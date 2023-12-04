@@ -43,10 +43,11 @@ const ImgContainer = styled.div`
   width: 285px;
   height: 181px;
   border-radius: 8px;
-  background-position: center;
+  /* background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url('https://images.unsplash.com/photo-1463797221720-6b07e6426c24?q=80&w=2371&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-image: url(''); */
+  background: #d9d9d9;
 `;
 
 const HeaderContainer = styled.div`

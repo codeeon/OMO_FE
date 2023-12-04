@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
+import PlaceComments from '../components/main/PlaceComments';
 
 const Home = () => {
   return (
     <Base>
       <RecentContents />
+      <PlaceComments />
     </Base>
   );
 };
@@ -17,11 +19,4 @@ const Base = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-`;
-
-const RecentContentsWrapper = styled.div`
-  display: flex;
-  justify-content: start;
-  align-items: start;
-  gap: 20px;
 `;
