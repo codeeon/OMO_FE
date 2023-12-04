@@ -2,14 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import RecentCard from './RecentCard';
+import { useNavigate } from 'react-router-dom';
 
 const RecentContents = () => {
+  const navigate = useNavigate();
+
   const four = Array.from({ length: 4 }, (_, index) => index);
+  
   return (
     <Base>
       <Header>
         <Title>오늘 뭐하지? (최신글)</Title>
-        <AllBtnWrapper>
+        <AllBtnWrapper onClick={() => navigate}>
           <Description>전체보기</Description>
           <BtnWrapper>
             <IoIosArrowForward />
@@ -28,7 +32,7 @@ const RecentContents = () => {
 export default RecentContents;
 
 const Base = styled.div`
-  margin-top: 50px;
+  margin-top: 60px;
   display: flex;
   flex-direction: column;
   align-items: start;
