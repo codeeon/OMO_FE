@@ -80,29 +80,36 @@ const List = styled.div<{ isOpen: boolean; width?: string }>`
 
   display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
   flex-direction: column;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
   width: ${({ width }) => width || '90px'};
   height: auto;
-  border-radius: 15px;
+  border-radius: 8px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  padding: 5px 10px;
+  padding: 0px 7px;
+  background: #fff;
 `;
 
 const Item = styled.div`
   padding: 10px;
   display: flex;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
-  border-radius: 10px;
+
   width: 90%;
   height: 15px;
   &:hover {
-    background: #e0e0e0;
+    background: #f2f4f7;
   }
   cursor: pointer;
   font-size: 15px;
   transition: background 300ms ease-in-out;
   animation: ${FadeIn} 300ms ease-in-out;
+  &:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+  &:last-child {
+    border-radius: 0 0 8px 8px;
+  }
 `;

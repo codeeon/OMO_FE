@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
 import RecentCard from '../components/main/RecentCard';
+import Modal from '../components/Modal';
 
 const Contents = () => {
   const recentCardsData = Array.from({ length: 12 }, (_, index) => index + 1);

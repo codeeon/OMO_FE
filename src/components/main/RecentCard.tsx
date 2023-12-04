@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
+import DetailContentsModal from '../detailModal/DetailContentsModal';
+import Modal from '../Modal';
 
 const RecentCard = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const openModalHandler = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModalHandler = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <Base>
+    <Base onClick={openModalHandler}>
       <ImgContainer />
       <HeaderContainer>
         <Title>Drew Coffee</Title>
@@ -26,18 +38,14 @@ const RecentCard = () => {
           <span>3</span>
         </FooterItem>
       </Footer>
+      <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
+        <DetailContentsModal />
+      </Modal>
     </Base>
   );
 };
 
 export default RecentCard;
-
-const Base = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: start;
-`;
 
 const ImgContainer = styled.div`
   width: 285px;
@@ -48,6 +56,18 @@ const ImgContainer = styled.div`
   background-size: cover;
   background-image: url(''); */
   background: #d9d9d9;
+  transition: all 300ms ease-in-out;
+`;
+
+const Base = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  cursor: pointer;
+  &:hover ${ImgContainer} {
+    transform: translateY(-10px);
+  }
 `;
 
 const HeaderContainer = styled.div`
