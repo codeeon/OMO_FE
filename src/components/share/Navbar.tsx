@@ -111,7 +111,7 @@ const RightContainer = styled.div`
 const Item = styled.div<{ isSelected: boolean }>`
   font-size: 16px;
   font-weight: 700;
-  color: ${({ isSelected }) => (isSelected ? 'black' : '#e6e6e6')};
+  color: ${({ isSelected }) => (isSelected ? '#F97393' : '#e6e6e6')};
   &:hover {
     color: black;
   }

@@ -8,12 +8,12 @@ const RecentContents = () => {
   const navigate = useNavigate();
 
   const four = Array.from({ length: 4 }, (_, index) => index);
-  
+
   return (
     <Base>
       <Header>
         <Title>오늘 뭐하지? (최신글)</Title>
-        <AllBtnWrapper onClick={() => navigate}>
+        <AllBtnWrapper onClick={() => navigate('/contents')}>
           <Description>전체보기</Description>
           <BtnWrapper>
             <IoIosArrowForward />
