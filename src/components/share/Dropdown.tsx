@@ -56,6 +56,9 @@ const Base = styled.div`
   &:hover {
     background: #e6e6e6;
   }
+  svg {
+    font-size: 24px;
+  }
   cursor: pointer;
   position: relative;
 `;

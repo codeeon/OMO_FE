@@ -68,21 +68,21 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1140px;
-  width: 92%;
+  max-width: 1200px;
+  width: 100%;
 `;
 
 const LogoCircle = styled.div`
-  width: 15px;
-  height: 15px;
+  width: 22.3px;
+  height: 22.3px;
   border: 5px solid #f97393;
   border-radius: 100%;
   transition: border 200ms ease-in-out;
 `;
 
 const LogoRectangle = styled.div`
-  width: 15px;
-  height: 15px;
+  width: 22.3px;
+  height: 22.3px;
   border: 5px solid #f97393;
   border-radius: 5px;
   transition: border 200ms ease-in-out;
@@ -109,8 +109,8 @@ const RightContainer = styled.div`
 `;
 
 const Item = styled.div<{ isSelected: boolean }>`
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 700;
   color: ${({ isSelected }) => (isSelected ? 'black' : '#e6e6e6')};
   &:hover {
     color: black;
