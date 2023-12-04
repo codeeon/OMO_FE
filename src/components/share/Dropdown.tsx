@@ -1,5 +1,5 @@
-import React, { ReactNode, useState } from 'react';
-import styled from 'styled-components';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 
 interface Props {
   children: ReactNode;
@@ -9,15 +9,32 @@ interface Props {
 
 const Dropdown: React.FC<Props> = ({ children, items, width }) => {
   const [isOpen, setIsDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleDropdown = () => {
-    setIsDropdown(!isOpen);
+  const openDropdown = () => {
+    setIsDropdown(true);
   };
 
+  useEffect(() => {
+    const onClickOutSide = (e: MouseEvent) => {
+      if (
+        isOpen &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', onClickOutSide);
+    return () => {
+      document.removeEventListener('mousedown', onClickOutSide);
+    };
+  }, [isOpen]);
+
   return (
-    <Base onClick={toggleDropdown}>
+    <Base onClick={openDropdown}>
       {children}
-      <List isOpen={isOpen} width={width}>
+      <List isOpen={isOpen} width={width} ref={dropdownRef}>
         {items.map((item) => (
           <Item key={item}>{item}</Item>
         ))}
@@ -37,10 +54,21 @@ const Base = styled.div`
   width: 15px;
   height: 15px;
   &:hover {
-    background: #dddddd;
+    background: #e6e6e6;
   }
-
+  cursor: pointer;
   position: relative;
+`;
+
+const FadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform:translateY(0);
+  }
 `;
 
 const List = styled.div<{ isOpen: boolean; width?: string }>`
@@ -68,8 +96,10 @@ const Item = styled.div`
   width: 90%;
   height: 15px;
   &:hover {
-    background: #e6e6e6;
+    background: #e0e0e0;
   }
   cursor: pointer;
   font-size: 15px;
+  transition: background 300ms ease-in-out;
+  animation: ${FadeIn} 300ms ease-in-out;
 `;

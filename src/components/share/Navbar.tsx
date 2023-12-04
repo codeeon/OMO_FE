@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Dropdown from './Dropdown';
 import { FaRegUser } from 'react-icons/fa6';
@@ -8,21 +8,37 @@ const navItem = ['게시글', '지도'];
 const dropdownItems = ['마이페이지', '로그아웃'];
 
 const Navbar = () => {
+  const [isSelected, setIsSelected] = useState<string>('');
   const navigate = useNavigate();
 
+  const onClickLogoHander = () => {
+    navigate('/');
+    setIsSelected('');
+  };
+
   const navigateHandler = (item: string) => {
-    item === '게시글' ? navigate('/contents') : navigate('/map');
+    if (item === '게시글') {
+      navigate('/contents');
+      setIsSelected('게시글');
+    } else {
+      navigate('/map');
+      setIsSelected('지도');
+    }
   };
   return (
     <Base>
       <Wrapper>
-        <Logo onClick={() => navigate('/')}>
+        <Logo onClick={onClickLogoHander}>
           <LogoCircle />
           <LogoRectangle />
         </Logo>
         <RightContainer>
           {navItem.map((item) => (
-            <Item key={item} onClick={() => navigateHandler(item)}>
+            <Item
+              key={item}
+              onClick={() => navigateHandler(item)}
+              isSelected={isSelected === item}
+            >
               {item}
             </Item>
           ))}
@@ -56,18 +72,12 @@ const Wrapper = styled.div`
   width: 92%;
 `;
 
-const Logo = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-`;
-
 const LogoCircle = styled.div`
   width: 15px;
   height: 15px;
   border: 5px solid #f97393;
   border-radius: 100%;
+  transition: border 200ms ease-in-out;
 `;
 
 const LogoRectangle = styled.div`
@@ -75,6 +85,19 @@ const LogoRectangle = styled.div`
   height: 15px;
   border: 5px solid #f97393;
   border-radius: 5px;
+  transition: border 200ms ease-in-out;
+`;
+
+const Logo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  &:hover > div {
+    border: 7px solid #f97476;
+  }
+
+  cursor: pointer;
 `;
 
 const RightContainer = styled.div`
@@ -85,7 +108,12 @@ const RightContainer = styled.div`
   gap: 20px;
 `;
 
-const Item = styled.div`
+const Item = styled.div<{ isSelected: boolean }>`
   font-size: 15px;
   font-weight: bold;
+  color: ${({ isSelected }) => (isSelected ? 'black' : '#e6e6e6')};
+  &:hover {
+    color: black;
+  }
+  cursor: pointer;
 `;
