@@ -34,6 +34,7 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
     ps.keywordSearch(event.target.value, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         setSearchValue(data);
+        console.log(data);
       }
     });
   };
@@ -52,6 +53,8 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
       addressName: adressName,
       categoryName: filteredCategoryName,
     });
+    console.log(selectedInfo);
+
     setInputValue('');
   };
 
@@ -91,15 +94,23 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
           {searchValue.map((value) => (
             <ResultItemContainer
               onClick={() => {
+                const address =
+                  value.road_address_name === ''
+                    ? value.address_name
+                    : value.road_address_name;
                 selectInfoHandler(
                   value.place_name,
-                  value.road_address_name,
+                  address,
                   value.category_group_name,
                 );
               }}
             >
               <ResultPlaceName>{value.place_name}</ResultPlaceName>
-              <ResultAdress>{value.road_address_name}</ResultAdress>
+              <ResultAdress>
+                {value.road_address_name === ''
+                  ? value.address_name
+                  : value.road_address_name}
+              </ResultAdress>
             </ResultItemContainer>
           ))}
         </ResultList>

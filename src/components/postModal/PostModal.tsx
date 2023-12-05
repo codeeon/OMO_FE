@@ -27,25 +27,12 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
   const [text, setText] = useState('');
 
   const uniqueId = useId();
-  const queryClient = new QueryClient();
 
   const clearPostHandler = () => {
     closePostModalHandler();
     setImageUrl([]);
     setSelectedInfo({ placeName: '', addressName: '', categoryName: '' });
     setText('');
-  };
-
-  const newContent = {
-    postId: uniqueId,
-    userId: '철', //TODO 추후에 추가
-    categoryName: selectedInfo.categoryName,
-    locationName: selectedInfo.addressName,
-    content: text,
-    imageURL: imageURL,
-    likeCount: 0,
-    createdAt: getToday(),
-    updatedAt: getToday(),
   };
 
   const { mutate, isLoading, isError, error, isSuccess } =
