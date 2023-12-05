@@ -23,6 +23,8 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
     placeName: '',
     addressName: '',
     categoryName: '',
+    latitude: '',
+    longitude: '',
   });
   const [text, setText] = useState('');
 
@@ -31,7 +33,13 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
   const clearPostHandler = () => {
     closePostModalHandler();
     setImageUrl([]);
-    setSelectedInfo({ placeName: '', addressName: '', categoryName: '' });
+    setSelectedInfo({
+      placeName: '',
+      addressName: '',
+      categoryName: '',
+      latitude: '',
+      longitude: '',
+    });
     setText('');
   };
 
@@ -47,6 +55,9 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
       content: text,
       imageURL: imageURL,
       likeCount: 0,
+      placeName: selectedInfo.placeName,
+      latitude: selectedInfo.latitude,
+      longitude: selectedInfo.longitude,
       createdAt: getToday(),
       updatedAt: getToday(),
     };

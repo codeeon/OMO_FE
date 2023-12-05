@@ -6,14 +6,14 @@ import CommentInput from './CommentInput';
 //TODO 유저 데이터 및 컨텐츠 데이터 추가
 const dummy = [
   {
-    commentId: 1,
+    commentId: 'asdklf',
     userName: '오늘은 진짜 뭐하지',
     text: '오늘은 여기로 정했습니다! 좋은 정보 감사드려요~',
     createdAt: '2023.12.05',
     updatedAt: '2023.12.05',
   },
   {
-    commentId: 2,
+    commentId: 'aslek',
     userName: '룰루랄라',
     text: '네 좋은하루되세요^^',
     createdAt: '2023.12.06',

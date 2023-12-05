@@ -24,6 +24,8 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
       placeName: '',
       addressName: '',
       categoryName: '',
+      latitude: '',
+      longitude: '',
     });
     setSearchValue([]);
     setInputValue('');
@@ -43,6 +45,8 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
     placeName: string,
     adressName: string,
     categoryName: string,
+    latitude: string,
+    longitude: string,
   ) => {
     const filteredCategoryName =
       categoryName === '음식점' || categoryName === '카페'
@@ -52,6 +56,8 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
       placeName: placeName,
       addressName: adressName,
       categoryName: filteredCategoryName,
+      latitude: latitude,
+      longitude: longitude,
     });
     console.log(selectedInfo);
 
@@ -102,6 +108,8 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
                   value.place_name,
                   address,
                   value.category_group_name,
+                  value.x,
+                  value.y,
                 );
               }}
             >

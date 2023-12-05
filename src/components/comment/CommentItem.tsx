@@ -3,10 +3,42 @@ import { Comments } from '../../model/interface';
 import styled from 'styled-components';
 import { FaEllipsis } from 'react-icons/fa6';
 import Dropdown from '../share/Dropdown';
+import { useMutation } from 'react-query';
+import { deleteComment, patchComment } from '../../apis/apis';
+import { getToday } from '../../function/getToday';
 
 //TODO 유저 데이터 및 컨텐츠 데이터 추가
 const CommentItem: React.FC<{ comment: Comments }> = ({ comment }) => {
-  const { userName, text, createdAt } = comment;
+  const { commentId, userName, text, createdAt } = comment;
+
+  const { mutate: patchMutate } = useMutation<
+    void,
+    unknown,
+    { commentId: string; updatedComment: Comments }
+  >(patchComment, { onSuccess: () => {} });
+
+  const {
+    mutate: deleteMutate,
+    // isLoading: isDeleteLoading,
+    // isError: isDeleteError,
+    // error: deleteError,
+    // isSuccess: isDeleteSuccess,
+  } = useMutation(deleteComment);
+
+  const onClickDropdownItem = (item: string) => {
+    if (item === '수정하기') {
+      const updatedComment = {
+        commentId: commentId,
+        userName: userName,
+        text: text,
+        createdAt: createdAt,
+        updatedAt: getToday(),
+      };
+      patchMutate({ commentId, updatedComment });
+    } else {
+      deleteMutate(commentId);
+    }
+  };
 
   return (
     <Base>
@@ -16,7 +48,11 @@ const CommentItem: React.FC<{ comment: Comments }> = ({ comment }) => {
           <UserName>{userName}</UserName>
           <CreateAt>{createdAt}</CreateAt>
           <EllipsisBtn>
-            <Dropdown items={['수정하기', '삭제하기']} width="70px">
+            <Dropdown
+              items={['수정하기', '삭제하기']}
+              width="70px"
+              onClickDropdownItem={onClickDropdownItem}
+            >
               <FaEllipsis />
             </Dropdown>
           </EllipsisBtn>
