@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import HotContentsCard from './HotContentsCard';
 
-const HotContents: React.FC = () => {
+const HotContents = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 

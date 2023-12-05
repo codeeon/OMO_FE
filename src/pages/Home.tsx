@@ -2,10 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/PlaceComments';
+import HotContents from '../components/main/HotContents';
+import { useQuery } from 'react-query';
+import { getContent } from '../api/contents';
 
 const Home = () => {
   return (
     <Base>
+      <HotContents />
       <RecentContents />
       <PlaceComments />
     </Base>
