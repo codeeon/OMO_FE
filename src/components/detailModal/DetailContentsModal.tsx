@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import DetailModalHeader from './DetailModalHeader';
 import DetailModalBody from './DetalModalBody';
 import DetailModalFooter from './DetailModalFooter';
+import Comment from '../comment/Comment';
 
 const DetailContentsModal = () => {
   return (
@@ -11,6 +12,7 @@ const DetailContentsModal = () => {
       <ImageContainer />
       <DetailModalBody />
       <DetailModalFooter />
+      <Comment />
     </Base>
   );
 };
@@ -30,6 +32,7 @@ const Base = styled.div`
 
   padding: 50px;
   z-index: 99;
+  overflow-y: scroll;
 `;
 
 const ImageContainer = styled.div`

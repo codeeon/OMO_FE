@@ -1,10 +1,23 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import HotContentsCard from './HotContentsCard';
+import { getContentsTest } from '../../apis/contents';
+import { useQuery } from 'react-query';
+import { Contents as ContentType } from '../../model/interface';
 
-const HotContents = () => {
+// type partialContents = Partial<ContentType>;
+
+const HotContents: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [testData, setTestData] = useState<ContentType[]>([]);
+
+  const { data } = useQuery('contents', getContentsTest, {
+    onSuccess: (data: ContentType[]) => {
+      setTestData(data);
+    },
+  });
+  console.log(testData);
 
   const repeatCounts = Array.from({ length: 9 }, (_, index) => index);
   const carouselCounts = Array.from(
@@ -42,11 +55,13 @@ const HotContents = () => {
   return (
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Title>오늘 인기글</Title>
-      {/* <HotContentsList> */}
       <CarouselList>
         {repeatCounts.map((i) => (
           <CarouselItem activeIndex={activeIndex} key={i}>
-            <HotContentsCard />
+            {testData?.map((cont) => (
+              <HotContentsCard cont={cont} />
+            ))}
+            {/* hotContentsData={hotContentsData} */}
           </CarouselItem>
         ))}
       </CarouselList>
@@ -71,6 +86,7 @@ export default HotContents;
 
 const Base = styled.div`
   box-sizing: border-box;
+  margin-top: 35px;
 `;
 
 const Title = styled.div`
@@ -101,6 +117,7 @@ const CarouselItem = styled.li<{ activeIndex: number }>`
   align-items: center;
   transform: translateX(-${({ activeIndex }) => activeIndex * 315}%);
   transition: 500ms ease;
+  gap: 20px;
 `;
 
 const NavButton = styled.div<{ isActive?: boolean }>`
