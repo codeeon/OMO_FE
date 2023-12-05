@@ -10,8 +10,8 @@ import { Contents } from '../model/interface';
 const Home = () => {
   const [contents, setContents] = useState<Contents[]>([]);
 
-  const {data} = useQuery('contents', getContent)
-  console.log(data)
+  // const {data} = useQuery('contents', getContent)
+  // console.log(data)
 
   // useEffect(() => {
   //   const fetchData = async () => {

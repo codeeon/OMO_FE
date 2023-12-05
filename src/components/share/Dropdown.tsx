@@ -5,9 +5,15 @@ interface Props {
   children: ReactNode;
   items: string[];
   width?: string;
+  onClickDropdownItem: (item: string) => void;
 }
 
-const Dropdown: React.FC<Props> = ({ children, items, width }) => {
+const Dropdown: React.FC<Props> = ({
+  children,
+  items,
+  width,
+  onClickDropdownItem,
+}) => {
   const [isOpen, setIsDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -36,7 +42,9 @@ const Dropdown: React.FC<Props> = ({ children, items, width }) => {
       {children}
       <List isOpen={isOpen} width={width} ref={dropdownRef}>
         {items.map((item) => (
-          <Item key={item}>{item}</Item>
+          <Item key={item} onClick={() => onClickDropdownItem(item)}>
+            {item}
+          </Item>
         ))}
       </List>
     </Base>
@@ -61,6 +69,7 @@ const Base = styled.div`
   }
   cursor: pointer;
   position: relative;
+  background: #fff;
 `;
 
 const FadeIn = keyframes`
@@ -71,7 +80,8 @@ const FadeIn = keyframes`
   to {
     opacity: 1;
     transform:translateY(0);
-  }
+  };
+  
 `;
 
 const List = styled.div<{ isOpen: boolean; width?: string }>`
@@ -89,6 +99,7 @@ const List = styled.div<{ isOpen: boolean; width?: string }>`
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   padding: 0px 7px;
   background: #fff;
+  z-index: 100;
 `;
 
 const Item = styled.div`
