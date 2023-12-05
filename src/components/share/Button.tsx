@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 interface Props {
   children: ReactNode;
   outlineColor?: string;
+  theme?: string;
   padding?: string;
   width?: string;
   height?: string;
@@ -16,6 +17,7 @@ const Button: React.FC<Props> = ({
   children,
   outlineColor,
   padding,
+  theme,
   width,
   height,
   fontSize,
@@ -31,6 +33,7 @@ const Button: React.FC<Props> = ({
       fontSize={fontSize}
       fontWeight={fontWeight}
       onClick={onClick}
+      theme={theme}
     >
       {children}
     </Base>
@@ -46,6 +49,7 @@ interface BtnProps {
   height?: string;
   fontSize?: string;
   fontWeight?: string;
+  theme?: string;
 }
 
 const Base = styled.div<BtnProps>`
@@ -62,6 +66,19 @@ const Base = styled.div<BtnProps>`
   height: ${({ height }) => (height ? height : '30px')};
   padding: ${({ padding }) => (padding ? padding : '10px 3px')};
   cursor: pointer;
+
+  ${({ theme }) =>
+    theme === 'gray'
+      ? css`
+          background: #b1b1b1;
+          color: #fff;
+          border: none;
+          &:hover {
+            background: #cfcfcf;
+          }
+        `
+      : null}
+
   ${({ outlineColor }) =>
     outlineColor === 'red'
       ? css`
@@ -81,12 +98,14 @@ const Base = styled.div<BtnProps>`
             color: #fff;
           }
         `
-      : css`
-          border: 1px solid gray;
-          color: gray;
+      : outlineColor === 'gray'
+      ? css`
+          border: 1px solid #b1b1b1;
+          color: #b1b1b1;
           &:hover {
-            background: gray;
+            background: #b1b1b1;
             color: #fff;
           }
-        `};
+        `
+      : null};
 `;
