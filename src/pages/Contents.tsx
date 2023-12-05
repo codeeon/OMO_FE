@@ -3,16 +3,19 @@ import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
 import RecentCard from '../components/main/RecentCard';
 import Modal from '../components/Modal';
+import PostModal from '../components/postModal/PostModal';
+import useModalCtr from '../hooks/useModalCtr';
 
 const Contents = () => {
   const recentCardsData = Array.from({ length: 12 }, (_, index) => index + 1);
+  const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
 
   return (
     <Base>
       <Wrapper>
         <Header>
           <Title>게시글</Title>
-          <PostBtn>
+          <PostBtn onClick={openModalHandler}>
             <FiEdit3 />
             <span>새 게시글</span>
           </PostBtn>
@@ -25,6 +28,9 @@ const Contents = () => {
           </RecentCardGrid>
         </Body>
       </Wrapper>
+      <Modal isOpen={isOpen} onClose={closeModalHandler}>
+        <PostModal closePostModalHandler={closeModalHandler} />
+      </Modal>
     </Base>
   );
 };

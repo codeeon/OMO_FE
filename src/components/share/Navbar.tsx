@@ -9,6 +9,7 @@ const dropdownItems = ['마이페이지', '로그아웃'];
 
 const Navbar = () => {
   const [isSelected, setIsSelected] = useState<string>('');
+  
   const navigate = useNavigate();
 
   const onClickLogoHander = () => {
@@ -25,6 +26,7 @@ const Navbar = () => {
       setIsSelected('지도');
     }
   };
+
   return (
     <Base>
       <Wrapper>
@@ -62,6 +64,8 @@ const Base = styled.div`
   height: 60px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  background: #fff;
+  z-index: 9;
 `;
 
 const Wrapper = styled.div`

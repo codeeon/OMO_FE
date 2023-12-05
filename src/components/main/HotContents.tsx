@@ -71,6 +71,7 @@ export default HotContents;
 
 const Base = styled.div`
   box-sizing: border-box;
+  margin-top: 35px;
 `;
 
 const Title = styled.div`
