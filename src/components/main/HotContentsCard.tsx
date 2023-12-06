@@ -31,9 +31,8 @@ const HotContentsCard: React.FC<{ cont: ContentType[] }> = ({ cont }) => {
   return (
     <Base>
       <HotContentsBox>
-        <HotContentsPhoto src={imageURL} alt=""></HotContentsPhoto>
-
-        <HotContentsTitle>{locationName}</HotContentsTitle>
+        <ImgContainer src={imageURL} alt=""></ImgContainer>
+        <ContentsTitle>{locationName}</ContentsTitle>
         <HotContentsBody>
           <HotContentsText>{content}</HotContentsText>
           <HotContentsNavigation>
@@ -54,6 +53,12 @@ const Base = styled.div`
   box-sizing: border-box;
 `;
 
+const ImgContainer = styled.img`
+  width: 343px;
+  height: 155px;
+  border-radius: 8px;
+  background: #d9d9d9;
+`;
 const HotContentsBox = styled.div`
   width: 343px;
   height: 287px;
@@ -61,16 +66,13 @@ const HotContentsBox = styled.div`
   flex-shrink: 0;
   border-radius: 8px;
   border: 1px solid #d9d9d9;
+  cursor: pointer;
+  &:hover ${ImgContainer} {
+    transform: translateY(-10px);
+  }
 `;
 
-const HotContentsPhoto = styled.img`
-  width: 343px;
-  height: 155px;
-  border-radius: 8px;
-  background: #d9d9d9;
-`;
-
-const HotContentsTitle = styled.div`
+const ContentsTitle = styled.div`
   color: #212121;
   font-family: Wanted Sans;
   font-size: 20px;

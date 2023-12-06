@@ -5,14 +5,12 @@ import { getContentsTest } from '../../apis/contents';
 import { useQuery } from 'react-query';
 import { Contents as ContentType } from '../../model/interface';
 
-// type partialContents = Partial<ContentType>;
-
 const HotContents: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [testData, setTestData] = useState<ContentType[]>([]);
 
-  const { data } = useQuery('contents', getContentsTest, {
+  const { data } = useQuery('contents', () => getContentsTest(9), {
     onSuccess: (data: ContentType[]) => {
       setTestData(data);
     },
@@ -56,14 +54,13 @@ const HotContents: React.FC = () => {
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Title>오늘 인기글</Title>
       <CarouselList>
-        {repeatCounts.map((i) => (
-          <CarouselItem activeIndex={activeIndex} key={i}>
-            {testData?.map((cont) => (
-              <HotContentsCard cont={cont} />
-            ))}
-            {/* hotContentsData={hotContentsData} */}
-          </CarouselItem>
-        ))}
+        {repeatCounts.map((i) =>
+          testData?.slice(0, 9).map((cont) => (
+            <CarouselItem activeIndex={activeIndex} key={i}>
+              <HotContentsCard key={cont.postId} cont={cont} />
+            </CarouselItem>
+          )),
+        )}
       </CarouselList>
       {repeatCounts.length && (
         <Nav>
@@ -77,7 +74,6 @@ const HotContents: React.FC = () => {
           ))}
         </Nav>
       )}
-      {/* </HotContentsList> */}
     </Base>
   );
 };
@@ -117,7 +113,6 @@ const CarouselItem = styled.li<{ activeIndex: number }>`
   align-items: center;
   transform: translateX(-${({ activeIndex }) => activeIndex * 315}%);
   transition: 500ms ease;
-  gap: 20px;
 `;
 
 const NavButton = styled.div<{ isActive?: boolean }>`
