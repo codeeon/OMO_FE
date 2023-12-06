@@ -4,15 +4,33 @@ import DetailModalHeader from './DetailModalHeader';
 import DetailModalBody from './DetalModalBody';
 import DetailModalFooter from './DetailModalFooter';
 import Comment from '../comment/Comment';
+import { CommentType, ContentType } from '../../model/interface';
 
-const DetailContentsModal = () => {
+const DetailContentsModal: React.FC<{
+  cont: ContentType;
+  comments: CommentType[];
+}> = ({ cont, comments }) => {
+  const {
+    id,
+    userId,
+    placeName,
+    createdAt,
+    locationName,
+    content,
+    likeCount,
+    imageURL,
+  } = cont;
   return (
     <Base>
-      <DetailModalHeader />
-      <ImageContainer />
-      <DetailModalBody />
-      <DetailModalFooter />
-      <Comment />
+      <DetailModalHeader userId={userId} createdAt={createdAt} />
+      <ImageContainer imageURL={imageURL} />
+      <DetailModalBody
+        placeName={placeName}
+        locationName={locationName}
+        content={content}
+      />
+      <DetailModalFooter likeCount={likeCount} />
+      <Comment postId={id} comments={comments} />
     </Base>
   );
 };
@@ -35,10 +53,14 @@ const Base = styled.div`
   overflow-y: scroll;
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled.div<{ imageURL: string[] }>`
   margin-top: 16px;
   width: 655px;
   height: 610px;
   border-radius: 16px;
   background: #d9d9d9;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
 `;

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import HotContentsCard from './HotContentsCard';
+import { ContentType } from '../../model/interface';
 
-const HotContents: React.FC = () => {
+const HotContents: React.FC<{ contents: ContentType[] }> = ({ contents }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -44,9 +45,9 @@ const HotContents: React.FC = () => {
       <Title>오늘 인기글</Title>
       {/* <HotContentsList> */}
       <CarouselList>
-        {repeatCounts.map((i) => (
-          <CarouselItem activeIndex={activeIndex} key={i}>
-            <HotContentsCard />
+        {contents?.map((content) => (
+          <CarouselItem activeIndex={activeIndex}>
+            <HotContentsCard cont={content} />
           </CarouselItem>
         ))}
       </CarouselList>

@@ -6,8 +6,8 @@ export interface SelectedInfoType {
   longitude: string;
 }
 
-export interface Contents {
-  postId: string;
+export interface ContentType {
+  id: string;
   userId: string;
   categoryName: string;
   locationName: string;
@@ -22,8 +22,9 @@ export interface Contents {
 }
 
 //TODO 유저 데이터 및 컨텐츠 데이터 추가
-export interface Comments {
-  commentId: string;
+export interface CommentType {
+  id: string;
+  postId: string;
   userName: string;
   text: string;
   createdAt: string;

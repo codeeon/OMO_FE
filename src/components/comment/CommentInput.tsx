@@ -3,28 +3,36 @@ import styled from 'styled-components';
 import Button from '../share/Button';
 import useInput from '../../hooks/useInput';
 import { getToday } from '../../function/getToday';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { postComment } from '../../apis/apis';
+import { CommentType } from '../../model/interface';
 
-const CommentInput = () => {
+const CommentInput: React.FC<{ postId: string }> = ({ postId }) => {
   const [text, setText] = useState<string>('');
   const uniqueId = useId();
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
 
-  const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(postComment);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<void, unknown, CommentType>(postComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+    },
+  });
 
   const postCommentHandler = () => {
     const newComment = {
       commentId: uniqueId,
+      postId: postId,
       userName: '철', // TODO 유저와 연결
       text: text,
       createdAt: getToday(),
       updatedAt: getToday(),
     };
-    mutate(newComment);
+
+    mutation.mutate(newComment); // Use `mutate` function here
     setText('');
   };
 
@@ -51,6 +59,8 @@ const Base = styled.div`
   align-items: end;
 
   width: 100%;
+
+  margin-top: 20px;
 `;
 
 const TextArea = styled.textarea`

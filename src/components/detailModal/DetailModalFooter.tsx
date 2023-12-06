@@ -3,12 +3,12 @@ import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
 import styled from 'styled-components';
 
-const DetailModalFooter = () => {
+const DetailModalFooter: React.FC<{ likeCount: number }> = ({ likeCount }) => {
   return (
     <Footer>
       <FooterItem color="red">
         <IoMdHeartEmpty />
-        <span>23</span>
+        <span>{likeCount}</span>
       </FooterItem>
       <FooterItem color="blue">
         <TbMessage2 />

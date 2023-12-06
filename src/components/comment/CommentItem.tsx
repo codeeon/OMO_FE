@@ -1,43 +1,54 @@
-import React from 'react';
-import { Comments } from '../../model/interface';
+import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
-import { FaEllipsis } from 'react-icons/fa6';
-import Dropdown from '../share/Dropdown';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { deleteComment, patchComment } from '../../apis/apis';
 import { getToday } from '../../function/getToday';
+import { CommentType } from '../../model/interface';
+import CommentDropdown from './CommentDropdown';
+import Button from '../share/Button';
 
-//TODO 유저 데이터 및 컨텐츠 데이터 추가
-const CommentItem: React.FC<{ comment: Comments }> = ({ comment }) => {
-  const { commentId, userName, text, createdAt } = comment;
+//TODO 유저 데이터
+const CommentItem: React.FC<{ comment: CommentType; postId: string }> = ({
+  comment,
+}) => {
+  const { id, postId, userName, text, createdAt, updatedAt } = comment;
+  const [textValue, setTextValue] = useState(text);
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const { mutate: patchMutate } = useMutation<
     void,
     unknown,
-    { commentId: string; updatedComment: Comments }
-  >(patchComment, { onSuccess: () => {} });
+    { id: string; updatedComment: CommentType }
+  >(patchComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+    },
+  });
 
-  const {
-    mutate: deleteMutate,
-    // isLoading: isDeleteLoading,
-    // isError: isDeleteError,
-    // error: deleteError,
-    // isSuccess: isDeleteSuccess,
-  } = useMutation(deleteComment);
+  const { mutate: deleteMutate } = useMutation(deleteComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('comments');
+    },
+  });
 
-  const onClickDropdownItem = (item: string) => {
-    if (item === '수정하기') {
-      const updatedComment = {
-        commentId: commentId,
-        userName: userName,
-        text: text,
-        createdAt: createdAt,
-        updatedAt: getToday(),
-      };
-      patchMutate({ commentId, updatedComment });
-    } else {
-      deleteMutate(commentId);
-    }
+  const onClickpatchComment = () => {
+    const updatedComment = {
+      ...comment,
+      text: textValue,
+      updatedAt: getToday(),
+    };
+    setIsEditMode(false);
+    patchMutate({ id, updatedComment });
+  };
+
+  const onClickdeleteComment = () => {
+    deleteMutate(id);
+  };
+
+  const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
+    setTextValue(e.target.value);
   };
 
   return (
@@ -47,17 +58,32 @@ const CommentItem: React.FC<{ comment: Comments }> = ({ comment }) => {
         <UserInfoContainer>
           <UserName>{userName}</UserName>
           <CreateAt>{createdAt}</CreateAt>
-          <EllipsisBtn>
-            <Dropdown
-              items={['수정하기', '삭제하기']}
-              width="70px"
-              onClickDropdownItem={onClickDropdownItem}
-            >
-              <FaEllipsis />
-            </Dropdown>
-          </EllipsisBtn>
+          {isEditMode ? (
+            <BtnWrapper>
+              <Button
+                padding="5px"
+                outlineColor="blue"
+                onClick={onClickpatchComment}
+              >
+                완료하기
+              </Button>
+            </BtnWrapper>
+          ) : (
+            <EllipsisBtn>
+              <CommentDropdown
+                onClickpatchComment={onClickpatchComment}
+                onClickdeleteComment={onClickdeleteComment}
+                isEditMode={isEditMode}
+                setIsEditMode={setIsEditMode}
+              />
+            </EllipsisBtn>
+          )}
         </UserInfoContainer>
-        <CommentText>{text}</CommentText>
+        <CommentText
+          disabled={!isEditMode}
+          value={textValue}
+          onChange={(e) => onChangeText(e)}
+        />
       </BodyContainer>
     </Base>
   );
@@ -88,7 +114,7 @@ const BodyContainer = styled.div`
   flex-direction: column;
   justify-content: start;
   gap: 9px;
-  width: 100%;
+  width: 90%;
 `;
 
 const UserInfoContainer = styled.div`
@@ -110,12 +136,14 @@ const CreateAt = styled.div`
   font-weight: 500;
 `;
 
-const CommentText = styled.div`
+const CommentText = styled.input`
   color: #000;
   font-size: 16px;
   font-weight: 500;
   line-height: 155%; /* 24.8px */
   letter-spacing: -0.16px;
+  outline: none;
+  border: none;
 `;
 
 const EllipsisBtn = styled.div`
@@ -125,4 +153,8 @@ const EllipsisBtn = styled.div`
   margin-left: auto;
   color: #a5a5a5;
   font-size: 25px;
+`;
+
+const BtnWrapper = styled.div`
+  margin-left: auto;
 `;
