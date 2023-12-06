@@ -5,9 +5,12 @@ import RecentCard from '../components/main/RecentCard';
 import Modal from '../components/Modal';
 import PostModal from '../components/postModal/PostModal';
 import useModalCtr from '../hooks/useModalCtr';
+import { CommentType, ContentType } from '../model/interface';
 
-const Contents = () => {
-  const recentCardsData = Array.from({ length: 12 }, (_, index) => index + 1);
+const Contents: React.FC<{
+  contents: ContentType[];
+  comments: CommentType[];
+}> = ({ contents, comments }) => {
   const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
 
   return (
@@ -22,8 +25,8 @@ const Contents = () => {
         </Header>
         <Body>
           <RecentCardGrid>
-            {recentCardsData.map((cardNumber) => (
-              <RecentCard key={cardNumber} />
+            {contents.map((cont) => (
+              <RecentCard cont={cont} comments={comments} />
             ))}
           </RecentCardGrid>
         </Body>

@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import RecentCard from './RecentCard';
 import { useNavigate } from 'react-router-dom';
+import { CommentType, ContentType } from '../../model/interface';
 
-const RecentContents = () => {
+const RecentContents: React.FC<{
+  contents: ContentType[];
+  comments: CommentType[];
+}> = ({ contents, comments }) => {
   const navigate = useNavigate();
-
-  const four = Array.from({ length: 4 }, (_, index) => index);
 
   return (
     <Base>
@@ -21,9 +23,15 @@ const RecentContents = () => {
         </AllBtnWrapper>
       </Header>
       <Body>
-        {four.map((i) => (
-          <RecentCard />
-        ))}
+        {contents
+          ?.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          )
+          .slice(0, 4)
+          .map((cont) => (
+            <RecentCard cont={cont} comments={comments} />
+          ))}
       </Body>
     </Base>
   );

@@ -4,9 +4,15 @@ import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
 import DetailContentsModal from '../detailModal/DetailContentsModal';
 import Modal from '../Modal';
+import { CommentType, ContentType } from '../../model/interface';
 
-const RecentCard = () => {
+const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
+  cont,
+  comments,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const { placeName, createdAt, content, likeCount, imageURL } = cont;
 
   const openModalHandler = () => {
     setIsModalOpen(true);
@@ -18,28 +24,26 @@ const RecentCard = () => {
 
   return (
     <Base onClick={openModalHandler}>
-      <ImgContainer />
+      <ImgContainer imageURL={imageURL} />
       <HeaderContainer>
-        <Title>Drew Coffee</Title>
+        <Title>{placeName}</Title>
         <VerticalLine />
-        <Date>2023.12.01</Date>
+        <Date>{createdAt}</Date>
       </HeaderContainer>
-      <Text>
-        요즘에 다들 놀러간다길래 <br /> 남자친구랑 같이 놀러 가봤는데
-        재밌었어요!!
-      </Text>
+      <Text>{content}</Text>
       <Footer>
         <FooterItem>
           <IoMdHeartEmpty />
-          <span>28</span>
+          <span>{likeCount}</span>
         </FooterItem>
         <FooterItem>
           <TbMessage2 />
           <span>3</span>
+          {/* TODO Comment 추가하기 */}
         </FooterItem>
       </Footer>
       <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
-        <DetailContentsModal />
+        <DetailContentsModal cont={cont} comments={comments} />
       </Modal>
     </Base>
   );
@@ -47,16 +51,14 @@ const RecentCard = () => {
 
 export default RecentCard;
 
-const ImgContainer = styled.div`
+const ImgContainer = styled.div<{ imageURL: string[] }>`
   width: 285px;
   height: 181px;
   border-radius: 8px;
-  /* background-position: center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url(''); */
-  background: #d9d9d9;
-  transition: all 300ms ease-in-out;
+  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
 `;
 
 const Base = styled.div`

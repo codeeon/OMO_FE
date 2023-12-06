@@ -1,19 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ContentType } from '../../model/interface';
 
-const HotContentsCard: React.FC = () => {
+const HotContentsCard: React.FC<{ cont: ContentType }> = ({ cont }) => {
+  const { placeName, content, categoryName, imageURL } = cont;
   return (
     <Base>
       <HotContentsBox>
-        <HotContentsPhoto src="" alt=""></HotContentsPhoto>
-        <HotContentsTitle>경리단길</HotContentsTitle>
+        <HotContentsPhoto imageURL={imageURL}></HotContentsPhoto>
+        <HotContentsTitle>{placeName}</HotContentsTitle>
         <HotContentsBody>
-          <HotContentsText>
-            요즘에 다들 놀러간다길래
-            <br /> 남자친구랑 같이 놀러 가봤는데 재밌었어요!!
-          </HotContentsText>
+          <HotContentsText>{content}</HotContentsText>
           <HotContentsNavigation>
-            <HotContentsCategory>#카페</HotContentsCategory>
+            <HotContentsCategory>#{categoryName}</HotContentsCategory>
             <HotContentsMap>
               <HotContentsMapText>지도로 보기</HotContentsMapText>
               <HotContentsMapNavigator>{arrow}</HotContentsMapNavigator>
@@ -40,11 +39,14 @@ const HotContentsBox = styled.div`
   border: 1px solid #d9d9d9;
 `;
 
-const HotContentsPhoto = styled.img`
+const HotContentsPhoto = styled.img<{ imageURL: string[] }>`
   width: 343px;
   height: 155px;
   border-radius: 8px;
-  background: #d9d9d9;
+  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 `;
 
 const HotContentsTitle = styled.div`

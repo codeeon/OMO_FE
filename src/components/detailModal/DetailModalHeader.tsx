@@ -3,16 +3,30 @@ import styled from 'styled-components';
 import { IoEllipsisHorizontalSharp } from 'react-icons/io5';
 import Dropdown from '../share/Dropdown';
 
-const DetailModalHeader = () => {
+const DetailModalHeader: React.FC<{ userId: string; createdAt: string }> = ({
+  userId,
+  createdAt,
+}) => {
+  const onClickDropdownItem = (item: string) => {
+    if (item === '수정하기') {
+      // TODO ContentPatch
+    } else {
+      // TODO ContentDelete
+    }
+  };
   return (
     <Base>
       <UserProfile />
       <UserInfoContainer>
-        <UserName>오늘은 진짜 뭐하지</UserName>
-        <CreationDate>2023.12.04</CreationDate>
+        <UserName>{userId}</UserName>
+        <CreationDate>{createdAt}</CreationDate>
       </UserInfoContainer>
       <EllipsisBtn>
-        <Dropdown items={['수정하기', '삭제하기']} width="70px">
+        <Dropdown
+          items={['수정하기', '삭제하기']}
+          width="70px"
+          onClickDropdownItem={onClickDropdownItem}
+        >
           <IoEllipsisHorizontalSharp />
         </Dropdown>
       </EllipsisBtn>

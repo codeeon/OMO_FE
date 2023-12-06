@@ -10,7 +10,7 @@ import Modal from '../Modal';
 import { SelectedInfoType } from '../../model/interface';
 import { getToday } from '../../function/getToday';
 import { postContent } from '../../apis/apis';
-import { QueryClient, useMutation } from 'react-query';
+import { QueryClient, useMutation, useQueryClient } from 'react-query';
 
 interface Props {
   closePostModalHandler: () => void;
@@ -30,6 +30,8 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
 
   const uniqueId = useId();
 
+  const queryClient = useQueryClient()
+
   const clearPostHandler = () => {
     closePostModalHandler();
     setImageUrl([]);
@@ -44,11 +46,15 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
   };
 
   const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(postContent);
+    useMutation(postContent, {
+      onSuccess : () => {
+        queryClient.invalidateQueries("contents")
+      }
+    });
 
   const savePostHandler = () => {
     const newContent = {
-      postId: uniqueId,
+      id: uniqueId,
       userId: '철', //TODO 추후에 추가
       categoryName: selectedInfo.categoryName,
       locationName: selectedInfo.addressName,
