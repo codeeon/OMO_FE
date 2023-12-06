@@ -4,6 +4,7 @@ import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/PlaceComments';
 import HotContents from '../components/main/HotContents';
 import { CommentType, ContentType } from '../model/interface';
+import LocationFilter from '../components/share/LocationFilter';
 
 const Home: React.FC<{ contents: ContentType[]; comments: CommentType[] }> = ({
   contents,
@@ -11,6 +12,7 @@ const Home: React.FC<{ contents: ContentType[]; comments: CommentType[] }> = ({
 }) => {
   return (
     <Base>
+      <LocationFilter />
       <HotContents contents={contents} />
       <RecentContents contents={contents} comments={comments} />
       <PlaceComments />
@@ -26,5 +28,3 @@ const Base = styled.div`
   justify-content: start;
   align-items: center;
 `;
-
-
