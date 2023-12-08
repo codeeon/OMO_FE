@@ -10,8 +10,8 @@ import Modal from '../Modal';
 import { SelectedInfoType } from '../../model/interface';
 import { getToday } from '../../function/getToday';
 import { postContent } from '../../apis/apis';
-import { QueryClient, useMutation, useQueryClient } from 'react-query';
-
+import { useMutation, useQueryClient } from 'react-query';
+import { v4 as uuidv4 } from 'uuid';
 interface Props {
   closePostModalHandler: () => void;
 }
@@ -30,7 +30,7 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
 
   const uniqueId = useId();
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const clearPostHandler = () => {
     closePostModalHandler();
@@ -45,16 +45,18 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
     setText('');
   };
 
-  const { mutate, isLoading, isError, error, isSuccess } =
-    useMutation(postContent, {
-      onSuccess : () => {
-        queryClient.invalidateQueries("contents")
-      }
-    });
+  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
+    postContent,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('contents');
+      },
+    },
+  );
 
   const savePostHandler = () => {
     const newContent = {
-      id: uniqueId,
+      id: uuidv4(),
       userId: '철', //TODO 추후에 추가
       categoryName: selectedInfo.categoryName,
       locationName: selectedInfo.addressName,
@@ -62,8 +64,8 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
       imageURL: imageURL,
       likeCount: 0,
       placeName: selectedInfo.placeName,
-      latitude: selectedInfo.latitude,
-      longitude: selectedInfo.longitude,
+      latitude: Number(selectedInfo.latitude),
+      longitude: Number(selectedInfo.longitude),
       createdAt: getToday(),
       updatedAt: getToday(),
     };

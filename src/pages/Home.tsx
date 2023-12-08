@@ -1,18 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/PlaceComments';
 import HotContents from '../components/main/HotContents';
-import { CommentType, ContentType } from '../model/interface';
+import { CommentType, ContentType, CurrentLocationType } from '../model/interface';
 import LocationFilter from '../components/share/LocationFilter';
 
-const Home: React.FC<{ contents: ContentType[]; comments: CommentType[] }> = ({
+interface Props {
+  contents: ContentType[];
+  comments: CommentType[];
+  currentLocation: CurrentLocationType;
+  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+}
+
+const Home: React.FC<Props> = ({
   contents,
   comments,
+  currentLocation,
+  setCurrentLocation,
 }) => {
   return (
     <Base>
-      <LocationFilter />
+      <LocationFilter
+        currentLocation={currentLocation}
+        setCurrentLocation={setCurrentLocation}
+      />
       <HotContents contents={contents} />
       <RecentContents contents={contents} comments={comments} />
       <PlaceComments />

@@ -9,7 +9,8 @@ import { CommentType, ContentType } from '../../model/interface';
 const DetailContentsModal: React.FC<{
   cont: ContentType;
   comments: CommentType[];
-}> = ({ cont, comments }) => {
+  closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}> = ({ cont, comments, closeModalHandler }) => {
   const {
     id,
     userId,
@@ -22,7 +23,12 @@ const DetailContentsModal: React.FC<{
   } = cont;
   return (
     <Base>
-      <DetailModalHeader userId={userId} createdAt={createdAt} />
+      <DetailModalHeader
+        userId={userId}
+        createdAt={createdAt}
+        contentId={id}
+        closeModalHandler={closeModalHandler}
+      />
       <ImageContainer imageURL={imageURL} />
       <DetailModalBody
         placeName={placeName}

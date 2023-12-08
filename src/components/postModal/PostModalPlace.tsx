@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
-import { Map } from 'react-kakao-maps-sdk';
 import { IoClose } from 'react-icons/io5';
 import { SelectedInfoType } from '../../model/interface';
 
@@ -36,7 +35,6 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
     ps.keywordSearch(event.target.value, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         setSearchValue(data);
-        console.log(data);
       }
     });
   };
@@ -97,27 +95,27 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
       )}
       {inputValue && (
         <ResultList>
-          {searchValue.map((value) => (
+          {searchValue.map((result) => (
             <ResultItemContainer
               onClick={() => {
                 const address =
-                  value.road_address_name === ''
-                    ? value.address_name
-                    : value.road_address_name;
+                  result.road_address_name === ''
+                    ? result.address_name
+                    : result.road_address_name;
                 selectInfoHandler(
-                  value.place_name,
+                  result.place_name,
                   address,
-                  value.category_group_name,
-                  value.x,
-                  value.y,
+                  result.category_group_name,
+                  result.y,
+                  result.x,
                 );
               }}
             >
-              <ResultPlaceName>{value.place_name}</ResultPlaceName>
+              <ResultPlaceName>{result.place_name}</ResultPlaceName>
               <ResultAdress>
-                {value.road_address_name === ''
-                  ? value.address_name
-                  : value.road_address_name}
+                {result.road_address_name === ''
+                  ? result.address_name
+                  : result.road_address_name}
               </ResultAdress>
             </ResultItemContainer>
           ))}

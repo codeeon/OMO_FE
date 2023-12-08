@@ -14,16 +14,22 @@ const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
 
   const { placeName, createdAt, content, likeCount, imageURL } = cont;
 
-  const openModalHandler = () => {
+  const openModalHandler = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
     setIsModalOpen(true);
   };
 
-  const closeModalHandler = () => {
+  const closeModalHandler = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
     setIsModalOpen(false);
   };
 
   return (
-    <Base onClick={openModalHandler}>
+    <Base onClick={(e) => openModalHandler(e)}>
       <ImgContainer imageURL={imageURL} />
       <HeaderContainer>
         <Title>{placeName}</Title>
@@ -43,7 +49,11 @@ const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
         </FooterItem>
       </Footer>
       <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
-        <DetailContentsModal cont={cont} comments={comments} />
+        <DetailContentsModal
+          cont={cont}
+          comments={comments}
+          closeModalHandler={closeModalHandler}
+        />
       </Modal>
     </Base>
   );

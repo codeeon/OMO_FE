@@ -1,25 +1,37 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { SlLocationPin } from 'react-icons/sl';
 import { LuSettings2 } from 'react-icons/lu';
 import LocationDropdown from './LocationDropdown';
-import { GeocodeResult, getCurrentPosition } from '../../function/kakao';
+import {
+  GeocodeResult,
+  distToLoc,
+  getCurrentAddress,
+} from '../../function/kakao';
 import { useQuery } from 'react-query';
 import { BounceLoader } from 'react-spinners';
+import { CurrentLocationType } from '../../model/interface';
 
-const LocationFilter = () => {
-  const [location, setLocation] = useState<string>('');
+interface Props {
+  currentLocation: CurrentLocationType;
+  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+}
+
+const LocationFilter: React.FC<Props> = ({
+  currentLocation,
+  setCurrentLocation,
+}) => {
   const [fetchData, setFetchData] = useState(false);
 
-  console.log(location);
-
   const { data, isLoading, error, refetch } = useQuery<GeocodeResult, Error>(
-    'getCurrentPosition',
-    getCurrentPosition,
+    'getCurrentAddress',
+    getCurrentAddress,
     {
       enabled: fetchData,
       onSuccess: (result) => {
-        setLocation(result[0].address.region_2depth_name);
+        const distName = result[0].address.region_2depth_name;
+        const coord = distToLoc(result[0].address.region_2depth_name);
+        setCurrentLocation({ distName: distName, coord: coord });
       },
     },
   );
@@ -34,13 +46,13 @@ const LocationFilter = () => {
         <SlLocationPin />
         {isLoading ? (
           <BounceLoader color="#f97393" size={30} />
-        ) : location ? (
-          <span>{location}</span>
+        ) : currentLocation ? (
+          <span>{currentLocation.distName}</span>
         ) : (
           <span>현재 위치</span>
         )}
       </CurLocaBtn>
-      <LocationDropdown setLocation={setLocation} />
+      <LocationDropdown setCurrentLocation={setCurrentLocation} />
     </Base>
   );
 };
@@ -80,10 +92,10 @@ const CurLocaBtn = styled.div`
     font-size: 16px;
     font-weight: 700;
   }
+
   cursor: pointer;
+
   &:hover {
     background: #e6e6e6;
   }
 `;
-
-asdfakjlsdfj;
