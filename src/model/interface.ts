@@ -19,6 +19,7 @@ export interface ContentType {
   likeCount: number;
   createdAt: string;
   updatedAt: string;
+  star: number;
 }
 
 //TODO 유저 데이터 및 컨텐츠 데이터 추가
