@@ -1,51 +1,25 @@
-import React, {
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { LuSettings2 } from 'react-icons/lu';
-import { CurrentLocationType } from '../../model/interface';
-import { distToLoc } from '../../function/kakao';
+import { IoEllipsisHorizontalSharp } from 'react-icons/io5';
+import { useMutation, useQueryClient } from 'react-query';
+import { deleteContent } from '../../apis/apis';
 
 interface Props {
-  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+  contentId: string;
+  closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
-const SeoulDistrict = [
-  '전체',
-  '강남구',
-  '강동구',
-  '강북구',
-  '강서구',
-  '관악구',
-  '광진구',
-  '구로구',
-  '금천구',
-  '노원구',
-  '도봉구',
-  '동대문구',
-  '동작구',
-  '마포구',
-  '서대문구',
-  '서초구',
-  '성동구',
-  '성북구',
-  '송파구',
-  '양천구',
-  '영등포구',
-  '용산구',
-  '은평구',
-  '종로구',
-  '중구',
-  '중랑구',
-];
-
-const LocationDropdown: React.FC<Props> = ({ setCurrentLocation }) => {
+const HeaderDropdown: React.FC<Props> = ({ contentId, closeModalHandler }) => {
   const [isOpen, setIsDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteMutate, isLoading } = useMutation(deleteContent, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('contents');
+    },
+  });
 
   const openDropdown = () => {
     setIsDropdown(true);
@@ -67,34 +41,37 @@ const LocationDropdown: React.FC<Props> = ({ setCurrentLocation }) => {
     };
   }, [isOpen]);
 
+  const onClickUpdate = () => {};
+
+  const onClickDelete = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    deleteMutate(contentId);
+    closeModalHandler(e);
+  };
+
   return (
     <Base onClick={openDropdown}>
-      <LuSettings2 />
+      <IoEllipsisHorizontalSharp />
       <List isOpen={isOpen} ref={dropdownRef}>
-        {SeoulDistrict.map((dist) => (
-          <Item
-            onClick={() =>
-              setCurrentLocation({ distName: dist, coord: distToLoc(dist) })
-            }
-          >
-            {dist}
-          </Item>
-        ))}
+        <Item>수정하기</Item>
+        <Item color="red" onClick={(e) => onClickDelete(e)}>
+          삭제하기
+        </Item>
       </List>
     </Base>
   );
 };
 
-export default LocationDropdown;
+export default HeaderDropdown;
 
 const Base = styled.div`
+  margin-left: auto;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 10px;
   border-radius: 100%;
-
-  border: 1px solid #d9d9d9;
   width: 15px;
   height: 15px;
   &:hover {
@@ -117,43 +94,46 @@ const FadeIn = keyframes`
     opacity: 1;
     transform:translateY(0);
   };
-  
 `;
 
-const List = styled.div<{ isOpen: boolean; width?: string }>`
+const List = styled.div<{ isOpen: boolean }>`
   position: absolute;
   top: 50px;
 
   display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-  flex-direction: row;
-  width: 270px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  flex-wrap: wrap;
-  justify-content: start;
-  align-items: flex-start;
-  height: 400px;
+  width: 80px;
+  height: auto;
+
+  padding: 5px 10px;
+
   border-radius: 8px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  padding: 7px;
+
   background: #fff;
   z-index: 100;
-  overflow-y: scroll;
+  animation: ${FadeIn} 300ms ease-in-out;
 `;
 
-const Item = styled.div`
-  padding: 10px;
+const Item = styled.div<{ color?: string }>`
+  padding: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: calc(33.333% - 20px); // Three columns with a small gap
-  margin-bottom: 10px;
+
+  width: 80px;
+  height: 25px;
+
   &:hover {
     background: #f2f4f7;
   }
   cursor: pointer;
-  font-size: 15px;
-  transition: background 300ms ease-in-out;
+  font-size: 16px;
   animation: ${FadeIn} 300ms ease-in-out;
   border-radius: 5px;
+  color: ${({ color }) => (color === 'red' ? '#FF3263' : 'black')};
 `;

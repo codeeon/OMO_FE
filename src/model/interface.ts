@@ -12,8 +12,8 @@ export interface ContentType {
   categoryName: string;
   locationName: string;
   placeName: string;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   content: string;
   imageURL: string[];
   likeCount: number;
@@ -29,4 +29,9 @@ export interface CommentType {
   text: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface CurrentLocationType {
+  distName: string;
+  coord: { lat: number; lng: number };
 }
