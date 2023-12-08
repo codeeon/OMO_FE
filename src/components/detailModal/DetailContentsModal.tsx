@@ -10,7 +10,8 @@ const DetailContentsModal: React.FC<{
   cont: ContentType;
   comments: CommentType[];
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}> = ({ cont, comments, closeModalHandler }) => {
+  star: number;
+}> = ({ cont, comments, closeModalHandler, star }) => {
   const {
     id,
     userId,
@@ -34,6 +35,7 @@ const DetailContentsModal: React.FC<{
         placeName={placeName}
         locationName={locationName}
         content={content}
+        star={star}
       />
       <DetailModalFooter likeCount={likeCount} />
       <Comment postId={id} comments={comments} />

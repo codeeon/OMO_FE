@@ -12,7 +12,7 @@ const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { placeName, createdAt, content, likeCount, imageURL } = cont;
+  const { placeName, createdAt, content, likeCount, imageURL, star } = cont;
 
   const openModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -51,6 +51,7 @@ const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
       <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
         <DetailContentsModal
           cont={cont}
+          star={star}
           comments={comments}
           closeModalHandler={closeModalHandler}
         />

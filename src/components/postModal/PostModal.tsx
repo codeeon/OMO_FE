@@ -12,6 +12,7 @@ import { getToday } from '../../function/getToday';
 import { postContent } from '../../apis/apis';
 import { useMutation, useQueryClient } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
+import Stars from './Stars';
 interface Props {
   closePostModalHandler: () => void;
 }
@@ -19,6 +20,7 @@ interface Props {
 const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
   const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
   const [imageURL, setImageUrl] = useState<string[]>([]);
+  const [starNum, setStarNum] = useState(0);
   const [selectedInfo, setSelectedInfo] = useState<SelectedInfoType>({
     placeName: '',
     addressName: '',
@@ -27,8 +29,6 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
     longitude: '',
   });
   const [text, setText] = useState('');
-
-  const uniqueId = useId();
 
   const queryClient = useQueryClient();
 
@@ -68,6 +68,7 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
       longitude: Number(selectedInfo.longitude),
       createdAt: getToday(),
       updatedAt: getToday(),
+      star: starNum,
     };
     mutate(newContent);
     clearPostHandler();
@@ -88,6 +89,7 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}
       />
+      <Stars starNum={starNum} setStarNum={setStarNum} />
       <PostModalText text={text} setText={setText} />
       <Modal isOpen={isOpen} onClose={closeModalHandler}>
         <ConfirmModal
