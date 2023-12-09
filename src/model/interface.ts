@@ -7,7 +7,7 @@ export interface SelectedInfoType {
 }
 
 export interface ContentType {
-  id: string;
+  id?: number | undefined;
   userId: string;
   categoryName: string;
   locationName: string;
@@ -24,8 +24,8 @@ export interface ContentType {
 
 //TODO 유저 데이터 및 컨텐츠 데이터 추가
 export interface CommentType {
-  id: string;
-  postId: string;
+  id?: number | undefined;
+  postId: number | undefined;
   userName: string;
   text: string;
   createdAt: string;

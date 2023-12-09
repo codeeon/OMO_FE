@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
 import RecentCard from '../components/main/RecentCard';
-import Modal from '../components/Modal';
+import Modal from '../components/Modal/Modal';
 import PostModal from '../components/postModal/PostModal';
 import useModalCtr from '../hooks/useModalCtr';
 import { CommentType, ContentType } from '../model/interface';
@@ -12,7 +12,11 @@ const Contents: React.FC<{
   comments: CommentType[];
 }> = ({ contents, comments }) => {
   const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
-
+  const {
+    isOpen: isSubModalOpen,
+    openModalHandler: openSubModal,
+    closeModalHandler: closeSubModal,
+  } = useModalCtr();
   return (
     <Base>
       <Wrapper>
@@ -31,8 +35,13 @@ const Contents: React.FC<{
           </RecentCardGrid>
         </Body>
       </Wrapper>
-      <Modal isOpen={isOpen} onClose={closeModalHandler}>
-        <PostModal closePostModalHandler={closeModalHandler} />
+      <Modal isOpen={isOpen} onClose={openSubModal}>
+        <PostModal
+          closeMainModal={closeModalHandler}
+          isSubModalOpen={isSubModalOpen}
+          openSubModal={openSubModal}
+          closeSubModal={closeSubModal}
+        />
       </Modal>
     </Base>
   );

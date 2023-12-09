@@ -5,17 +5,16 @@ import { useMutation, useQueryClient } from 'react-query';
 import { deleteContent } from '../../apis/apis';
 
 interface Props {
-  contentId: string;
+  contentId: number | undefined;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 const HeaderDropdown: React.FC<Props> = ({ contentId, closeModalHandler }) => {
   const [isOpen, setIsDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
   const queryClient = useQueryClient();
 
-  const { mutate: deleteMutate, isLoading } = useMutation(deleteContent, {
+  const { mutate: deleteMutate } = useMutation(deleteContent, {
     onSuccess: () => {
       queryClient.invalidateQueries('contents');
     },
@@ -45,6 +44,8 @@ const HeaderDropdown: React.FC<Props> = ({ contentId, closeModalHandler }) => {
 
   const onClickDelete = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     deleteMutate(contentId);
+    console.log(contentId);
+
     closeModalHandler(e);
   };
 
@@ -83,6 +84,7 @@ const Base = styled.div`
   cursor: pointer;
   position: relative;
   background: #fff;
+  transition: all 300ms ease-in-out;
 `;
 
 const FadeIn = keyframes`
@@ -136,4 +138,5 @@ const Item = styled.div<{ color?: string }>`
   animation: ${FadeIn} 300ms ease-in-out;
   border-radius: 5px;
   color: ${({ color }) => (color === 'red' ? '#FF3263' : 'black')};
+  transition: all 300ms ease-in-out;
 `;

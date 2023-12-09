@@ -5,7 +5,7 @@ import HeaderDropdown from './HeaderDropdown';
 const DetailModalHeader: React.FC<{
   userId: string;
   createdAt: string;
-  contentId: string;
+  contentId: number | undefined;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }> = ({ userId, createdAt, contentId, closeModalHandler }) => {
   return (
@@ -15,7 +15,10 @@ const DetailModalHeader: React.FC<{
         <UserName>{userId}</UserName>
         <CreationDate>{createdAt}</CreationDate>
       </UserInfoContainer>
-      <HeaderDropdown contentId={contentId} closeModalHandler={closeModalHandler}/>
+      <HeaderDropdown
+        contentId={contentId}
+        closeModalHandler={closeModalHandler}
+      />
     </Base>
   );
 };

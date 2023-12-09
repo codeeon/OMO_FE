@@ -1,26 +1,36 @@
-import React, { useId, useState } from 'react';
-import styled from 'styled-components';
-import { MdArrowBack } from 'react-icons/md';
+import React, { useEffect, useId, useState } from 'react';
+import styled, { css } from 'styled-components';
+import { IoIosArrowRoundBack } from 'react-icons/io';
+
 import PostModalImage from './PostModalImage';
 import PostModalPlace from './PostModalPlace';
 import PostModalText from './PostModalText';
 import ConfirmModal from './ConfirmModal';
-import useModalCtr from '../../hooks/useModalCtr';
-import Modal from '../Modal';
 import { SelectedInfoType } from '../../model/interface';
 import { getToday } from '../../function/getToday';
 import { postContent } from '../../apis/apis';
 import { useMutation, useQueryClient } from 'react-query';
-import { v4 as uuidv4 } from 'uuid';
 import Stars from './Stars';
+import SubModal from '../Modal/SubModal';
+
 interface Props {
-  closePostModalHandler: () => void;
+  closeMainModal: () => void;
+  isSubModalOpen: boolean;
+  openSubModal: () => void;
+  closeSubModal: () => void;
 }
 
-const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
-  const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
+const PostModal: React.FC<Props> = ({
+  closeMainModal,
+  isSubModalOpen,
+  openSubModal,
+  closeSubModal,
+}) => {
+  const [isValidate, setIsValidate] = useState<boolean>(false);
   const [imageURL, setImageUrl] = useState<string[]>([]);
   const [starNum, setStarNum] = useState(0);
+  const [searchValue, setSearchValue] =
+    useState<kakao.maps.services.PlacesSearchResult>([]);
   const [selectedInfo, setSelectedInfo] = useState<SelectedInfoType>({
     placeName: '',
     addressName: '',
@@ -33,7 +43,8 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
   const queryClient = useQueryClient();
 
   const clearPostHandler = () => {
-    closePostModalHandler();
+    closeMainModal();
+    closeSubModal();
     setImageUrl([]);
     setSelectedInfo({
       placeName: '',
@@ -44,6 +55,17 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
     });
     setText('');
   };
+
+  useEffect(() => {
+    console.log(selectedInfo.placeName);
+    console.log(imageURL.length !== 0);
+    console.log(text);
+    if (imageURL.length !== 0 && text && selectedInfo.placeName) {
+      setIsValidate(true);
+    } else {
+      setIsValidate(false);
+    }
+  }, [imageURL, text, searchValue]);
 
   const { mutate, isLoading, isError, error, isSuccess } = useMutation(
     postContent,
@@ -56,11 +78,10 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
 
   const savePostHandler = () => {
     const newContent = {
-      id: uuidv4(),
       userId: '철', //TODO 추후에 추가
       categoryName: selectedInfo.categoryName,
       locationName: selectedInfo.addressName,
-      content: text,
+      content: text.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
       imageURL: imageURL,
       likeCount: 0,
       placeName: selectedInfo.placeName,
@@ -70,33 +91,38 @@ const PostModal: React.FC<Props> = ({ closePostModalHandler }) => {
       updatedAt: getToday(),
       star: starNum,
     };
-    mutate(newContent);
-    clearPostHandler();
+    if (isValidate) {
+      mutate(newContent);
+      clearPostHandler();
+    }
   };
 
   return (
     <Base>
-      {isLoading && '업로드 중!'}
       <Header>
-        <BackBtn onClick={openModalHandler}>
-          <MdArrowBack />
+        <BackBtn onClick={openSubModal}>
+          <IoIosArrowRoundBack />
         </BackBtn>
         <Title>새 게시글</Title>
-        <CompleteBtn onClick={savePostHandler}>작성완료</CompleteBtn>
+        <CompleteBtn onClick={savePostHandler} disable={!isValidate}>
+          작성완료
+        </CompleteBtn>
       </Header>
       <PostModalImage imageURL={imageURL} setImageUrl={setImageUrl} />
       <PostModalPlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
       />
       <Stars starNum={starNum} setStarNum={setStarNum} />
       <PostModalText text={text} setText={setText} />
-      <Modal isOpen={isOpen} onClose={closeModalHandler}>
+      <SubModal isOpen={isSubModalOpen}>
         <ConfirmModal
           clearPostHandler={clearPostHandler}
-          closeModalHandler={closeModalHandler}
+          closeModalHandler={closeSubModal}
         />
-      </Modal>
+      </SubModal>
     </Base>
   );
 };
@@ -105,7 +131,7 @@ export default PostModal;
 
 const Base = styled.div`
   width: 700px;
-  height: 1120px;
+  height: 900px;
   border-radius: 16px;
   background: #fff;
 
@@ -115,6 +141,7 @@ const Base = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  transition: all 200ms ease-in;
 `;
 
 const Header = styled.div`
@@ -125,31 +152,45 @@ const Header = styled.div`
 `;
 
 const BackBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   font-size: 40px;
   color: #a5a5a5;
+  cursor: pointer;
 `;
 
 const Title = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 20px;
   font-weight: 700;
   color: #111;
   letter-spacing: -0.2px;
 `;
 
-const CompleteBtn = styled.div`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 9px 14px;
+const CompleteBtn = styled.div<{ disable: boolean }>`
+  padding: 10px 15px;
   font-size: 14px;
   font-weight: 700;
   border-radius: 8px;
-  background: #b1b1b1;
   color: #fff;
   cursor: pointer;
-  &:hover {
-    background-color: #c7c7c7;
-  }
+  ${({ disable }) =>
+    disable
+      ? css`
+          background: #b1b1b1;
+        `
+      : css`
+          background: #44a5ff;
+          &:hover {
+            background-color: #f97476;
+          }
+        `}
+
+  transition: all 200ms ease-in;
 `;
 
 const PlaceName = styled.div`

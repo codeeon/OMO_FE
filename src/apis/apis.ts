@@ -2,20 +2,21 @@ import axios, { AxiosResponse } from 'axios';
 import { CommentType, ContentType } from '../model/interface';
 import { MutationFunction } from 'react-query';
 
-const instance = axios.create({
-  baseURL: 'https://ommmoapi-5557a8752856.herokuapp.com',
+export const instance = axios.create({
+  // baseURL: 'https://ommmoapi-5557a8752856.herokuapp.com',
+  baseURL: 'http://localhost:3001',
 });
 
 export const postContent = async (newContent: ContentType) => {
   return await instance.post(`/contents`, newContent);
 };
 
-export const deleteContent = async (contentId: string) => {
+export const deleteContent = async (contentId: number | undefined) => {
   return instance.delete(`/contents/${contentId}`);
 };
 
 export const patchContent = async (
-  contentId: string,
+  contentId: number | undefined,
   newContent: ContentType,
 ) => {
   return instance.patch(`/contents/${contentId}`, newContent);
@@ -30,24 +31,24 @@ export const postComment: MutationFunction<void, CommentType> = async (
   newComment: CommentType,
 ) => {
   try {
-    const response = await instance.post('/comment', newComment);
+    const response = await instance.post('/comments', newComment);
     return response.data;
   } catch (error) {
     console.error(error);
-    throw error; // Optional: Re-throw the error to propagate it further
+    throw error;
   }
 };
 
-export const deleteComment = async (commentId: string) => {
-  return instance.delete(`/comment/${commentId}`);
+export const deleteComment = async (commentId: number | undefined) => {
+  return instance.delete(`/comments/${commentId}`);
 };
 
 export const patchComment: MutationFunction<
   void,
-  { id: string; updatedComment: CommentType }
+  { id: number | undefined; updatedComment: CommentType }
 > = async ({ id, updatedComment }) => {
   try {
-    const response = await instance.patch(`/comment/${id}`, updatedComment);
+    const response = await instance.patch(`/comments/${id}`, updatedComment);
     return response.data; // Assuming your API returns the updated comment
   } catch (error) {
     console.error(error);
@@ -55,6 +56,6 @@ export const patchComment: MutationFunction<
 };
 
 export const getComment = async () => {
-  const response = await instance.get(`/comment`);
+  const response = await instance.get(`/comments`);
   return response.data;
 };

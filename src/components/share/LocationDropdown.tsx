@@ -12,6 +12,7 @@ import { distToLoc } from '../../function/kakao';
 
 interface Props {
   setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+  setFetchData: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const SeoulDistrict = [
@@ -43,12 +44,26 @@ const SeoulDistrict = [
   '중랑구',
 ];
 
-const LocationDropdown: React.FC<Props> = ({ setCurrentLocation }) => {
+const LocationDropdown: React.FC<Props> = ({
+  setCurrentLocation,
+  setFetchData,
+}) => {
   const [isOpen, setIsDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const openDropdown = () => {
     setIsDropdown(true);
+  };
+
+  const onClickCurLocHandler = (
+    distName: string,
+    coord: {
+      lat: number;
+      lng: number;
+    },
+  ) => {
+    setCurrentLocation({ distName: distName, coord: coord });
+    setFetchData(false);
   };
 
   useEffect(() => {
@@ -72,11 +87,7 @@ const LocationDropdown: React.FC<Props> = ({ setCurrentLocation }) => {
       <LuSettings2 />
       <List isOpen={isOpen} ref={dropdownRef}>
         {SeoulDistrict.map((dist) => (
-          <Item
-            onClick={() =>
-              setCurrentLocation({ distName: dist, coord: distToLoc(dist) })
-            }
-          >
+          <Item onClick={() => onClickCurLocHandler(dist, distToLoc(dist))}>
             {dist}
           </Item>
         ))}
