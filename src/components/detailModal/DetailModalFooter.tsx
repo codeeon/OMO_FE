@@ -1,18 +1,31 @@
-import React from 'react';
-import { IoMdHeartEmpty } from 'react-icons/io';
-import { TbMessage2 } from 'react-icons/tb';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { CommentType } from '../../model/interface';
+import { PiHeartFill } from 'react-icons/pi';
+import { PiHeart } from 'react-icons/pi';
+import { TbMessage } from 'react-icons/tb';
+import { motion } from 'framer-motion';
+import LikeBtn from './LikeBtn';
 
-const DetailModalFooter: React.FC<{ likeCount: number }> = ({ likeCount }) => {
+interface Props {
+  likeCount: number;
+  comments: CommentType[];
+  id: number | undefined;
+}
+
+const DetailModalFooter: React.FC<Props> = ({ likeCount, comments, id }) => {
+  const commentLength = comments.filter(
+    (comment) => comment.postId === id,
+  ).length;
   return (
     <Footer>
       <FooterItem color="red">
-        <IoMdHeartEmpty />
+        <LikeBtn />
         <span>{likeCount}</span>
       </FooterItem>
       <FooterItem color="blue">
-        <TbMessage2 />
-        <span>2</span>
+        <TbMessage />
+        <span>{commentLength}</span>
       </FooterItem>
     </Footer>
   );
@@ -25,7 +38,7 @@ const Footer = styled.div`
   justify-content: start;
   align-items: center;
   margin-top: 21px;
-  gap: 8px;
+  gap: 10px;
 `;
 
 const FooterItem = styled.div<{ color: string }>`
@@ -39,6 +52,7 @@ const FooterItem = styled.div<{ color: string }>`
     color: ${({ color }) => (color === 'red' ? '#F97393' : '#44A5FF')};
   }
   span {
+    margin-top: 4px;
     font-size: 20px;
     font-weight: 700;
   }
