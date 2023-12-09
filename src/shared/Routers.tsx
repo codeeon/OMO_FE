@@ -16,6 +16,7 @@ import {
 } from '../model/interface';
 import { useQuery } from 'react-query';
 import { getComment, getContent } from '../apis/apis';
+import Signup from '../pages/Signup';
 
 const Routers = () => {
   const [contents, setContents] = useState<ContentType[]>([]);
@@ -60,6 +61,7 @@ const Routers = () => {
           element={<Contents contents={contents} comments={comments} />}
         />
         <Route path="/map" element={<Map />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </>
   );
