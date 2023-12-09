@@ -11,11 +11,15 @@ const RecentContents: React.FC<{
 }> = ({ contents, comments }) => {
   const navigate = useNavigate();
 
+  const navigateToContentsPage = () => {
+    navigate('/contents');
+  };
+
   return (
     <Base>
       <Header>
         <Title>오늘 뭐하지? (최신글)</Title>
-        <AllBtnWrapper onClick={() => navigate('/contents')}>
+        <AllBtnWrapper onClick={navigateToContentsPage}>
           <Description>전체보기</Description>
           <BtnWrapper>
             <IoIosArrowForward />

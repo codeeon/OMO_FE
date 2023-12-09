@@ -19,6 +19,10 @@ const DetalModalBody: React.FC<Props> = ({
   return (
     <Base>
       <Title>{placeName}</Title>
+      <PlaceInfo>
+        <BiSolidMap />
+        <span>{locationName}</span>
+      </PlaceInfo>
       <StarContainer>
         {/* 별 아이콘을 특정 개수만큼 생성하여 표시 */}
         {Array.from({ length: 5 }, (_, idx) => (
@@ -29,11 +33,8 @@ const DetalModalBody: React.FC<Props> = ({
         {/* 별점 텍스트 표시 */}
         <span>{star}점</span>
       </StarContainer>
-      <PlaceInfo>
-        <BiSolidMap />
-        <span>{locationName}</span>
-      </PlaceInfo>
-      <Text>{content}</Text>
+
+      <Text dangerouslySetInnerHTML={{ __html: content }} />
     </Base>
   );
 };
@@ -54,7 +55,7 @@ const Title = styled.div`
 `;
 
 const PlaceInfo = styled.div`
-  margin-top: 13px;
+  margin-top: 10px;
   color: #44a5ff;
   font-size: 16px;
   font-weight: 500;
@@ -70,7 +71,7 @@ const Text = styled.div`
 `;
 
 const StarContainer = styled.div`
-  margin-top: 8px;
+  margin-top: 15px;
 
   width: 100%;
   display: flex;

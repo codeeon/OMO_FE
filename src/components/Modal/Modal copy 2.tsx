@@ -2,7 +2,7 @@ import React, { MouseEventHandler, ReactNode } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import Portal from '../../Portal';
-import './index.css';
+import './modal.css';
 
 interface Props {
   children: ReactNode;
@@ -51,14 +51,18 @@ const Dim = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.8);
-  /* backdrop-filter: blur(2px); */
+  width: 110%;
+  height: 110%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
 `;
 
 const Container = styled.div`
-  max-width: 1000px;
+  width: 700px;
+  height: 900px;
+
   position: relative;
-  width: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;

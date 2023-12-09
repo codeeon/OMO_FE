@@ -11,6 +11,15 @@ const ConfirmModal: React.FC<Props> = ({
   closeModalHandler,
   clearPostHandler,
 }) => {
+  const onClickYesBtn = () => {
+    clearPostHandler()
+    
+  }
+
+  const onClickNoBtn = () => {
+    closeModalHandler
+  }
+
   return (
     <Base>
       <Title>게시글을 삭제하시겠습니까?</Title>
@@ -22,7 +31,7 @@ const ConfirmModal: React.FC<Props> = ({
           height="15px"
           fontSize="14px"
           fontWeight="700"
-          onClick={clearPostHandler}
+          onClick={onClickYesBtn}
         >
           예
         </Button>
@@ -33,7 +42,7 @@ const ConfirmModal: React.FC<Props> = ({
           height="15px"
           fontSize="14px"
           fontWeight="700"
-          onClick={closeModalHandler}
+          onClick={onClickNoBtn}
         >
           아니오
         </Button>

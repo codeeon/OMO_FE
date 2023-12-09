@@ -10,8 +10,7 @@ const DetailContentsModal: React.FC<{
   cont: ContentType;
   comments: CommentType[];
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  star: number;
-}> = ({ cont, comments, closeModalHandler, star }) => {
+}> = ({ cont, comments, closeModalHandler }) => {
   const {
     id,
     userId,
@@ -21,7 +20,9 @@ const DetailContentsModal: React.FC<{
     content,
     likeCount,
     imageURL,
+    star,
   } = cont;
+  console.log(id);
   return (
     <Base>
       <DetailModalHeader
@@ -38,7 +39,7 @@ const DetailContentsModal: React.FC<{
         star={star}
       />
       <DetailModalFooter likeCount={likeCount} />
-      <Comment postId={id} comments={comments} />
+      <Comment contentId={id} comments={comments} />
     </Base>
   );
 };
@@ -46,13 +47,8 @@ const DetailContentsModal: React.FC<{
 export default DetailContentsModal;
 
 const Base = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: start;
-
-  width: calc(700px - 50px);
-  height: calc(1120px - 50px);
+  width: 700px;
+  height: 900px;
   background-color: #fff;
   border-radius: 16px;
 
@@ -63,8 +59,8 @@ const Base = styled.div`
 
 const ImageContainer = styled.div<{ imageURL: string[] }>`
   margin-top: 16px;
-  width: 655px;
-  height: 610px;
+  width: 100%;
+  height: 600px;
   border-radius: 16px;
   background: #d9d9d9;
   background-position: center;

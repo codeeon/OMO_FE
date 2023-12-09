@@ -52,7 +52,10 @@ const LocationFilter: React.FC<Props> = ({
           <span>현재 위치</span>
         )}
       </CurLocaBtn>
-      <LocationDropdown setCurrentLocation={setCurrentLocation} />
+      <LocationDropdown
+        setCurrentLocation={setCurrentLocation}
+        setFetchData={setFetchData}
+      />
     </Base>
   );
 };

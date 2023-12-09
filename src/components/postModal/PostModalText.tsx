@@ -22,7 +22,7 @@ const PostModalText: React.FC<{
   return (
     <Base>
       <TextArea
-        placeholder="장소에 대해 좋았던 점을 작성해 보세요"
+        placeholder="글을 입력하세요"
         value={text}
         onChange={handleChange}
         rows={calculateRows(text)}
@@ -41,19 +41,30 @@ const Base = styled.div`
   width: 100%;
 
   display: flex;
+  flex-direction: column;
   justify-content: start;
-  align-items: center;
+  align-items: end;
 `;
 
 const TextArea = styled.textarea`
-  width: 80%;
+  width: 100%;
+  height: 150px;
   resize: none;
+
   border: none;
   outline: none;
+
   color: #000;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+
+  &::placeholder {
+    color: #a5a5a5;
+    font-size: 16px;
+    font-weight: 500;
+  }
 `;
 
 const CharacterCount = styled.div<{ rows: any }>`

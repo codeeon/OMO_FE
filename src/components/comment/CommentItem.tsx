@@ -8,9 +8,9 @@ import CommentDropdown from './CommentDropdown';
 import Button from '../share/Button';
 
 //TODO 유저 데이터
-const CommentItem: React.FC<{ comment: CommentType; postId: string }> = ({
-  comment,
-}) => {
+const CommentItem: React.FC<{
+  comment: CommentType;
+}> = ({ comment }) => {
   const { id, postId, userName, text, createdAt, updatedAt } = comment;
   const [textValue, setTextValue] = useState(text);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -20,7 +20,7 @@ const CommentItem: React.FC<{ comment: CommentType; postId: string }> = ({
   const { mutate: patchMutate } = useMutation<
     void,
     unknown,
-    { id: string; updatedComment: CommentType }
+    { id: number | undefined; updatedComment: CommentType }
   >(patchComment, {
     onSuccess: () => {
       queryClient.invalidateQueries('comments');

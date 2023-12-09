@@ -3,17 +3,16 @@ import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
 import DetailContentsModal from '../detailModal/DetailContentsModal';
-import Modal from '../Modal';
+import Modal from '../Modal/Modal';
 import { CommentType, ContentType } from '../../model/interface';
 
-const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
-  cont,
-  comments,
-}) => {
+const RecentCard: React.FC<{
+  cont: ContentType;
+  comments: CommentType[];
+}> = ({ cont, comments }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { placeName, createdAt, content, likeCount, imageURL, star } = cont;
-
+  const { placeName, createdAt, content, likeCount, imageURL } = cont;
   const openModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -36,7 +35,7 @@ const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
         <VerticalLine />
         <Date>{createdAt}</Date>
       </HeaderContainer>
-      <Text>{content}</Text>
+      <Text dangerouslySetInnerHTML={{ __html: content }} />
       <Footer>
         <FooterItem>
           <IoMdHeartEmpty />
@@ -51,7 +50,6 @@ const RecentCard: React.FC<{ cont: ContentType; comments: CommentType[] }> = ({
       <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
         <DetailContentsModal
           cont={cont}
-          star={star}
           comments={comments}
           closeModalHandler={closeModalHandler}
         />
@@ -116,6 +114,11 @@ const Text = styled.div`
   line-height: 140%;
   font-size: 16px;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 20px;
+  width: 270px;
 `;
 
 const Footer = styled.div`

@@ -24,6 +24,7 @@ const Stars: React.FC<Props> = ({ starNum, setStarNum }) => {
           {idx <= hover || idx <= starNum ? <FaStar /> : <FaRegStar />}
         </BtnWrapper>
       ))}
+      <Rating>{!starNum ? hover : starNum}점</Rating>
     </Base>
   );
 };
@@ -51,4 +52,14 @@ const BtnWrapper = styled.div`
     color: #f97393;
   }
   cursor: pointer;
+`;
+
+const Rating = styled.div`
+  text-justify: center;
+  text-align: center;
+  margin-top: 5px;
+  margin-left: 3px;
+  color: #323232;
+  font-size: 16px;
+  font-weight: 700;
 `;

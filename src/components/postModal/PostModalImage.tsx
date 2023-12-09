@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { LuImagePlus } from 'react-icons/lu';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { storage } from '../../../firebase.ts';
 import { GrFormClose } from 'react-icons/gr';
+import { useMutation, useQueryClient } from 'react-query';
+import { onImageChange } from '../../function/uploadImage.ts';
+import { MoonLoader } from 'react-spinners';
 
 interface Props {
   imageURL: string[];
@@ -11,47 +12,9 @@ interface Props {
 }
 
 const PostModalImage: React.FC<Props> = ({ imageURL, setImageUrl }) => {
-  const [progressPercent, setProgressPercent] = useState<number>(0);
+  const [progressPercent, setProgressPercent] = useState<number>(100);
 
-  const onImageChange = async () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-    input.addEventListener('change', () => {
-      try {
-        const file = input.files?.[0];
-        if (!file) return null;
-
-        const storageRef = ref(storage, `files/${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-            );
-            setProgressPercent(progress);
-          },
-          (error) => {
-            switch (error.code) {
-              case 'storage/canceled':
-                alert('Upload has been canceled');
-                break;
-            }
-          },
-          async () => {
-            await getDownloadURL(storageRef).then((downloadURL) => {
-              setImageUrl([...imageURL, downloadURL]);
-            });
-          },
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  };
+  const { mutate } = useMutation(onImageChange);
 
   const deleteImageHandler = (image: string) => {
     setImageUrl(imageURL.filter((img) => img !== image));
@@ -59,16 +22,24 @@ const PostModalImage: React.FC<Props> = ({ imageURL, setImageUrl }) => {
 
   return (
     <>
-      {imageURL.length > 0 ? (
+      <h2>{progressPercent}</h2>
+      {progressPercent === 0 ? (
+        <LoadingBox>
+          <MoonLoader color="#44a5ff" size={50} />
+        </LoadingBox>
+      ) : imageURL.length > 0 ? (
         <ImageBox imageURL={imageURL[imageURL.length - 1]} />
       ) : (
-        <Base onClick={onImageChange}>
-          <ImageIcon fontsize="53px">
+        <Base
+          onClick={() => mutate({ setImageUrl, imageURL, setProgressPercent })}
+        >
+          <ImageIcon fontsize="45px">
             <LuImagePlus />
           </ImageIcon>
-          <Description fontsize="20px">이미지 추가하기</Description>
+          <Description fontsize="18px">이미지 추가하기</Description>
         </Base>
       )}
+
       {imageURL.length > 0 && (
         <ImageContainer>
           {imageURL.map((image) => (
@@ -78,12 +49,18 @@ const PostModalImage: React.FC<Props> = ({ imageURL, setImageUrl }) => {
               </DeleteBtn>
             </ImageCard>
           ))}
-          <AddImageCard onClick={onImageChange}>
-            <ImageIcon fontsize="30px">
-              <LuImagePlus />
-            </ImageIcon>
-            <Description fontsize="14px">이미지 추가하기</Description>
-          </AddImageCard>
+          {imageURL.length !== 5 ? (
+            <AddImageCard
+              onClick={() =>
+                mutate({ setImageUrl, imageURL, setProgressPercent })
+              }
+            >
+              <ImageIcon fontsize="30px">
+                <LuImagePlus />
+              </ImageIcon>
+              <Description fontsize="14px">이미지 추가하기</Description>
+            </AddImageCard>
+          ) : null}
         </ImageContainer>
       )}
     </>
@@ -107,11 +84,25 @@ const Base = styled.div`
   background: #f5faff;
 
   width: 100%;
-  height: 613px;
+  height: 550px;
   &:hover {
-    background: #d9dde2;
+    background: #f2faff;
   }
   cursor: pointer;
+  transition: all 200ms ease-in;
+`;
+
+const LoadingBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5faff;
+  margin-top: 31px;
+  border-radius: 16px;
+  width: 100%;
+  height: 613px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 `;
 
 const ImageBox = styled.div<{ imageURL: string }>`
@@ -123,6 +114,8 @@ const ImageBox = styled.div<{ imageURL: string }>`
   background-size: cover;
   width: 100%;
   height: 613px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 `;
 
 const ImageIcon = styled.div<{ fontsize: string }>`
@@ -164,6 +157,8 @@ const ImageCard = styled.div<{ imageURL: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 `;
 
 const AddImageCard = styled.div`
@@ -182,6 +177,8 @@ const AddImageCard = styled.div`
     background: #d9dde2;
   }
   cursor: pointer;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 `;
 
 const DeleteBtn = styled.div`
@@ -209,4 +206,12 @@ const DeleteBtn = styled.div`
     top: -7px;
     right: -7px;
   }
+`;
+
+const LoadingSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 613px;
 `;

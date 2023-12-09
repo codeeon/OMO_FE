@@ -1,17 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { IoClose } from 'react-icons/io5';
 import { SelectedInfoType } from '../../model/interface';
+import { FaLocationDot } from 'react-icons/fa6';
 
 interface Props {
   selectedInfo: SelectedInfoType;
   setSelectedInfo: React.Dispatch<React.SetStateAction<SelectedInfoType>>;
+  searchValue: kakao.maps.services.PlacesSearchResult;
+  setSearchValue: React.Dispatch<
+    SetStateAction<kakao.maps.services.PlacesSearchResult>
+  >;
 }
 
-const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
+const PostModalPlace: React.FC<Props> = ({
+  selectedInfo,
+  setSelectedInfo,
+  searchValue,
+  setSearchValue,
+}) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<object[]>([]);
 
   const onChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -34,6 +43,7 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
     const ps = new kakao.maps.services.Places();
     ps.keywordSearch(event.target.value, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
+        console.log(data);
         setSearchValue(data);
       }
     });
@@ -58,7 +68,6 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
       longitude: longitude,
     });
     console.log(selectedInfo);
-
     setInputValue('');
   };
 
@@ -70,10 +79,10 @@ const PostModalPlace: React.FC<Props> = ({ selectedInfo, setSelectedInfo }) => {
     <Base>
       {!selectedInfo.placeName && (
         <SearchContainer>
-          <LuMapPin />
+          <FaLocationDot />
           <SearchInput
             value={inputValue}
-            placeholder="위치 정보를 추가해주세요"
+            placeholder="여기를 클릭해 위치를 추가해 보세요"
             onChange={onChangeInputValue}
           />
         </SearchContainer>
@@ -143,6 +152,9 @@ const SearchContainer = styled.div`
   justify-content: start;
   align-items: center;
   width: 100%;
+  svg {
+    color: #a5a5a5;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -150,9 +162,14 @@ const SearchInput = styled.input`
   height: 20px;
   outline: none;
   border: none;
+  color: #111;
   font-size: 16px;
   font-weight: 700;
-  line-height: 16px;
+  &::placeholder {
+    font-size: 16px;
+    font-weight: 700;
+    color: #a3a3a3;
+  }
 `;
 
 const ResultList = styled.div`
@@ -163,11 +180,11 @@ const ResultList = styled.div`
   justify-content: start;
   align-items: start;
   width: 100%;
-  height: 219px;
+  height: 300px;
   overflow: scroll;
 
   background: #fff;
-  border-radius: 15px;
+  border-radius: 8px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 `;
 

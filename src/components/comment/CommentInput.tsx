@@ -7,9 +7,10 @@ import { useMutation, useQueryClient } from 'react-query';
 import { postComment } from '../../apis/apis';
 import { CommentType } from '../../model/interface';
 
-const CommentInput: React.FC<{ postId: string }> = ({ postId }) => {
+const CommentInput: React.FC<{ contentId: number | undefined }> = ({
+  contentId,
+}) => {
   const [text, setText] = useState<string>('');
-  const uniqueId = useId();
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
@@ -24,8 +25,7 @@ const CommentInput: React.FC<{ postId: string }> = ({ postId }) => {
 
   const postCommentHandler = () => {
     const newComment = {
-      commentId: uniqueId,
-      postId: postId,
+      postId: contentId,
       userName: '철', // TODO 유저와 연결
       text: text,
       createdAt: getToday(),
