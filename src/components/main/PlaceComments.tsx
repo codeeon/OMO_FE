@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PlaceCommnetCard from './PlaceCommnetCard';
+import PlaceCommnetCardSkeleton from './skeleton/PlaceCommnetCardSkeleton';
 
 const PlaceComments = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -47,6 +48,15 @@ const PlaceComments = () => {
       </Header>
       <Body>
         <CarouselList>
+          {/* skeleton */}
+          {Array(9)
+            .fill(1)
+            .map((i) => (
+              <CarouselItem activeIndex={activeIndex} key={i}>
+                <PlaceCommnetCardSkeleton />
+              </CarouselItem>
+            ))}
+          {/* skeleton */}
           {repeatCounts.map((i) => (
             <CarouselItem activeIndex={activeIndex} key={i}>
               <PlaceCommnetCard />

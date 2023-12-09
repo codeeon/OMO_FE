@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import HotContentsCard from './HotContentsCard';
+import HotContentsCardSkeleton from './skeleton/HotContentsCardSkeleton';
 import { ContentType } from '../../model/interface';
 
 const HotContents: React.FC<{ contents: ContentType[] }> = ({ contents }) => {
@@ -45,11 +46,20 @@ const HotContents: React.FC<{ contents: ContentType[] }> = ({ contents }) => {
       <Title>오늘 인기글</Title>
       {/* <HotContentsList> */}
       <CarouselList>
-        {contents?.map((content) => (
+        {/* {!contents && */}
+        {[1, 1, 1, 1, 1, 1, 1, 1, 1].map((v) => (
           <CarouselItem activeIndex={activeIndex}>
-            <HotContentsCard cont={content} />
+            <HotContentsCardSkeleton />
           </CarouselItem>
         ))}
+        {/* } */}
+        {/* {contents &&
+          contents.map((content) => (
+            <CarouselItem activeIndex={activeIndex}>
+              <HotContentsCard cont={content} />
+              <HotContentsCardSkeleton cont={content} />
+            </CarouselItem>
+          ))} */}
       </CarouselList>
       {repeatCounts.length && (
         <Nav>
