@@ -4,6 +4,7 @@ import { IoIosArrowForward } from 'react-icons/io';
 import RecentCard from './RecentCard';
 import { useNavigate } from 'react-router-dom';
 import { CommentType, ContentType } from '../../model/interface';
+import RecentCardSkeleton from './skeleton/recentCardSkeleton.css';
 
 const RecentContents: React.FC<{
   contents: ContentType[];
@@ -27,6 +28,10 @@ const RecentContents: React.FC<{
         </AllBtnWrapper>
       </Header>
       <Body>
+        {!contents &&
+          Array(4)
+            .fill(1)
+            .map((i) => <RecentCardSkeleton />)}
         {contents
           ?.sort(
             (a, b) =>
