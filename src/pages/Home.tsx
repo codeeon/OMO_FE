@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/PlaceComments';
 import HotContents from '../components/main/HotContents';
-import { CommentType, ContentType, CurrentLocationType } from '../model/interface';
+import {
+  CommentType,
+  ContentType,
+  CurrentLocationType,
+} from '../model/interface';
 import LocationFilter from '../components/share/LocationFilter';
 
 interface Props {

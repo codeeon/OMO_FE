@@ -38,7 +38,7 @@ const DetailContentsModal: React.FC<{
         content={content}
         star={star}
       />
-      <DetailModalFooter likeCount={likeCount} />
+      <DetailModalFooter likeCount={likeCount} comments={comments} id={id} />
       <Comment contentId={id} comments={comments} />
     </Base>
   );

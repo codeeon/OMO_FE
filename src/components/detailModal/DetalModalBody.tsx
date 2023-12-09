@@ -33,7 +33,6 @@ const DetalModalBody: React.FC<Props> = ({
         {/* 별점 텍스트 표시 */}
         <span>{star}점</span>
       </StarContainer>
-
       <Text dangerouslySetInnerHTML={{ __html: content }} />
     </Base>
   );
@@ -62,7 +61,7 @@ const PlaceInfo = styled.div`
 `;
 
 const Text = styled.div`
-  margin-top: 33px;
+  margin-top: 20px;
   font-size: 16px;
   font-weight: 500;
   line-height: 155%;
