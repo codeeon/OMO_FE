@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import MapLevelButton from './MapLevelButton.tsx';
 import MapCurrentButton from './MapCurrentButton.tsx';
-import { getCurrentLocationCoordinates } from '../../../function/kakao.ts';
+import { getCurrentCoords } from '../../../function/kakao.ts';
 import { FaLocationDot } from 'react-icons/fa6';
 import { ContentType } from '../../../model/interface.ts';
 
@@ -30,7 +30,7 @@ const MapMain: React.FC<Props> = ({ contentsData, selectedCategory }) => {
 
   useEffect(() => {
     // 초기 렌더링 시 자기위치로 맵 센터 지정.
-    getCurrentLocationCoordinates().then((coordinates) => {
+    getCurrentCoords().then((coordinates) => {
       setMyLoca({
         ...myLoca,
         center: { lat: coordinates.latitude, lng: coordinates.longitude },

@@ -9,11 +9,7 @@ import Navbar from '../components/share/Navbar';
 import Home from '../pages/Home';
 import Contents from '../pages/Contents';
 import Map from '../pages/Map';
-import {
-  CommentType,
-  ContentType,
-  CurrentLocationType,
-} from '../model/interface';
+import { CommentType, ContentType } from '../model/interface';
 import { useQuery } from 'react-query';
 import { getComment, getContent } from '../apis/apis';
 import Signup from '../pages/Signup';
@@ -21,10 +17,9 @@ import Signup from '../pages/Signup';
 const Routers = () => {
   const [contents, setContents] = useState<ContentType[]>([]);
   const [comments, setComments] = useState<CommentType[]>([]);
-  const [currentLocation, setCurrentLocation] = useState<CurrentLocationType>({
-    distName: '강남구',
-    coord: { lat: 37.514575, lng: 127.0495556 },
-  });
+  const [currentLocation, setCurrentLocation] = useState<string | undefined>(
+    '전체',
+  );
 
   const { data: feeds } = useQuery('contents', getContent, {
     onSuccess: (data) => {
@@ -58,7 +53,14 @@ const Routers = () => {
         />
         <Route
           path="/contents"
-          element={<Contents contents={contents} comments={comments} />}
+          element={
+            <Contents
+              contents={contents}
+              comments={comments}
+              currentLocation={currentLocation}
+              setCurrentLocation={setCurrentLocation}
+            />
+          }
         />
         <Route path="/map" element={<Map />} />
         <Route path="/signup" element={<Signup />} />

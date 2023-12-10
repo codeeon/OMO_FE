@@ -45,7 +45,6 @@ const HeaderDropdown: React.FC<Props> = ({ contentId, closeModalHandler }) => {
   const onClickDelete = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     deleteMutate(contentId);
     console.log(contentId);
-
     closeModalHandler(e);
   };
 

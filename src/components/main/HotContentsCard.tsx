@@ -28,15 +28,15 @@ export default HotContentsCard;
 
 const Base = styled.div`
   box-sizing: border-box;
+
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
 `;
 
 const HotContentsBox = styled.div`
   width: 343px;
-  height: 287px;
+  height: 280px;
   padding: 20px;
-  flex-shrink: 0;
-  border-radius: 8px;
-  border: 1px solid #d9d9d9;
 `;
 
 const HotContentsPhoto = styled.img<{ imageURL: string[] }>`
@@ -51,11 +51,8 @@ const HotContentsPhoto = styled.img<{ imageURL: string[] }>`
 
 const HotContentsTitle = styled.div`
   color: #212121;
-  font-family: Wanted Sans;
   font-size: 20px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   margin: 12px 0 10px 0;
 `;
 
@@ -69,7 +66,6 @@ const HotContentsBody = styled.div`
 
 const HotContentsText = styled.div`
   color: #5a5a5a;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-weight: 500;
   line-height: 140%;
@@ -82,12 +78,9 @@ const HotContentsNavigation = styled.div`
 `;
 
 const HotContentsCategory = styled.div`
-  color: #a9a9a9;
-  font-family: Wanted Sans;
+  color: #f97393;
   font-size: 14px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
 `;
 
 const HotContentsMap = styled.div`
@@ -97,12 +90,9 @@ const HotContentsMap = styled.div`
 `;
 
 const HotContentsMapText = styled.div`
-  color: #a9a9a9;
-  font-family: Wanted Sans;
+  color: #44a5ff;
   font-size: 14px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
 `;
 
 const HotContentsMapNavigator = styled.div`

@@ -3,18 +3,14 @@ import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/PlaceComments';
 import HotContents from '../components/main/HotContents';
-import {
-  CommentType,
-  ContentType,
-  CurrentLocationType,
-} from '../model/interface';
-import LocationFilter from '../components/share/LocationFilter';
+import { CommentType, ContentType } from '../model/interface';
+import Banner from '../components/main/Banner';
 
 interface Props {
   contents: ContentType[];
   comments: CommentType[];
-  currentLocation: CurrentLocationType;
-  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+  currentLocation: string | undefined;
+  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
 const Home: React.FC<Props> = ({
@@ -25,7 +21,7 @@ const Home: React.FC<Props> = ({
 }) => {
   return (
     <Base>
-      <LocationFilter
+      <Banner
         currentLocation={currentLocation}
         setCurrentLocation={setCurrentLocation}
       />
