@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
 import RecentCard from '../components/main/RecentCard';
@@ -6,11 +6,21 @@ import Modal from '../components/Modal/Modal';
 import PostModal from '../components/postModal/PostModal';
 import useModalCtr from '../hooks/useModalCtr';
 import { CommentType, ContentType } from '../model/interface';
+import Location from '../Location';
 
-const Contents: React.FC<{
+interface Props {
+  currentLocation: string | undefined;
+  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
   contents: ContentType[];
   comments: CommentType[];
-}> = ({ contents, comments }) => {
+}
+
+const Contents: React.FC<Props> = ({
+  contents,
+  comments,
+  currentLocation,
+  setCurrentLocation,
+}) => {
   const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
   const {
     isOpen: isSubModalOpen,
@@ -27,6 +37,10 @@ const Contents: React.FC<{
             <span>새 게시글</span>
           </PostBtn>
         </Header>
+        <Location
+          currentLocation={currentLocation}
+          setCurrentLocation={setCurrentLocation}
+        />
         <Body>
           <RecentCardGrid>
             {contents.map((cont) => (
@@ -71,6 +85,7 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   gap: 12px;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.div`

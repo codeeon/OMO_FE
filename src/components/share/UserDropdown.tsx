@@ -1,19 +1,9 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { IoEllipsisHorizontalSharp } from 'react-icons/io5';
+import { FaRegUser } from 'react-icons/fa6';
 
-interface Props {
-  children: ReactNode;
-  items: string[];
-  width?: string;
-  onClickDropdownItem: (item: string) => void;
-}
-
-const Dropdown: React.FC<Props> = ({
-  children,
-  items,
-  width,
-  onClickDropdownItem,
-}) => {
+const UserDropdown = () => {
   const [isOpen, setIsDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,24 +29,24 @@ const Dropdown: React.FC<Props> = ({
 
   return (
     <Base onClick={openDropdown}>
-      {children}
-      <List isOpen={isOpen} width={width} ref={dropdownRef}>
-        {items.map((item) => (
-          <Item key={item} onClick={() => onClickDropdownItem(item)}>
-            {item}
-          </Item>
-        ))}
+      <FaRegUser />
+      <List isOpen={isOpen} ref={dropdownRef}>
+        <Item>내 정보</Item>
+        <Item color="red">로그아웃</Item>
       </List>
     </Base>
   );
 };
 
-export default Dropdown;
+export default UserDropdown;
 
 const Base = styled.div`
+  margin-left: auto;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 10px;
   border-radius: 100%;
   width: 15px;
@@ -66,10 +56,12 @@ const Base = styled.div`
   }
   svg {
     font-size: 24px;
+    color: #7b7b7b;
   }
   cursor: pointer;
   position: relative;
   background: #fff;
+  transition: all 300ms ease-in-out;
 `;
 
 const FadeIn = keyframes`
@@ -81,10 +73,9 @@ const FadeIn = keyframes`
     opacity: 1;
     transform:translateY(0);
   };
-  
 `;
 
-const List = styled.div<{ isOpen: boolean; width?: string }>`
+const List = styled.div<{ isOpen: boolean }>`
   position: absolute;
   top: 50px;
 
@@ -92,35 +83,40 @@ const List = styled.div<{ isOpen: boolean; width?: string }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: ${({ width }) => width || '90px'};
+
+  width: 70px;
   height: auto;
+
+  padding: 5px 13px;
+
   border-radius: 8px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  padding: 0px 7px;
+
   background: #fff;
   z-index: 100;
+  animation: ${FadeIn} 300ms ease-in-out;
 `;
 
-const Item = styled.div`
-  padding: 10px;
+const Item = styled.div<{ color?: string }>`
+  padding: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 90%;
-  height: 15px;
+  width: 80px;
+  height: 25px;
+  border-radius: 5px;
+
+  font-size: 16px;
+  font-weight: 700;
+  color: ${({ color }) => (color === 'red' ? '#FF3263' : 'black')};
+
+  transition: all 300ms ease-in-out;
+  animation: ${FadeIn} 300ms ease-in-out;
+
+  cursor: pointer;
   &:hover {
     background: #f2f4f7;
-  }
-  cursor: pointer;
-  font-size: 15px;
-  transition: background 300ms ease-in-out;
-  animation: ${FadeIn} 300ms ease-in-out;
-  &:first-child {
-    border-radius: 8px 8px 0 0;
-  }
-  &:last-child {
-    border-radius: 0 0 8px 8px;
   }
 `;

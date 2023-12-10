@@ -18,18 +18,11 @@ const PlaceComments = () => {
     setActiveIndex((activeIndex) => (activeIndex + 1) % carouselCounts.length);
   };
 
-  const handlePrev = () => {
-    setActiveIndex(
-      (activeIndex) =>
-        (activeIndex - 1 + carouselCounts.length) % carouselCounts.length,
-    );
-  };
-
   const handleMouseEnter = () => setIsFocused(true);
   const handleMouseLeave = () => setIsFocused(false);
 
   useEffect(() => {
-    let intervalId: number;
+    let intervalId: NodeJS.Timeout;
 
     if (!isFocused) {
       intervalId = setInterval(handleNext, 4000);
@@ -38,7 +31,7 @@ const PlaceComments = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [isFocused]);
+  }, [isFocused, handleNext]);
 
   return (
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>

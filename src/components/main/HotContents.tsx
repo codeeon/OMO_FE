@@ -19,21 +19,14 @@ const HotContents: React.FC<{ contents: ContentType[] }> = ({ contents }) => {
     setActiveIndex((activeIndex) => (activeIndex + 1) % carouselCounts.length);
   };
 
-  const handlePrev = () => {
-    setActiveIndex(
-      (activeIndex) =>
-        (activeIndex - 1 + carouselCounts.length) % carouselCounts.length,
-    );
-  };
-
   const handleMouseEnter = () => setIsFocused(true);
   const handleMouseLeave = () => setIsFocused(false);
 
   useEffect(() => {
-    let intervalId: number;
+    let intervalId: NodeJS.Timeout;
 
     if (!isFocused) {
-      intervalId = setInterval(handleNext, 4000);
+      intervalId = setInterval(handleNext, 8000);
     }
 
     return () => {
@@ -87,11 +80,11 @@ const CarouselList = styled.ul`
   display: flex;
   justify-content: start;
   align-items: center;
+
   gap: 20px;
   list-style: none;
 
-  padding: 0;
-  display: flex;
+  padding: 10px 0;
   width: 1200px;
   overflow: hidden;
   margin-top: 20px;

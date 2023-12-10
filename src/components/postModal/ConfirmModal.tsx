@@ -12,13 +12,12 @@ const ConfirmModal: React.FC<Props> = ({
   clearPostHandler,
 }) => {
   const onClickYesBtn = () => {
-    clearPostHandler()
-    
-  }
+    clearPostHandler();
+  };
 
   const onClickNoBtn = () => {
-    closeModalHandler
-  }
+    closeModalHandler();
+  };
 
   return (
     <Base>

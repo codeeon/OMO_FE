@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Dropdown from './Dropdown';
 import { FaRegUser } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
-
-const navItem = ['게시글', '지도'];
-const dropdownItems = ['마이페이지', '로그아웃'];
+import { motion } from 'framer-motion';
+import UserDropdown from './UserDropdown';
 
 const Navbar = () => {
   const [isSelected, setIsSelected] = useState<string>('');
-  
+
   const navigate = useNavigate();
 
   const onClickLogoHander = () => {
@@ -17,36 +15,31 @@ const Navbar = () => {
     setIsSelected('');
   };
 
-  const navigateHandler = (item: string) => {
-    if (item === '게시글') {
-      navigate('/contents');
-      setIsSelected('게시글');
-    } else {
-      navigate('/map');
-      setIsSelected('지도');
-    }
-  };
-
   return (
     <Base>
       <Wrapper>
-        <Logo onClick={onClickLogoHander}>
+        <Logo
+          onClick={onClickLogoHander}
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+        >
           <LogoCircle />
           <LogoRectangle />
         </Logo>
         <RightContainer>
-          {navItem.map((item) => (
-            <Item
-              key={item}
-              onClick={() => navigateHandler(item)}
-              isSelected={isSelected === item}
-            >
-              {item}
-            </Item>
-          ))}
-          <Dropdown items={dropdownItems}>
-            <FaRegUser />
-          </Dropdown>
+          <Item
+            onClick={() => navigate('/contents')}
+            isSelected={isSelected === '게시글'}
+          >
+            게시글
+          </Item>
+          <Item
+            onClick={() => navigate('/map')}
+            isSelected={isSelected === '지도'}
+          >
+            지도
+          </Item>
+          <UserDropdown />
         </RightContainer>
       </Wrapper>
     </Base>
@@ -77,29 +70,26 @@ const Wrapper = styled.div`
 `;
 
 const LogoCircle = styled.div`
-  width: 22.3px;
-  height: 22.3px;
-  border: 5px solid #f97393;
+  width: 16px;
+  height: 16px;
+  border: 7px solid #f97393;
   border-radius: 100%;
   transition: border 200ms ease-in-out;
 `;
 
 const LogoRectangle = styled.div`
-  width: 22.3px;
-  height: 22.3px;
-  border: 5px solid #f97393;
+  width: 16px;
+  height: 16px;
+  border: 7px solid #f97393;
   border-radius: 5px;
   transition: border 200ms ease-in-out;
 `;
 
-const Logo = styled.div`
+const Logo = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  &:hover > div {
-    border: 7px solid #f97476;
-  }
 
   cursor: pointer;
 `;

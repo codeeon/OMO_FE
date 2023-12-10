@@ -31,8 +31,3 @@ export interface CommentType {
   createdAt: string;
   updatedAt: string;
 }
-
-export interface CurrentLocationType {
-  distName: string;
-  coord: { lat: number; lng: number };
-}
