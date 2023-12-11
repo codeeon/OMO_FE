@@ -1,15 +1,16 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
+import { LocationType } from '../../model/interface';
 
-const BannerPlaceCard = () => {
+const BannerPlaceCard: React.FC<{ loc: LocationType }> = ({ loc }) => {
   return (
     <Base
       whileHover={{ scale: 1.05 }}
       transition={{ type: 'spring', stiffness: 400, damping: 10 }}
     >
-      <PlaceName>리움 미술관</PlaceName>
-      <InfoContainer>{`별점 3.4점 (14)`}</InfoContainer>
+      <PlaceName>{loc.storeName}</PlaceName>
+      <InfoContainer>{`별점 ${loc.star}점 (14)`}</InfoContainer>
     </Base>
   );
 };

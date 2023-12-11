@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import HotContentsCard from './HotContentsCard';
 import HotContentsCardSkeleton from './skeleton/HotContentsCardSkeleton';
-import { ContentType } from '../../model/interface';
 
-const HotContents: React.FC<{ contents: ContentType[] }> = ({ contents }) => {
+import useGetHotContentsQuery from '../../hooks/useGetHotContentsQuery';
+
+const HotContents = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  const { data: contents, isLoading } = useGetHotContentsQuery();
 
   const repeatCounts = Array.from({ length: 9 }, (_, index) => index);
   const carouselCounts = Array.from(
@@ -37,22 +40,18 @@ const HotContents: React.FC<{ contents: ContentType[] }> = ({ contents }) => {
   return (
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Title>오늘 인기글</Title>
-      {/* <HotContentsList> */}
       <CarouselList>
-        {/* {!contents && */}
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1].map((v) => (
-          <CarouselItem activeIndex={activeIndex}>
-            <HotContentsCardSkeleton />
-          </CarouselItem>
-        ))}
-        {/* } */}
-        {/* {contents &&
-          contents.map((content) => (
-            <CarouselItem activeIndex={activeIndex}>
-              <HotContentsCard cont={content} />
-              <HotContentsCardSkeleton cont={content} />
-            </CarouselItem>
-          ))} */}
+        {isLoading
+          ? Array.from({ length: 9 }).map((_, idx) => (
+              <CarouselItem activeIndex={activeIndex} key={idx}>
+                <HotContentsCardSkeleton />
+              </CarouselItem>
+            ))
+          : contents?.map((contentData) => (
+              <CarouselItem activeIndex={activeIndex} key={contentData.id}>
+                <HotContentsCard contentData={contentData} />
+              </CarouselItem>
+            ))}
       </CarouselList>
       {repeatCounts.length && (
         <Nav>
@@ -66,7 +65,6 @@ const HotContents: React.FC<{ contents: ContentType[] }> = ({ contents }) => {
           ))}
         </Nav>
       )}
-      {/* </HotContentsList> */}
     </Base>
   );
 };

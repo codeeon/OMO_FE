@@ -5,12 +5,12 @@ import RecentCard from './RecentCard';
 import { useNavigate } from 'react-router-dom';
 import { CommentType, ContentType } from '../../model/interface';
 import RecentCardSkeleton from './skeleton/RecentCardSkeleton';
+import useGetRecentContentsQuery from '../../hooks/useGetRecentContentsQuery';
 
-const RecentContents: React.FC<{
-  contents: ContentType[];
-  comments: CommentType[];
-}> = ({ contents, comments }) => {
+const RecentContents = () => {
   const navigate = useNavigate();
+
+  const { data: contents, isLoading } = useGetRecentContentsQuery();
 
   const navigateToContentsPage = () => {
     navigate('/contents');
@@ -28,19 +28,20 @@ const RecentContents: React.FC<{
         </AllBtnWrapper>
       </Header>
       <Body>
-        {!contents &&
-          Array(4)
-            .fill(1)
-            .map(() => <RecentCardSkeleton />)}
-        {/* {contents
-          ?.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          )
-          .slice(0, 4)
-          .map((cont) => (
-            <RecentCard cont={cont} comments={comments} />
-          ))} */}
+        {isLoading
+          ? Array.from({ length: 4 }).map((_, idx) => (
+              <RecentCardSkeleton key={idx} />
+            ))
+          : contents
+              ?.sort(
+                (a, b) =>
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime(),
+              )
+              .slice(0, 4)
+              .map((contentData) => (
+                <RecentCard key={contentData.id} contentData={contentData} />
+              ))}
       </Body>
     </Base>
   );

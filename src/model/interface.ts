@@ -31,3 +31,14 @@ export interface CommentType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface LocationType {
+  id?: number | undefined;
+  categoryName: string;
+  districName: string;
+  storeName: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  star: number;
+}

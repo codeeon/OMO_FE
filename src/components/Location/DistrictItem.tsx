@@ -1,7 +1,7 @@
 import React, { ReactNode, SetStateAction } from 'react';
 import { motion, Variants } from 'framer-motion';
 import styled from 'styled-components';
-import { itemVariants } from '../styles/Motion';
+import { itemVariants } from '../../styles/Motion';
 
 interface Props {
   dist: string;

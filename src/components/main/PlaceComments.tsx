@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PlaceCommnetCard from './PlaceCommnetCard';
 import PlaceCommnetCardSkeleton from './skeleton/PlaceCommnetCardSkeleton';
+import useGetRecentCommentsQuery from '../../hooks/useRecentCommentQuery';
 
 const PlaceComments = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  const { data: comments, isLoading } = useGetRecentCommentsQuery();
 
   const repeatCounts = Array.from({ length: 9 }, (_, index) => index);
   const carouselCounts = Array.from(
@@ -15,15 +18,16 @@ const PlaceComments = () => {
 
   const handleGoTo = (index: number) => setActiveIndex(index);
 
-  const handleNext = () => {
-    setActiveIndex((activeIndex) => (activeIndex + 1) % carouselCounts.length);
-  };
-
   const handleMouseEnter = () => setIsFocused(true);
   const handleMouseLeave = () => setIsFocused(false);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
+    const handleNext = () => {
+      setActiveIndex(
+        (activeIndex) => (activeIndex + 1) % carouselCounts.length,
+      );
+    };
 
     if (!isFocused) {
       intervalId = setInterval(handleNext, 4000);
@@ -32,7 +36,7 @@ const PlaceComments = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [isFocused, handleNext]);
+  }, [isFocused]);
 
   return (
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -41,20 +45,17 @@ const PlaceComments = () => {
       </Header>
       <Body>
         <CarouselList>
-          {/* skeleton */}
-          {Array(9)
-            .fill(1)
-            .map((i) => (
-              <CarouselItem activeIndex={activeIndex} key={i}>
-                <PlaceCommnetCardSkeleton />
-              </CarouselItem>
-            ))}
-          {/* skeleton */}
-          {repeatCounts.map((i) => (
-            <CarouselItem activeIndex={activeIndex} key={i}>
-              <PlaceCommnetCard />
-            </CarouselItem>
-          ))}
+          {isLoading
+            ? Array.from({ length: 9 }).map((_, i) => (
+                <CarouselItem activeIndex={activeIndex} key={i}>
+                  <PlaceCommnetCardSkeleton />
+                </CarouselItem>
+              ))
+            : comments?.map((comment) => (
+                <CarouselItem activeIndex={activeIndex} key={comment.id}>
+                  <PlaceCommnetCard comment={comment} />
+                </CarouselItem>
+              ))}
         </CarouselList>
       </Body>
       {repeatCounts.length && (

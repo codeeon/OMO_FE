@@ -1,7 +1,8 @@
 import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 import BannerPlaceCard from './BannerPlaceCard';
-import Location from '../../Location';
+import Location from '../Location';
+import useGetHotPlaceQuery from '../../hooks/useGetHotPlaceQuery';
 
 interface Props {
   currentLocation: string | undefined;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
+  const { data: locations, isLoading } = useGetHotPlaceQuery();
   return (
     <Base>
       <Wrapper>
@@ -29,8 +31,9 @@ const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
           />
         </TitleContainer>
         <HotPlaceContainer>
-          <BannerPlaceCard />
-          <BannerPlaceCard />
+          {locations?.slice(0, 2).map((loc) => (
+            <BannerPlaceCard loc={loc} />
+          ))}
         </HotPlaceContainer>
       </Wrapper>
     </Base>

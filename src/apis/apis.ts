@@ -12,7 +12,7 @@ export const postContent = async (newContent: ContentType) => {
 };
 
 export const deleteContent = async (contentId: number | undefined) => {
-  return instance.delete(`/contents/${contentId}`);
+  return await instance.delete(`/contents/${contentId}`);
 };
 
 export const patchContent = async (
@@ -23,7 +23,7 @@ export const patchContent = async (
 };
 
 export const getContent = async () => {
-  const response = await instance.get(`/contents`);
+  const response = await instance.get('/contents');
   return response.data;
 };
 

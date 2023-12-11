@@ -7,7 +7,7 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from 'react-query';
-import { itemVariants } from '../styles/Motion';
+import { itemVariants } from '../../styles/Motion';
 
 interface Props {
   refetch: <TPageData>(

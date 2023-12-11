@@ -6,13 +6,13 @@ import DetailContentsModal from '../detailModal/DetailContentsModal';
 import Modal from '../Modal/Modal';
 import { CommentType, ContentType } from '../../model/interface';
 
-const RecentCard: React.FC<{
-  cont: ContentType;
-  comments: CommentType[];
-}> = ({ cont, comments }) => {
+const RecentCard: React.FC<{ contentData: ContentType }> = ({
+  contentData,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { placeName, createdAt, content, likeCount, imageURL } = cont;
+  const { placeName, createdAt, content, likeCount, imageURL } = contentData;
+
   const openModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -49,8 +49,7 @@ const RecentCard: React.FC<{
       </Footer>
       <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
         <DetailContentsModal
-          cont={cont}
-          comments={comments}
+          contentData={contentData}
           closeModalHandler={closeModalHandler}
         />
       </Modal>
@@ -68,6 +67,7 @@ const ImgContainer = styled.div<{ imageURL: string[] }>`
   background-repeat: no-repeat;
   background-size: cover;
   background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
+  transition: all 300ms ease-in-out;
 `;
 
 const Base = styled.div`

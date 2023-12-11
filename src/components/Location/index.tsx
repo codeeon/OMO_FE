@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { FaCaretDown } from 'react-icons/fa';
 import { SlLocationPin } from 'react-icons/sl';
 import { BounceLoader } from 'react-spinners';
-import useCurrentLocationQuery from '../hooks/useCurrentLocationQuery';
+import useCurrentLocationQuery from '../../hooks/useCurrentLocationQuery';
 
 interface Props {
   currentLocation: string | undefined;

@@ -6,28 +6,22 @@ import Modal from '../components/Modal/Modal';
 import PostModal from '../components/postModal/PostModal';
 import useModalCtr from '../hooks/useModalCtr';
 import { CommentType, ContentType } from '../model/interface';
-import Location from '../Location';
-import RecentCardAddressSkeleton from '../components/main/skeleton/RecentCardAddressSkeleton';
+import Location from '../components/Location';
+import useGetContentsQuery from '../hooks/useGetContentsQuery';
 
 interface Props {
   currentLocation: string | undefined;
   setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
-  contents: ContentType[];
-  comments: CommentType[];
 }
 
-const Contents: React.FC<Props> = ({
-  contents,
-  comments,
-  currentLocation,
-  setCurrentLocation,
-}) => {
+const Contents: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
   const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
   const {
     isOpen: isSubModalOpen,
     openModalHandler: openSubModal,
     closeModalHandler: closeSubModal,
   } = useModalCtr();
+  const { data: contents, isLoading } = useGetContentsQuery();
   return (
     <Base>
       <Wrapper>
@@ -44,13 +38,9 @@ const Contents: React.FC<Props> = ({
         />
         <Body>
           <RecentCardGrid>
-            {!contents &&
-              Array(12)
-                .fill(1)
-                .map(() => <RecentCardAddressSkeleton />)}
-            {/* {contents.map((cont) => (
-              <RecentCard cont={cont} comments={comments} />
-            ))} */}
+            {contents?.map((contentData) => (
+              <RecentCard contentData={contentData} />
+            ))}
           </RecentCardGrid>
         </Body>
       </Wrapper>
