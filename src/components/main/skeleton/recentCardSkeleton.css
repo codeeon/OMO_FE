@@ -1,4 +1,4 @@
-.img {
+.recent-img {
   width: 285px;
   height: 181px;
   flex-shrink: 0;
@@ -20,6 +20,12 @@
 .content {
   width: 280px;
   height: 44px;
+  border-radius: 8px;
+}
+
+.address {
+  width: 274px;
+  height: 18px;
   border-radius: 8px;
 }
 
