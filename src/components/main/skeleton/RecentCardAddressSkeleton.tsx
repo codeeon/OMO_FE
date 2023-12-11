@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import './recentCardSkeleton.css';
 
-const RecentCardSkeleton: React.FC = () => {
+const RecentCardAddressSkeleton: React.FC = () => {
   return (
     <Base>
       <Skeleton className="recent-img" />
@@ -18,6 +18,7 @@ const RecentCardSkeleton: React.FC = () => {
       <Skeleton className="content" />
       <Footer>
         <FooterItem>
+          <Skeleton className="address" />
           <Skeleton className="footer" />
         </FooterItem>
       </Footer>
@@ -25,17 +26,7 @@ const RecentCardSkeleton: React.FC = () => {
   );
 };
 
-export default RecentCardSkeleton;
-
-const ImgContainer = styled.div<{ imageURL: string[] }>`
-  width: 285px;
-  height: 181px;
-  border-radius: 8px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
-`;
+export default RecentCardAddressSkeleton;
 
 const Base = styled.div`
   display: flex;
@@ -43,9 +34,6 @@ const Base = styled.div`
   justify-content: start;
   align-items: start;
   cursor: pointer;
-  &:hover ${ImgContainer} {
-    transform: translateY(-10px);
-  }
 `;
 
 const HeaderContainer = styled.div`

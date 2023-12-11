@@ -7,6 +7,7 @@ import PostModal from '../components/postModal/PostModal';
 import useModalCtr from '../hooks/useModalCtr';
 import { CommentType, ContentType } from '../model/interface';
 import Location from '../Location';
+import RecentCardAddressSkeleton from '../components/main/skeleton/RecentCardAddressSkeleton';
 
 interface Props {
   currentLocation: string | undefined;
@@ -43,9 +44,13 @@ const Contents: React.FC<Props> = ({
         />
         <Body>
           <RecentCardGrid>
-            {contents.map((cont) => (
+            {!contents &&
+              Array(12)
+                .fill(1)
+                .map(() => <RecentCardAddressSkeleton />)}
+            {/* {contents.map((cont) => (
               <RecentCard cont={cont} comments={comments} />
-            ))}
+            ))} */}
           </RecentCardGrid>
         </Body>
       </Wrapper>
