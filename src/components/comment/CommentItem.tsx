@@ -11,21 +11,9 @@ import Button from '../share/Button';
 const CommentItem: React.FC<{
   comment: CommentType;
 }> = ({ comment }) => {
-  const { id, postId, userName, text, createdAt, updatedAt } = comment;
-  const [textValue, setTextValue] = useState(text);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const { id, postId, userName, text, createdAt } = comment;
 
   const queryClient = useQueryClient();
-
-  const { mutate: patchMutate } = useMutation<
-    void,
-    unknown,
-    { id: number | undefined; updatedComment: CommentType }
-  >(patchComment, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('comments');
-    },
-  });
 
   const { mutate: deleteMutate } = useMutation(deleteComment, {
     onSuccess: () => {
@@ -33,22 +21,8 @@ const CommentItem: React.FC<{
     },
   });
 
-  const onClickpatchComment = () => {
-    const updatedComment = {
-      ...comment,
-      text: textValue,
-      updatedAt: getToday(),
-    };
-    setIsEditMode(false);
-    patchMutate({ id, updatedComment });
-  };
-
   const onClickdeleteComment = () => {
     deleteMutate(id);
-  };
-
-  const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
-    setTextValue(e.target.value);
   };
 
   return (
@@ -58,32 +32,11 @@ const CommentItem: React.FC<{
         <UserInfoContainer>
           <UserName>{userName}</UserName>
           <CreateAt>{createdAt}</CreateAt>
-          {isEditMode ? (
-            <BtnWrapper>
-              <Button
-                padding="5px"
-                outlineColor="blue"
-                onClick={onClickpatchComment}
-              >
-                완료하기
-              </Button>
-            </BtnWrapper>
-          ) : (
-            <EllipsisBtn>
-              <CommentDropdown
-                onClickpatchComment={onClickpatchComment}
-                onClickdeleteComment={onClickdeleteComment}
-                isEditMode={isEditMode}
-                setIsEditMode={setIsEditMode}
-              />
-            </EllipsisBtn>
-          )}
+          <EllipsisBtn>
+            <CommentDropdown onClickdeleteComment={onClickdeleteComment} />
+          </EllipsisBtn>
         </UserInfoContainer>
-        <CommentText
-          disabled={!isEditMode}
-          value={textValue}
-          onChange={(e) => onChangeText(e)}
-        />
+        <CommentText>{text}</CommentText>
       </BodyContainer>
     </Base>
   );
@@ -136,7 +89,7 @@ const CreateAt = styled.div`
   font-weight: 500;
 `;
 
-const CommentText = styled.input`
+const CommentText = styled.div`
   color: #000;
   font-size: 16px;
   font-weight: 500;

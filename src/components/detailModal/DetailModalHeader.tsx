@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import HeaderDropdown from './HeaderDropdown';
+
+import DetailModalDropdown from './DetailModalDropdown';
 
 const DetailModalHeader: React.FC<{
   userId: string;
@@ -15,7 +16,7 @@ const DetailModalHeader: React.FC<{
         <UserName>{userId}</UserName>
         <CreationDate>{createdAt}</CreationDate>
       </UserInfoContainer>
-      <HeaderDropdown
+      <DetailModalDropdown
         contentId={contentId}
         closeModalHandler={closeModalHandler}
       />
@@ -59,13 +60,4 @@ const CreationDate = styled.div`
   font-weight: 500x;
   letter-spacing: -0.16px;
   color: #a5a5a5;
-`;
-
-const EllipsisBtn = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  color: #a5a5a5;
-  font-size: 25px;
 `;

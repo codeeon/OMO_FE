@@ -6,6 +6,7 @@ import { getToday } from '../../function/getToday';
 import { useMutation, useQueryClient } from 'react-query';
 import { postComment } from '../../apis/apis';
 import { CommentType } from '../../model/interface';
+import usePostCommentQuery from '../../hooks/usePostCommentQuery';
 
 const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   contentId,
@@ -15,13 +16,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
     setText(e.target.value);
   };
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation<void, unknown, CommentType>(postComment, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('comments');
-    },
-  });
+  const { postMutate, isPostLoading } = usePostCommentQuery();
 
   const postCommentHandler = () => {
     const newComment = {
@@ -32,7 +27,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
       updatedAt: getToday(),
     };
 
-    mutation.mutate(newComment); // Use `mutate` function here
+    postMutate(newComment);
     setText('');
   };
 

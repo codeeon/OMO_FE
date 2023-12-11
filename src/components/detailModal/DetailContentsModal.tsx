@@ -4,13 +4,13 @@ import DetailModalHeader from './DetailModalHeader';
 import DetailModalBody from './DetalModalBody';
 import DetailModalFooter from './DetailModalFooter';
 import Comment from '../comment/Comment';
-import { CommentType, ContentType } from '../../model/interface';
+import { ContentType } from '../../model/interface';
+import useGetCommentQuery from '../../hooks/useGetCommentQuery';
 
 const DetailContentsModal: React.FC<{
-  cont: ContentType;
-  comments: CommentType[];
+  contentData: ContentType;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}> = ({ cont, comments, closeModalHandler }) => {
+}> = ({ contentData, closeModalHandler }) => {
   const {
     id,
     userId,
@@ -21,8 +21,9 @@ const DetailContentsModal: React.FC<{
     likeCount,
     imageURL,
     star,
-  } = cont;
-  console.log(id);
+  } = contentData;
+  const { data: comments, isLoading } = useGetCommentQuery();
+
   return (
     <Base>
       <DetailModalHeader
@@ -38,7 +39,12 @@ const DetailContentsModal: React.FC<{
         content={content}
         star={star}
       />
-      <DetailModalFooter likeCount={likeCount} comments={comments} id={id} />
+      {isLoading && <h2>로딩중</h2>}
+      <DetailModalFooter
+        likeCount={likeCount}
+        comments={comments}
+        contentId={id}
+      />
       <Comment contentId={id} comments={comments} />
     </Base>
   );

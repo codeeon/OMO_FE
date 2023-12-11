@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LuMapPin } from 'react-icons/lu';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import './placeCommnetCardSkeleton.css';
@@ -11,7 +10,6 @@ const PlaceCommnetCardSkeleton = () => {
       {quote}
       <Skeleton className="text" />
       <PlaceName>
-        {/* <LuMapPin /> */}
         <Skeleton className="address" />
       </PlaceName>
     </Base>

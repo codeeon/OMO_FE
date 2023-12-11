@@ -9,13 +9,18 @@ import LikeBtn from './LikeBtn';
 
 interface Props {
   likeCount: number;
-  comments: CommentType[];
-  id: number | undefined;
+  comments: CommentType[] | undefined;
+  contentId: number | undefined;
 }
 
-const DetailModalFooter: React.FC<Props> = ({ likeCount, comments, id }) => {
-  const commentLength = comments.filter(
-    (comment) => comment.postId === id,
+const DetailModalFooter: React.FC<Props> = ({
+  likeCount,
+  comments,
+  contentId,
+}) => {
+  const commentArray = Array.isArray(comments) ? comments : [];
+  const commentLength = commentArray?.filter(
+    (comment) => comment.postId === contentId,
   ).length;
   return (
     <Footer>

@@ -7,26 +7,19 @@ import { CommentType, ContentType } from '../model/interface';
 import Banner from '../components/main/Banner';
 
 interface Props {
-  contents: ContentType[];
-  comments: CommentType[];
   currentLocation: string | undefined;
   setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
-const Home: React.FC<Props> = ({
-  contents,
-  comments,
-  currentLocation,
-  setCurrentLocation,
-}) => {
+const Home: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
   return (
     <Base>
       <Banner
         currentLocation={currentLocation}
         setCurrentLocation={setCurrentLocation}
       />
-      <HotContents contents={contents} />
-      <RecentContents contents={contents} comments={comments} />
+      <HotContents />
+      <RecentContents />
       <PlaceComments />
     </Base>
   );

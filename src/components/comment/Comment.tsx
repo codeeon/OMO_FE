@@ -5,15 +5,18 @@ import CommentInput from './CommentInput';
 import { CommentType } from '../../model/interface';
 
 const Comment: React.FC<{
-  comments: CommentType[];
+  comments: CommentType[] | undefined;
   contentId: number | undefined;
 }> = ({ comments, contentId }) => {
-  const filteredComments = comments.filter(
+  const commentArray = Array.isArray(comments) ? comments : [];
+
+  const filteredComments = commentArray?.filter(
     (comment) => comment.postId === contentId,
   );
+
   return (
     <Base>
-      {filteredComments.map((comment) => (
+      {filteredComments?.map((comment) => (
         <CommentItem comment={comment} />
       ))}
       <CommentInput contentId={contentId} />

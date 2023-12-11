@@ -15,23 +15,9 @@ import { getComment, getContent } from '../apis/apis';
 import Signup from '../pages/Signup';
 
 const Routers = () => {
-  const [contents, setContents] = useState<ContentType[]>([]);
-  const [comments, setComments] = useState<CommentType[]>([]);
   const [currentLocation, setCurrentLocation] = useState<string | undefined>(
     '전체',
   );
-
-  const { data: feeds } = useQuery('contents', getContent, {
-    onSuccess: (data) => {
-      setContents(data);
-    },
-  });
-
-  const { data } = useQuery('comments', getComment, {
-    onSuccess: (data) => {
-      setComments(data);
-    },
-  });
 
   const excludedRoutes = ['/map'];
   const location = useLocation();
@@ -44,8 +30,6 @@ const Routers = () => {
           path="/"
           element={
             <Home
-              contents={contents}
-              comments={comments}
               currentLocation={currentLocation}
               setCurrentLocation={setCurrentLocation}
             />
@@ -55,8 +39,6 @@ const Routers = () => {
           path="/contents"
           element={
             <Contents
-              contents={contents}
-              comments={comments}
               currentLocation={currentLocation}
               setCurrentLocation={setCurrentLocation}
             />

@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
 
 interface ModalControl {
-  isOpen: boolean;
-  openModalHandler: () => void;
-  closeModalHandler: () => void;
+  isModalOpen: boolean;
+  setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleModalHandler: () => void;
 }
 
 const useModalCtr = (): ModalControl => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const openModalHandler = () => {
-    !isOpen && setIsOpen(true);
+  const toggleModalHandler = () => {
+    setModalIsOpen(!isModalOpen);
   };
 
-  const closeModalHandler = () => {
-    isOpen && setIsOpen(false);
-  };
-
-  return { isOpen, openModalHandler, closeModalHandler };
+  return { isModalOpen, setModalIsOpen, toggleModalHandler };
 };
 
 export default useModalCtr;

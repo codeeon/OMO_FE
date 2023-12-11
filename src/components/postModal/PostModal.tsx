@@ -1,17 +1,15 @@
 import React, { useEffect, useId, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { IoIosArrowRoundBack } from 'react-icons/io';
-
 import PostModalImage from './PostModalImage';
 import PostModalPlace from './PostModalPlace';
 import PostModalText from './PostModalText';
 import ConfirmModal from './ConfirmModal';
 import { SelectedInfoType } from '../../model/interface';
 import { getToday } from '../../function/getToday';
-import { postContent } from '../../apis/apis';
-import { useMutation, useQueryClient } from 'react-query';
 import Stars from './Stars';
 import SubModal from '../Modal/SubModal';
+import usePostContentQuery from '../../hooks/usePostContentQuery';
 
 interface Props {
   closeMainModal: () => void;
@@ -40,7 +38,7 @@ const PostModal: React.FC<Props> = ({
   });
   const [text, setText] = useState('');
 
-  const queryClient = useQueryClient();
+  const { postMutate, isPostLoading } = usePostContentQuery();
 
   const clearPostHandler = () => {
     closeMainModal();
@@ -57,24 +55,12 @@ const PostModal: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log(selectedInfo.placeName);
-    console.log(imageURL.length !== 0);
-    console.log(text);
     if (imageURL.length !== 0 && text && selectedInfo.placeName) {
       setIsValidate(true);
     } else {
       setIsValidate(false);
     }
-  }, [imageURL, text, searchValue]);
-
-  const { mutate, isLoading, isError, error, isSuccess } = useMutation(
-    postContent,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('contents');
-      },
-    },
-  );
+  }, [imageURL, text, searchValue, selectedInfo.placeName]);
 
   const savePostHandler = () => {
     const newContent = {
@@ -92,7 +78,7 @@ const PostModal: React.FC<Props> = ({
       star: starNum,
     };
     if (isValidate) {
-      mutate(newContent);
+      postMutate(newContent);
       clearPostHandler();
     }
   };

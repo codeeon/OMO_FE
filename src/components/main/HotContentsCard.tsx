@@ -2,8 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { ContentType } from '../../model/interface';
 
-const HotContentsCard: React.FC<{ cont: ContentType }> = ({ cont }) => {
-  const { placeName, content, categoryName, imageURL } = cont;
+const HotContentsCard: React.FC<{ contentData: ContentType }> = ({
+  contentData,
+}) => {
+  const { placeName, content, categoryName, imageURL } = contentData;
   return (
     <Base>
       <HotContentsBox>

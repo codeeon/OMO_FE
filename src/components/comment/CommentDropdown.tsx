@@ -10,18 +10,10 @@ import { FaEllipsis } from 'react-icons/fa6';
 import Button from '../share/Button';
 
 interface Props {
-  onClickpatchComment: () => void;
   onClickdeleteComment: () => void;
-  isEditMode: boolean;
-  setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const CommentDropdown: React.FC<Props> = ({
-  onClickpatchComment,
-  onClickdeleteComment,
-  isEditMode,
-  setIsEditMode,
-}) => {
+const CommentDropdown: React.FC<Props> = ({ onClickdeleteComment }) => {
   const [isOpen, setIsDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -49,7 +41,6 @@ const CommentDropdown: React.FC<Props> = ({
     <Base onClick={openDropdown}>
       <FaEllipsis />
       <List isOpen={isOpen} ref={dropdownRef}>
-        <Item onClick={() => setIsEditMode(true)}>수정하기</Item>
         <Item onClick={onClickdeleteComment} color="red">
           삭제하기
         </Item>

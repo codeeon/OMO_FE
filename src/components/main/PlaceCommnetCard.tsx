@@ -2,17 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { FaQuoteLeft } from 'react-icons/fa';
+import { CommentType } from '../../model/interface';
 
-const PlaceCommnetCard = () => {
+const PlaceCommnetCard: React.FC<{ comment: CommentType }> = ({ comment }) => {
+  const { text } = comment;
   return (
     <Base>
       <QuoteContainer>
         <FaQuoteLeft />
       </QuoteContainer>
-      <Text>
-        요즘에 다들 놀러간다길래 <br /> 남자친구랑 같이 놀러 가봤는데
-        재밌었어요!!
-      </Text>
+      <Text>{text}</Text>
       <PlaceName>
         <LuMapPin />
         <span>서울시 광진구 아차산</span>
@@ -35,7 +34,7 @@ const Base = styled.div`
   border: 1px solid #d9d9d9;
   border-radius: 8px;
 
-  padding: 25px;
+  padding: 24px 30px;
 `;
 
 const QuoteContainer = styled.div`
@@ -62,9 +61,18 @@ const PlaceName = styled.div`
 `;
 
 const Text = styled.div`
-  margin-top: 12px;
+  margin-top: 8px;
   color: #111;
   font-size: 16px;
   font-weight: 500;
-  line-height: 140%; /* 22.4px */
+  line-height: 140%;
+  width: 100%;
+  height: 40px;
+  overflow: hidden;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  white-space: normal;
 `;
