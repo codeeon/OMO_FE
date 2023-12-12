@@ -13,6 +13,7 @@ import { CommentType, ContentType } from '../model/interface';
 import { useQuery } from 'react-query';
 import { getComment, getContent } from '../apis/apis';
 import Signup from '../pages/Signup';
+import Login from '../pages/Login';
 
 const Routers = () => {
   const [currentLocation, setCurrentLocation] = useState<string | undefined>(
@@ -46,6 +47,7 @@ const Routers = () => {
         />
         <Route path="/map" element={<Map />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   );
