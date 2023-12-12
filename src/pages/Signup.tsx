@@ -22,7 +22,7 @@ const Signup: React.FC = () => {
 
   const mutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      const res = await axios.post('/auth/register', data);
+      const res = await axios.post(`/auth/register`, data); // `${import.meta.env.VITE_APP_SERVER_URL}/auth/register`
     },
     {
       onSuccess: () => {
@@ -136,6 +136,7 @@ const SmallBtn = styled.button`
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
+  cursor: pointer;
 `;
 
 const Input = styled.input`
@@ -172,6 +173,7 @@ const LargeBtn = styled.button`
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
+  cursor: pointer;
 `;
 
 const Text = styled.span`
