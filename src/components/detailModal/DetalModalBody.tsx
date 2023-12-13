@@ -24,13 +24,11 @@ const DetalModalBody: React.FC<Props> = ({
         <span>{locationName}</span>
       </PlaceInfo>
       <StarContainer>
-        {/* 별 아이콘을 특정 개수만큼 생성하여 표시 */}
         {Array.from({ length: 5 }, (_, idx) => (
           <StarWrapper key={idx}>
             {idx < star ? <FaStar /> : <FaRegStar />}
           </StarWrapper>
         ))}
-        {/* 별점 텍스트 표시 */}
         <span>{star}점</span>
       </StarContainer>
       <Text dangerouslySetInnerHTML={{ __html: content }} />

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaRegUser } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import UserDropdown from './UserDropdown';
 
-const Navbar = () => {
+const Navbar: React.FC<{ maxWidth?: string }> = ({ maxWidth }) => {
   const [isSelected, setIsSelected] = useState<string>('');
 
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ const Navbar = () => {
 
   return (
     <Base>
-      <Wrapper>
+      <Wrapper maxWidth={maxWidth}>
         <Logo
           onClick={onClickLogoHander}
           whileHover={{ scale: 1.1 }}
@@ -61,11 +60,11 @@ const Base = styled.div`
   z-index: 9;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ maxWidth?: string }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 1200px;
+  max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '1200px')};
   width: 100%;
 `;
 

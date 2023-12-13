@@ -42,3 +42,11 @@ export interface LocationType {
   longitude: number;
   star: number;
 }
+
+export interface MapLocationType {
+  center: {
+    lat: any;
+    lng: any;
+  };
+  isPanto: boolean;
+}

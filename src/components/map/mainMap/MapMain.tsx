@@ -1,12 +1,15 @@
 import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { CustomOverlayMap, Map } from 'react-kakao-maps-sdk';
 import MapLevelButton from './MapLevelButton.tsx';
 import MapCurrentButton from './MapCurrentButton.tsx';
 import { getCurrentCoords } from '../../../function/kakao.ts';
+import { LocationType, MapLocationType } from '../../../model/interface.ts';
+import CustomInfoMap from './CustomInfoMap.tsx';
+import { IoMdCafe } from 'react-icons/io';
+import { IoRestaurant } from 'react-icons/io5';
 import { FaLocationDot } from 'react-icons/fa6';
-import { ContentType } from '../../../model/interface.ts';
 
 declare global {
   interface Window {
@@ -15,114 +18,133 @@ declare global {
 }
 
 interface Props {
-  contentsData: ContentType[];
   selectedCategory: string;
+  placeDatas: LocationType[] | undefined;
+  selectedPlace: LocationType | null;
+  setSelectedPlace: React.Dispatch<React.SetStateAction<LocationType | null>>;
+  mapCenterLocation: MapLocationType;
+  setMapCenterLocation: React.Dispatch<React.SetStateAction<MapLocationType>>;
+  myLoca: { lat: number; lng: number };
+  setMyLoca: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>>;
 }
 
-const MapMain: React.FC<Props> = ({ contentsData, selectedCategory }) => {
-  const [myLoca, setMyLoca] = useState({
-    // 위치 지정
-    center: { lat: 36.5, lng: 127.8 },
-    isPanto: false,
-  });
-  const mapRef = useRef<kakao.maps.Map>(null); // 맵
-  const [level, setLevel] = useState(2); // 맵 확대 크기
+const MapMain: React.FC<Props> = ({
+  selectedCategory,
+  placeDatas,
+  selectedPlace,
+  setSelectedPlace,
+  mapCenterLocation,
+  setMapCenterLocation,
+}) => {
+  const mapRef = useRef<kakao.maps.Map>(null);
+  const [level, setLevel] = useState(2);
+  const [myLoca, setMyLoca] = useState({ lat: 36.5, lng: 127.8 });
 
   useEffect(() => {
-    // 초기 렌더링 시 자기위치로 맵 센터 지정.
-    getCurrentCoords().then((coordinates) => {
-      setMyLoca({
-        ...myLoca,
-        center: { lat: coordinates.latitude, lng: coordinates.longitude },
+    const setCurLoca = async () => {
+      await getCurrentCoords().then((coordinates) => {
+        setMyLoca({
+          lat: coordinates.latitude,
+          lng: coordinates.longitude,
+        });
+        setMapCenterLocation({
+          isPanto: true,
+          center: { lat: coordinates.latitude, lng: coordinates.longitude },
+        });
       });
-    });
+    };
+    setCurLoca();
   }, []);
 
-  const markerImageSrc =
-    'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/category.png';
-  const imageSize = { width: 22, height: 26 };
-  const spriteSize = { width: 36, height: 98 };
+  useEffect(() => {
+    if (!selectedPlace) return;
+    setMapCenterLocation({
+      isPanto: true,
+      center: { lat: selectedPlace?.latitude, lng: selectedPlace?.longitude },
+    });
+  }, [selectedPlace]);
 
-  const coffeeOrigin = { x: 10, y: 0 };
-  const storeOrigin = { x: 10, y: 36 };
+  useEffect(() => {
+    console.log(mapCenterLocation);
+  }, [mapCenterLocation]);
+
+  const cafeDb = placeDatas?.filter((place) => place.categoryName === '카페');
+  const RestaurantDb = placeDatas?.filter(
+    (place) => place.categoryName === '음식점',
+  );
+  const etcDb = placeDatas?.filter(
+    (place) => place.categoryName !== '카페' && place.categoryName !== '음식점',
+  );
 
   return (
     <CustomMap
-      center={myLoca.center}
+      center={mapCenterLocation.center}
       level={level}
       ref={mapRef}
       zoomable={true}
-      isPanto={myLoca.isPanto}
+      isPanto={mapCenterLocation.isPanto}
     >
-      <MapCurrentButton setMyLoca={setMyLoca} />
+      <MapCurrentButton
+        setMyLoca={setMapCenterLocation}
+        myLoca={mapCenterLocation}
+      />
       <MapLevelButton mapRef={mapRef} setLevel={setLevel} />
-      <MapMarker // 마커를 생성합니다
+      <CustomOverlayMap // 마커를 생성합니다
         position={{
           // 마커가 표시될 위치입니다
-          lat: myLoca.center.lat,
-          lng: myLoca.center.lng,
+          lat: myLoca.lat,
+          lng: myLoca.lng,
         }}
-      />
+      >
+        <LocIconWrapper>
+          <FaLocationDot />
+          <ShadowBox />
+        </LocIconWrapper>
+      </CustomOverlayMap>
       {selectedCategory === '카페'
-        ? contentsData
-            .filter((content) => content.categoryName === '카페')
-            .map((content) => (
-              <MapMarker
-                position={{ lat: content.latitude, lng: content.longitude }}
-                image={{
-                  src: markerImageSrc,
-                  size: imageSize,
-                  options: {
-                    spriteSize: spriteSize,
-                    spriteOrigin: storeOrigin,
-                  },
-                }}
-              />
-            ))
+        ? cafeDb?.map((placeDb) => (
+            <CustomInfoMap
+              placeDb={placeDb}
+              selectedPlace={selectedPlace}
+              setSelectedPlace={setSelectedPlace}
+            >
+              <IoMdCafe />
+            </CustomInfoMap>
+          ))
         : selectedCategory === '음식점'
-        ? contentsData
-            .filter((content) => content.categoryName === '음식점')
-            .map((content) => (
-              <MapMarker
-                position={{ lat: content.latitude, lng: content.longitude }}
-                image={{
-                  src: markerImageSrc,
-                  size: imageSize,
-                  options: {
-                    spriteSize: spriteSize,
-                    spriteOrigin: storeOrigin,
-                  },
-                }}
-              />
-            ))
+        ? RestaurantDb?.map((placeDb) => (
+            <CustomInfoMap
+              placeDb={placeDb}
+              selectedPlace={selectedPlace}
+              setSelectedPlace={setSelectedPlace}
+            >
+              <IoRestaurant />
+            </CustomInfoMap>
+          ))
         : selectedCategory === '기타'
-        ? contentsData
-            .filter((content) => content.categoryName === '기타')
-            .map((content) => (
-              <MapMarker
-                position={{ lat: content.latitude, lng: content.longitude }}
-                image={{
-                  src: markerImageSrc,
-                  size: imageSize,
-                  options: {
-                    spriteSize: spriteSize,
-                    spriteOrigin: storeOrigin,
-                  },
-                }}
-              />
-            ))
-        : contentsData.map((content) => (
-            <MapMarker
-              position={{ lat: content.latitude, lng: content.longitude }}
-              image={{
-                src: markerImageSrc,
-                size: imageSize,
-                options: {
-                  spriteSize: spriteSize,
-                  spriteOrigin: storeOrigin,
-                },
-              }}
-            />
+        ? etcDb?.map((placeDb) => (
+            <CustomInfoMap
+              placeDb={placeDb}
+              selectedPlace={selectedPlace}
+              setSelectedPlace={setSelectedPlace}
+            >
+              <FaLocationDot />
+            </CustomInfoMap>
+          ))
+        : placeDatas?.map((placeDb) => (
+            <CustomInfoMap
+              placeDb={placeDb}
+              selectedPlace={selectedPlace}
+              setSelectedPlace={setSelectedPlace}
+            >
+              {placeDb.categoryName === '카페' ? (
+                <IoMdCafe />
+              ) : placeDb.categoryName === '음식점' ? (
+                <IoRestaurant />
+              ) : (
+                <FaLocationDot />
+              )}
+            </CustomInfoMap>
           ))}
     </CustomMap>
   );
@@ -132,9 +154,33 @@ export default MapMain;
 
 const CustomMap = styled(Map)`
   width: 100%;
-  height: 100vh;
-
+  height: calc(100vh - 60px);
   position: relative;
+  z-index: 1;
 `;
 
-const CustomMarker = styled(MapMarker)``;
+const LocIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  svg {
+    color: #f97393;
+    font-size: 36px;
+  }
+  position: relative;
+  z-index: 2;
+`;
+
+const ShadowBox = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 65px;
+  width: 12px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+`;

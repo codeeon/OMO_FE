@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from '../components/share/Navbar';
 import Home from '../pages/Home';
 import Contents from '../pages/Contents';
 import Map from '../pages/Map';
-import { CommentType, ContentType } from '../model/interface';
-import { useQuery } from 'react-query';
-import { getComment, getContent } from '../apis/apis';
+
 import Signup from '../pages/Signup';
 
 const Routers = () => {
@@ -25,6 +18,7 @@ const Routers = () => {
   return (
     <>
       {!excludedRoutes.includes(location.pathname) && <Navbar />}
+      {excludedRoutes.includes(location.pathname) && <Navbar maxWidth="98%" />}
       <Routes>
         <Route
           path="/"

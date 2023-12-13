@@ -8,6 +8,7 @@ import useModalCtr from '../hooks/useModalCtr';
 import { CommentType, ContentType } from '../model/interface';
 import Location from '../components/Location';
 import useGetContentsQuery from '../hooks/useGetContentsQuery';
+import useGetAllContentsQuery from '../hooks/useGetAllContentsQuery';
 
 interface Props {
   currentLocation: string | undefined;
@@ -15,19 +16,19 @@ interface Props {
 }
 
 const Contents: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
-  const { isOpen, openModalHandler, closeModalHandler } = useModalCtr();
+  const { isModalOpen, setModalIsOpen, toggleModalHandler } = useModalCtr();
   const {
-    isOpen: isSubModalOpen,
-    openModalHandler: openSubModal,
-    closeModalHandler: closeSubModal,
+    isModalOpen: isSubModalOpen,
+    setModalIsOpen: openSubModal,
+    toggleModalHandler: toggleSubModal,
   } = useModalCtr();
-  const { data: contents, isLoading } = useGetContentsQuery();
+  const { data: contents, isLoading } = useGetAllContentsQuery();
   return (
     <Base>
       <Wrapper>
         <Header>
           <Title>게시글</Title>
-          <PostBtn onClick={openModalHandler}>
+          <PostBtn onClick={toggleModalHandler}>
             <FiEdit3 />
             <span>새 게시글</span>
           </PostBtn>
@@ -44,12 +45,12 @@ const Contents: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
           </RecentCardGrid>
         </Body>
       </Wrapper>
-      <Modal isOpen={isOpen} onClose={openSubModal}>
+      <Modal isOpen={isModalOpen} onClose={toggleSubModal}>
         <PostModal
-          closeMainModal={closeModalHandler}
+          closeMainModal={toggleModalHandler}
           isSubModalOpen={isSubModalOpen}
-          openSubModal={openSubModal}
-          closeSubModal={closeSubModal}
+          openSubModal={toggleSubModal}
+          closeSubModal={toggleSubModal}
         />
       </Modal>
     </Base>
