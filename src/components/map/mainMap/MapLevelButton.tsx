@@ -41,7 +41,7 @@ const Base = styled.div`
   position: absolute;
   right: 45px;
   bottom: 45px;
-  z-index: 99;
+  z-index: 2;
 `;
 
 const BtnWrapper = styled.div`

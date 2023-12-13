@@ -4,7 +4,7 @@
 
 .modal-enter-active {
   opacity: 1;
-  transition: opacity 300ms;
+  transition: all 300ms ease;
   backdrop-filter: blur(5px);
 }
 
@@ -14,6 +14,6 @@
 
 .modal-exit-active {
   opacity: 0;
-  transition: opacity 300ms;
+  transition: all 300ms ease;
   backdrop-filter: blur(5px);
 }

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { CommentType } from '../../model/interface';
-import { PiHeartFill } from 'react-icons/pi';
-import { PiHeart } from 'react-icons/pi';
 import { TbMessage } from 'react-icons/tb';
-import { motion } from 'framer-motion';
 import LikeBtn from './LikeBtn';
 
 interface Props {

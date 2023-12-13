@@ -2,11 +2,15 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { ContentType } from '../model/interface';
 
-const getContents = async (): Promise<ContentType[]> => {
+const getContents = async (storeName: string): Promise<ContentType[]> => {
   const response = await axios.get('http://localhost:3001/contents');
-  return response.data;
+  const db = response.data.filter(
+    (data: ContentType) => data.placeName === storeName,
+  );
+  return db;
 };
 
-const useGetContentsQuery = () => useQuery('contents', getContents);
+const useGetContentsQuery = (storeName: string) =>
+  useQuery('contents', () => getContents(storeName));
 
 export default useGetContentsQuery;
