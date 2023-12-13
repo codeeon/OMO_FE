@@ -6,6 +6,8 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import KakaoLogin from '../components/auth/KakaoLogin';
+// import KakaoLogin2 from '../components/auth/KakaoLogin2';
 
 interface LoginData {
   email: string;
@@ -16,26 +18,45 @@ const Login: React.FC = () => {
   const { register, handleSubmit } = useForm<LoginData>();
   const navigate = useNavigate();
 
-  const mutation = useMutation(
+  const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
-      const response = await axios.post(`/auth/login`, formData);
-      // `${import.meta.env.VITE_APP_SERVER_URL}/auth/login`
-      if (response.data.accessToken) {
-        Cookies.set('accessToken', response.data.accessToken, {
-          secure: window.location.protocol === 'https:',
-          httpOnly: true,
-        });
-      }
-      if (response.data.refreshToken) {
-        localStorage.setItem('refreshToken', response.data.refreshToken);
-      }
+      try {
+        const response = await axios.post(`/auth/login`, formData);
+        // `${import.meta.env.VITE_APP_SERVER_URL}/auth/login`
 
-      return response.data;
+        const accessTokenExpiresIn = 60 * 60; // 1 hour in seconds
+        const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 days in seconds
+
+        if (response.data.accessToken) {
+          Cookies.set('accessToken', response.data.accessToken, {
+            expires: accessTokenExpiresIn / (60 * 60 * 24),
+            secure: window.location.protocol === 'https:',
+            httpOnly: true,
+          });
+        }
+        if (response.data.refreshToken) {
+          Cookies.set('refreshToken', response.data.refreshToken, {
+            expires: refreshTokenExpiresIn / (60 * 60 * 24),
+            secure: window.location.protocol === 'https:',
+            httpOnly: true,
+          });
+        }
+
+        return response.data;
+      } catch (error) {
+        throw new Error(
+          error.response?.data.message || '로그인에 실패했습니다.',
+        );
+      }
     },
     {
       onSuccess: () => {
         // 로그인 성공 (redirect)
         navigate(`/`); // `${import.meta.env.VITE_APP_SERVER_URL}/`
+      },
+      onError: (error: Error) => {
+        // 로그인 실패 시 에러 메시지 출력 등의 처리
+        console.error(error.message);
       },
     },
   );
@@ -64,19 +85,8 @@ const Login: React.FC = () => {
             <Text>로그인</Text>
           </LargeBtn>
         </form>
-        <LargeBtn
-          bgColor="#FEE500"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div style={{ margin: '13px 0' }}>{kakao}</div>
-          <Text style={{ marginLeft: '4px', textAlign: 'center' }} color="#000">
-            카카오로 로그인
-          </Text>
-        </LargeBtn>
+        {/* <KakaoLogin2 /> */}
+        <KakaoLogin />
         <OrLine>
           <div>{line}</div>{' '}
           <div style={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -181,21 +191,6 @@ const Text = styled.div`
   line-height: 100%;
   height: 25px;
 `;
-
-const kakao = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M12.0009 3C17.7999 3 22.501 6.66445 22.501 11.1847C22.501 15.705 17.7999 19.3694 12.0009 19.3694C11.4127 19.3694 10.8361 19.331 10.2742 19.2586L5.86611 22.1419C5.36471 22.4073 5.18769 22.3778 5.39411 21.7289L6.28571 18.0513C3.40572 16.5919 1.50098 14.0619 1.50098 11.1847C1.50098 6.66445 6.20194 3 12.0009 3Z"
-      fill="black"
-    />
-  </svg>
-);
 
 const OrLine = styled.div`
   width: 300px;
