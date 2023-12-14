@@ -11,11 +11,11 @@ const PlaceContentsDetail: React.FC<{ placeDb: LocationType | null }> = ({
   placeDb,
 }) => {
   if (!placeDb) return;
-  const { id, categoryName, storeName, address, star } = placeDb;
+  const { id, categoryName, storeName, address, star, imageURL } = placeDb;
   return (
     <Base>
       <BodyContainer>
-        <ImageHeader />
+        <ImageHeader imageURL={imageURL} />
         <PlaceName>{storeName}</PlaceName>
         <Address>
           <HiLocationMarker />
@@ -47,19 +47,19 @@ const Base = styled.div`
 
   width: 420px;
   height: calc(100vh - 60px);
-
-  position: absolute;
-  top: 0;
-  background-color: #fff;
-  z-index: 3;
+  background-color: ${({ theme }) => theme.color.bg};
   border-right: 1px solid #d9d9d9;
   overflow-y: scroll;
 `;
 
-const ImageHeader = styled.div`
+const ImageHeader = styled.div<{ imageURL: string }>`
   width: 100%;
   height: 186px;
   background: gray;
+  background-image: ${({ imageURL }) => `url(${imageURL})`};
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 `;
 const BodyContainer = styled.div`
   box-sizing: border-box;
@@ -72,7 +72,7 @@ const BodyContainer = styled.div`
 `;
 
 const PlaceName = styled.div`
-  color: #212121;
+  color: ${({ theme }) => theme.color.text};
   font-size: 20px;
   font-weight: 700;
   padding: 20px 20px 0 20px;
@@ -97,7 +97,7 @@ const RatingContainer = styled.div`
   span {
     margin-top: 5px;
     text-align: center;
-    color: #323232;
+    color: ${({ theme }) => theme.color.text};
     font-size: 16px;
     font-weight: 700;
   }

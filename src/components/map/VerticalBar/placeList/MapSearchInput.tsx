@@ -36,7 +36,6 @@ const MapSearchInput: React.FC<Props> = ({ setMapCenterLocation }) => {
   ) => {
     if (status === kakao.maps.services.Status.OK) {
       setResult(data);
-      console.log(result);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       setIsError('검색 결과가 존재하지 않습니다.');
       return;
@@ -68,6 +67,7 @@ const MapSearchInput: React.FC<Props> = ({ setMapCenterLocation }) => {
         onChange={(e) => onChangeValue(e)}
         placeholder="장소 검색하기"
         onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
       />
       <Btn onClick={onClichHandler}>
         <CgSearch />
@@ -105,11 +105,13 @@ const MapSearchInput: React.FC<Props> = ({ setMapCenterLocation }) => {
 export default MapSearchInput;
 
 const Base = styled.div<{ onFocus: boolean }>`
+  box-sizing: border-box;
+  margin: 20px;
   display: flex;
   justify-content: start;
   align-items: center;
-  width: 100%;
-  height: 40px;
+  width: 90%;
+  min-height: 40px;
   ${({ onFocus }) =>
     onFocus
       ? css`
@@ -128,11 +130,13 @@ const Base = styled.div<{ onFocus: boolean }>`
 const Input = styled.input`
   margin: 5px 20px;
   width: 80%;
-  height: 80%;
+
   border: none;
   outline: none;
 
   font-size: 14px;
+  background: ${({ theme }) => theme.color.bg};
+  color: ${({ theme }) => theme.color.text};
 `;
 
 const Btn = styled.div`
@@ -140,6 +144,7 @@ const Btn = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 20px;
+  color: ${({ theme }) => theme.color.text};
 `;
 
 const ResultContainer = styled.div`
@@ -149,12 +154,12 @@ const ResultContainer = styled.div`
   gap: 5px;
 
   position: absolute;
-  top: 37px;
+  top: 45px;
 
   padding: 14px 14px 8px;
 
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px;
-  background-color: rgba(245, 245, 247, 0.72);
+  background-color: ${({ theme }) => theme.color.searchBg};
 
   border: 1px solid rgb(224, 224, 224);
   border-radius: 1rem;
@@ -179,8 +184,9 @@ const ResultItem = styled.div`
   border-radius: 10px;
   padding: 10px;
   cursor: pointer;
+  color: ${({ theme }) => theme.color.text};
   &:hover {
-    background: #fff;
+    background: ${({ theme }) => theme.color.hover};
   }
   font-size: 14px;
   font-weight: bold;

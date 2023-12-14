@@ -1,10 +1,11 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
-import PlaceComments from '../components/main/PlaceComments';
-import HotContents from '../components/main/HotContents';
+import PlaceComments from '../components/main/comment';
+import HotContents from '../components/main/hotContents';
 import { CommentType, ContentType } from '../model/interface';
-import Banner from '../components/main/Banner';
+import Banner from '../components/main/banner';
+import Footer from '../components/share/Footer';
 
 interface Props {
   currentLocation: string | undefined;
@@ -21,6 +22,7 @@ const Home: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
       <HotContents />
       <RecentContents />
       <PlaceComments />
+      <Footer />
     </Base>
   );
 };
@@ -32,4 +34,5 @@ const Base = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
+  background: ${({ theme }) => theme.color.bg};
 `;

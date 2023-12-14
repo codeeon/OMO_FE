@@ -54,21 +54,22 @@ export default ContentsSection;
 
 const Base = styled.div`
   box-sizing: border-box;
-  margin-top: 55px;
+  margin-top: 45px;
 
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: start;
   width: 100%;
-  padding: 0 20px;
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 90%;
+  padding: 0 20px;
+  margin-bottom: 15px;
 `;
 
 const Title = styled.div`
@@ -76,7 +77,7 @@ const Title = styled.div`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  color: #212121;
+  color: ${({ theme }) => theme.color.text};
   font-size: 20px;
   font-weight: 700;
 `;
@@ -85,7 +86,7 @@ const AllBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #a9a9a9;
+  color: ${({ theme }) => theme.color.sub2};
   span {
     font-size: 14px;
     font-weight: 700;
@@ -100,9 +101,11 @@ const AllBtn = styled.div`
 `;
 
 const ListContainer = styled.div`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 10px;
   width: 100%;
 `;

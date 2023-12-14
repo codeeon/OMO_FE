@@ -59,7 +59,7 @@ const Rating = styled.div`
   text-align: center;
   margin-top: 5px;
   margin-left: 3px;
-  color: #323232;
+  color: ${({ theme }) => theme.color.text};
   font-size: 16px;
   font-weight: 700;
 `;

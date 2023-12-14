@@ -7,8 +7,10 @@ import Map from '../pages/Map';
 
 import Signup from '../pages/Signup';
 import Login from '../pages/Login';
+import { ThemeType } from '../model/interface';
+import Footer from '../components/share/Footer';
 
-const Routers = () => {
+const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const [currentLocation, setCurrentLocation] = useState<string | undefined>(
     '전체',
   );
@@ -18,8 +20,11 @@ const Routers = () => {
 
   return (
     <>
-      {!excludedRoutes.includes(location.pathname) && <Navbar />}
-      {excludedRoutes.includes(location.pathname) && <Navbar maxWidth="98%" />}
+      <Navbar
+        maxWidth={!excludedRoutes.includes(location.pathname) ? null : '98%'}
+        themeMode={themeMode}
+        toggleTheme={toggleTheme}
+      />
       <Routes>
         <Route
           path="/"

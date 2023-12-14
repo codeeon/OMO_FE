@@ -1,16 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import Routers from './shared/Routers';
-import { app } from '../firebase';
 import { BrowserRouter } from 'react-router-dom';
+import styled, { ThemeProvider } from 'styled-components';
+import { LightTheme, DarkTheme } from './styles/theme.js';
 
 const App = () => {
-  useEffect(() => {
-    console.log(app);
-  }, []);
+  const localThemeMode = window.localStorage.getItem('theme' || 'LightMode');
+  const [themeMode, setThemeMode] = useState<string | null>(localThemeMode);
+
+  const toggleTheme = () => {
+    if (themeMode === 'LightMode') {
+      setThemeMode('DarkMode');
+      window.localStorage.setItem('theme', 'DarkMode');
+    } else {
+      setThemeMode('LightMode');
+      window.localStorage.setItem('theme', 'LightMode');
+    }
+    // window.location.reload();
+  };
+
   return (
-    <BrowserRouter>
-      <Routers />
-    </BrowserRouter>
+    <ThemeProvider theme={themeMode === 'LightMode' ? LightTheme : DarkTheme}>
+      <BrowserRouter>
+        <Routers toggleTheme={toggleTheme} themeMode={themeMode} />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 

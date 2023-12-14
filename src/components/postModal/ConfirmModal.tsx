@@ -3,20 +3,28 @@ import styled from 'styled-components';
 import Button from '../share/Button';
 
 interface Props {
-  closeModalHandler: () => void;
-  clearPostHandler: () => void;
+  closeModalHandler: (
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+  ) => void;
+  clearPostHandler: (
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+  ) => void;
 }
 
 const ConfirmModal: React.FC<Props> = ({
   closeModalHandler,
   clearPostHandler,
 }) => {
-  const onClickYesBtn = () => {
-    clearPostHandler();
+  const onClickYesBtn = (
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+  ) => {
+    clearPostHandler(e);
   };
 
-  const onClickNoBtn = () => {
-    closeModalHandler();
+  const onClickNoBtn = (
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+  ) => {
+    closeModalHandler(e);
   };
 
   return (
@@ -30,7 +38,7 @@ const ConfirmModal: React.FC<Props> = ({
           height="15px"
           fontSize="14px"
           fontWeight="700"
-          onClick={onClickYesBtn}
+          onClick={(e) => onClickYesBtn(e)}
         >
           예
         </Button>
@@ -41,7 +49,7 @@ const ConfirmModal: React.FC<Props> = ({
           height="15px"
           fontSize="14px"
           fontWeight="700"
-          onClick={onClickNoBtn}
+          onClick={(e) => onClickNoBtn(e)}
         >
           아니오
         </Button>
@@ -57,7 +65,7 @@ const Base = styled.div`
   height: 287px;
   border-radius: 16px;
 
-  background: #fff;
+  background: ${({ theme }) => theme.color.cardBg};
 
   display: flex;
   flex-direction: column;
@@ -66,14 +74,11 @@ const Base = styled.div`
 `;
 
 const Title = styled.div`
-  color: #000;
+  color: ${({ theme }) => theme.color.text};
 
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 20px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%; /* 20px */
   letter-spacing: -0.2px;
 `;
 

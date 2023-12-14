@@ -7,7 +7,7 @@ const MapPlaceHeader = () => {
   const changeCategory = (category: string) => {
     setIsSelected(category);
   };
-  
+
   return (
     <Base>
       <Category
@@ -29,7 +29,9 @@ const MapPlaceHeader = () => {
 export default MapPlaceHeader;
 
 const Base = styled.div`
-  margin-top: 40px;
+  box-sizing: border-box;
+  margin: 20px;
+  margin-top: 20px;
   width: 100%;
 
   display: flex;
@@ -40,7 +42,7 @@ const Base = styled.div`
 `;
 
 const Category = styled.div<{ selected: boolean }>`
-  color: #323232;
+  color: ${({ theme }) => theme.color.text};
   text-align: center;
   font-family: Wanted Sans;
   font-size: 20px;
