@@ -3,14 +3,11 @@ import { ContentType } from '../model/interface';
 import { useMutation, useQueryClient } from 'react-query';
 
 const postContent = async (newContent: ContentType) => {
-  const response = await axios.post(
-    'http://localhost:3001/contents',
-    newContent,
-  );
+  const response = await axios.post('https://tonadus.shop/posts', newContent);
   return response.data;
 };
 
-const usePostContentQuery = () => {
+const usePostContentMutate = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation(postContent, {
     onSuccess: () => {
@@ -18,9 +15,9 @@ const usePostContentQuery = () => {
     },
   });
   return {
-    postMutate: mutation.mutate,
-    isPostLoading: mutation.isLoading,
+    postContentMutate: mutation.mutate,
+    isPostContentLoading: mutation.isLoading,
   };
 };
 
-export default usePostContentQuery;
+export default usePostContentMutate;

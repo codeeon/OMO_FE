@@ -6,14 +6,16 @@ import LikeBtn from '../../../detailModal/LikeBtn';
 import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa';
 import Modal from '../../../Modal/Modal';
-import DetailContentsModal from '../../../detailModal/DetailContentsModal';
+import DetailContentsModal from '../../../detailModal/ContentsModal';
 interface Props {
   cont: ContentType;
 }
 
 const ContentCard: React.FC<Props> = ({ cont }) => {
   const { star, likeCount, createdAt, content, imageURL } = cont;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const toggleModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -39,7 +41,7 @@ const ContentCard: React.FC<Props> = ({ cont }) => {
           ))}
           <span>{star}점</span>
         </RatingContainer>
-        <Text>{content}</Text>
+        <Text dangerouslySetInnerHTML={{ __html: content }} />
         <Footer>
           <FooterItem color="red">
             <LikeBtn />
@@ -64,12 +66,16 @@ const ContentCard: React.FC<Props> = ({ cont }) => {
 export default ContentCard;
 
 const Base = styled.div`
-  margin-top: 20px;
+  padding: 15px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: start;
   width: 100%;
+  &:hover {
+    background: ${({ theme }) => theme.color.hover};
+  }
+  cursor: pointer;
 `;
 
 const UserContainer = styled.div`
@@ -77,6 +83,8 @@ const UserContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 6px;
+  box-sizing: border-box;
+  padding: 0 20px;
 `;
 
 const UserProfile = styled.div`
@@ -94,21 +102,22 @@ const UserInfoContainer = styled.div`
 `;
 
 const UserId = styled.div`
-  color: #000;
+  color: ${({ theme }) => theme.color.text};
   font-size: 14px;
   font-weight: 700;
 `;
 
 const Date = styled.div`
-  color: #5a5a5a;
+  color: ${({ theme }) => theme.color.sub2};
   font-size: 14px;
   font-weight: 500;
 `;
 
 const ImageBox = styled.div<{ imageURL: string[] }>`
+  margin: 0 20px;
   margin-top: 10px;
   background-color: gray;
-  width: 100%;
+  width: 90%;
   height: 380px;
   border-radius: 8px;
   background-position: center;
@@ -118,7 +127,7 @@ const ImageBox = styled.div<{ imageURL: string[] }>`
 `;
 
 const RatingContainer = styled.div`
-  margin-top: 17px;
+  margin: 17px 20px;
 
   width: 100%;
   display: flex;
@@ -126,9 +135,10 @@ const RatingContainer = styled.div`
   align-items: center;
   gap: 2px;
   span {
-    margin-top: 5px;
+    margin-top: 2px;
+    margin-left: 2px;
     text-align: center;
-    color: #323232;
+    color: ${({ theme }) => theme.color.text};
     font-size: 16px;
     font-weight: 700;
   }
@@ -146,18 +156,24 @@ const StarWrapper = styled.div`
 `;
 
 const Text = styled.div`
-  color: #5a5a5a;
+  color: ${({ theme }) => theme.color.sub2};
   font-size: 16px;
   font-weight: 500;
-  line-height: 140%; /* 22.4px */
+  line-height: 140%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 370px;
+  height: 20px;
+  margin: 0 20px;
 `;
 
 const Footer = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  margin-top: 15px;
   gap: 10px;
+  margin: 10px 20px;
 `;
 
 const FooterItem = styled.div`

@@ -8,18 +8,28 @@ interface Props {
   children: ReactNode;
   selectedPlace: LocationType | null;
   setSelectedPlace: React.Dispatch<React.SetStateAction<LocationType | null>>;
+  setIsListOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isListOpen: boolean;
 }
 
-const CustomInfoMap: React.FC<Props> = ({
+const LevelButton: React.FC<Props> = ({
   placeDb,
   children,
   selectedPlace,
   setSelectedPlace,
+  setIsListOpen,
+  isListOpen,
 }) => {
   const selectPlaceHandler = () => {
     setSelectedPlace(placeDb);
   };
   const { latitude, longitude, storeName, categoryName } = placeDb;
+
+  const clikcMarkerHandler = () => {
+    !isListOpen && setIsListOpen(true);
+    selectPlaceHandler();
+  };
+
   return (
     <CustomOverlayMap
       position={{ lat: latitude, lng: longitude }}
@@ -28,7 +38,7 @@ const CustomInfoMap: React.FC<Props> = ({
       zIndex={1}
     >
       <CustomMarkerContainer
-        onClick={selectPlaceHandler}
+        onClick={clikcMarkerHandler}
         isSelected={selectedPlace?.storeName === storeName}
       >
         <MarkerIcon isSelected={selectedPlace?.storeName === storeName}>
@@ -48,7 +58,7 @@ const CustomInfoMap: React.FC<Props> = ({
   );
 };
 
-export default CustomInfoMap;
+export default LevelButton;
 
 const CustomMarkerContainer = styled.div<{ isSelected: boolean }>`
   box-sizing: border-box;
@@ -58,10 +68,11 @@ const CustomMarkerContainer = styled.div<{ isSelected: boolean }>`
   gap: 6px;
   width: ${({ isSelected }) => (isSelected ? '160px' : '150px')};
   height: ${({ isSelected }) => (isSelected ? '45px' : '40px')};
-  background: ${({ isSelected }) => (isSelected ? '#4462ff' : '#fff')};
+  background: ${({ isSelected, theme }) =>
+    isSelected ? `${theme.color.marker}` : `${theme.color.bg}`};
   border-radius: 41px;
   padding: 5px;
-  border: 0.5px solid #4462ff;
+  border: 0.5px solid ${({ theme }) => theme.color.marker};
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   position: relative;
@@ -70,8 +81,10 @@ const CustomMarkerContainer = styled.div<{ isSelected: boolean }>`
     position: absolute;
     border-style: solid;
     border-width: 10px 10px 0;
-    border-color: ${({ isSelected }) =>
-      isSelected ? '#4462ff transparent' : '#fff transparent'};
+    border-color: ${({ isSelected, theme }) =>
+      isSelected
+        ? `${theme.color.marker} transparent`
+        : `${theme.color.bg} transparent`};
     display: block;
     width: 0;
     z-index: 1;
@@ -103,8 +116,10 @@ const MarkerIcon = styled.div<{ isSelected: boolean }>`
   width: ${({ isSelected }) => (isSelected ? '35px' : '30px')};
   height: ${({ isSelected }) => (isSelected ? '35px' : '30px')};
   border-radius: 100%;
-  background-color: ${({ isSelected }) => (isSelected ? '#fff' : '#4462ff')};
-  color: ${({ isSelected }) => (isSelected ? '#4462ff' : '#fff')};
+  background-color: ${({ isSelected, theme }) =>
+    isSelected ? '#fff' : `${theme.color.marker}`};
+  color: ${({ isSelected, theme }) =>
+    isSelected ? `${theme.color.marker}` : '#fff'};
   transition: all 300ms ease-in-out;
 `;
 
@@ -119,7 +134,8 @@ const PlaceInfoContainer = styled.div<{ isSelected: boolean }>`
 `;
 
 const PlaceName = styled.div<{ isSelected: boolean }>`
-  color: ${({ isSelected }) => (isSelected ? '#fff' : '#111')};
+  color: ${({ isSelected, theme }) =>
+    isSelected ? '#fff' : `${theme.color.text}`};
   font-family: Wanted Sans;
   font-size: 13px;
   font-style: normal;

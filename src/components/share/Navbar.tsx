@@ -2,9 +2,15 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import UserDropdown from './UserDropdown';
+import NavDropdown from './NavDropdown';
 
-const Navbar: React.FC<{ maxWidth?: string }> = ({ maxWidth }) => {
+interface Props {
+  maxWidth: string | null;
+  toggleTheme: () => void;
+  themeMode: string | null;
+}
+
+const Navbar: React.FC<Props> = ({ maxWidth, themeMode, toggleTheme }) => {
   const [isSelected, setIsSelected] = useState<string>('');
 
   const navigate = useNavigate();
@@ -12,6 +18,16 @@ const Navbar: React.FC<{ maxWidth?: string }> = ({ maxWidth }) => {
   const onClickLogoHander = () => {
     navigate('/');
     setIsSelected('');
+  };
+
+  const onSelectHandler = (item: string) => {
+    if (item === '게시글') {
+      navigate('/contents');
+      setIsSelected('게시글');
+    } else {
+      navigate('/map');
+      setIsSelected('지도');
+    }
   };
 
   return (
@@ -27,18 +43,18 @@ const Navbar: React.FC<{ maxWidth?: string }> = ({ maxWidth }) => {
         </Logo>
         <RightContainer>
           <Item
-            onClick={() => navigate('/contents')}
+            onClick={() => onSelectHandler('게시글')}
             isSelected={isSelected === '게시글'}
           >
             게시글
           </Item>
           <Item
-            onClick={() => navigate('/map')}
+            onClick={() => onSelectHandler('지도')}
             isSelected={isSelected === '지도'}
           >
             지도
           </Item>
-          <UserDropdown />
+          <NavDropdown themeMode={themeMode} toggleTheme={toggleTheme} />
         </RightContainer>
       </Wrapper>
     </Base>
@@ -56,11 +72,11 @@ const Base = styled.div`
   height: 60px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-  background: #fff;
+  background: ${({ theme }) => theme.color.bg};
   z-index: 9;
 `;
 
-const Wrapper = styled.div<{ maxWidth?: string }>`
+const Wrapper = styled.div<{ maxWidth: string | null }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -104,9 +120,10 @@ const RightContainer = styled.div`
 const Item = styled.div<{ isSelected: boolean }>`
   font-size: 16px;
   font-weight: 700;
-  color: ${({ isSelected }) => (isSelected ? '#F97393' : '#e6e6e6')};
+  color: ${({ isSelected, theme }) =>
+    isSelected ? '#F97393' : `${theme.color.sub2}`};
   &:hover {
-    color: black;
+    color: #f97393;
   }
   cursor: pointer;
 `;

@@ -4,7 +4,7 @@ import { MutationFunction } from 'react-query';
 
 export const instance = axios.create({
   // baseURL: 'https://ommmoapi-5557a8752856.herokuapp.com',
-  baseURL: 'http://localhost:3001',
+  baseURL: 'https://tonadus.shop/api',
 });
 
 export const postContent = async (newContent: ContentType) => {

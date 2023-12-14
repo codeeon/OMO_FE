@@ -14,11 +14,44 @@
       href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Noto+Sans+KR&display=swap"
       rel="stylesheet"
     />
-    <title>Vite + React + TS</title>
+    <title>OMO</title>
   </head>
   <body>
     <div id="root"></div>
     <div id="modal-root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="text/javascript">
+      (function () {
+        function getInitialColorMode() {
+          const isClient = typeof window !== 'undefined';
+          if (isClient) {
+            const persistedColorPreference =
+              window.localStorage.getItem('theme');
+
+            if (persistedColorPreference) {
+              return persistedColorPreference;
+            }
+
+            const systemPreference = window.matchMedia(
+              '(prefers-color-scheme: DarkMode)',
+            );
+            if (systemPreference.matches) {
+              return 'true';
+            }
+            return 'false';
+          }
+        }
+        const colorMode = getInitialColorMode();
+        console.log(colorMode);
+        document.documentElement.style.setProperty(
+          'background-color',
+          colorMode === 'LightMode' ? '#FFFFFF' : '#1b1b20',
+        );
+        document.documentElement.style.setProperty(
+          'color',
+          colorMode === 'LightMode' ? '#101010' : '#fff',
+        );
+      })();
+    </script>
   </body>
 </html>

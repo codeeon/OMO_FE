@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import MapMain from '../components/map/mainMap/MapMain';
+import MapMain from '../components/map/mainMap';
 import MapPlaceList from '../components/map/VerticalBar/placeList/MapPlaceList';
 import useGetPlaceContentsQuery from '../hooks/useGetPlaceContentsQuery';
 import { IoIosArrowForward } from 'react-icons/io';
@@ -62,6 +62,8 @@ const Map: React.FC = () => {
         setMapCenterLocation={setMapCenterLocation}
         myLoca={myLoca}
         setMyLoca={setMyLoca}
+        setIsListOpen={setIsListOpen}
+        isListOpen={isListOpen}
       />
     </Base>
   );
@@ -83,7 +85,7 @@ const ListWrapper = styled.div<{ isListOpen: boolean }>`
   width: 420px;
   height: calc(100vh - 60px);
   left: ${({ isListOpen }) => (isListOpen ? '0' : '-420px')};
-  transition: all 300ms ease;
+  transition: left 600ms ease;
 `;
 
 const DetailListWrapper = styled.div<{
@@ -94,8 +96,9 @@ const DetailListWrapper = styled.div<{
   width: 420px;
   height: calc(100vh - 60px);
   left: ${({ isDetailListOpen, isListOpen }) =>
-    isDetailListOpen ? '420px' : isListOpen ? '0px' : '-420px'};
-  transition: all 300ms ease;
+    isDetailListOpen ? '420px' : '0px'};
+  transition: all 600ms;
+  z-index: 3;
 `;
 
 const ToggleBtn = styled.div<{
@@ -112,15 +115,15 @@ const ToggleBtn = styled.div<{
   align-items: center;
   height: 70px;
   width: 30px;
-  background: #fff;
-  border: 1px solid #d9d9d9;
-  z-index: 2;
+  background: ${({ theme }) => theme.color.bg};
+  border: 1px solid ${({ theme }) => theme.color.border};
+  z-index: 4;
   border-radius: 0 8px 8px 0;
   &:hover {
-    background: #d9d9d9;
+    background: ${({ theme }) => theme.color.hover};
   }
   cursor: pointer;
-  transition: all 300ms ease;
+  transition: all 600ms ease;
 `;
 
 const IconWrapper = styled.div<{ isListOpen: boolean }>`
@@ -129,4 +132,5 @@ const IconWrapper = styled.div<{ isListOpen: boolean }>`
   align-items: center;
   transform: ${({ isListOpen }) => (isListOpen ? 'rotate(180deg)' : null)};
   transition: all 200ms ease-in-out;
+  color: ${({ theme }) => theme.color.text};
 `;

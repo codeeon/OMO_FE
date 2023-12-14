@@ -10,7 +10,9 @@ interface Props {
   height?: string;
   fontSize?: string;
   fontWeight?: string;
-  onClick?: () => void;
+  onClick?: (
+    event: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+  ) => void;
 }
 
 const Button: React.FC<Props> = ({

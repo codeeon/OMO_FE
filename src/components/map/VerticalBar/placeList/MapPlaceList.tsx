@@ -36,7 +36,7 @@ const MapPlaceList: React.FC<Props> = ({
   };
 
   return (
-    <Base isListOpen={isListOpen}>
+    <Base>
       <MapSearchInput setMapCenterLocation={setMapCenterLocation} />
       <MapPlaceHeader />
       <PlaceCategoryContainer>
@@ -84,7 +84,7 @@ const MapPlaceList: React.FC<Props> = ({
 
 export default MapPlaceList;
 
-const Base = styled.div<{ isListOpen: boolean }>`
+const Base = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -96,16 +96,17 @@ const Base = styled.div<{ isListOpen: boolean }>`
 
   position: absolute;
   top: 0;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.color.bg};
   z-index: 4;
-  border-right: 1px solid #d9d9d9;
-  padding: 20px;
+  border-right: 1px solid ${({ theme }) => theme.color.border2};
+
   overflow-y: scroll;
 `;
 
 const PlaceCategoryContainer = styled.div`
-  margin-top: 27px;
-  width: 100%;
+  box-sizing: border-box;
+  margin: 17px 20px;
+  width: 90%;
   height: 40px;
   display: flex;
   justify-content: start;
@@ -115,15 +116,15 @@ const PlaceCategoryContainer = styled.div`
 
 const PlaceCategoryBtn = styled.div<{ selected: boolean }>`
   border-radius: 40px;
-  width: 180px;
-  border: ${({ selected }) =>
-    selected ? '1px solid #f97393;' : '1px solid #d9d9d9'};
+  border: ${({ selected, theme }) =>
+    selected ? '1px solid #f97393;' : `1px solid ${theme.color.border2}`};
   color: #323232;
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-  padding: 10px 10px;
+  padding: 10px 16px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  color: ${({ theme }) => theme.color.text};
   cursor: pointer;
   &:hover {
     border: 1px solid #f97393;
@@ -135,7 +136,7 @@ const ContentsContainer = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  gap: 25px;
+  gap: 7px;
 
   width: 100%;
   height: 100%;

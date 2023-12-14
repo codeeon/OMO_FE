@@ -8,6 +8,7 @@ export interface SelectedInfoType {
 
 export interface ContentType {
   id?: number | undefined;
+
   userId: string;
   categoryName: string;
   locationName: string;
@@ -34,6 +35,7 @@ export interface CommentType {
 
 export interface LocationType {
   id?: number | undefined;
+  imageURL: string;
   categoryName: string;
   districName: string;
   storeName: string;
@@ -49,4 +51,55 @@ export interface MapLocationType {
     lng: any;
   };
   isPanto: boolean;
+}
+
+export interface ThemeType {
+  toggleTheme: () => void;
+  themeMode: string | null;
+}
+
+// 여기부터 실제 서버 타입
+export interface PostType {
+  postId: number;
+  User: { nickname: string };
+  Location: { storName: string; address: string; starAvg: number };
+  imgUrl: string[];
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+}
+
+export interface PostDetailType {
+  postId: number;
+  content: string;
+  createdAt: string;
+  likeCount: number;
+  imgUrl: string[];
+  star: number;
+  User: {
+    nickname: string;
+    imgUrl: string;
+  };
+  Location: {
+    address: string;
+  };
+  Comments: CommentType2[];
+}
+
+export interface CommentType2 {
+  commentId: number;
+  content: string;
+  createdAt: string;
+  User: {
+    imgUrl: string;
+    nickname: string;
+  };
+}
+
+export interface CommentPostType {
+  UserId: number;
+  PostId: number | undefined;
+  content: string;
+  createdAt: Date;
 }

@@ -11,7 +11,7 @@ interface Props {
 }
 
 const MapPlaceCard: React.FC<Props> = ({ placeDb, setSelectedPlace }) => {
-  const { id, categoryName, storeName, address, star } = placeDb;
+  const { imageURL, id, categoryName, storeName, address, star } = placeDb;
 
   const selectPlaceHandler = (place: LocationType) => {
     setSelectedPlace(place);
@@ -20,7 +20,7 @@ const MapPlaceCard: React.FC<Props> = ({ placeDb, setSelectedPlace }) => {
   return (
     <>
       <Base onClick={() => selectPlaceHandler(placeDb)}>
-        <ImageContainer />
+        <ImageContainer imageURL={imageURL} />
         <HeaderContainer>
           <PlaceName>{storeName}</PlaceName>
           <CategoryName>{categoryName}</CategoryName>
@@ -54,7 +54,8 @@ const MapPlaceCard: React.FC<Props> = ({ placeDb, setSelectedPlace }) => {
 export default MapPlaceCard;
 
 const Base = styled.div`
-  margin-top: 20px;
+  box-sizing: border-box;
+  padding: 20px;
 
   display: flex;
   flex-direction: column;
@@ -62,13 +63,21 @@ const Base = styled.div`
   align-items: start;
 
   width: 100%;
+  &:hover {
+    background: ${({ theme }) => theme.color.hover};
+  }
+  cursor: pointer;
 `;
 
-const ImageContainer = styled.div<{ imageURL?: string[] }>`
+const ImageContainer = styled.div<{ imageURL?: string }>`
   background: gray;
   width: 100%;
   height: 180px;
   border-radius: 8px;
+  background-image: ${({ imageURL }) => `url(${imageURL})`};
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 `;
 
 const HeaderContainer = styled.div`
@@ -83,13 +92,13 @@ const HeaderContainer = styled.div`
 `;
 
 const PlaceName = styled.div`
-  color: #212121;
+  color: ${({ theme }) => theme.color.text};
   font-size: 20px;
   font-weight: 700;
 `;
 
 const CategoryName = styled.div`
-  color: #5a5a5a;
+  color: ${({ theme }) => theme.color.sub2};
   font-size: 14px;
   font-weight: 500;
 `;
@@ -157,13 +166,13 @@ const ContentCountContainer = styled.div`
 `;
 
 const Title = styled.div`
-  color: #5a5a5a;
+  color: ${({ theme }) => theme.color.sub2};
   font-size: 16px;
   font-weight: 500;
 `;
 
 const Count = styled.div`
-  color: #111;
+  color: ${({ theme }) => theme.color.text};
   font-size: 16px;
   font-weight: 700;
 `;
