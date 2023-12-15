@@ -21,10 +21,17 @@ const Login: React.FC = () => {
   const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
       try {
-        const response = await axios.post(`/auth/login`, formData);
-        // `${import.meta.env.VITE_APP_SERVER_URL}/auth/login`
+        const response = await axios.post(
+          `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/auth/login`,
+          formData,
+          // { withCredentials: true }, // 얘를 넣으니까 로그인이 안 되는 현상 발생
+        );
 
-        const accessTokenExpiresIn = 60 * 60; // 1 hour in seconds
+        console.log(response);
+        console.log(accessToken);
+        // console.log(response);
+
+        const accessTokenExpiresIn = 60 * 60 * 2; // 2 hour in seconds
         const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 days in seconds
 
         if (response.data.accessToken) {
@@ -41,7 +48,7 @@ const Login: React.FC = () => {
             httpOnly: true,
           });
         }
-
+        console.log(response);
         return response.data;
       } catch (error) {
         throw new Error(
