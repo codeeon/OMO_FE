@@ -2,6 +2,7 @@ import React from 'react';
 import { useQueryClient, useQuery } from 'react-query';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 interface KakaoTokenResponse {
   access_token: string;
@@ -13,7 +14,6 @@ interface KakaoTokenResponse {
 }
 
 const KakaoLogin: React.FC = () => {
-  const queryClient = useQueryClient();
 
   const loginWithKakao = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${

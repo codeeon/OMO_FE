@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { MdOutlineDarkMode, MdOutlineWbSunny } from 'react-icons/md';
 import { FiUser } from 'react-icons/fi';
 import { ThemeType } from '../../model/interface';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +36,16 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const clickToggleBtn = () => {
     toggleTheme();
     setIsOpen(false);
+  };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
+
+    // redirect를 홈으로 둘지 어떨지.
+    navigate(`${import.meta.env.VITE_APP_SERVER_URL}`);
   };
 
   return (
@@ -87,7 +99,11 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
             </>
           )}
         </DropdownItem>
-        <DropdownItem variants={itemVariants} style={{ color: 'red' }}>
+        <DropdownItem
+          onClick={handleLogout}
+          variants={itemVariants}
+          style={{ color: 'red' }}
+        >
           로그아웃
         </DropdownItem>
       </DropdownList>
