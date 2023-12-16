@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Skeleton from 'react-loading-skeleton';
 
-const Card = () => {
+const ContentCardSkeleton = () => {
   return (
     <Base>
       <ImgContainer width="285px" height="181px" />
@@ -24,7 +24,7 @@ const Card = () => {
   );
 };
 
-export default Card;
+export default ContentCardSkeleton;
 const Base = styled.div`
   display: flex;
   flex-direction: column;

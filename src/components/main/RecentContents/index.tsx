@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import RecentCard from './Card';
 import { useNavigate } from 'react-router-dom';
-import RecentCardSkeleton from './CardSkeleton';
+import ContentCardSkeleton from '../../share/ContentCardSkeleton';
 import useGetRecentContentsQuery from '../../../hooks/useGetRecentContentsQuery';
 
 const RecentContents = () => {
@@ -29,7 +29,7 @@ const RecentContents = () => {
       <Body>
         {isLoading
           ? Array.from({ length: 4 }).map((_, idx) => (
-              <RecentCardSkeleton key={idx} />
+              <ContentCardSkeleton key={idx} />
             ))
           : contents
               ?.sort(

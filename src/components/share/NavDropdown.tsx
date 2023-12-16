@@ -45,7 +45,7 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
     Cookies.remove('refreshToken');
 
     // redirect를 홈으로 둘지 어떨지.
-    navigate(`${import.meta.env.VITE_APP_SERVER_URL}`);
+    navigate('/');
   };
 
   return (
@@ -85,7 +85,12 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
         }}
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
-        <DropdownItem variants={itemVariants}>내 정보</DropdownItem>
+        <DropdownItem
+          onClick={() => navigate('/mypage')}
+          variants={itemVariants}
+        >
+          내 정보
+        </DropdownItem>
         <DropdownItem variants={itemVariants} onClick={clickToggleBtn}>
           {themeMode === 'LightMode' ? (
             <>

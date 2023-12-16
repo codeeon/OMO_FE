@@ -7,7 +7,8 @@ import PostModal from '../postModal';
 import useModalCtr from '../../hooks/useModalCtr';
 import Location from './location';
 import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContentsQuery';
-import Card from './Card';
+import ContentCard from '../share/ContentCard';
+import ContentCardSkeleton from '../share/ContentCardSkeleton';
 
 interface Props {
   currentLocation: string | undefined;
@@ -57,9 +58,13 @@ const Posts: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
         />
         <Body>
           <RecentCardGrid>
-            {contents?.map((contentData) => (
-              <Card contentData={contentData} />
-            ))}
+            {isLoading
+              ? Array.from({ length: 12 }).map((_, idx) => (
+                  <ContentCardSkeleton key={idx} />
+                ))
+              : contents?.map((contentData) => (
+                  <ContentCard contentData={contentData} />
+                ))}
           </RecentCardGrid>
         </Body>
       </Wrapper>
