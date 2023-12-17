@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import CommentItem from './Item';
 import CommentInput from './Input';
-import { CommentType, CommentType2 } from '../../model/interface';
+import { CommentType, CommentType } from '../../model/interface';
 
 const Comment: React.FC<{
-  comments: CommentType2[];
+  comments: CommentType[];
   contentId: number;
 }> = ({ comments, contentId }) => {
   return (

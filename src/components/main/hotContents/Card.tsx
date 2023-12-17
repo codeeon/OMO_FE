@@ -1,19 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ContentType } from '../../../model/interface';
+import { HotPostsType } from '../../../model/interface';
 import { HiArrowNarrowRight } from 'react-icons/hi';
 
-const Card: React.FC<{ contentData: ContentType }> = ({ contentData }) => {
-  const { placeName, content, categoryName, imageURL } = contentData;
+interface Props {
+  post: HotPostsType;
+}
+
+const Card: React.FC<Props> = ({ post }) => {
+  const { imgUrl, Location, content, Category: category } = post;
   return (
     <Base>
       <Wrapper>
-        <ImageContainer imageURL={imageURL}></ImageContainer>
-        <Title>{placeName}</Title>
+        <ImageContainer imageURL={imgUrl}></ImageContainer>
+        <Title>{Location.storeName}</Title>
         <BodyConatiner>
           <Text dangerouslySetInnerHTML={{ __html: content }} />
           <FooterContainer>
-            <Category>#{categoryName}</Category>
+            <Category>#{category.categoryName}</Category>
             <MapBtnContainer>
               <span>지도로 보기</span>
               <HiArrowNarrowRight />

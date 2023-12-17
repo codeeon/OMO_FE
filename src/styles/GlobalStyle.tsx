@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
   
   #root {
-    font-family: 'WantedSans';
+    font-family: 'Wanted Sans Variable';
   }
   * {
     transition : color 200ms ease-in-out;

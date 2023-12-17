@@ -2,16 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { FaQuoteLeft } from 'react-icons/fa';
-import { CommentType } from '../../../model/interface';
+import { CommentPostsType, CommentType } from '../../../model/interface';
 
-const PlaceCommnetCard: React.FC<{ comment: CommentType }> = ({ comment }) => {
-  const { text } = comment;
+const PlaceCommnetCard: React.FC<{ comment: CommentPostsType }> = ({
+  comment,
+}) => {
+  const { content } = comment;
   return (
     <Base>
       <QuoteContainer>
         <FaQuoteLeft />
       </QuoteContainer>
-      <Text>{text}</Text>
+      <Text>{content}</Text>
       <PlaceName>
         <LuMapPin />
         <span>서울시 광진구 아차산</span>

@@ -2,6 +2,9 @@ import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 import Location from './location';
 
+const BANNERIMG =
+  'https://firebasestorage.googleapis.com/v0/b/photo-zone-b66e9.appspot.com/o/files%2Fseoul-cityscape-at-twilight-in-south-korea.jpg?alt=media&token=94ed1302-6aaf-42ee-8e54-5b991002fc88';
+
 interface Props {
   currentLocation: string | undefined;
   setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
@@ -9,7 +12,7 @@ interface Props {
 
 const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
   return (
-    <Base>
+    <Base bannerimg={BANNERIMG}>
       <Wrapper>
         <TitleContainer>
           <BannerTitle>
@@ -37,8 +40,9 @@ const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
 
 export default Banner;
 
-const Base = styled.div`
-  background-image: url('https://images.unsplash.com/photo-1482517967863-00e15c9b44be?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+const Base = styled.div<{ bannerimg: string }>`
+  box-sizing: border-box;
+  background-image: url(${({ bannerimg }) => bannerimg});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -1,22 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import MapMain from '../components/map/mainMap';
 import MapPlaceList from '../components/map/VerticalBar/placeList/MapPlaceList';
-import useGetPlaceContentsQuery from '../hooks/useGetPlaceContentsQuery';
 import { IoIosArrowForward } from 'react-icons/io';
-import { LocationType } from '../model/interface';
+import {
+  LocationType,
+  MapCurrentLocationType,
+  MapLocationType,
+} from '../model/interface';
 import PlaceContentsDetail from '../components/map/VerticalBar/placeDetail/PlaceContentsDetail';
+import { getCurrentCoords } from '../function/kakao';
+import useGetLookAroundQuery from '../hooks/reactQuery/map/useGetLookAroundQuery';
 
 const Map: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState('전체');
-  const [isListOpen, setIsListOpen] = useState<boolean>(true);
+  const [myLoca, setMyLoca] = useState<MapCurrentLocationType>({
+    lat: null,
+    lng: null,
+    placeName: null,
+  });
+  const [selectedCategory, setSelectedCategory] = useState<string>('전체');
   const [selectedPlace, setSelectedPlace] = useState<LocationType | null>(null);
-  const { data: placeDatas, isLoading } = useGetPlaceContentsQuery();
-  const [myLoca, setMyLoca] = useState({ lat: 36.5, lng: 127.8 });
-  const [mapCenterLocation, setMapCenterLocation] = useState({
+  const [isListOpen, setIsListOpen] = useState<boolean>(true);
+  const [mapCenterLocation, setMapCenterLocation] = useState<MapLocationType>({
     center: { lat: myLoca.lat, lng: myLoca.lng },
     isPanto: false,
+    bounds: undefined,
   });
+
+  const mapRef = useRef<kakao.maps.Map>(null);
+
+  const {
+    data: placeDatas,
+    isLoading,
+    refetch,
+  } = useGetLookAroundQuery(
+    mapCenterLocation.center.lat,
+    mapCenterLocation.center.lng,
+    selectedCategory === '전체' ? '' : selectedCategory,
+    mapCenterLocation.bounds?.ha,
+    mapCenterLocation.bounds?.oa,
+    mapCenterLocation.bounds?.pa,
+    mapCenterLocation.bounds?.qa,
+  );
 
   const onClickToggleBtn = () => {
     if (selectedPlace !== null) {
@@ -25,6 +50,37 @@ const Map: React.FC = () => {
       setIsListOpen(!isListOpen);
     }
   };
+
+  useEffect(() => {
+    const getCurLoc = async () => {
+      const { latitude, longitude } = await getCurrentCoords();
+      const bounds = mapRef.current?.getBounds();
+      setMyLoca({
+        ...myLoca,
+        lat: latitude,
+        lng: longitude,
+      });
+      setMapCenterLocation({
+        ...mapCenterLocation,
+        center: {
+          lat: latitude,
+          lng: longitude,
+        },
+        bounds: {
+          ha: bounds?.ha,
+          oa: bounds?.oa,
+          pa: bounds?.pa,
+          qa: bounds?.qa,
+        },
+      });
+    };
+
+    getCurLoc();
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [myLoca, mapCenterLocation, selectedCategory]);
 
   return (
     <Base>
@@ -36,17 +92,19 @@ const Map: React.FC = () => {
           setSelectedCategory={setSelectedCategory}
           setSelectedPlace={setSelectedPlace}
           setMapCenterLocation={setMapCenterLocation}
+          setMyLoca={setMyLoca}
+          mapRef={mapRef}
         />
-        <ToggleBtn
-          onClick={onClickToggleBtn}
-          isDetailListOpen={selectedPlace !== null}
-          isListOpen={isListOpen}
-        >
-          <IconWrapper isListOpen={isListOpen}>
-            <IoIosArrowForward />
-          </IconWrapper>
-        </ToggleBtn>
       </ListWrapper>
+      <ToggleBtn
+        onClick={onClickToggleBtn}
+        isDetailListOpen={selectedPlace !== null}
+        isListOpen={isListOpen}
+      >
+        <IconWrapper isListOpen={isListOpen}>
+          <IoIosArrowForward />
+        </IconWrapper>
+      </ToggleBtn>
       <DetailListWrapper
         isDetailListOpen={selectedPlace !== null}
         isListOpen={isListOpen}
@@ -64,6 +122,7 @@ const Map: React.FC = () => {
         setMyLoca={setMyLoca}
         setIsListOpen={setIsListOpen}
         isListOpen={isListOpen}
+        mapRef={mapRef}
       />
     </Base>
   );
@@ -97,7 +156,7 @@ const DetailListWrapper = styled.div<{
   height: calc(100vh - 60px);
   left: ${({ isDetailListOpen, isListOpen }) =>
     isDetailListOpen ? '420px' : '0px'};
-  transition: all 600ms;
+  transition: all 600ms ease;
   z-index: 3;
 `;
 
@@ -108,8 +167,8 @@ const ToggleBtn = styled.div<{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: ${({ isDetailListOpen, isListOpen }) =>
-    isDetailListOpen ? '-451px' : isListOpen ? '-31px' : '-31px'};
+  left: ${({ isDetailListOpen, isListOpen }) =>
+    isListOpen && isDetailListOpen ? '840px' : isListOpen ? '420px' : '0px'};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,7 +176,7 @@ const ToggleBtn = styled.div<{
   width: 30px;
   background: ${({ theme }) => theme.color.bg};
   border: 1px solid ${({ theme }) => theme.color.border};
-  z-index: 4;
+  z-index: 99;
   border-radius: 0 8px 8px 0;
   &:hover {
     background: ${({ theme }) => theme.color.hover};

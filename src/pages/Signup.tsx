@@ -22,7 +22,8 @@ const Signup: React.FC = () => {
 
   const mutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      const res = await axios.post(`/auth/register`, data); // `${import.meta.env.VITE_APP_SERVER_URL}/auth/register`
+      const res = await axios.post(`https://tonadus.shop/auth/register`, data); // `${import.meta.env.VITE_APP_SERVER_URL}/auth/register`
+      console.log(res.data);
     },
     {
       onSuccess: () => {

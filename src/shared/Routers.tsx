@@ -32,6 +32,7 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
             <Home
               currentLocation={currentLocation}
               setCurrentLocation={setCurrentLocation}
+              themeMode={themeMode}
             />
           }
         />
@@ -39,6 +40,7 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
           path="/contents"
           element={
             <Contents
+              themeMode={themeMode}
               currentLocation={currentLocation}
               setCurrentLocation={setCurrentLocation}
             />

@@ -4,12 +4,12 @@ import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
 import DetailContentsModal from '../../detailModal/ContentsModal';
 import Modal from '../../Modal/Modal';
-import { CommentType, ContentType } from '../../../model/interface';
+import { RecentPostsType } from '../../../model/interface';
 
-const Card: React.FC<{ contentData: ContentType }> = ({ contentData }) => {
+const Card: React.FC<{ post: RecentPostsType }> = ({ post }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { placeName, createdAt, content, likeCount, imageURL } = contentData;
+  const { User, createdAt, content, likeCount, commentCount, imgUrl } = post;
 
   const openModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -27,11 +27,11 @@ const Card: React.FC<{ contentData: ContentType }> = ({ contentData }) => {
 
   return (
     <Base onClick={(e) => openModalHandler(e)}>
-      <ImgContainer imageURL={imageURL} />
+      <ImgContainer imageURL={imgUrl} />
       <HeaderContainer>
-        <Title>{placeName}</Title>
+        <Title>{User.nickname}</Title>
         <VerticalLine />
-        <Date>{createdAt}</Date>
+        <Date>{createdAt.split('T')[0]}</Date>
       </HeaderContainer>
       <Text dangerouslySetInnerHTML={{ __html: content }} />
       <Footer>
@@ -41,12 +41,12 @@ const Card: React.FC<{ contentData: ContentType }> = ({ contentData }) => {
         </FooterItem>
         <FooterItem>
           <TbMessage2 />
-          <span>3</span>
+          <span>{commentCount}</span>
         </FooterItem>
       </Footer>
       <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
         <DetailContentsModal
-          contentData={contentData}
+          postId={post.postId}
           closeModalHandler={closeModalHandler}
         />
       </Modal>

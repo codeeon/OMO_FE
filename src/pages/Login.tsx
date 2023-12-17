@@ -21,7 +21,11 @@ const Login: React.FC = () => {
   const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
       try {
-        const response = await axios.post(`/auth/login`, formData);
+        const response = await axios.post(
+          `https://tonadus.shop/auth/login`,
+          formData,
+        );
+        console.log(response.data);
         // `${import.meta.env.VITE_APP_SERVER_URL}/auth/login`
 
         const accessTokenExpiresIn = 60 * 60; // 1 hour in seconds

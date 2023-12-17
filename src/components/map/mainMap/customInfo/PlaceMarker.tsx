@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { CustomOverlayMap } from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
-import { LocationType } from '../../../model/interface';
+import { LocationType } from '../../../../model/interface';
 
 interface Props {
   placeDb: LocationType;
@@ -12,7 +12,7 @@ interface Props {
   isListOpen: boolean;
 }
 
-const LevelButton: React.FC<Props> = ({
+const PlaceMarker: React.FC<Props> = ({
   placeDb,
   children,
   selectedPlace,
@@ -23,7 +23,7 @@ const LevelButton: React.FC<Props> = ({
   const selectPlaceHandler = () => {
     setSelectedPlace(placeDb);
   };
-  const { latitude, longitude, storeName, categoryName } = placeDb;
+  const { latitude, longitude, Category, storeName } = placeDb;
 
   const clikcMarkerHandler = () => {
     !isListOpen && setIsListOpen(true);
@@ -32,10 +32,10 @@ const LevelButton: React.FC<Props> = ({
 
   return (
     <CustomOverlayMap
-      position={{ lat: latitude, lng: longitude }}
+      position={{ lat: Number(latitude), lng: Number(longitude) }}
       yAnchor={1.4}
       xAnchor={0.25}
-      zIndex={1}
+      zIndex={selectedPlace?.storeName === storeName ? 99 : 1}
     >
       <CustomMarkerContainer
         onClick={clikcMarkerHandler}
@@ -50,7 +50,7 @@ const LevelButton: React.FC<Props> = ({
             {storeName}
           </PlaceName>
           <CategoryName isSelected={selectedPlace?.storeName === storeName}>
-            {categoryName}
+            {Category.categoryName}
           </CategoryName>
         </PlaceInfoContainer>
       </CustomMarkerContainer>
@@ -58,7 +58,7 @@ const LevelButton: React.FC<Props> = ({
   );
 };
 
-export default LevelButton;
+export default PlaceMarker;
 
 const CustomMarkerContainer = styled.div<{ isSelected: boolean }>`
   box-sizing: border-box;
@@ -66,16 +66,19 @@ const CustomMarkerContainer = styled.div<{ isSelected: boolean }>`
   justify-content: start;
   align-items: center;
   gap: 6px;
-  width: ${({ isSelected }) => (isSelected ? '160px' : '150px')};
-  height: ${({ isSelected }) => (isSelected ? '45px' : '40px')};
+  width: auto;
+  height: ${({ isSelected }) => (isSelected ? '50px' : '45px')};
   background: ${({ isSelected, theme }) =>
     isSelected ? `${theme.color.marker}` : `${theme.color.bg}`};
   border-radius: 41px;
   padding: 5px;
+
   border: 0.5px solid ${({ theme }) => theme.color.marker};
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  position: relative;
+  position: absolute;
+  z-index: ${({ isSelected }) => (isSelected ? '99' : '1')};
+
   ::after {
     content: '';
     position: absolute;
@@ -89,7 +92,7 @@ const CustomMarkerContainer = styled.div<{ isSelected: boolean }>`
     width: 0;
     z-index: 1;
     bottom: -8px;
-    left: 26px;
+    left: 25.5px;
     transition: all 300ms ease-in-out;
   }
 
@@ -129,18 +132,17 @@ const PlaceInfoContainer = styled.div<{ isSelected: boolean }>`
   justify-content: center;
   align-items: start;
   gap: ${({ isSelected }) => (isSelected ? '3px' : '1px')};
-  width: 70px;
+  width: auto;
   transition: all 300ms ease-in-out;
+  margin-right: 8px;
 `;
 
 const PlaceName = styled.div<{ isSelected: boolean }>`
   color: ${({ isSelected, theme }) =>
     isSelected ? '#fff' : `${theme.color.text}`};
-  font-family: Wanted Sans;
-  font-size: 13px;
-  font-style: normal;
+  font-size: 14px;
   font-weight: 500;
-  width: 90px;
+  width: auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
