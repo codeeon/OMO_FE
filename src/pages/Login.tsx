@@ -24,35 +24,19 @@ const Login: React.FC = () => {
         const response = await axios.post(
           `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/auth/login`,
           formData,
-          // { withCredentials: true }, // 얘를 넣으니까 로그인이 안 되는 현상 발생
         );
 
-        console.log(response);
-        console.log(accessToken);
-        // console.log(response);
+        const accessToken = response.headers.authorization;
+        const refreshToken = response.headers.refreshtoken;
 
-        const accessTokenExpiresIn = 60 * 60 * 2; // 2 hour in seconds
-        const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 days in seconds
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
 
-        if (response.data.accessToken) {
-          Cookies.set('accessToken', response.data.accessToken, {
-            expires: accessTokenExpiresIn / (60 * 60 * 24),
-            secure: window.location.protocol === 'https:',
-            httpOnly: true,
-          });
-        }
-        if (response.data.refreshToken) {
-          Cookies.set('refreshToken', response.data.refreshToken, {
-            expires: refreshTokenExpiresIn / (60 * 60 * 24),
-            secure: window.location.protocol === 'https:',
-            httpOnly: true,
-          });
-        }
         console.log(response);
         return response.data;
       } catch (error) {
         throw new Error(
-          error.response?.data.message || '로그인에 실패했습니다.',
+          error.response?.data.message || 'FE: 로그인에 실패했습니다.',
         );
       }
     },
@@ -105,7 +89,7 @@ const Login: React.FC = () => {
           <Text color="#666">아직 회원이 아니신가요?</Text>
           <Link
             style={{ textDecoration: 'none', marginLeft: '10px' }}
-            to="/signin"
+            to="/signup"
           >
             <Text color="#44a5ff">회원가입</Text>
           </Link>

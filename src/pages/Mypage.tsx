@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import PlaceCard from '../components/auth/mypage/PlaceCard';
-import ContentCard from '../components/share/ContentCard';
 import ContentCardSkeleton from '../components/share/ContentCardSkeleton';
+import ContentCard from '../components/share/ContentCard';
 import PlaceCardSkeleton from '../components/auth/mypage/PlaceCardSkeleton';
-
-// 임시 데이터
+// import MapPlaceCard from '../components/map/VerticalBar/placeList/MapPlaceCard';
+import PlaceCard from '../components/auth/mypage/PlaceCard';
+// 임시 데이터 두 개
 import useGetAllContentsQuery from '../hooks/reactQuery/post/useGetAllContentsQuery';
+import useGetHotPlaceQuery from '../hooks/useGetHotPlaceQuery';
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const [isSelect, setIsSelect] = useState(true);
+  const [isSelect, setIsSelect] = useState('Bookmark');
 
-  const onClickSelect = (e) => {
-    setIsSelect(e.target.value);
-    console.log(isSelect);
-  };
+  const { data: userData, isLoading: userLoading } = useGetUserDataQuery();
   // 임시 GET 두 개
-  const { data: markedPlaces, isLoading: placesLoading } =
-    useGetAllContentsQuery();
+  const { data: placeData, isLoading: placesLoading } = useGetHotPlaceQuery();
   const { data: myContents, isLoading: contentsLoading } =
     useGetAllContentsQuery();
+
+  console.log(placeData);
+
+  const onClickSelectBookmark = () => {
+    setIsSelect('Bookmark');
+  };
+  const onClickSelectContents = () => {
+    setIsSelect('Contents');
+  };
 
   return (
     <Base>
@@ -33,25 +39,35 @@ const Mypage = () => {
         <Btn onClick={() => navigate('/mypage/edit')}>내 정보 수정</Btn>
       </Header>
       <Select>
-        <Item value="true" onclick={onClickSelect}>
-          북마크 3
+        <Item
+          onClick={onClickSelectBookmark}
+          selected={isSelect === 'Bookmark'}
+        >
+          북마크 {}
         </Item>
-        <Item style={{ marginLeft: '30px' }}>내 게시글 4</Item>
+        <Item
+          onClick={onClickSelectContents}
+          selected={isSelect === 'Contents'}
+          style={{ marginLeft: '30px' }}
+        >
+          내 게시글 {}
+        </Item>
       </Select>
-
       <Contents>
-        {placesLoading && isSelect
+        {placesLoading && isSelect === 'Bookmark'
           ? Array.from({ length: 12 }).map((_, idx) => (
               <PlaceCardSkeleton key={idx} />
             ))
-          : markedPlaces?.map((placeData) => (
+          : isSelect === 'Bookmark' &&
+            markedPlaces?.map((placeData) => (
               <PlaceCard placeData={placeData} />
             ))}
-        {contentsLoading && !isSelect
+        {contentsLoading && isSelect === 'Contents'
           ? Array.from({ length: 12 }).map((_, idx) => (
               <ContentCardSkeleton key={idx} />
             ))
-          : myContents?.map((contentData) => (
+          : isSelect === 'Contents' &&
+            myContents?.map((contentData) => (
               <ContentCard contentData={contentData} />
             ))}
       </Contents>
@@ -135,7 +151,7 @@ const Item = styled.div`
   line-height: 100%;
   padding: 5px;
   border: solid var(--primary, #f97393);
-  border-width: 0 0 3px 0;
+  border-width: ${({ selected }) => (selected ? '0 0 3px 0' : `0`)};
   margin-bottom: 16px;
   cursor: pointer;
   // 보더라인, 선택된 녀석만 보이게끔

@@ -202,35 +202,3 @@ const Bold = styled.div`
   font-weight: 700;
   line-height: 100%; /* 16px */
 `;
-
-{
-  /* <Wrapper>
-        <Header>
-          <Title>게시글</Title>
-          <PostBtn onClick={(e) => handleModalOpen(e)}>
-            <FiEdit3 />
-            <span>새 게시글</span>
-          </PostBtn>
-        </Header>
-        <Navigator>{'홈 > 게시글'}</Navigator>
-        <Location
-          currentLocation={currentLocation}
-          setCurrentLocation={setCurrentLocation}
-        />
-        <Body>
-          <RecentCardGrid>
-            {contents?.map((contentData) => (
-              <Card contentData={contentData} />
-            ))}
-          </RecentCardGrid>
-        </Body>
-      </Wrapper>
-      <Modal isOpen={isModalOpen} onClose={opeSubModal}>
-        <PostModal
-          closeMainModal={handleModalClose}
-          isSubModalOpen={isSubModalOpen}
-          openSubModal={opeSubModal}
-          closeSubModal={closeSubModal}
-        />
-      </Modal> */
-}
