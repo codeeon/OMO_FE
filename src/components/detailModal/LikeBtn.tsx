@@ -1,16 +1,27 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import usePostLikeMutation from '../../hooks/reactQuery/like/usePostLikeMutation';
+import useDeleteLikeMutation from '../../hooks/reactQuery/like/useDeleteLikeMutation';
 
-const LikeBtn = () => {
+interface Props {
+  contentId: number | undefined;
+}
+
+const LikeBtn: React.FC<Props> = ({ contentId }) => {
   const [isLiked, setLiked] = useState(false);
   const [isHover, setIsHover] = useState(true);
+
+  const { postMutate, isPostLoading } = usePostLikeMutation();
+  const { deleteMutate, isDeleteLoading } = useDeleteLikeMutation();
 
   const handleLikeClick = () => {
     if (isLiked) {
       setLiked(false);
+      deleteMutate({ contentId });
     } else {
       setLiked(true);
+      postMutate({ contentId });
     }
   };
   return (

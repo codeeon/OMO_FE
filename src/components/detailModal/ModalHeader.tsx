@@ -2,23 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 
 import DetailModalDropdown from './ModalDropdown';
+import { PostDetailType } from '../../model/interface';
 
 const ModalHeader: React.FC<{
   userId: string;
   createdAt: string;
   contentId: number | undefined;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}> = ({ userId, createdAt, contentId, closeModalHandler }) => {
+  post: PostDetailType;
+}> = ({ userId, createdAt, contentId, closeModalHandler, post }) => {
   return (
     <Base>
       <UserProfile />
       <UserInfoContainer>
         <UserName>{userId}</UserName>
-        <CreationDate>{createdAt}</CreationDate>
+        <CreationDate>{createdAt.split('T')[0]}</CreationDate>
       </UserInfoContainer>
       <DetailModalDropdown
         contentId={contentId}
         closeModalHandler={closeModalHandler}
+        post={post}
       />
     </Base>
   );

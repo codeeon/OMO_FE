@@ -9,8 +9,13 @@ interface Props {
 }
 
 const DistrictItem: React.FC<Props> = ({ dist, setCurrentLocation }) => {
+  const saveCurLocHandler = () => {
+    console.log(dist);
+    setCurrentLocation(dist);
+  };
+
   return (
-    <Item variants={itemVariants} onClick={() => setCurrentLocation(dist)}>
+    <Item variants={itemVariants} onClick={saveCurLocHandler}>
       {dist}
     </Item>
   );

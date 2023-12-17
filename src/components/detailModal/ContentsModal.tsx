@@ -4,16 +4,13 @@ import DetailModalHeader from './ModalHeader';
 import DetailModalBody from './ModalBody';
 import DetailModalFooter from './ModalFooter';
 import Comment from '../comment';
-import { ContentType, PostType } from '../../model/interface';
-import useGetCommentQuery from '../../hooks/reactQuery/comment/useGetCommentQuery';
-import useGetContentDetailQuery from '../../hooks/useGetContentDetailQuery';
+import useGetContentDetailQuery from '../../hooks/reactQuery/post/useGetContentDetailQuery';
+import Image from './Image';
 
 const DetailContentsModal: React.FC<{
   postId: number;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }> = ({ closeModalHandler, postId }) => {
-  const { data: comments, isLoading: isCommentLoading } = useGetCommentQuery();
-
   const { data: post, isLoading: isPostLoading } =
     useGetContentDetailQuery(postId);
 
@@ -30,6 +27,8 @@ const DetailContentsModal: React.FC<{
     Comments,
   } = post;
 
+  const commentLength = Comments.length;
+
   return (
     <Base>
       <DetailModalHeader
@@ -37,18 +36,19 @@ const DetailContentsModal: React.FC<{
         createdAt={createdAt}
         contentId={postId}
         closeModalHandler={closeModalHandler}
+        post={post}
       />
-      <ImageContainer imageURL={imgUrl} />
+      <Image imgUrl={imgUrl} />
       <DetailModalBody
-        placeName={Location.address}
+        placeName={Location.storeName}
         locationName={Location.address}
         content={content}
         star={star}
       />
       <DetailModalFooter
         likeCount={likeCount}
-        comments={comments}
         contentId={postId}
+        commentLength={commentLength}
       />
       <Comment contentId={postId} comments={Comments} />
     </Base>

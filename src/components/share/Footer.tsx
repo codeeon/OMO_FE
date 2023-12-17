@@ -22,8 +22,11 @@ const Footer = () => {
 export default Footer;
 
 const Base = styled.div`
-  height: 210px;
+  position: relative;
+  transform: translateY(100%);
+
   width: 100%;
+  height: 210px;
   background: ${({ theme }) => theme.color.footer};
 
   display: flex;

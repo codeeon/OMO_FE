@@ -4,7 +4,7 @@ import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
 import DetailContentsModal from '../detailModal/ContentsModal';
 import Modal from '../Modal/Modal';
-import { ContentType, PostType } from '../../model/interface';
+import { PostType } from '../../model/interface';
 import { MdLocationOn } from 'react-icons/md';
 
 const Card: React.FC<{ contentData: PostType }> = ({ contentData }) => {
@@ -79,7 +79,7 @@ const ImgContainer = styled.div<{ imageURL: string[] }>`
   background-repeat: no-repeat;
   background-size: cover;
   background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
-  transition: all 300ms ease-in-out;
+  transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
 `;
 
 const Base = styled.div`

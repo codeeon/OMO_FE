@@ -2,15 +2,26 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PlaceCommnetCard from './Card';
 import PlaceCommnetCardSkeleton from './CardSkeleton';
-import useGetRecentCommentsQuery from '../../../hooks/useRecentCommentQuery';
+import useGetCommentPostsQuery from '../../../hooks/reactQuery/main/useGetCommentPostsQuery';
+import CardDarkSkeleton from './CardDarkSkeleton';
 
-const PlaceComments = () => {
+interface Props {
+  currentLocation: string | undefined;
+  themeMode: string | null;
+}
+
+const PlaceComments: React.FC<Props> = ({ currentLocation, themeMode }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  const { data: comments, isLoading } = useGetRecentCommentsQuery();
+  const {
+    data: comments,
+    isLoading,
+    refetch,
+  } = useGetCommentPostsQuery(currentLocation);
 
   const repeatCounts = Array.from({ length: 9 }, (_, index) => index);
+
   const carouselCounts = Array.from(
     { length: repeatCounts.length / 3 },
     (_, index) => index,
@@ -38,6 +49,10 @@ const PlaceComments = () => {
     };
   }, [isFocused]);
 
+  useEffect(() => {
+    refetch();
+  }, [currentLocation]);
+
   return (
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Header>
@@ -45,15 +60,21 @@ const PlaceComments = () => {
       </Header>
       <Body>
         <CarouselList>
-          {isLoading
+          {!isLoading
+            ? comments?.map((comment) => (
+                <CarouselItem activeIndex={activeIndex} key={comment.postId}>
+                  <PlaceCommnetCard comment={comment} />
+                </CarouselItem>
+              ))
+            : themeMode === 'LightMode'
             ? Array.from({ length: 9 }).map((_, i) => (
                 <CarouselItem activeIndex={activeIndex} key={i}>
                   <PlaceCommnetCardSkeleton />
                 </CarouselItem>
               ))
-            : comments?.map((comment) => (
-                <CarouselItem activeIndex={activeIndex} key={comment.id}>
-                  <PlaceCommnetCard comment={comment} />
+            : Array.from({ length: 9 }).map((_, i) => (
+                <CarouselItem activeIndex={activeIndex} key={i}>
+                  <CardDarkSkeleton />
                 </CarouselItem>
               ))}
         </CarouselList>

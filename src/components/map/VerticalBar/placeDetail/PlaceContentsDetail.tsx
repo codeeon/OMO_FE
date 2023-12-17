@@ -47,9 +47,15 @@ const Base = styled.div`
 
   width: 420px;
   height: calc(100vh - 60px);
+
+  position: absolute;
+  top: 0;
+
   background-color: ${({ theme }) => theme.color.bg};
   border-right: 1px solid #d9d9d9;
+  z-index: 4;
   overflow-y: scroll;
+  transition: all 600ms ease;
 `;
 
 const ImageHeader = styled.div<{ imageURL: string }>`

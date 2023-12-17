@@ -22,14 +22,11 @@ const Login: React.FC = () => {
     async (formData: LoginData) => {
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/auth/login`,
+          `https://tonadus.shop/auth/login`,
           formData,
-          // { withCredentials: true }, // 얘를 넣으니까 로그인이 안 되는 현상 발생
         );
-
-        console.log(response);
-        console.log(accessToken);
-        // console.log(response);
+        console.log(response.data);
+        // `${import.meta.env.VITE_APP_SERVER_URL}/auth/login`
 
         const accessTokenExpiresIn = 60 * 60 * 2; // 2 hour in seconds
         const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 days in seconds

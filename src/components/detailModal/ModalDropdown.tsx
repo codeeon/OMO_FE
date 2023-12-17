@@ -3,17 +3,33 @@ import { motion } from 'framer-motion';
 import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { IoEllipsisHorizontalSharp } from 'react-icons/io5';
-import useDeleteContentQuery from '../../hooks/reactQuery/post/useDeleteContentQuery';
+import useDeleteContentQuery from '../../hooks/reactQuery/post/useDeletePostsMutation';
 import useModalCtr from '../../hooks/useModalCtr';
 import Modal from '../Modal/Modal';
-import PatchContentModal from './PatchContentModal';
+import { PostDetailType } from '../../model/interface';
+import PatchModal from './patchModal';
 
-const ModalDropdown: React.FC<{
+interface Props {
   contentId: number | undefined;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}> = ({ contentId, closeModalHandler }) => {
+  post: PostDetailType;
+}
+
+const ModalDropdown: React.FC<Props> = ({
+  contentId,
+  closeModalHandler,
+  post,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isModalOpen, setModalIsOpen, toggleModalHandler } = useModalCtr();
+  const { isModalOpen, setModalIsOpen, handleModalOpen, handleModalClose } =
+    useModalCtr();
+  const {
+    isModalOpen: isSubModalOpen,
+    setModalIsOpen: setSubModalIsOpen,
+    handleModalOpen: handleSubModalOpen,
+    handleModalClose: handleSubModalClose,
+  } = useModalCtr();
+
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const { deleteMutate, isDeleteLoading } = useDeleteContentQuery();
 
@@ -23,7 +39,7 @@ const ModalDropdown: React.FC<{
   };
 
   const onClickPatch = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    toggleModalHandler();
+    handleModalOpen(e);
   };
 
   const onClickDelete = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -99,8 +115,14 @@ const ModalDropdown: React.FC<{
           삭제하기
         </DropdownItem>
       </DropdownList>
-      <Modal isOpen={isModalOpen} onClose={toggleModalHandler}>
-        <PatchContentModal />
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+        <PatchModal
+          closeMainModal={handleModalClose}
+          isSubModalOpen={isSubModalOpen}
+          openSubModal={handleSubModalOpen}
+          closeSubModal={handleSubModalClose}
+          post={post}
+        />
       </Modal>
     </NavContainer>
   );
@@ -163,7 +185,7 @@ const DropdownList = styled(motion.div)<{ width?: string; height?: string }>`
 
 const DropdownItem = styled(motion.div)`
   padding: 15px 20px;
-  color: #000;
+  color: ${({ theme }) => theme.color.text};
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;

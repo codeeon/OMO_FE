@@ -1,19 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import RecentCard from './Card';
 import { useNavigate } from 'react-router-dom';
 import RecentCardSkeleton from './CardSkeleton';
-import useGetRecentContentsQuery from '../../../hooks/useGetRecentContentsQuery';
+import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
+import CardDarkSkeleton from './CardDarkSkeleton';
 
-const RecentContents = () => {
+interface Props {
+  currentLocation: string | undefined;
+  themeMode: string | null;
+}
+
+const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
+  const {
+    data: recentPosts,
+    isLoading,
+    refetch,
+  } = useGetRecentPostsQuery(currentLocation);
+
   const navigate = useNavigate();
-
-  const { data: contents, isLoading } = useGetRecentContentsQuery();
 
   const navigateToContentsPage = () => {
     navigate('/contents');
   };
+
+  useEffect(() => {
+    refetch();
+  }, [currentLocation]);
 
   return (
     <Base>
@@ -27,20 +41,17 @@ const RecentContents = () => {
         </AllBtnWrapper>
       </Header>
       <Body>
-        {isLoading
+        {!isLoading
+          ? recentPosts?.map((post) => (
+              <RecentCard key={post.postId} post={post} />
+            ))
+          : themeMode === 'LightMode'
           ? Array.from({ length: 4 }).map((_, idx) => (
               <RecentCardSkeleton key={idx} />
             ))
-          : contents
-              ?.sort(
-                (a, b) =>
-                  new Date(b.createdAt).getTime() -
-                  new Date(a.createdAt).getTime(),
-              )
-              .slice(0, 4)
-              .map((contentData) => (
-                <RecentCard key={contentData.id} contentData={contentData} />
-              ))}
+          : Array.from({ length: 4 }).map((_, idx) => (
+              <CardDarkSkeleton key={idx} />
+            ))}
       </Body>
     </Base>
   );

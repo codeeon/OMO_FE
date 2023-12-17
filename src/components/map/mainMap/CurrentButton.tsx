@@ -1,21 +1,42 @@
 import React from 'react';
 import { MdMyLocation } from 'react-icons/md';
 import styled from 'styled-components';
-import { Location, getCurrentCoords } from '../../../function/kakao';
-import { MapLocationType } from '../../../model/interface';
+import { getCurrentCoords } from '../../../function/kakao';
+import {
+  MapCurrentLocationType,
+  MapLocationType,
+} from '../../../model/interface';
 
-const CurrentButton: React.FC<{
-  setMyLoca: React.Dispatch<React.SetStateAction<Location>>;
-  myLoca: MapLocationType;
-}> = ({ setMyLoca }) => {
-  const moveMyLocation = () => {
-    getCurrentCoords().then((coordinates) => {
-      setMyLoca({
-        isPanto: true,
-        center: { lat: coordinates.latitude, lng: coordinates.longitude },
-      });
+interface Props {
+  setMapCenterLocation: React.Dispatch<React.SetStateAction<MapLocationType>>;
+  mapCenterLocation: MapLocationType;
+  setMyLoca: React.Dispatch<React.SetStateAction<MapCurrentLocationType>>;
+  mapRef: React.RefObject<kakao.maps.Map>;
+}
+
+const CurrentButton: React.FC<Props> = ({
+  setMyLoca,
+  setMapCenterLocation,
+  mapRef,
+}) => {
+  const moveMyLocation = async () => {
+    const { latitude, longitude } = await getCurrentCoords();
+    const bounds = mapRef.current?.getBounds();
+    setMyLoca({
+      lat: latitude,
+      lng: longitude,
+      placeName: null,
+    });
+    setMapCenterLocation({
+      isPanto: true,
+      center: {
+        lat: latitude,
+        lng: longitude,
+      },
+      bounds: bounds,
     });
   };
+
   return (
     <BtnWrapper onClick={moveMyLocation}>
       <MdMyLocation />

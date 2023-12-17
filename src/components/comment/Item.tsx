@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useMutation, useQueryClient } from 'react-query';
-import { deleteComment } from '../../apis/apis';
-import { CommentType, CommentType2 } from '../../model/interface';
+import { CommentType } from '../../model/interface';
 import Dropdown from './Dropdown';
 
 //TODO 유저 데이터
 const CommentItem: React.FC<{
-  comment: CommentType2;
+  comment: CommentType;
   contentId: number;
 }> = ({ comment, contentId }) => {
   const { commentId, content, createdAt, User } = comment;

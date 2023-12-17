@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Routers from './shared/Routers';
 import { BrowserRouter } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { LightTheme, DarkTheme } from './styles/theme.js';
 
 const App = () => {

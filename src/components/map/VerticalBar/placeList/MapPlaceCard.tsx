@@ -11,7 +11,7 @@ interface Props {
 }
 
 const MapPlaceCard: React.FC<Props> = ({ placeDb, setSelectedPlace }) => {
-  const { imageURL, id, categoryName, storeName, address, star } = placeDb;
+  const { Posts, address, storeName, Category, starAvg, postCount } = placeDb;
 
   const selectPlaceHandler = (place: LocationType) => {
     setSelectedPlace(place);
@@ -20,10 +20,10 @@ const MapPlaceCard: React.FC<Props> = ({ placeDb, setSelectedPlace }) => {
   return (
     <>
       <Base onClick={() => selectPlaceHandler(placeDb)}>
-        <ImageContainer imageURL={imageURL} />
+        <ImageContainer imageURL={Posts[0].imgUrl} />
         <HeaderContainer>
           <PlaceName>{storeName}</PlaceName>
-          <CategoryName>{categoryName}</CategoryName>
+          <CategoryName>{Category.categoryName}</CategoryName>
           <BookMarkBtn>
             <LuBookmark />
           </BookMarkBtn>
@@ -38,12 +38,11 @@ const MapPlaceCard: React.FC<Props> = ({ placeDb, setSelectedPlace }) => {
               <PiStarFill />
             </RatingBtnWrapper>
             <Title>별점</Title>
-            <Count>{star}</Count>
-            <Count>(203)</Count>
+            <Count>{starAvg}</Count>
           </RatingConatiner>
           <ContentCountContainer>
             <Title>게시글</Title>
-            <Count>34</Count>
+            <Count>{postCount}</Count>
           </ContentCountContainer>
         </FoonterContainer>
       </Base>

@@ -1,19 +1,24 @@
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { CgSearch } from 'react-icons/cg';
-import { IoMdCafe } from 'react-icons/io';
-import { IoRestaurant } from 'react-icons/io5';
-import { FaLocationDot } from 'react-icons/fa6';
-import { FaSubway } from 'react-icons/fa';
-import { MapLocationType } from '../../../../model/interface';
+import {
+  MapCurrentLocationType,
+  MapLocationType,
+} from '../../../../model/interface';
 
 interface Props {
   setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
+  setMyLoca: React.Dispatch<React.SetStateAction<MapCurrentLocationType>>;
+  mapRef: React.RefObject<kakao.maps.Map>;
 }
 
-const MapSearchInput: React.FC<Props> = ({ setMapCenterLocation }) => {
-  const [value, setValue] = useState('');
-  const [isFocus, setIsFocus] = useState(false);
+const MapSearchInput: React.FC<Props> = ({
+  setMapCenterLocation,
+  setMyLoca,
+  mapRef,
+}) => {
+  const [value, setValue] = useState<string>('');
+  const [isFocus, setIsFocus] = useState<boolean>(false);
   const [result, setResult] = useState<kakao.maps.services.PlacesSearchResult>(
     [],
   );
@@ -25,16 +30,13 @@ const MapSearchInput: React.FC<Props> = ({ setMapCenterLocation }) => {
 
   const ps = new kakao.maps.services.Places();
 
-  const onClichHandler = () => {
-    ps.keywordSearch(value, placesSearchCB);
-  };
-
   const placesSearchCB = (
     data: kakao.maps.services.PlacesSearchResult,
     status: any,
     pagination: any,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
+      console.log(data);
       setResult(data);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       setIsError('검색 결과가 존재하지 않습니다.');
@@ -50,14 +52,35 @@ const MapSearchInput: React.FC<Props> = ({ setMapCenterLocation }) => {
     if (!value) {
       setResult([]);
       setIsError('');
+      setIsFocus(false);
+    } else {
+      setIsFocus(true);
     }
   }, [value]);
 
-  const moveMapCenterHandler = (lat: string, lng: string) => {
+  const moveMapCenterHandler = (
+    placeName: string,
+    districtName: string,
+    lat: string,
+    lng: string,
+  ) => {
+    if (!mapRef.current) return;
+    const bounds = mapRef.current.getBounds();
     setMapCenterLocation({
       center: { lat: Number(lat), lng: Number(lng) },
       isPanto: true,
+      bounds: bounds,
     });
+
+    setMyLoca({
+      placeName: placeName,
+      districtName: districtName,
+      lat: Number(lat),
+      lng: Number(lng),
+    });
+    setIsFocus(false);
+    setResult([]);
+    setIsError('');
   };
 
   return (
@@ -67,27 +90,24 @@ const MapSearchInput: React.FC<Props> = ({ setMapCenterLocation }) => {
         onChange={(e) => onChangeValue(e)}
         placeholder="장소 검색하기"
         onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
       />
-      <Btn onClick={onClichHandler}>
+      <Btn>
         <CgSearch />
       </Btn>
       {isFocus && (
         <ResultContainer>
           {value ? (
             result.map((res) => (
-              <ResultItem onClick={() => moveMapCenterHandler(res.y, res.x)}>
-                <IconWrapper>
-                  {res.category_group_name === '지하철역' ? (
-                    <FaSubway />
-                  ) : res.category_group_name === '카페' ? (
-                    <IoMdCafe />
-                  ) : res.category_group_name === '음식점' ? (
-                    <IoRestaurant />
-                  ) : (
-                    <FaLocationDot />
-                  )}
-                </IconWrapper>
+              <ResultItem
+                onClick={() =>
+                  moveMapCenterHandler(
+                    res.place_name,
+                    res.address_name.split(' ')[1],
+                    res.y,
+                    res.x,
+                  )
+                }
+              >
                 {res.place_name}
               </ResultItem>
             ))
@@ -112,29 +132,20 @@ const Base = styled.div<{ onFocus: boolean }>`
   align-items: center;
   width: 90%;
   min-height: 40px;
-  ${({ onFocus }) =>
-    onFocus
-      ? css`
-          border: 1px solid #f97393;
-          box-shadow: rgba(255, 183, 240, 0.4) 0px 0px 0px 3px;
-        `
-      : css`
-          border: 1px solid #d9d9d9;
-        `}
-
-  border-radius: 32px;
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: ${({ onFocus }) => (onFocus ? '20px 20px 0 0 ' : '20px')};
   position: relative;
   transition: all 300ms ease-in-out;
 `;
 
 const Input = styled.input`
-  margin: 5px 20px;
+  margin: 5px 15px;
   width: 80%;
-
+  height: 30px;
   border: none;
   outline: none;
-
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 700;
   background: ${({ theme }) => theme.color.bg};
   color: ${({ theme }) => theme.color.text};
 `;
@@ -148,59 +159,47 @@ const Btn = styled.div`
 `;
 
 const ResultContainer = styled.div`
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   gap: 5px;
 
   position: absolute;
-  top: 45px;
+  top: 39px;
 
-  padding: 14px 14px 8px;
+  background-color: ${({ theme }) => theme.color.bg};
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-radius: 0 0 20px 20px;
 
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px;
-  background-color: ${({ theme }) => theme.color.searchBg};
-
-  border: 1px solid rgb(224, 224, 224);
-  border-radius: 1rem;
-
-  max-height: 500px;
+  max-height: 260px;
   overflow-y: scroll;
 
   width: 100%;
-  box-sizing: border-box;
-  backdrop-filter: saturate(180%) blur(20px);
   z-index: 2;
 `;
 
 const ResultItem = styled.div`
-  width: 95%;
-  min-height: 25px;
-  height: 25px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 50px;
+  height: 50px;
+
   display: flex;
   justify-content: start;
   align-items: center;
+
+  padding: 12px 15px;
+
   gap: 10px;
-  border-radius: 10px;
-  padding: 10px;
   cursor: pointer;
   color: ${({ theme }) => theme.color.text};
   &:hover {
     background: ${({ theme }) => theme.color.hover};
   }
-  font-size: 14px;
-  font-weight: bold;
-`;
-
-const IconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  font-size: 20px;
-  padding: 5px;
-  color: #b0b0b0;
+  font-size: 16px;
+  font-weight: 700;
 `;
 
 const GuideContainer = styled.div`
@@ -208,7 +207,8 @@ const GuideContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 50px;
-  color: #111;
-  font-size: 14px;
+  height: 260px;
+  color: ${({ theme }) => theme.color.text};
+  font-size: 16px;
+  font-weight: 700;
 `;
