@@ -28,7 +28,7 @@ const Login: React.FC = () => {
         console.log(response.data);
         // `${import.meta.env.VITE_APP_SERVER_URL}/auth/login`
 
-        const accessTokenExpiresIn = 60 * 60; // 1 hour in seconds
+        const accessTokenExpiresIn = 60 * 60 * 2; // 2 hour in seconds
         const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 days in seconds
 
         if (response.data.accessToken) {
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
             httpOnly: true,
           });
         }
-
+        console.log(response);
         return response.data;
       } catch (error) {
         throw new Error(

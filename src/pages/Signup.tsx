@@ -13,7 +13,7 @@ interface UserData {
 }
 
 interface SignupData extends UserData {
-  password2: string;
+  confirmedPassword: string;
 }
 
 const Signup: React.FC = () => {
@@ -28,7 +28,11 @@ const Signup: React.FC = () => {
     {
       onSuccess: () => {
         alert('회원가입을 완료하였습니다.');
+        // console.log(response);
         navigate('/login');
+      },
+      onError: (error) => {
+        console.log(error);
       },
     },
   );
@@ -69,7 +73,7 @@ const Signup: React.FC = () => {
             <Input
               placeholder="비밀번호를 다시 입력해 주세요."
               type="password"
-              {...register('password2')}
+              {...register('confirmedPassword')}
             />
           </div>
           <div>
