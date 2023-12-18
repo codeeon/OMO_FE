@@ -22,7 +22,7 @@ const Login: React.FC = () => {
     async (formData: LoginData) => {
       try {
         const response = await axios.post(
-          `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/auth/login`,
+          `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/login`,
           formData,
         );
 

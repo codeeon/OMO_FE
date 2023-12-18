@@ -24,16 +24,14 @@ const Signup: React.FC = () => {
     async (data: SignupData): Promise<void> => {
       console.log(data);
       const response = await axios.post(
-        `https://tonadus.shop/auth/register`,
-        // `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/auth/register`,
+        `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/register`,
         data,
-      ); // `${import.meta.env.VITE_APP_SERVER_URL}/auth/register`
+      );
       console.log(response);
     },
     {
       onSuccess: () => {
         alert('회원가입을 완료하였습니다.');
-        // console.log(response);
         navigate('/login');
       },
       onError: (error) => {
