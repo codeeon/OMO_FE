@@ -14,7 +14,7 @@ const Mypage = () => {
   const navigate = useNavigate();
   const [isSelect, setIsSelect] = useState('Bookmark');
 
-  const { data: userData, isLoading: userLoading } = useGetUserDataQuery();
+  // const { data: userData, isLoading: userLoading } = useGetUserDataQuery();
   // 임시 GET 두 개
   const { data: placeData, isLoading: placesLoading } = useGetHotPlaceQuery();
   const { data: myContents, isLoading: contentsLoading } =
@@ -150,11 +150,11 @@ const Item = styled.div`
   font-weight: 700;
   line-height: 100%;
   padding: 5px;
-  border: solid var(--primary, #f97393);
-  border-width: ${({ selected }) => (selected ? '0 0 3px 0' : `0`)};
+  border: ${({ selected, theme }) =>
+    selected ? `solid #f97393` : `solid ${theme.color.bg}`};
+  border-width: 0 0 3px 0;
   margin-bottom: 16px;
   cursor: pointer;
-  // 보더라인, 선택된 녀석만 보이게끔
 `;
 
 const Contents = styled.div`
