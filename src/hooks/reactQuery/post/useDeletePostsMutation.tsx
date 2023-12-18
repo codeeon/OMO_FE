@@ -1,11 +1,11 @@
-import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
+import { instance } from '../../../apis/apis';
 
 const deleteContent = async (contentId: number | undefined) => {
-  return await axios.delete(`http://localhost:3001/contents/${contentId}`);
+  return await instance.delete(`posts/${contentId}`);
 };
 
-const useDeleteContentQuery = () => {
+const useDeleteContentMutation = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation(deleteContent, {
     onSuccess: () => {
@@ -18,4 +18,4 @@ const useDeleteContentQuery = () => {
   };
 };
 
-export default useDeleteContentQuery;
+export default useDeleteContentMutation;

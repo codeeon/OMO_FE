@@ -1,15 +1,21 @@
 import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { CustomOverlayMap, Map } from 'react-kakao-maps-sdk';
+import { Map } from 'react-kakao-maps-sdk';
 import MapLevelButton from './LevelButton.tsx';
 import MapCurrentButton from './CurrentButton.tsx';
-import { getCurrentCoords } from '../../../function/kakao.ts';
-import { LocationType, MapLocationType } from '../../../model/interface.ts';
-import CustomInfoMap from './CustomInfoMap.tsx';
+import {
+  LocationType,
+  MapCurrentLocationType,
+  MapLocationType,
+} from '../../../model/interface.ts';
+import CustomInfoMap from './customInfo/PlaceMarker.tsx';
 import { IoMdCafe } from 'react-icons/io';
 import { IoRestaurant } from 'react-icons/io5';
 import { FaLocationDot } from 'react-icons/fa6';
+import PlaceMarker from './customInfo/PlaceMarker.tsx';
+import CurrentMarker from './customInfo/CurrentMarker.tsx';
+import ReSearchButton from './ReSearchButton.tsx';
 
 declare global {
   interface Window {
@@ -24,10 +30,11 @@ interface Props {
   setSelectedPlace: React.Dispatch<React.SetStateAction<LocationType | null>>;
   mapCenterLocation: MapLocationType;
   setMapCenterLocation: React.Dispatch<React.SetStateAction<MapLocationType>>;
-  myLoca: { lat: number; lng: number };
-  setMyLoca: React.Dispatch<React.SetStateAction<{ lat: number; lng: number }>>;
+  myLoca: MapCurrentLocationType;
   setIsListOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isListOpen: boolean;
+  setMyLoca: React.Dispatch<React.SetStateAction<MapCurrentLocationType>>;
+  mapRef: React.RefObject<kakao.maps.Map>;
 }
 
 const MapMain: React.FC<Props> = ({
@@ -39,45 +46,22 @@ const MapMain: React.FC<Props> = ({
   setMapCenterLocation,
   setIsListOpen,
   isListOpen,
+  myLoca,
+  setMyLoca,
+  mapRef,
 }) => {
-  const mapRef = useRef<kakao.maps.Map>(null);
   const [level, setLevel] = useState(2);
-  const [myLoca, setMyLoca] = useState({ lat: 36.5, lng: 127.8 });
 
-  useEffect(() => {
-    const setCurLoca = async () => {
-      await getCurrentCoords().then((coordinates) => {
-        setMyLoca({
-          lat: coordinates.latitude,
-          lng: coordinates.longitude,
-        });
-        setMapCenterLocation({
-          isPanto: true,
-          center: { lat: coordinates.latitude, lng: coordinates.longitude },
-        });
-      });
-    };
-    setCurLoca();
-  }, []);
-
-  useEffect(() => {
-    if (!selectedPlace) return;
-    setMapCenterLocation({
-      isPanto: true,
-      center: { lat: selectedPlace?.latitude, lng: selectedPlace?.longitude },
-    });
-  }, [selectedPlace]);
-
-  useEffect(() => {
-    console.log(mapCenterLocation);
-  }, [mapCenterLocation]);
-
-  const cafeDb = placeDatas?.filter((place) => place.categoryName === '카페');
+  const cafeDb = placeDatas?.filter(
+    (place) => place.Category.categoryName === '카페',
+  );
   const RestaurantDb = placeDatas?.filter(
-    (place) => place.categoryName === '음식점',
+    (place) => place.Category.categoryName === '음식점',
   );
   const etcDb = placeDatas?.filter(
-    (place) => place.categoryName !== '카페' && place.categoryName !== '음식점',
+    (place) =>
+      place.Category.categoryName !== '카페' &&
+      place.Category.categoryName !== '음식점',
   );
 
   return (
@@ -90,26 +74,28 @@ const MapMain: React.FC<Props> = ({
       isListOpen={isListOpen}
       isSelectedPlace={selectedPlace !== null}
     >
+      <ReSearchButton
+        setMyLoca={setMyLoca}
+        mapRef={mapRef}
+        myLoca={myLoca}
+        mapCenterLocation={mapCenterLocation}
+        setMapCenterLocation={setMapCenterLocation}
+      />
       <MapCurrentButton
-        setMyLoca={setMapCenterLocation}
-        myLoca={mapCenterLocation}
+        setMapCenterLocation={setMapCenterLocation}
+        mapCenterLocation={mapCenterLocation}
+        setMyLoca={setMyLoca}
+        mapRef={mapRef}
       />
       <MapLevelButton mapRef={mapRef} setLevel={setLevel} />
-      <CustomOverlayMap // 마커를 생성합니다
-        position={{
-          // 마커가 표시될 위치입니다
-          lat: myLoca.lat,
-          lng: myLoca.lng,
-        }}
-      >
-        <LocIconWrapper>
-          <FaLocationDot />
-          <ShadowBox />
-        </LocIconWrapper>
-      </CustomOverlayMap>
+      <CurrentMarker
+        lat={myLoca.lat}
+        lng={myLoca.lng}
+        placeName={myLoca.placeName}
+      />
       {selectedCategory === '카페'
         ? cafeDb?.map((placeDb) => (
-            <CustomInfoMap
+            <PlaceMarker
               placeDb={placeDb}
               selectedPlace={selectedPlace}
               setSelectedPlace={setSelectedPlace}
@@ -117,7 +103,7 @@ const MapMain: React.FC<Props> = ({
               isListOpen={isListOpen}
             >
               <IoMdCafe />
-            </CustomInfoMap>
+            </PlaceMarker>
           ))
         : selectedCategory === '음식점'
         ? RestaurantDb?.map((placeDb) => (
@@ -133,7 +119,7 @@ const MapMain: React.FC<Props> = ({
           ))
         : selectedCategory === '기타'
         ? etcDb?.map((placeDb) => (
-            <CustomInfoMap
+            <PlaceMarker
               placeDb={placeDb}
               selectedPlace={selectedPlace}
               setSelectedPlace={setSelectedPlace}
@@ -141,24 +127,25 @@ const MapMain: React.FC<Props> = ({
               isListOpen={isListOpen}
             >
               <FaLocationDot />
-            </CustomInfoMap>
+            </PlaceMarker>
           ))
         : placeDatas?.map((placeDb) => (
-            <CustomInfoMap
+            <PlaceMarker
               placeDb={placeDb}
               selectedPlace={selectedPlace}
               setSelectedPlace={setSelectedPlace}
               setIsListOpen={setIsListOpen}
               isListOpen={isListOpen}
+              
             >
-              {placeDb.categoryName === '카페' ? (
+              {placeDb.Category.categoryName === '카페' ? (
                 <IoMdCafe />
-              ) : placeDb.categoryName === '음식점' ? (
+              ) : placeDb.Category.categoryName === '음식점' ? (
                 <IoRestaurant />
               ) : (
                 <FaLocationDot />
               )}
-            </CustomInfoMap>
+            </PlaceMarker>
           ))}
     </CustomMap>
   );
@@ -171,7 +158,8 @@ const CustomMap = styled(Map)<{
   isSelectedPlace: boolean;
 }>`
   margin-left: auto;
-  width: ${({ isListOpen }) => (isListOpen ? '90%' : '100%')};
+  width: ${({ isListOpen, isSelectedPlace }) =>
+    isListOpen && isSelectedPlace ? '80%' : isListOpen ? '90%' : '100%'};
   height: calc(100vh - 60px);
   position: relative;
   z-index: 1;

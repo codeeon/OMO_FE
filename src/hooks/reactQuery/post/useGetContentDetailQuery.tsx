@@ -1,10 +1,9 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
-import { PostDetailType } from '../model/interface';
+import { PostDetailType } from '../../../model/interface';
+import { instance } from '../../../apis/apis';
 
 const getDetailContent = async (postId: number): Promise<PostDetailType> => {
-  const response = await axios.get(`https://tonadus.shop/api/posts/${postId}`);
-  console.log(response.data);
+  const response = await instance.get(`/posts/${postId}`);
   return response.data;
 };
 

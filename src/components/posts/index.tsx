@@ -1,28 +1,40 @@
-import React, { SetStateAction, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
-import RecentCard from '../main/RecentContents/Card';
 import Modal from '../Modal/Modal';
 import PostModal from '../postModal';
 import useModalCtr from '../../hooks/useModalCtr';
 import Location from './location';
 import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContentsQuery';
 import ContentCard from '../share/ContentCard';
+import CategoryDropdown from './CateogryDropdown';
 import ContentCardSkeleton from '../share/ContentCardSkeleton';
+import CardDarkSkeleton from './CardDarkSkeleton';
 
 interface Props {
   currentLocation: string | undefined;
   setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
+  themeMode: string | null;
 }
 
-const Posts: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
+const Posts: React.FC<Props> = ({
+  currentLocation,
+  setCurrentLocation,
+  themeMode,
+}) => {
+  const [category, setCategory] = useState<string>('전체');
   const {
     isModalOpen: isSubModalOpen,
     handleModalOpen: opeSubModal,
     handleModalClose: closeSubModal,
   } = useModalCtr();
-  const { data: contents, isLoading } = useGetAllContentsQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const {
+    data: contents,
+    isLoading,
+    refetch,
+  } = useGetAllContentsQuery(currentLocation, category);
 
   const handleModalOpen = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
@@ -41,6 +53,10 @@ const Posts: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
     }
   };
 
+  useEffect(() => {
+    refetch();
+  }, [currentLocation, category]);
+
   return (
     <Base>
       <Wrapper>
@@ -52,19 +68,22 @@ const Posts: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
           </PostBtn>
         </Header>
         <Navigator>{'홈 > 게시글'}</Navigator>
-        <Location
-          currentLocation={currentLocation}
-          setCurrentLocation={setCurrentLocation}
-        />
+        <FilterContainer>
+          <Location
+            currentLocation={currentLocation}
+            setCurrentLocation={setCurrentLocation}
+          />
+          <CategoryDropdown category={category} setCategory={setCategory} />
+        </FilterContainer>
         <Body>
           <RecentCardGrid>
-            {isLoading
-              ? Array.from({ length: 12 }).map((_, idx) => (
-                  <ContentCardSkeleton key={idx} />
-                ))
-              : contents?.map((contentData) => (
+            {!isLoading
+              ? contents?.map((contentData) => (
                   <ContentCard contentData={contentData} />
-                ))}
+                ))
+              : themeMode === 'LightMode'
+              ? Array.from({ length: 20 }).map((_) => <ContentContentCardSkeleton />)
+              : Array.from({ length: 20 }).map((_) => <CardDarkSkeleton />)}
           </RecentCardGrid>
         </Body>
       </Wrapper>
@@ -162,4 +181,12 @@ const RecentCardGrid = styled.div`
   margin: 20px 0px 40px 0;
 
   grid-area: main;
+`;
+
+const FilterContainer = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 `;

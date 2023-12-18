@@ -62,7 +62,7 @@ const Location: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
           transition={{ duration: 0.2 }}
           style={{ originY: 0.55 }}
         >
-          <FaCaretDown style={{ color: '#f97393', margin: '5px 0 0 3px' }} />
+          <FaCaretDown style={{ color: '#f97393', margin: '3px 0 0 2px' }} />
         </motion.div>
       </DropdownBtn>
       <Menu
@@ -90,7 +90,7 @@ const DropdownBtn = styled(motion.button)<{ width?: string; height?: string }>`
   padding: 10px 15px;
 
   border-radius: 41px;
-  border: 1px solid ${({ theme }) => theme.color.locBorder};
+  border: 1px solid ${({ theme }) => theme.color.primary};
   background: ${({ theme }) => theme.color.locBg};
 
   span {

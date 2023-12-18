@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import MapSearchInput from './MapSearchInput';
 import MapPlaceHeader from './MapPlaceHeader';
 import MapPlaceCard from './MapPlaceCard';
-import { LocationType, MapLocationType } from '../../../../model/interface';
+import {
+  LocationType,
+  MapCurrentLocationType,
+  MapLocationType,
+} from '../../../../model/interface';
 const categories = ['전체', '음식점', '카페', '기타'];
 
 interface Props {
@@ -13,6 +17,8 @@ interface Props {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   setSelectedPlace: React.Dispatch<React.SetStateAction<LocationType | null>>;
   setMapCenterLocation: React.Dispatch<React.SetStateAction<MapLocationType>>;
+  setMyLoca: React.Dispatch<React.SetStateAction<MapCurrentLocationType>>;
+  mapRef: React.RefObject<kakao.maps.Map>;
 }
 
 const MapPlaceList: React.FC<Props> = ({
@@ -22,13 +28,19 @@ const MapPlaceList: React.FC<Props> = ({
   setSelectedCategory,
   setSelectedPlace,
   setMapCenterLocation,
+  setMyLoca,
+  mapRef,
 }) => {
-  const cafeDb = placeDatas?.filter((place) => place.categoryName === '카페');
+  const cafeDb = placeDatas?.filter(
+    (place) => place.Category.categoryName === '카페',
+  );
   const RestaurantDb = placeDatas?.filter(
-    (place) => place.categoryName === '음식점',
+    (place) => place.Category.categoryName === '음식점',
   );
   const etcDb = placeDatas?.filter(
-    (place) => place.categoryName !== '카페' && place.categoryName !== '음식점',
+    (place) =>
+      place.Category.categoryName !== '카페' &&
+      place.Category.categoryName !== '음식점',
   );
 
   const changeCategory = (category: string) => {
@@ -37,7 +49,11 @@ const MapPlaceList: React.FC<Props> = ({
 
   return (
     <Base>
-      <MapSearchInput setMapCenterLocation={setMapCenterLocation} />
+      <MapSearchInput
+        setMapCenterLocation={setMapCenterLocation}
+        setMyLoca={setMyLoca}
+        mapRef={mapRef}
+      />
       <MapPlaceHeader />
       <PlaceCategoryContainer>
         {categories.map((cat) => (
@@ -108,6 +124,7 @@ const PlaceCategoryContainer = styled.div`
   margin: 17px 20px;
   width: 90%;
   height: 40px;
+
   display: flex;
   justify-content: start;
   align-items: center;

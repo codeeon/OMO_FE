@@ -6,51 +6,26 @@ export interface SelectedInfoType {
   longitude: string;
 }
 
-export interface ContentType {
-  id?: number | undefined;
-
-  userId: string;
-  categoryName: string;
-  locationName: string;
-  placeName: string;
-  latitude: number;
-  longitude: number;
-  content: string;
-  imageURL: string[];
-  likeCount: number;
-  createdAt: string;
-  updatedAt: string;
-  star: number;
-}
-
-//TODO 유저 데이터 및 컨텐츠 데이터 추가
-export interface CommentType {
-  id?: number | undefined;
-  postId: number | undefined;
-  userName: string;
-  text: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface LocationType {
-  id?: number | undefined;
-  imageURL: string;
-  categoryName: string;
-  districName: string;
-  storeName: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  star: number;
-}
-
 export interface MapLocationType {
   center: {
-    lat: any;
-    lng: any;
+    lat: number | null;
+    lng: number | null;
   };
   isPanto: boolean;
+  bounds: kakao.maps.LatLngBounds | undefined;
+}
+
+export interface MapCurrentLocationType {
+  lat: number | null;
+  lng: number | null;
+  placeName: string | null;
+}
+
+export interface BoundsType {
+  ha: number;
+  oa: number;
+  pa: number;
+  qa: number;
 }
 
 export interface ThemeType {
@@ -82,12 +57,19 @@ export interface PostDetailType {
     imgUrl: string;
   };
   Location: {
+    Category: {
+      categoryId: number;
+      categoryName: string;
+    };
+    storeName: string;
     address: string;
+    latitude: string;
+    longitude: string;
   };
-  Comments: CommentType2[];
+  Comments: CommentType[];
 }
 
-export interface CommentType2 {
+export interface CommentType {
   commentId: number;
   content: string;
   createdAt: string;
@@ -97,9 +79,42 @@ export interface CommentType2 {
   };
 }
 
-export interface CommentPostType {
-  UserId: number;
-  PostId: number | undefined;
+export interface HotPostsType {
+  Category: { categoryName: string };
+  Location: { storeName: string };
   content: string;
-  createdAt: Date;
+  imgUrl: string[];
+}
+
+export interface RecentPostsType {
+  User: { nickname: string };
+  commentCount: number;
+  content: string;
+  createdAt: string;
+  imgUrl: string[];
+  likeCount: number;
+  postId: number;
+}
+
+export interface CommentPostsType {
+  User: { nickname: string };
+  commentCount: number;
+  content: string;
+  createdAt: string;
+  imgUrl: string[];
+  likeCount: number;
+  postId: number;
+}
+
+export interface LocationType {
+  Category: { categoryName: string };
+  Posts: [{ imgUrl: string }];
+  address: string;
+  distance: number;
+  latitude: string;
+  locationId: number;
+  longitude: string;
+  starAvg: number;
+  postCount: number;
+  storeName: string;
 }

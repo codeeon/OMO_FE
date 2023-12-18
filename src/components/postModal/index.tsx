@@ -9,7 +9,6 @@ import { SelectedInfoType } from '../../model/interface';
 import { getToday } from '../../function/getToday';
 import Stars from './Stars';
 import SubModal from '../Modal/SubModal';
-import usePostContentMutate from '../../hooks/usePostContentQuery';
 import usePostLocationMutate from '../../hooks/usePostLocationMutate';
 
 interface Props {
@@ -45,7 +44,6 @@ const PostModal: React.FC<Props> = ({
   });
   const [text, setText] = useState('');
 
-  const { postContentMutate, isPostContentLoading } = usePostContentMutate();
   const { postLocMutate, isPostLocLoading } = usePostLocationMutate();
 
   const clearPostHandler = (

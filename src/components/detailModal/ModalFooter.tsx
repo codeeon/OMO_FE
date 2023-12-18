@@ -6,19 +6,19 @@ import LikeBtn from './LikeBtn';
 
 interface Props {
   likeCount: number;
-  comments: CommentType[] | undefined;
   contentId: number | undefined;
+  commentLength: number;
 }
 
-const ModalFooter: React.FC<Props> = ({ likeCount, comments, contentId }) => {
-  const commentArray = Array.isArray(comments) ? comments : [];
-  const commentLength = commentArray?.filter(
-    (comment) => comment.postId === contentId,
-  ).length;
+const ModalFooter: React.FC<Props> = ({
+  likeCount,
+  contentId,
+  commentLength,
+}) => {
   return (
     <Footer>
       <FooterItem color="red">
-        <LikeBtn />
+        <LikeBtn contentId={contentId} />
         <span>{likeCount}</span>
       </FooterItem>
       <FooterItem color="blue">
