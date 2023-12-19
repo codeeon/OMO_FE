@@ -24,7 +24,7 @@ const Map: React.FC = () => {
   const [mapCenterLocation, setMapCenterLocation] = useState<MapLocationType>({
     center: { lat: myLoca.lat, lng: myLoca.lng },
     isPanto: false,
-    bounds: undefined,
+    bounds: null,
   });
 
   const mapRef = useRef<kakao.maps.Map>(null);
@@ -55,32 +55,31 @@ const Map: React.FC = () => {
     const getCurLoc = async () => {
       const { latitude, longitude } = await getCurrentCoords();
       const bounds = mapRef.current?.getBounds();
+
       setMyLoca({
         ...myLoca,
         lat: latitude,
         lng: longitude,
       });
+
       setMapCenterLocation({
         ...mapCenterLocation,
         center: {
           lat: latitude,
           lng: longitude,
         },
-        bounds: {
-          ha: bounds?.ha,
-          oa: bounds?.oa,
-          pa: bounds?.pa,
-          qa: bounds?.qa,
-        },
       });
     };
-
     getCurLoc();
   }, []);
 
   useEffect(() => {
-    refetch();
-  }, [myLoca, mapCenterLocation, selectedCategory]);
+    if (mapCenterLocation.bounds) {
+      if (mapCenterLocation.bounds.qa <= 200) {
+        refetch();
+      }
+    }
+  }, [myLoca, mapCenterLocation.bounds, selectedCategory]);
 
   return (
     <Base>

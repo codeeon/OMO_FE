@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HotPostsType } from '../../../model/interface';
+import { HotPostsType, MapLocationType } from '../../../model/interface';
 import { HiArrowNarrowRight } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   post: HotPostsType;
@@ -9,6 +10,12 @@ interface Props {
 
 const Card: React.FC<Props> = ({ post }) => {
   const { imgUrl, Location, content, Category: category } = post;
+  const navigate = useNavigate();
+
+  const moveMapHandler = () => {
+    navigate('/map');
+  };
+
   return (
     <Base>
       <Wrapper>
@@ -18,7 +25,7 @@ const Card: React.FC<Props> = ({ post }) => {
           <Text dangerouslySetInnerHTML={{ __html: content }} />
           <FooterContainer>
             <Category>#{category.categoryName}</Category>
-            <MapBtnContainer>
+            <MapBtnContainer onClick={moveMapHandler}>
               <span>지도로 보기</span>
               <HiArrowNarrowRight />
             </MapBtnContainer>
@@ -108,11 +115,18 @@ const MapBtnContainer = styled.div`
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
+    &:hover {
+      color: #3765ff;
+    }
   }
   svg {
     width: 18px;
     height: 18px;
     color: #44a5ff;
     margin-bottom: 2px;
+    &:hover {
+      color: #3765ff;
+    }
   }
+  cursor: pointer;
 `;

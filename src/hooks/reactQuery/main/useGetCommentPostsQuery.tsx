@@ -9,6 +9,7 @@ const getCommentPost = async (
     districtName !== '전체' ? { districtName, limit: 9 } : { limit: 9 };
 
   const response = await instance.get(`/main/comments`, { params });
+
   return response.data;
 };
 

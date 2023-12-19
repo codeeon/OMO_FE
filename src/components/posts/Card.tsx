@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
@@ -6,9 +6,13 @@ import DetailContentsModal from '../detailModal/ContentsModal';
 import Modal from '../Modal/Modal';
 import { PostType } from '../../model/interface';
 import { MdLocationOn } from 'react-icons/md';
+import useModalCtr from '../../hooks/useModalCtr';
+interface Props {
+  contentData: PostType;
+}
 
-const Card: React.FC<{ contentData: PostType }> = ({ contentData }) => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+const Card: React.FC<Props> = ({ contentData }) => {
+  const { isModalOpen, handleModalOpen, handleModalClose } = useModalCtr();
 
   const {
     postId,
@@ -20,21 +24,6 @@ const Card: React.FC<{ contentData: PostType }> = ({ contentData }) => {
     commentCount,
     createdAt,
   } = contentData;
-
-  const handleModalOpen = (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
-  ) => {
-    e.stopPropagation();
-    if (!isModalOpen) {
-      setIsModalOpen(true);
-      document.body.style.overflow = 'hidden';
-    }
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    document.body.style.overflow = 'auto';
-  };
 
   return (
     <Base onClick={(e) => handleModalOpen(e)}>

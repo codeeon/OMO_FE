@@ -6,7 +6,7 @@ import { MutationFunction } from 'react-query';
 interface OnImageChangeParams {
   setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
   imageURL: string[];
-  setProgressPercent: React.Dispatch<React.SetStateAction<number>>;
+  setProgressPercent: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export const onImageChange: MutationFunction<

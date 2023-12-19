@@ -36,7 +36,6 @@ const MapSearchInput: React.FC<Props> = ({
     pagination: any,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
-      console.log(data);
       setResult(data);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       setIsError('검색 결과가 존재하지 않습니다.');
@@ -74,7 +73,6 @@ const MapSearchInput: React.FC<Props> = ({
 
     setMyLoca({
       placeName: placeName,
-      districtName: districtName,
       lat: Number(lat),
       lng: Number(lng),
     });

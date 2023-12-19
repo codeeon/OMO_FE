@@ -8,11 +8,11 @@ import { FaRegStar } from 'react-icons/fa';
 import Modal from '../../../Modal/Modal';
 import DetailContentsModal from '../../../detailModal/ContentsModal';
 interface Props {
-  cont: ContentType;
+  post: { postId: number; imgUrl: string; star: number };
 }
 
-const ContentCard: React.FC<Props> = ({ cont }) => {
-  const { star, likeCount, createdAt, content, imageURL } = cont;
+const ContentCard: React.FC<Props> = ({ post }) => {
+  const { postId, imgUrl, star } = post;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -32,7 +32,7 @@ const ContentCard: React.FC<Props> = ({ cont }) => {
             <Date>{createdAt}</Date>
           </UserInfoContainer>
         </UserContainer>
-        <ImageBox imageURL={imageURL} />
+        <ImageBox imageURL={imgUrl} />
         <RatingContainer>
           {Array.from({ length: 5 }, (_, idx) => (
             <StarWrapper key={idx}>
@@ -49,13 +49,13 @@ const ContentCard: React.FC<Props> = ({ cont }) => {
           </FooterItem>
           <FooterItem color="blue">
             <TbMessage />
-            <span>1</span>
+            <span>{commentCount}</span>
           </FooterItem>
         </Footer>
       </Base>
       <Modal isOpen={isModalOpen} onClose={toggleModalHandler}>
         <DetailContentsModal
-          contentData={cont}
+          postId={postId}
           closeModalHandler={toggleModalHandler}
         />
       </Modal>
@@ -113,7 +113,7 @@ const Date = styled.div`
   font-weight: 500;
 `;
 
-const ImageBox = styled.div<{ imageURL: string[] }>`
+const ImageBox = styled.div<{ imageURL: string }>`
   margin: 0 20px;
   margin-top: 10px;
   background-color: gray;
@@ -123,7 +123,7 @@ const ImageBox = styled.div<{ imageURL: string[] }>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
+  background-image: ${({ imageURL }) => `url(${imageURL})`};
 `;
 
 const RatingContainer = styled.div`

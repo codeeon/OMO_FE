@@ -10,7 +10,6 @@ interface Props {
 
 const DistrictItem: React.FC<Props> = ({ dist, setCurrentLocation }) => {
   const saveCurLocHandler = () => {
-    console.log(dist);
     setCurrentLocation(dist);
   };
 

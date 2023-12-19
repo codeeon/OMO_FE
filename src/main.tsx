@@ -4,7 +4,13 @@ import App from './App.tsx';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import GlobalStyle from './styles/GlobalStyle.tsx';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    // queries: {
+    //   refetchOnWindowFocus: false,
+    // },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>

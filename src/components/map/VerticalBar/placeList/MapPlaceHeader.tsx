@@ -30,7 +30,7 @@ export default MapPlaceHeader;
 
 const Base = styled.div`
   box-sizing: border-box;
-  margin: 20px;
+  padding: 20px;
   margin-top: 20px;
   width: 100%;
 

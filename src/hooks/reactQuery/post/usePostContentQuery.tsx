@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ContentType } from '../model/interface';
+import { ContentType } from '../../../model/interface';
 import { useMutation, useQueryClient } from 'react-query';
 
 const postContent = async (newContent: ContentType) => {

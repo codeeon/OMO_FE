@@ -8,6 +8,7 @@ import {
   MapCurrentLocationType,
   MapLocationType,
 } from '../../../../model/interface';
+
 const categories = ['전체', '음식점', '카페', '기타'];
 
 interface Props {
@@ -23,7 +24,6 @@ interface Props {
 
 const MapPlaceList: React.FC<Props> = ({
   placeDatas,
-  isListOpen,
   selectedCategory,
   setSelectedCategory,
   setSelectedPlace,
@@ -31,18 +31,6 @@ const MapPlaceList: React.FC<Props> = ({
   setMyLoca,
   mapRef,
 }) => {
-  const cafeDb = placeDatas?.filter(
-    (place) => place.Category.categoryName === '카페',
-  );
-  const RestaurantDb = placeDatas?.filter(
-    (place) => place.Category.categoryName === '음식점',
-  );
-  const etcDb = placeDatas?.filter(
-    (place) =>
-      place.Category.categoryName !== '카페' &&
-      place.Category.categoryName !== '음식점',
-  );
-
   const changeCategory = (category: string) => {
     setSelectedCategory(category);
   };
@@ -66,33 +54,9 @@ const MapPlaceList: React.FC<Props> = ({
         ))}
       </PlaceCategoryContainer>
       <ContentsContainer>
-        {selectedCategory === '전체'
-          ? placeDatas?.map((placeDb) => (
-              <MapPlaceCard
-                placeDb={placeDb}
-                setSelectedPlace={setSelectedPlace}
-              />
-            ))
-          : selectedCategory === '카페'
-          ? cafeDb?.map((placeDb) => (
-              <MapPlaceCard
-                placeDb={placeDb}
-                setSelectedPlace={setSelectedPlace}
-              />
-            ))
-          : selectedCategory === '음식점'
-          ? RestaurantDb?.map((placeDb) => (
-              <MapPlaceCard
-                placeDb={placeDb}
-                setSelectedPlace={setSelectedPlace}
-              />
-            ))
-          : etcDb?.map((placeDb) => (
-              <MapPlaceCard
-                placeDb={placeDb}
-                setSelectedPlace={setSelectedPlace}
-              />
-            ))}
+        {placeDatas?.map((placeDb) => (
+          <MapPlaceCard placeDb={placeDb} setSelectedPlace={setSelectedPlace} />
+        ))}
       </ContentsContainer>
     </Base>
   );
