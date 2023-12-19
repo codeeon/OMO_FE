@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import KakaoLogin from '../components/auth/KakaoLogin';
+import auth from '..//axios/auth';
 // import KakaoLogin2 from '../components/auth/KakaoLogin2';
 
 interface LoginData {
@@ -21,35 +22,19 @@ const Login: React.FC = () => {
   const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
       try {
-        const response = await axios.post(
-          `https://tonadus.shop/auth/login`,
-          formData,
-        );
-        console.log(response.data);
-        // `${import.meta.env.VITE_APP_SERVER_URL}/auth/login`
+        const response = await auth.post(`/login`, formData);
 
-        const accessTokenExpiresIn = 60 * 60 * 2; // 2 hour in seconds
-        const refreshTokenExpiresIn = 60 * 60 * 24 * 7; // 7 days in seconds
+        const accessToken = response.headers.authorization;
+        const refreshToken = response.headers.refreshtoken;
 
-        if (response.data.accessToken) {
-          Cookies.set('accessToken', response.data.accessToken, {
-            expires: accessTokenExpiresIn / (60 * 60 * 24),
-            secure: window.location.protocol === 'https:',
-            httpOnly: true,
-          });
-        }
-        if (response.data.refreshToken) {
-          Cookies.set('refreshToken', response.data.refreshToken, {
-            expires: refreshTokenExpiresIn / (60 * 60 * 24),
-            secure: window.location.protocol === 'https:',
-            httpOnly: true,
-          });
-        }
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+
         console.log(response);
         return response.data;
       } catch (error) {
         throw new Error(
-          error.response?.data.message || '로그인에 실패했습니다.',
+          error.response?.data.message || 'FE: 로그인에 실패했습니다.',
         );
       }
     },
@@ -102,7 +87,7 @@ const Login: React.FC = () => {
           <Text color="#666">아직 회원이 아니신가요?</Text>
           <Link
             style={{ textDecoration: 'none', marginLeft: '10px' }}
-            to="/signin"
+            to="/signup"
           >
             <Text color="#44a5ff">회원가입</Text>
           </Link>
