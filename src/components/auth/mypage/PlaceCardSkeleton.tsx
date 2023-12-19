@@ -2,29 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 import Skeleton from 'react-loading-skeleton';
 
-const Card = () => {
+const PlaceCardSkeleton = () => {
   return (
     <Base>
-      <ImgContainer width="285px" height="181px" />
+      <ImgContainer width="285px" height="168px" />
       <HeaderContainer>
-        <Title width="40px" height="15px"></Title>
-        <VerticalLine />
-        <Date width="50px" height="15px"></Date>
+        <Title width="190px" height="20px" />
+        <Skeleton width="24px" height="24px" />
       </HeaderContainer>
-      <Text></Text>
+      <Text />
       <Footer>
         <FooterItem>
-          <Skeleton width="30px" height="15px" />
-        </FooterItem>
-        <FooterItem>
-          <Skeleton width="30px" height="15px" />
+          <Skeleton width="180px" height="16px" />
         </FooterItem>
       </Footer>
     </Base>
   );
 };
 
-export default Card;
+export default PlaceCardSkeleton;
 const Base = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,8 +29,9 @@ const Base = styled.div`
 `;
 
 const ImgContainer = styled(Skeleton)`
+  box-sizing: border-box;
   width: 285px;
-  height: 181px;
+  height: 168px;
   border-radius: 8px;
 `;
 
@@ -42,18 +39,12 @@ const HeaderContainer = styled.div`
   margin-top: 12px;
   width: 100%;
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   gap: 5px;
 `;
 
 const Title = styled(Skeleton)``;
-
-const VerticalLine = styled.div`
-  border-right: 1px solid #a9a9a9;
-  width: 1px;
-  height: 12px;
-`;
 
 const Date = styled(Skeleton)``;
 
@@ -67,7 +58,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  margin-top: 21px;
+  margin-top: 9px;
   gap: 8px;
 `;
 

@@ -7,7 +7,7 @@ import Modal from '../Modal/Modal';
 import { PostType } from '../../model/interface';
 import { MdLocationOn } from 'react-icons/md';
 
-const Card: React.FC<{ contentData: PostType }> = ({ contentData }) => {
+const ContentCard: React.FC<{ contentData: PostType }> = ({ contentData }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const {
@@ -69,7 +69,7 @@ const Card: React.FC<{ contentData: PostType }> = ({ contentData }) => {
   );
 };
 
-export default Card;
+export default ContentCard;
 
 const ImgContainer = styled.div<{ imageURL: string[] }>`
   width: 285px;

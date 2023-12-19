@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import RecentCard from './Card';
 import { useNavigate } from 'react-router-dom';
-import RecentCardSkeleton from './CardSkeleton';
+import ContentCardSkeleton from '../../share/ContentCardSkeleton';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
 
@@ -47,7 +47,7 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
             ))
           : themeMode === 'LightMode'
           ? Array.from({ length: 4 }).map((_, idx) => (
-              <RecentCardSkeleton key={idx} />
+              <ContentCardSkeleton key={idx} />
             ))
           : Array.from({ length: 4 }).map((_, idx) => (
               <CardDarkSkeleton key={idx} />

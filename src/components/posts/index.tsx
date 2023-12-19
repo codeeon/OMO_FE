@@ -6,9 +6,9 @@ import PostModal from '../postModal';
 import useModalCtr from '../../hooks/useModalCtr';
 import Location from './location';
 import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContentsQuery';
-import Card from './Card';
+import ContentCard from '../share/ContentCard';
 import CategoryDropdown from './CateogryDropdown';
-import CardSkeleton from './CardLightSkeleton';
+import ContentCardSkeleton from '../share/ContentCardSkeleton';
 import CardDarkSkeleton from './CardDarkSkeleton';
 
 interface Props {
@@ -79,10 +79,10 @@ const Posts: React.FC<Props> = ({
           <RecentCardGrid>
             {!isLoading
               ? contents?.map((contentData) => (
-                  <Card contentData={contentData} />
+                  <ContentCard contentData={contentData} />
                 ))
               : themeMode === 'LightMode'
-              ? Array.from({ length: 20 }).map((_) => <CardSkeleton />)
+              ? Array.from({ length: 20 }).map((_) => <ContentContentCardSkeleton />)
               : Array.from({ length: 20 }).map((_) => <CardDarkSkeleton />)}
           </RecentCardGrid>
         </Body>

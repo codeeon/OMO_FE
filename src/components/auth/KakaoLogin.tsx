@@ -14,7 +14,6 @@ interface KakaoTokenResponse {
 }
 
 const KakaoLogin: React.FC = () => {
-
   const loginWithKakao = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${
       import.meta.env.VITE_APP_KAKAO_API_KEY
@@ -32,6 +31,7 @@ const KakaoLogin: React.FC = () => {
         import.meta.env.VITE_APP_KAKAO_REDIRECT_URI
       }&code=${code}`,
     );
+    console.log(code);
     return response.data;
   };
 
