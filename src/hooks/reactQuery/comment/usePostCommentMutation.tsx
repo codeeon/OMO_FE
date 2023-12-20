@@ -1,13 +1,12 @@
-import axios from 'axios';
-import { CommentPostType, CommentType } from '../../../model/interface';
+import { PostCommentType } from '../../../model/interface';
 import { MutationFunction, useMutation, useQueryClient } from 'react-query';
-import { instance } from '../../../apis/apis';
+import authApi from '../../../axios/authApi';
 
 const postComment: MutationFunction<
   void,
-  { contentId: number | undefined; newComment: CommentPostType }
+  { contentId: number | undefined; newComment: PostCommentType }
 > = async ({ contentId, newComment }) => {
-  const response = await instance.post(
+  const response = await authApi.post(
     `/posts/${contentId}/comments`,
     newComment,
   );
@@ -19,10 +18,10 @@ const usePostCommentQuery = () => {
   const mutation = useMutation<
     void,
     unknown,
-    { contentId: number | undefined; newComment: CommentPostType }
+    { contentId: number | undefined; newComment: PostCommentType }
   >(postComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries('comments');
+      queryClient.invalidateQueries('contents');
     },
   });
   return {

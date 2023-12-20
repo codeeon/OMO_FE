@@ -32,7 +32,7 @@ const useGetAllContentsQuery = (
   categoryName: string | undefined,
 ) =>
   useInfiniteQuery(
-    ['posts'],
+    'posts',
     ({ pageParam }) => getContents(districtName, categoryName, pageParam, 20),
     {
       getNextPageParam: (lastPage) => {

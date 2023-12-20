@@ -1,5 +1,6 @@
 import { MutationFunction, useMutation, useQueryClient } from 'react-query';
 import { instance } from '../../../apis/apis';
+import authApi from '../../../axios/authApi';
 
 const deleteComment: MutationFunction<
   void,
@@ -8,7 +9,7 @@ const deleteComment: MutationFunction<
     commentId: number | undefined;
   }
 > = async ({ contentId, commentId }) => {
-  const response = await instance.delete(
+  const response = await authApi.delete(
     `/posts/${contentId}/comments/${commentId}`,
   );
   return response.data;
@@ -22,7 +23,7 @@ const useDeleteCommentMutation = () => {
     { contentId: number | undefined; commentId: number | undefined }
   >(deleteComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries('comments');
+      queryClient.invalidateQueries('contents');
     },
   });
   return {
