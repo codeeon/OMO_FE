@@ -1,15 +1,15 @@
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { IoIosArrowRoundBack } from 'react-icons/io';
-import PostModalImage from './Image';
 import PostModalPlace from './Place';
 import PostModalText from './Text';
 import ConfirmModal from './ConfirmModal';
 import { SelectedInfoType } from '../../model/interface';
-import { getToday } from '../../function/getToday';
 import Stars from './Stars';
 import SubModal from '../Modal/SubModal';
-import usePostLocationMutate from '../../hooks/usePostLocationMutate';
+import Image2 from './Image';
+import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
+import ImageFile from './Image2';
 
 interface Props {
   closeMainModal: (
@@ -44,7 +44,7 @@ const PostModal: React.FC<Props> = ({
   });
   const [text, setText] = useState('');
 
-  const { postLocMutate, isPostLocLoading } = usePostLocationMutate();
+  const { postContentMutate, isPostContentLoading } = usePostContentMutate();
 
   const clearPostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
@@ -74,34 +74,17 @@ const PostModal: React.FC<Props> = ({
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
     const newContent = {
-      // UserId: 1, //TODO 추후에 추가
-      // categoryName: selectedInfo.categoryName,
-      // CategoryId: 1,
-      // locationName: selectedInfo.addressName,
-      // LocationId: 1,
       content: text.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
-      imageURL: imageURL,
-      likeCount: 0,
-      placeName: selectedInfo.placeName,
-      latitude: Number(selectedInfo.latitude),
-      longitude: Number(selectedInfo.longitude),
-      createdAt: getToday(),
-      updatedAt: getToday(),
       star: starNum,
-    };
-    const newLocation = {
-      imageURL: imageURL[0],
       categoryName: selectedInfo.categoryName,
-      districName: selectedInfo.addressName.split('')[1],
+      imgUrl: imageURL,
       storeName: selectedInfo.placeName,
       address: selectedInfo.addressName,
-      latitude: Number(selectedInfo.latitude),
-      longitude: Number(selectedInfo.longitude),
-      star: starNum,
+      latitude: selectedInfo.latitude,
+      longitude: selectedInfo.longitude,
     };
     if (isValidate) {
-      // postContentMutate(newContent);
-      postLocMutate(newLocation);
+      postContentMutate(newContent);
       clearPostHandler(e);
     }
   };
@@ -117,7 +100,7 @@ const PostModal: React.FC<Props> = ({
           작성완료
         </CompleteBtn>
       </Header>
-      <PostModalImage imageURL={imageURL} setImageUrl={setImageUrl} />
+      <ImageFile imageURL={imageURL} setImageUrl={setImageUrl} />
       <PostModalPlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}

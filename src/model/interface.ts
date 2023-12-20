@@ -128,3 +128,19 @@ export interface LocationType {
   postCount: number;
   storeName: string;
 }
+
+export interface PostContentType {
+  content: string;
+  categoryName: string;
+  imgUrl: string[];
+  storeName: string;
+  address: string;
+  latitude: string;
+  longitude: string;
+  star: number;
+}
+
+export interface PostCommentType {
+  PostId: number | undefined;
+  content: string;
+}

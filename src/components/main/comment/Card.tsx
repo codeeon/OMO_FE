@@ -2,11 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { FaQuoteLeft } from 'react-icons/fa';
-import { CommentPostsType, CommentType } from '../../../model/interface';
+import { CommentPostsType } from '../../../model/interface';
 
-const PlaceCommnetCard: React.FC<{ comment: CommentPostsType }> = ({
-  comment,
-}) => {
+const Card: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
   const { content } = comment;
   return (
     <Base>
@@ -22,7 +20,7 @@ const PlaceCommnetCard: React.FC<{ comment: CommentPostsType }> = ({
   );
 };
 
-export default PlaceCommnetCard;
+export default Card;
 
 const Base = styled.div`
   box-sizing: border-box;

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import PlaceCommnetCard from './Card';
+import styled, { css } from 'styled-components';
 import PlaceCommnetCardSkeleton from './CardSkeleton';
 import useGetCommentPostsQuery from '../../../hooks/reactQuery/main/useGetCommentPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
+import Carousel from '../../share/Carousel';
+import Card from './Card';
 
 interface Props {
   currentLocation: string | undefined;
@@ -12,7 +13,6 @@ interface Props {
 
 const PlaceComments: React.FC<Props> = ({ currentLocation, themeMode }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const {
     data: comments,
@@ -27,71 +27,36 @@ const PlaceComments: React.FC<Props> = ({ currentLocation, themeMode }) => {
     (_, index) => index,
   );
 
-  const handleGoTo = (index: number) => setActiveIndex(index);
-
-  const handleMouseEnter = () => setIsFocused(true);
-  const handleMouseLeave = () => setIsFocused(false);
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    const handleNext = () => {
-      setActiveIndex(
-        (activeIndex) => (activeIndex + 1) % carouselCounts.length,
-      );
-    };
-
-    if (!isFocused) {
-      intervalId = setInterval(handleNext, 4000);
-    }
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [isFocused]);
-
   useEffect(() => {
     refetch();
   }, [currentLocation]);
 
   return (
-    <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <Header>
-        <Title>실시간 댓글 💬</Title>
-      </Header>
-      <Body>
-        <CarouselList>
-          {!isLoading
-            ? comments?.map((comment) => (
-                <CarouselItem activeIndex={activeIndex} key={comment.postId}>
-                  <PlaceCommnetCard comment={comment} />
-                </CarouselItem>
-              ))
-            : themeMode === 'LightMode'
-            ? Array.from({ length: 9 }).map((_, i) => (
-                <CarouselItem activeIndex={activeIndex} key={i}>
-                  <PlaceCommnetCardSkeleton />
-                </CarouselItem>
-              ))
-            : Array.from({ length: 9 }).map((_, i) => (
-                <CarouselItem activeIndex={activeIndex} key={i}>
-                  <CardDarkSkeleton />
-                </CarouselItem>
-              ))}
-        </CarouselList>
-      </Body>
-      {repeatCounts.length && (
-        <Nav>
-          {carouselCounts.map((i) => (
-            <NavItem key={i}>
-              <NavButton
-                isActive={activeIndex === i}
-                onClick={() => handleGoTo(i)}
-              />
-            </NavItem>
+    <Carousel
+      title={<Title>실시간 댓글 💬</Title>}
+      itemCount={9}
+      carouselCount={3}
+      activeIndex={activeIndex}
+      setActiveIndex={setActiveIndex}
+    >
+      {!isLoading
+        ? comments?.map((comment) => (
+            <CarouselItem activeIndex={activeIndex} key={comment.postId}>
+              <Card comment={comment} />
+            </CarouselItem>
+          ))
+        : themeMode === 'LightMode'
+        ? Array.from({ length: 9 }).map((_, i) => (
+            <CarouselItem activeIndex={activeIndex} key={i}>
+              <PlaceCommnetCardSkeleton />
+            </CarouselItem>
+          ))
+        : Array.from({ length: 9 }).map((_, i) => (
+            <CarouselItem activeIndex={activeIndex} key={i}>
+              <CardDarkSkeleton />
+            </CarouselItem>
           ))}
-        </Nav>
-      )}
-    </Base>
+    </Carousel>
   );
 };
 
@@ -106,6 +71,7 @@ const Base = styled.div`
   justify-content: center;
   max-width: 1200px;
   width: 100%;
+  position: relative;
 `;
 
 const Header = styled.div`
@@ -178,4 +144,30 @@ const Nav = styled.ul`
 
   width: 100%;
   height: 30px;
+`;
+
+const ArrowBtn = styled.div<{ position: string }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 100%;
+  background: ${({ theme }) => theme.color.bg};
+  border: 1px solid ${({ theme }) => theme.color.sub};
+  &:hover {
+    background: ${({ theme }) => theme.color.border};
+  }
+  ${({ position }) =>
+    position === 'left'
+      ? css`
+          left: -60px;
+        `
+      : css`
+          right: -60px;
+        `};
 `;

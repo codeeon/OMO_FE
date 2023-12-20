@@ -1,23 +1,28 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import RecentCard from './Card';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../../share/ContentCardSkeleton';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
+import Carousel from '../../share/Carousel';
 
 interface Props {
   currentLocation: string | undefined;
   themeMode: string | null;
 }
+const categories = ['전체', '음식점', '카페', '기타'];
 
 const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [selectedCateogry, setSelectedCategory] = useState<string>('전체');
+
   const {
     data: recentPosts,
     isLoading,
     refetch,
-  } = useGetRecentPostsQuery(currentLocation);
+  } = useGetRecentPostsQuery(currentLocation, selectedCateogry);
 
   const navigate = useNavigate();
 
@@ -26,48 +31,66 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
   };
 
   useEffect(() => {
+    console.log(selectedCateogry);
     refetch();
-  }, [currentLocation]);
+  }, [currentLocation, selectedCateogry]);
+
+  const changeCateogryHandler = (category: string) => {
+    setSelectedCategory(category);
+  };
 
   return (
-    <Base>
-      <Header>
-        <Title>오늘 모할까🤔?</Title>
-        <AllBtnWrapper onClick={navigateToContentsPage}>
-          <Description>전체보기</Description>
-          <BtnWrapper>
-            <IoIosArrowForward />
-          </BtnWrapper>
-        </AllBtnWrapper>
-      </Header>
-      <Body>
-        {!isLoading
-          ? recentPosts?.map((post) => (
-              <RecentCard key={post.postId} post={post} />
-            ))
-          : themeMode === 'LightMode'
-          ? Array.from({ length: 4 }).map((_, idx) => (
-              <ContentCardSkeleton key={idx} />
-            ))
-          : Array.from({ length: 4 }).map((_, idx) => (
-              <CardDarkSkeleton key={idx} />
+    <Carousel
+      itemCount={12}
+      title={
+        <>
+          <Header>
+            <Title>오늘 모할까🤔?</Title>
+            <AllBtnWrapper onClick={navigateToContentsPage}>
+              <Description>전체보기</Description>
+              <BtnWrapper>
+                <IoIosArrowForward />
+              </BtnWrapper>
+            </AllBtnWrapper>
+          </Header>
+          <CategroyContainer>
+            {categories.map((category) => (
+              <CategoryBtn
+                isSelected={selectedCateogry === category}
+                onClick={() => changeCateogryHandler(category)}
+              >
+                {category}
+              </CategoryBtn>
             ))}
-      </Body>
-    </Base>
+          </CategroyContainer>
+        </>
+      }
+      carouselCount={4}
+      activeIndex={activeIndex}
+      setActiveIndex={setActiveIndex}
+    >
+      {!isLoading
+        ? recentPosts?.map((post) => (
+            <CarouselItem activeIndex={activeIndex}>
+              <RecentCard key={post.postId} post={post} />
+            </CarouselItem>
+          ))
+        : themeMode === 'LightMode'
+        ? Array.from({ length: 4 }).map((_, idx) => (
+            <CarouselItem activeIndex={activeIndex}>
+              <ContentCardSkeleton key={idx} />
+            </CarouselItem>
+          ))
+        : Array.from({ length: 4 }).map((_, idx) => (
+            <CarouselItem activeIndex={activeIndex}>
+              <CardDarkSkeleton key={idx} />
+            </CarouselItem>
+          ))}
+    </Carousel>
   );
 };
 
 export default RecentContents;
-
-const Base = styled.div`
-  margin-top: 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-  max-width: 1200px;
-  width: 100%;
-`;
 
 const Header = styled.div`
   width: 100%;
@@ -116,10 +139,41 @@ const AllBtnWrapper = styled.div`
   right: 0;
 `;
 
-const Body = styled.div`
+const CarouselItem = styled.li<{ activeIndex: number }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-${({ activeIndex }) => activeIndex * 425}%);
+  transition: 500ms ease;
+`;
+
+const CategroyContainer = styled.div`
   margin-top: 20px;
   display: flex;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
+`;
+
+const CategoryBtn = styled.div<{ isSelected: boolean }>`
+  border: 1px solid ${({ theme }) => theme.color.border};
+  color: ${({ theme }) => theme.color.text};
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 41px;
+
+  cursor: pointer;
+  ${({ isSelected }) =>
+    isSelected &&
+    css`
+      border: 1px solid ${({ theme }) => theme.color.primary};
+      color: ${({ theme }) => theme.color.primary};
+    `}
+  &:hover {
+    border: 1px solid ${({ theme }) => theme.color.primary};
+    color: ${({ theme }) => theme.color.primary};
+  }
+  transition: all 300ms ease;
 `;

@@ -77,7 +77,7 @@ const Posts: React.FC<Props> = ({
             {isFetching && !isFetchingNextPage
               ? themeMode === 'LightMode'
                 ? Array.from({ length: 20 }).map((_, idx) => (
-                    <CardSkeleton key={idx} />
+                    <ContentCardSkeleton key={idx} />
                   ))
                 : Array.from({ length: 20 }).map((_, idx) => (
                     <CardDarkSkeleton key={idx} />
@@ -85,7 +85,7 @@ const Posts: React.FC<Props> = ({
               : !isFetching && isFetchingNextPage
               ? themeMode === 'LightMode'
                 ? Array.from({ length: 20 }).map((_, idx) => (
-                    <CardSkeleton key={idx} />
+                    <ContentCardSkeleton key={idx} />
                   ))
                 : Array.from({ length: 20 }).map((_, idx) => (
                     <CardDarkSkeleton key={idx} />
@@ -93,7 +93,7 @@ const Posts: React.FC<Props> = ({
               : contents?.pages.map((group, i) => (
                   <>
                     {group.map((contentData) => (
-                      <Card
+                      <ContentCard
                         key={contentData.postId}
                         contentData={contentData}
                       />
@@ -102,7 +102,7 @@ const Posts: React.FC<Props> = ({
                 ))}
             {isFetchingNextPage &&
               !isFetching &&
-              Array.from({ length: 20 }).map((_) => <CardSkeleton />)}
+              Array.from({ length: 20 }).map((_) => <ContentCardSkeleton />)}
             <ObserverContainer ref={setTarget}></ObserverContainer>
           </RecentCardGrid>
         </Body>
