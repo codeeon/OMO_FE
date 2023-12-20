@@ -6,7 +6,7 @@ import { MdOutlineDarkMode, MdOutlineWbSunny } from 'react-icons/md';
 import { FiUser } from 'react-icons/fi';
 import { ThemeType } from '../../model/interface';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,11 +41,11 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    alert('로그아웃이 완료되었습니다.');
     // redirect를 홈으로 둘지 어떨지.
-    navigate(`${import.meta.env.VITE_APP_SERVER_URL}`);
+    navigate('/');
   };
 
   return (
@@ -85,7 +85,12 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
         }}
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
-        <DropdownItem variants={itemVariants}>내 정보</DropdownItem>
+        <DropdownItem
+          onClick={() => navigate('/mypage')}
+          variants={itemVariants}
+        >
+          내 정보
+        </DropdownItem>
         <DropdownItem variants={itemVariants} onClick={clickToggleBtn}>
           {themeMode === 'LightMode' ? (
             <>

@@ -13,6 +13,7 @@ import {
   ThemeType,
 } from '../model/interface';
 import { getCurrentCoords } from '../function/kakao';
+import Mypage from '../pages/Mypage';
 
 const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const [currentLocation, setCurrentLocation] = useState<string | undefined>(
@@ -96,6 +97,10 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
         />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/mypage"
+          element={<Mypage currentLocation={currentLocation} />}
+        />
       </Routes>
     </>
   );

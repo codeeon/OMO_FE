@@ -6,9 +6,9 @@ import PostModal from '../postModal';
 import useModalCtr from '../../hooks/useModalCtr';
 import Location from './location';
 import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContentsQuery';
-import Card from './Card';
+import ContentCard from '../share/ContentCard';
 import CategoryDropdown from './CateogryDropdown';
-import CardSkeleton from './CardLightSkeleton';
+import ContentCardSkeleton from '../share/ContentCardSkeleton';
 import CardDarkSkeleton from './CardDarkSkeleton';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
