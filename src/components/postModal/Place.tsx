@@ -43,7 +43,6 @@ const Place: React.FC<Props> = ({
     const ps = new kakao.maps.services.Places();
     ps.keywordSearch(event.target.value, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
-        console.log(data);
         setSearchValue(data);
       }
     });
@@ -67,7 +66,6 @@ const Place: React.FC<Props> = ({
       latitude: latitude,
       longitude: longitude,
     });
-    console.log(selectedInfo);
     setInputValue('');
   };
 

@@ -1,16 +1,26 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { useState, useEffect, SetStateAction } from 'react';
+import styled, { css } from 'styled-components';
 import HotContentsCard from './Card';
 import CardSkeleton from './CardSkeleton';
 import useGetHotPosts from '../../../hooks/reactQuery/main/useGetHotPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
+import { RightArrow } from '../../../assets/icons/RightArrow';
+import LeftArrow from '../../../assets/icons/LeftArrow';
+import { MapLocationType } from '../../../model/interface';
 
 interface Props {
   currentLocation: string | undefined;
   themeMode: string | null;
+  mapCenterLocation: MapLocationType;
+  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
 }
 
-const HotContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
+const HotContents: React.FC<Props> = ({
+  currentLocation,
+  themeMode,
+  mapCenterLocation,
+  setMapCenterLocation,
+}) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -30,10 +40,15 @@ const HotContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
   const handleGoTo = (index: number) => setActiveIndex(index);
 
   const handleNext = () => {
-    setActiveIndex((activeIndex) => (activeIndex + 1) % carouselCounts.length);
+    setActiveIndex((activeIndex) => (activeIndex + 1) % 3);
+  };
+
+  const handlePrev = () => {
+    setActiveIndex((activeIndex) => (activeIndex + -1) % 3);
   };
 
   const handleMouseEnter = () => setIsFocused(true);
+
   const handleMouseLeave = () => setIsFocused(false);
 
   useEffect(() => {
@@ -56,10 +71,17 @@ const HotContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <Title>요즘 뜨는🔥</Title>
       <CarouselList>
+        <ArrowBtn position="left" onClick={handlePrev}>
+          <LeftArrow />
+        </ArrowBtn>
         {!isLoading
           ? hotPosts?.map((post) => (
               <CarouselItem activeIndex={activeIndex}>
-                <HotContentsCard post={post} />
+                <HotContentsCard
+                  post={post}
+                  mapCenterLocation={mapCenterLocation}
+                  setMapCenterLocation={setMapCenterLocation}
+                />
               </CarouselItem>
             ))
           : themeMode === 'LightMode'
@@ -73,6 +95,9 @@ const HotContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
                 <CardDarkSkeleton />
               </CarouselItem>
             ))}
+        <ArrowBtn position="right" onClick={handleNext}>
+          <RightArrow />
+        </ArrowBtn>
       </CarouselList>
       {repeatCounts.length && (
         <Nav>
@@ -99,6 +124,7 @@ const Base = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 const Title = styled.div`
@@ -159,4 +185,30 @@ const Nav = styled.ul`
 
   width: 100%;
   height: 30px;
+`;
+
+const ArrowBtn = styled.div<{ position: string }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 100%;
+  background: ${({ theme }) => theme.color.bg};
+  border: 1px solid ${({ theme }) => theme.color.sub};
+  &:hover {
+    background: ${({ theme }) => theme.color.border};
+  }
+  ${({ position }) =>
+    position === 'left'
+      ? css`
+          left: -60px;
+        `
+      : css`
+          right: -60px;
+        `};
 `;

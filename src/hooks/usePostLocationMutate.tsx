@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CommentType, LocationType } from '../model/interface';
+import { LocationType } from '../model/interface';
 import { useMutation, useQueryClient } from 'react-query';
 import { instance } from '../apis/apis';
 

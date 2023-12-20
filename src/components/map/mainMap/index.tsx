@@ -38,7 +38,6 @@ interface Props {
 }
 
 const MapMain: React.FC<Props> = ({
-  selectedCategory,
   placeDatas,
   selectedPlace,
   setSelectedPlace,
@@ -52,18 +51,6 @@ const MapMain: React.FC<Props> = ({
 }) => {
   const [level, setLevel] = useState(2);
 
-  const cafeDb = placeDatas?.filter(
-    (place) => place.Category.categoryName === '카페',
-  );
-  const RestaurantDb = placeDatas?.filter(
-    (place) => place.Category.categoryName === '음식점',
-  );
-  const etcDb = placeDatas?.filter(
-    (place) =>
-      place.Category.categoryName !== '카페' &&
-      place.Category.categoryName !== '음식점',
-  );
-
   return (
     <CustomMap
       center={mapCenterLocation.center}
@@ -73,6 +60,19 @@ const MapMain: React.FC<Props> = ({
       isPanto={mapCenterLocation.isPanto}
       isListOpen={isListOpen}
       isSelectedPlace={selectedPlace !== null}
+      onTileLoaded={(map) => {
+        const bounds = map.getBounds();
+
+        setMapCenterLocation({
+          ...mapCenterLocation,
+          bounds: {
+            ha: bounds?.ha,
+            oa: bounds?.oa,
+            pa: bounds?.pa,
+            qa: bounds?.qa,
+          },
+        });
+      }}
     >
       <ReSearchButton
         setMyLoca={setMyLoca}
@@ -93,60 +93,24 @@ const MapMain: React.FC<Props> = ({
         lng={myLoca.lng}
         placeName={myLoca.placeName}
       />
-      {selectedCategory === '카페'
-        ? cafeDb?.map((placeDb) => (
-            <PlaceMarker
-              placeDb={placeDb}
-              selectedPlace={selectedPlace}
-              setSelectedPlace={setSelectedPlace}
-              setIsListOpen={setIsListOpen}
-              isListOpen={isListOpen}
-            >
-              <IoMdCafe />
-            </PlaceMarker>
-          ))
-        : selectedCategory === '음식점'
-        ? RestaurantDb?.map((placeDb) => (
-            <CustomInfoMap
-              placeDb={placeDb}
-              selectedPlace={selectedPlace}
-              setSelectedPlace={setSelectedPlace}
-              setIsListOpen={setIsListOpen}
-              isListOpen={isListOpen}
-            >
-              <IoRestaurant />
-            </CustomInfoMap>
-          ))
-        : selectedCategory === '기타'
-        ? etcDb?.map((placeDb) => (
-            <PlaceMarker
-              placeDb={placeDb}
-              selectedPlace={selectedPlace}
-              setSelectedPlace={setSelectedPlace}
-              setIsListOpen={setIsListOpen}
-              isListOpen={isListOpen}
-            >
-              <FaLocationDot />
-            </PlaceMarker>
-          ))
-        : placeDatas?.map((placeDb) => (
-            <PlaceMarker
-              placeDb={placeDb}
-              selectedPlace={selectedPlace}
-              setSelectedPlace={setSelectedPlace}
-              setIsListOpen={setIsListOpen}
-              isListOpen={isListOpen}
-              
-            >
-              {placeDb.Category.categoryName === '카페' ? (
-                <IoMdCafe />
-              ) : placeDb.Category.categoryName === '음식점' ? (
-                <IoRestaurant />
-              ) : (
-                <FaLocationDot />
-              )}
-            </PlaceMarker>
-          ))}
+
+      {placeDatas?.map((placeDb) => (
+        <PlaceMarker
+          placeDb={placeDb}
+          selectedPlace={selectedPlace}
+          setSelectedPlace={setSelectedPlace}
+          setIsListOpen={setIsListOpen}
+          isListOpen={isListOpen}
+        >
+          {placeDb.Category.categoryName === '카페' ? (
+            <IoMdCafe />
+          ) : placeDb.Category.categoryName === '음식점' ? (
+            <IoRestaurant />
+          ) : (
+            <FaLocationDot />
+          )}
+        </PlaceMarker>
+      ))}
     </CustomMap>
   );
 };

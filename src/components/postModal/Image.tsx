@@ -12,17 +12,71 @@ interface Props {
 }
 
 const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
-  const [progressPercent, setProgressPercent] = useState<number>(100);
+  // const [progressPercent, setProgressPercent] = useState<number | null>(100);
 
-  const { mutate } = useMutation(onImageChange);
+  // const { mutate } = useMutation(onImageChange);
 
   const deleteImageHandler = (image: string) => {
     setImageUrl(imageURL.filter((img) => img !== image));
   };
 
+  const isValidImageFileType = (file: File): boolean => {
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    return allowedTypes.includes(file.type);
+  };
+
+  const fileToUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        resolve(dataUrl);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const uploadImage = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    const changeHandler = async () => {
+      const file = input.files?.[0];
+      if (!file) return null;
+
+      // isValidImageFileType 함수의 구현은 생략되어 있습니다.
+      // 해당 함수를 알맞게 구현하여 사용하세요.
+      if (!isValidImageFileType(file)) {
+        alert('jpg 혹은 png 파일만 업로드 가능합니다.');
+        return;
+      }
+
+      try {
+        const imageUrl = await fileToUrl(file);
+        setImageUrl((prev) => [...prev, imageUrl]);
+
+        // 여기에서 imageUrl을 사용하여 필요한 동작을 수행하세요.
+      } catch (error) {
+        console.error('Error converting file to URL:', error);
+      } finally {
+        input.removeEventListener('change', changeHandler);
+      }
+    };
+
+    input.addEventListener('change', changeHandler);
+  };
+
   return (
     <>
-      {progressPercent === 0 ? (
+      {/* {progressPercent === 0 ? (
         <LoadingBox>
           <MoonLoader color="#44a5ff" size={50} />
         </LoadingBox>
@@ -37,6 +91,19 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
           </ImageIcon>
           <Description fontsize="18px">이미지 추가하기</Description>
         </Base>
+      )} */}
+      {imageURL.length > 0 ? (
+        <ImageBox imageURL={imageURL[imageURL.length - 1]} />
+      ) : (
+        <Base onClick={uploadImage}>
+          {/* <Base
+          onClick={() => mutate({ setImageUrl, imageURL, setProgressPercent })}
+        > */}
+          <ImageIcon fontsize="45px">
+            <LuImagePlus />
+          </ImageIcon>
+          <Description fontsize="18px">이미지 추가하기</Description>
+        </Base>
       )}
 
       {imageURL.length > 0 && (
@@ -44,16 +111,18 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
           {imageURL.map((image) => (
             <ImageCard key={image} imageURL={image}>
               <DeleteBtn onClick={() => deleteImageHandler(image)}>
+                {/* <DeleteBtn onClick={() => deleteImageHandler(image)}> */}
                 <GrFormClose />
               </DeleteBtn>
             </ImageCard>
           ))}
           {imageURL.length !== 5 ? (
-            <AddImageCard
+            <AddImageCard onClick={uploadImage}>
+              {/* <AddImageCard
               onClick={() =>
                 mutate({ setImageUrl, imageURL, setProgressPercent })
               }
-            >
+            > */}
               <ImageIcon fontsize="30px">
                 <LuImagePlus />
               </ImageIcon>
@@ -107,7 +176,7 @@ const LoadingBox = styled.div`
 const ImageBox = styled.div<{ imageURL: string }>`
   margin-top: 31px;
   border-radius: 16px;
-  background-image: ${({ imageURL }) => `url(${imageURL})`};
+  background-image: ${({ imageURL }) => `url("${imageURL}")`};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -146,7 +215,7 @@ const ImageCard = styled.div<{ imageURL: string }>`
   width: 114px;
   height: 114px;
   border-radius: 16px;
-  background-image: ${({ imageURL }) => `url(${imageURL})`};
+  background-image: ${({ imageURL }) => `url("${imageURL}")`};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

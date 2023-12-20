@@ -10,6 +10,7 @@ import ContentCard from '../share/ContentCard';
 import CategoryDropdown from './CateogryDropdown';
 import ContentCardSkeleton from '../share/ContentCardSkeleton';
 import CardDarkSkeleton from './CardDarkSkeleton';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 
 interface Props {
   currentLocation: string | undefined;
@@ -28,41 +29,37 @@ const Posts: React.FC<Props> = ({
     handleModalOpen: opeSubModal,
     handleModalClose: closeSubModal,
   } = useModalCtr();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const {
+    isModalOpen: isMainModalOpen,
+    handleModalOpen: openMainModal,
+    handleModalClose: closeMainModal,
+  } = useModalCtr();
 
   const {
     data: contents,
-    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
     refetch,
   } = useGetAllContentsQuery(currentLocation, category);
+  console.log(contents);
 
-  const handleModalOpen = (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
-  ) => {
-    e.stopPropagation();
-    if (!isModalOpen) {
-      setIsModalOpen(true);
-      document.body.style.overflow = 'hidden';
-    }
-  };
-
-  const handleModalClose = () => {
-    if (isModalOpen) {
-      setIsModalOpen(false);
-      document.body.style.overflow = 'auto';
-    }
-  };
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage,
+  });
 
   useEffect(() => {
     refetch();
-  }, [currentLocation, category]);
+  }, []);
 
   return (
     <Base>
       <Wrapper>
         <Header>
           <Title>게시글</Title>
-          <PostBtn onClick={(e) => handleModalOpen(e)}>
+          <PostBtn onClick={(e) => openMainModal(e)}>
             <FiEdit3 />
             <span>새 게시글</span>
           </PostBtn>
@@ -77,19 +74,42 @@ const Posts: React.FC<Props> = ({
         </FilterContainer>
         <Body>
           <RecentCardGrid>
-            {!isLoading
-              ? contents?.map((contentData) => (
-                  <ContentCard contentData={contentData} />
-                ))
-              : themeMode === 'LightMode'
-              ? Array.from({ length: 20 }).map((_) => <ContentContentCardSkeleton />)
-              : Array.from({ length: 20 }).map((_) => <CardDarkSkeleton />)}
+            {isFetching && !isFetchingNextPage
+              ? themeMode === 'LightMode'
+                ? Array.from({ length: 20 }).map((_, idx) => (
+                    <CardSkeleton key={idx} />
+                  ))
+                : Array.from({ length: 20 }).map((_, idx) => (
+                    <CardDarkSkeleton key={idx} />
+                  ))
+              : !isFetching && isFetchingNextPage
+              ? themeMode === 'LightMode'
+                ? Array.from({ length: 20 }).map((_, idx) => (
+                    <CardSkeleton key={idx} />
+                  ))
+                : Array.from({ length: 20 }).map((_, idx) => (
+                    <CardDarkSkeleton key={idx} />
+                  ))
+              : contents?.pages.map((group, i) => (
+                  <>
+                    {group.map((contentData) => (
+                      <Card
+                        key={contentData.postId}
+                        contentData={contentData}
+                      />
+                    ))}
+                  </>
+                ))}
+            {isFetchingNextPage &&
+              !isFetching &&
+              Array.from({ length: 20 }).map((_) => <CardSkeleton />)}
+            <ObserverContainer ref={setTarget}></ObserverContainer>
           </RecentCardGrid>
         </Body>
       </Wrapper>
-      <Modal isOpen={isModalOpen} onClose={opeSubModal}>
+      <Modal isOpen={isMainModalOpen} onClose={opeSubModal}>
         <PostModal
-          closeMainModal={handleModalClose}
+          closeMainModal={closeMainModal}
           isSubModalOpen={isSubModalOpen}
           openSubModal={opeSubModal}
           closeSubModal={closeSubModal}
@@ -189,4 +209,8 @@ const FilterContainer = styled.div`
   align-items: center;
   gap: 8px;
   width: 100%;
+`;
+
+const ObserverContainer = styled.div`
+  height: 100px;
 `;

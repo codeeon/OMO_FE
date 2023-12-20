@@ -11,11 +11,11 @@ const PlaceContentsDetail: React.FC<{ placeDb: LocationType | null }> = ({
   placeDb,
 }) => {
   if (!placeDb) return;
-  const { id, categoryName, storeName, address, star, imageURL } = placeDb;
+  const { Category, storeName, address, Posts, starAvg } = placeDb;
   return (
     <Base>
       <BodyContainer>
-        <ImageHeader imageURL={imageURL} />
+        <ImageHeader imageURL={Posts[0].imgUrl} />
         <PlaceName>{storeName}</PlaceName>
         <Address>
           <HiLocationMarker />
@@ -24,13 +24,13 @@ const PlaceContentsDetail: React.FC<{ placeDb: LocationType | null }> = ({
         <RatingContainer>
           {Array.from({ length: 5 }, (_, idx) => (
             <StarWrapper key={idx}>
-              {idx < star ? <FaStar /> : <FaRegStar />}
+              {idx < starAvg ? <FaStar /> : <FaRegStar />}
             </StarWrapper>
           ))}
-          <span>{star}점</span>
+          <span>{starAvg}점</span>
         </RatingContainer>
         <BookmarkBtn />
-        <ContentsSection storeName={storeName} />
+        {/* <ContentsSection Posts={Posts} /> */}
       </BodyContainer>
     </Base>
   );
@@ -47,9 +47,6 @@ const Base = styled.div`
 
   width: 420px;
   height: calc(100vh - 60px);
-
-  position: absolute;
-  top: 0;
 
   background-color: ${({ theme }) => theme.color.bg};
   border-right: 1px solid #d9d9d9;

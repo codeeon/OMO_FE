@@ -12,7 +12,7 @@ export interface MapLocationType {
     lng: number | null;
   };
   isPanto: boolean;
-  bounds: kakao.maps.LatLngBounds | undefined;
+  bounds: BoundsType | null;
 }
 
 export interface MapCurrentLocationType {
@@ -35,9 +35,19 @@ export interface ThemeType {
 
 // 여기부터 실제 서버 타입
 export interface PostType {
+  User: {
+    nickname: string;
+  };
+  Category: {
+    categoryName: string;
+  };
+  Location: {
+    locationId: number;
+    storeName: string;
+    address: string;
+    starAvg: number;
+  };
   postId: number;
-  User: { nickname: string };
-  Location: { storName: string; address: string; starAvg: number };
   imgUrl: string[];
   content: string;
   likeCount: number;
@@ -81,7 +91,7 @@ export interface CommentType {
 
 export interface HotPostsType {
   Category: { categoryName: string };
-  Location: { storeName: string };
+  Location: { storeName: string; latitude: number; longitude: number };
   content: string;
   imgUrl: string[];
 }
@@ -108,7 +118,7 @@ export interface CommentPostsType {
 
 export interface LocationType {
   Category: { categoryName: string };
-  Posts: [{ imgUrl: string }];
+  Posts: { postId: number; imgUrl: string; star: number }[];
   address: string;
   distance: number;
   latitude: string;
