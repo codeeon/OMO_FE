@@ -11,14 +11,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/react-transition-group": "^4.4.9",
+    "@types/uuid": "^9.0.7",
     "axios": "^1.6.2",
+    "firebase": "^10.7.0",
+    "framer-motion": "^10.16.16",
+    "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.0",
     "react-icons": "^4.12.0",
+    "react-kakao-maps-sdk": "^1.1.24",
+    "react-loading-skeleton": "^3.3.1",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.20.1",
+    "react-spinners": "^0.13.8",
+    "react-spring": "^9.7.3",
+    "react-transition-group": "^4.4.5",
     "styled-components": "^6.1.1",
-    "styled-reset": "^4.5.1"
+    "styled-reset": "^4.5.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
@@ -26,11 +39,14 @@
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "babel-plugin-styled-components": "^2.1.4",
     "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "kakao.maps.d.ts": "^0.1.39",
     "typescript": "^5.2.2",
     "vite": "^5.0.0",
+    "vite-plugin-html-env": "^1.2.8",
     "vite-plugin-mkcert": "^1.17.1"
   }
 }

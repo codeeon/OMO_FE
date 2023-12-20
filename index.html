@@ -1,13 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%VITE_APP_KAKAO_MAP_KEY%&libraries=services"
+    ></script>
+    <link
+      rel="preconnect"
+      href="https://cdn.jsdelivr.net"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
+    />
+    <title>OMO</title>
   </head>
   <body>
     <div id="root"></div>
+    <div id="modal-root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="text/javascript">
+      (function () {
+        function getInitialColorMode() {
+          const isClient = typeof window !== 'undefined';
+          if (isClient) {
+            const persistedColorPreference =
+              window.localStorage.getItem('theme');
+
+            if (persistedColorPreference) {
+              return persistedColorPreference;
+            }
+
+            const systemPreference = window.matchMedia(
+              '(prefers-color-scheme: DarkMode)',
+            );
+            if (systemPreference.matches) {
+              return 'true';
+            }
+            return 'false';
+          }
+        }
+        const colorMode = getInitialColorMode();
+        document.documentElement.style.setProperty(
+          'background-color',
+          colorMode === 'LightMode' ? '#FFFFFF' : '#1b1b20',
+        );
+        document.documentElement.style.setProperty(
+          'color',
+          colorMode === 'LightMode' ? '#101010' : '#fff',
+        );
+      })();
+    </script>
   </body>
 </html>
