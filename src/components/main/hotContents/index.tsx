@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SetStateAction } from 'react';
 import styled, { css } from 'styled-components';
 import HotContentsCard from './Card';
 import CardSkeleton from './CardSkeleton';
@@ -11,9 +11,16 @@ import { MapLocationType } from '../../../model/interface';
 interface Props {
   currentLocation: string | undefined;
   themeMode: string | null;
+  mapCenterLocation: MapLocationType;
+  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
 }
 
-const HotContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
+const HotContents: React.FC<Props> = ({
+  currentLocation,
+  themeMode,
+  mapCenterLocation,
+  setMapCenterLocation,
+}) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -70,7 +77,11 @@ const HotContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
         {!isLoading
           ? hotPosts?.map((post) => (
               <CarouselItem activeIndex={activeIndex}>
-                <HotContentsCard post={post} />
+                <HotContentsCard
+                  post={post}
+                  mapCenterLocation={mapCenterLocation}
+                  setMapCenterLocation={setMapCenterLocation}
+                />
               </CarouselItem>
             ))
           : themeMode === 'LightMode'

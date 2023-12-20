@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import MapMain from '../components/map/mainMap';
 import MapPlaceList from '../components/map/VerticalBar/placeList/MapPlaceList';
@@ -9,23 +9,24 @@ import {
   MapLocationType,
 } from '../model/interface';
 import PlaceContentsDetail from '../components/map/VerticalBar/placeDetail/PlaceContentsDetail';
-import { getCurrentCoords } from '../function/kakao';
 import useGetLookAroundQuery from '../hooks/reactQuery/map/useGetLookAroundQuery';
 
-const Map: React.FC = () => {
-  const [myLoca, setMyLoca] = useState<MapCurrentLocationType>({
-    lat: null,
-    lng: null,
-    placeName: null,
-  });
+interface Props {
+  myLoca: MapCurrentLocationType;
+  setMyLoca: React.Dispatch<SetStateAction<MapCurrentLocationType>>;
+  mapCenterLocation: MapLocationType;
+  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
+}
+
+const Map: React.FC<Props> = ({
+  myLoca,
+  setMyLoca,
+  mapCenterLocation,
+  setMapCenterLocation,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
   const [selectedPlace, setSelectedPlace] = useState<LocationType | null>(null);
   const [isListOpen, setIsListOpen] = useState<boolean>(true);
-  const [mapCenterLocation, setMapCenterLocation] = useState<MapLocationType>({
-    center: { lat: myLoca.lat, lng: myLoca.lng },
-    isPanto: false,
-    bounds: null,
-  });
 
   const mapRef = useRef<kakao.maps.Map>(null);
 
@@ -50,28 +51,6 @@ const Map: React.FC = () => {
       setIsListOpen(!isListOpen);
     }
   };
-
-  useEffect(() => {
-    const getCurLoc = async () => {
-      const { latitude, longitude } = await getCurrentCoords();
-      const bounds = mapRef.current?.getBounds();
-
-      setMyLoca({
-        ...myLoca,
-        lat: latitude,
-        lng: longitude,
-      });
-
-      setMapCenterLocation({
-        ...mapCenterLocation,
-        center: {
-          lat: latitude,
-          lng: longitude,
-        },
-      });
-    };
-    getCurLoc();
-  }, []);
 
   useEffect(() => {
     if (mapCenterLocation.bounds) {

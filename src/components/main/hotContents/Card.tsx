@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 import { HotPostsType, MapLocationType } from '../../../model/interface';
 import { HiArrowNarrowRight } from 'react-icons/hi';
@@ -6,13 +6,26 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
   post: HotPostsType;
+  mapCenterLocation: MapLocationType;
+  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
 }
 
-const Card: React.FC<Props> = ({ post }) => {
+const Card: React.FC<Props> = ({
+  post,
+  mapCenterLocation,
+  setMapCenterLocation,
+}) => {
   const { imgUrl, Location, content, Category: category } = post;
   const navigate = useNavigate();
 
   const moveMapHandler = () => {
+    setMapCenterLocation({
+      ...mapCenterLocation,
+      center: {
+        lat: Location.latitude,
+        lng: Location.longitude,
+      },
+    });
     navigate('/map');
   };
 
