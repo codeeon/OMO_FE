@@ -16,7 +16,6 @@ const ContentsSection: React.FC<Props> = ({ posts }) => {
   const goToContentsPage = () => {
     navigate('/contents');
   };
-  console.log(posts);
 
   return (
     <Base>

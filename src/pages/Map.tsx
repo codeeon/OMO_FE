@@ -10,6 +10,7 @@ import {
 } from '../model/interface';
 import PlaceContentsDetail from '../components/map/VerticalBar/placeDetail/PlaceContentsDetail';
 import useGetLookAroundQuery from '../hooks/reactQuery/map/useGetLookAroundQuery';
+import useGetBookmarkQuery from '../hooks/reactQuery/bookmark/useGetBookmarkQuery';
 
 interface Props {
   myLoca: MapCurrentLocationType;
@@ -29,7 +30,6 @@ const Map: React.FC<Props> = ({
   setSelectedPlace,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
-
   const [isListOpen, setIsListOpen] = useState<boolean>(true);
 
   const mapRef = useRef<kakao.maps.Map>(null);
@@ -48,6 +48,8 @@ const Map: React.FC<Props> = ({
     mapCenterLocation.bounds?.qa,
   );
 
+  const { data: bookmarkPlaceDb } = useGetBookmarkQuery();
+  
   const onClickToggleBtn = () => {
     if (selectedPlace !== null) {
       setSelectedPlace(null);
@@ -76,6 +78,7 @@ const Map: React.FC<Props> = ({
           setMapCenterLocation={setMapCenterLocation}
           setMyLoca={setMyLoca}
           mapRef={mapRef}
+          bookmarkPlaceDb={bookmarkPlaceDb}
         />
       </ListWrapper>
       <ToggleBtn
@@ -91,7 +94,10 @@ const Map: React.FC<Props> = ({
         isDetailListOpen={selectedPlace !== null}
         isListOpen={isListOpen}
       >
-        <PlaceContentsDetail placeDb={selectedPlace} />
+        <PlaceContentsDetail
+          placeDb={selectedPlace}
+          bookmarkPlaceDb={bookmarkPlaceDb}
+        />
       </DetailListWrapper>
       <MapMain
         placeDatas={placeDatas}
@@ -105,6 +111,7 @@ const Map: React.FC<Props> = ({
         setIsListOpen={setIsListOpen}
         isListOpen={isListOpen}
         mapRef={mapRef}
+        bookmarkPlaceDb={bookmarkPlaceDb}
       />
     </Base>
   );

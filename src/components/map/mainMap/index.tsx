@@ -5,6 +5,7 @@ import { Map } from 'react-kakao-maps-sdk';
 import MapLevelButton from './LevelButton.tsx';
 import MapCurrentButton from './CurrentButton.tsx';
 import {
+  BookmarkLocationType,
   LocationType,
   MapCurrentLocationType,
   MapLocationType,
@@ -15,6 +16,9 @@ import { FaLocationDot } from 'react-icons/fa6';
 import PlaceMarker from './customInfo/PlaceMarker.tsx';
 import CurrentMarker from './customInfo/CurrentMarker.tsx';
 import ReSearchButton from './ReSearchButton.tsx';
+import BookmarkButton from './BookmarkButton.tsx';
+import useGetBookmarkQuery from '../../../hooks/reactQuery/bookmark/useGetBookmarkQuery.tsx';
+import BookMarker from './customInfo/BookMarker.tsx';
 
 declare global {
   interface Window {
@@ -34,6 +38,7 @@ interface Props {
   isListOpen: boolean;
   setMyLoca: React.Dispatch<React.SetStateAction<MapCurrentLocationType>>;
   mapRef: React.RefObject<kakao.maps.Map>;
+  bookmarkPlaceDb: BookmarkLocationType[];
 }
 
 const MapMain: React.FC<Props> = ({
@@ -47,9 +52,13 @@ const MapMain: React.FC<Props> = ({
   myLoca,
   setMyLoca,
   mapRef,
+  bookmarkPlaceDb,
 }) => {
   const [level, setLevel] = useState(2);
-
+  const [isShowBookmarker, setIsShowBookmarker] = useState<boolean>(false);
+  const ToggleBookMarker = () => {
+    setIsShowBookmarker(!isShowBookmarker);
+  };
   return (
     <CustomMap
       center={mapCenterLocation.center}
@@ -80,6 +89,7 @@ const MapMain: React.FC<Props> = ({
         mapCenterLocation={mapCenterLocation}
         setMapCenterLocation={setMapCenterLocation}
       />
+      <BookmarkButton ToggleBookMarker={ToggleBookMarker} />
       <MapCurrentButton
         setMapCenterLocation={setMapCenterLocation}
         mapCenterLocation={mapCenterLocation}
@@ -92,6 +102,8 @@ const MapMain: React.FC<Props> = ({
         lng={myLoca.lng}
         placeName={myLoca.placeName}
       />
+      {isShowBookmarker &&
+        bookmarkPlaceDb.map((place) => <BookMarker place={place} />)}
 
       {placeDatas?.map((placeDb) => (
         <PlaceMarker

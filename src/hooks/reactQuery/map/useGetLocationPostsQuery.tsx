@@ -7,7 +7,6 @@ export const getLocations = async (
   latitude: number | undefined,
   longitude: number | undefined,
 ): Promise<LocationPostsType> => {
-  // const params = { latitude: String(latitude), longitude: String(longitude) };
   const params = { latitude, longitude };
   const response = await instance.get(`/locations/${locationId}`, { params });
 
@@ -19,8 +18,12 @@ const useGetLocationPostsQuery = (
   latitude: number | undefined,
   longitude: number | undefined,
 ) =>
-  useQuery(['locations', locationId], () =>
-    getLocations(locationId, latitude, longitude),
+  useQuery(
+    ['locations', locationId],
+    () => getLocations(locationId, latitude, longitude),
+    {
+      enabled: false,
+    },
   );
 
 export default useGetLocationPostsQuery;

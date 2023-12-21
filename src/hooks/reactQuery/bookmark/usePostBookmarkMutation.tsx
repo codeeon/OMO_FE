@@ -2,10 +2,7 @@ import { MutationFunction, useMutation, useQueryClient } from 'react-query';
 import authApi from '../../../axios/authApi';
 import { PostDetailType } from '../../../model/interface';
 
-const postBookmark: MutationFunction<
-  void,
-  { locationId: number | undefined }
-> = async ({ locationId }) => {
+const postBookmark = async (locationId: number | undefined) => {
   const response = await authApi.post(`/posts/${locationId}/bookmark`);
   return response.data;
 };
@@ -16,32 +13,27 @@ const usePostBookmarkMutation = (locationId: number | undefined) => {
     void,
     unknown,
     { locationId: number | undefined }
-  >(postBookmark, {
-    onMutate: async ({ locationId }) => {
-      queryClient.cancelQueries(['location', locationId]);
-      const previousLocationData: PostDetailType | undefined =
-        queryClient.getQueryData(['location', locationId]);
+  >(() => postBookmark(locationId), {
+    onMutate: async () => {
+      queryClient.cancelQueries('bookmarkPlaces');
+      const previousLocationData = queryClient.getQueryData('bookmarkPlaces');
 
       if (previousLocationData) {
-        const updatedPostDat = {
-          ...previousLocationData,
-          likeCount: previousLocationData.likeCount + 1,
-        };
-        queryClient.setQueryData(['location', locationId], updatedPostDat);
+        queryClient.setQueryData(['bookmarkPlaces'], previousLocationData);
       }
-      return { previousPostData };
+      return { previousLocationData };
     },
     onError: (err, brandId, context) => {
-      queryClient.setQueryData(['post', locationId], context?.previousPostData);
+      queryClient.setQueryData('bookmarkPlaces', context?.previousLocationData);
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries(['location', locationId]);
+      queryClient.invalidateQueries('bookmarkPlaces');
     },
   });
   return {
-    postMutate: mutation.mutate,
-    isPostLoading: mutation.isLoading,
+    postBookmarkingMutate: mutation.mutate,
+    isPostBookmarkingLoading: mutation.isLoading,
   };
 };
 

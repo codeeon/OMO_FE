@@ -36,6 +36,7 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const clickToggleBtn = () => {
     toggleTheme();
     setIsOpen(false);
+    window.document.location.reload();
   };
 
   const navigate = useNavigate();
