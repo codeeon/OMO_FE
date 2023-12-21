@@ -11,6 +11,7 @@ const ModalHeader: React.FC<{
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   post: PostDetailType;
 }> = ({ userId, createdAt, contentId, closeModalHandler, post }) => {
+  
   return (
     <Base>
       <UserProfile />

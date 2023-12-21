@@ -6,6 +6,7 @@ import Contents from '../pages/Contents';
 import Map from '../pages/Map';
 import Login from '../pages/Login';
 import {
+  LocationType,
   MapCurrentLocationType,
   MapLocationType,
   ThemeType,
@@ -28,6 +29,7 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
     isPanto: false,
     bounds: null,
   });
+  const [selectedPlace, setSelectedPlace] = useState<LocationType | null>(null);
 
   useEffect(() => {
     const getCurLoc = async () => {
@@ -91,6 +93,8 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
               setMyLoca={setMyLoca}
               mapCenterLocation={mapCenterLocation}
               setMapCenterLocation={setMapCenterLocation}
+              selectedPlace={selectedPlace}
+              setSelectedPlace={setSelectedPlace}
             />
           }
         />

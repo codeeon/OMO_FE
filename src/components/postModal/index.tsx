@@ -32,6 +32,7 @@ const PostModal: React.FC<Props> = ({
 }) => {
   const [isValidate, setIsValidate] = useState<boolean>(false);
   const [imageURL, setImageUrl] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [starNum, setStarNum] = useState(0);
   const [searchValue, setSearchValue] =
     useState<kakao.maps.services.PlacesSearchResult>([]);
@@ -62,6 +63,8 @@ const PostModal: React.FC<Props> = ({
     setText('');
   };
 
+  
+
   useEffect(() => {
     if (imageURL.length !== 0 && text && selectedInfo.placeName) {
       setIsValidate(true);
@@ -77,12 +80,13 @@ const PostModal: React.FC<Props> = ({
       content: text.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
       star: starNum,
       categoryName: selectedInfo.categoryName,
-      imgUrl: imageURL,
+      imgUrl: files,
       storeName: selectedInfo.placeName,
       address: selectedInfo.addressName,
       latitude: selectedInfo.latitude,
       longitude: selectedInfo.longitude,
     };
+    
     if (isValidate) {
       postContentMutate(newContent);
       clearPostHandler(e);
@@ -100,7 +104,12 @@ const PostModal: React.FC<Props> = ({
           작성완료
         </CompleteBtn>
       </Header>
-      <ImageFile imageURL={imageURL} setImageUrl={setImageUrl} />
+      <ImageFile
+        imageURL={imageURL}
+        setImageUrl={setImageUrl}
+        setFiles={setFiles}
+        files={files}
+      />
       <PostModalPlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}

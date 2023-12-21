@@ -4,24 +4,26 @@ import { IoIosArrowForward } from 'react-icons/io';
 import ContentCard from './ContentCard';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSk from './ContentCardSk';
+import { LocationPostsType } from '../../../../model/interface';
 
 interface Props {
-  Posts: { postId: number; imgUrl: string; star: number }[];
+  posts: LocationPostsType | undefined;
 }
 
-const ContentsSection: React.FC<Props> = ({ Posts }) => {
+const ContentsSection: React.FC<Props> = ({ posts }) => {
   const navigate = useNavigate();
 
   const goToContentsPage = () => {
     navigate('/contents');
   };
+  console.log(posts);
 
   return (
     <Base>
       <Header>
         <Title>
           <span>게시글</span>
-          <span>{Posts?.length}</span>
+          <span>{posts?.posts.length}</span>
         </Title>
         <AllBtn onClick={goToContentsPage}>
           <span>전체보기</span>
@@ -29,7 +31,7 @@ const ContentsSection: React.FC<Props> = ({ Posts }) => {
         </AllBtn>
       </Header>
       <ListContainer>
-        {Posts?.map((post) => (
+        {posts?.posts.map((post) => (
           <ContentCard key={post.postId} post={post} />
         ))}
       </ListContainer>

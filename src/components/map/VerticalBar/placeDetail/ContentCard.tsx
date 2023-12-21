@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ContentType } from '../../../../model/interface';
+import { LocationPostType } from '../../../../model/interface';
 import styled from 'styled-components';
 import { TbMessage } from 'react-icons/tb';
 import LikeBtn from '../../../detailModal/LikeBtn';
@@ -8,12 +8,10 @@ import { FaRegStar } from 'react-icons/fa';
 import Modal from '../../../Modal/Modal';
 import DetailContentsModal from '../../../detailModal/ContentsModal';
 interface Props {
-  post: { postId: number; imgUrl: string; star: number };
+  post: LocationPostType;
 }
 
 const ContentCard: React.FC<Props> = ({ post }) => {
-  const { postId, imgUrl, star } = post;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleModalHandler = (
@@ -29,33 +27,33 @@ const ContentCard: React.FC<Props> = ({ post }) => {
           <UserProfile />
           <UserInfoContainer>
             <UserId>뽀롱</UserId>
-            <Date>{createdAt}</Date>
+            <Date>{post.createdAt.split('T')[0]}</Date>
           </UserInfoContainer>
         </UserContainer>
-        <ImageBox imageURL={imgUrl} />
+        <ImageBox imageURL={post.imgUrl[0]} />
         <RatingContainer>
           {Array.from({ length: 5 }, (_, idx) => (
             <StarWrapper key={idx}>
-              {idx < star ? <FaStar /> : <FaRegStar />}
+              {idx < post.star ? <FaStar /> : <FaRegStar />}
             </StarWrapper>
           ))}
-          <span>{star}점</span>
+          <span>{post.star}점</span>
         </RatingContainer>
-        <Text dangerouslySetInnerHTML={{ __html: content }} />
+        <Text dangerouslySetInnerHTML={{ __html: post.content }} />
         <Footer>
           <FooterItem color="red">
-            <LikeBtn />
-            <span>{likeCount}</span>
+            <LikeBtn postId={post.postId} />
+            <span>{post.likeCount}</span>
           </FooterItem>
           <FooterItem color="blue">
             <TbMessage />
-            <span>{commentCount}</span>
+            <span>{post.commentCount}</span>
           </FooterItem>
         </Footer>
       </Base>
       <Modal isOpen={isModalOpen} onClose={toggleModalHandler}>
         <DetailContentsModal
-          postId={postId}
+          postId={post.postId}
           closeModalHandler={toggleModalHandler}
         />
       </Modal>

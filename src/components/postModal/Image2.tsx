@@ -9,9 +9,11 @@ import { MoonLoader } from 'react-spinners';
 interface Props {
   imageURL: string[];
   setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
+  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  files: File[];
 }
 
-const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
+const Image: React.FC<Props> = ({ imageURL, setImageUrl, setFiles, files }) => {
   const [progressPercent, setProgressPercent] = useState<number | null>(100);
 
   const { mutate } = useMutation(onImageChange);
@@ -38,6 +40,7 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
         reject(error);
       };
 
+      // Read the file as a data URL (base64)
       reader.readAsDataURL(file);
     });
   };
@@ -58,6 +61,8 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
 
       try {
         const imageUrl = await fileToUrl(file);
+
+        setFiles((prev) => [...prev, file]);
         setImageUrl((prev) => [...prev, imageUrl]);
       } catch (error) {
         console.error('Error converting file to URL:', error);
@@ -71,7 +76,7 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
 
   return (
     <>
-      {progressPercent === 0 ? (
+      {/* {progressPercent === 0 ? (
         <LoadingBox>
           <MoonLoader color="#44a5ff" size={50} />
         </LoadingBox>
@@ -86,7 +91,7 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
           </ImageIcon>
           <Description fontsize="18px">이미지 추가하기</Description>
         </Base>
-      )}
+      )} */}
       {imageURL.length > 0 ? (
         <ImageBox imageURL={imageURL[imageURL.length - 1]} />
       ) : (

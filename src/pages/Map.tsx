@@ -16,6 +16,8 @@ interface Props {
   setMyLoca: React.Dispatch<SetStateAction<MapCurrentLocationType>>;
   mapCenterLocation: MapLocationType;
   setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
+  selectedPlace: LocationType | null;
+  setSelectedPlace: React.Dispatch<SetStateAction<LocationType | null>>;
 }
 
 const Map: React.FC<Props> = ({
@@ -23,9 +25,11 @@ const Map: React.FC<Props> = ({
   setMyLoca,
   mapCenterLocation,
   setMapCenterLocation,
+  selectedPlace,
+  setSelectedPlace,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
-  const [selectedPlace, setSelectedPlace] = useState<LocationType | null>(null);
+
   const [isListOpen, setIsListOpen] = useState<boolean>(true);
 
   const mapRef = useRef<kakao.maps.Map>(null);

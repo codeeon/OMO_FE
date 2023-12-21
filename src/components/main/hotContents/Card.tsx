@@ -1,6 +1,10 @@
 import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
-import { HotPostsType, MapLocationType } from '../../../model/interface';
+import {
+  HotPostsType,
+  LocationType,
+  MapLocationType,
+} from '../../../model/interface';
 import { HiArrowNarrowRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +30,7 @@ const Card: React.FC<Props> = ({
         lng: Location.longitude,
       },
     });
+
     navigate('/map');
   };
 

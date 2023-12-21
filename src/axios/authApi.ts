@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import auth from './auth';
 
-const instance: AxiosInstance = axios.create({
+export const authApi: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_SERVER_URL,
   // withCredentials: true,
 });
 
-instance.interceptors.request.use(
+authApi.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken');
 
@@ -78,4 +78,4 @@ instance.interceptors.response.use(
   },
 );
 
-export default instance;
+export default authApi;

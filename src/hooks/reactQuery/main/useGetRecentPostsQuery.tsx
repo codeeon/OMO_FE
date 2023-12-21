@@ -10,12 +10,11 @@ export const getRecentPosts = async (
   categoryName: string,
 ): Promise<RecentPostsType[]> => {
   const params = {
-    districtName: districtName !== '전체' ? districtName : null,
-    categoryName: categoryName !== '전체' ? categoryName : null,
+    districtName: districtName !== '전체' ? districtName : '',
+    categoryName: categoryName !== '전체' ? categoryName : '',
     limit: 12,
   };
   const response = await instance.get(`/main/recent`, { params });
-
   return response.data;
 };
 

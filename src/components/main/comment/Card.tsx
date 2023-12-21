@@ -5,7 +5,7 @@ import { FaQuoteLeft } from 'react-icons/fa';
 import { CommentPostsType } from '../../../model/interface';
 
 const Card: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
-  const { content } = comment;
+  const { PostId, content, Post } = comment;
   return (
     <Base>
       <QuoteContainer>
@@ -14,7 +14,7 @@ const Card: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
       <Text>{content}</Text>
       <PlaceName>
         <LuMapPin />
-        <span>서울시 광진구 아차산</span>
+        <span>{Post.Location.address}</span>
       </PlaceName>
     </Base>
   );

@@ -13,7 +13,7 @@ export const getLocations = async (
   const params = { latitude, longitude, categoryName, qa, pa, ha, oa };
 
   const response = await instance.get(`/locations`, { params });
-
+  console.log(response.data);
   return response.data.location || response.data;
 };
 

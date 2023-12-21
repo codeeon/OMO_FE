@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/comment';
