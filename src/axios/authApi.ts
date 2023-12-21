@@ -22,7 +22,7 @@ authApi.interceptors.request.use(
   },
 );
 
-instance.interceptors.response.use(
+authApi.interceptors.response.use(
   (response: AxiosResponse) =>
     // response,
     {
@@ -62,7 +62,7 @@ instance.interceptors.response.use(
           req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
 
           req._retry = false;
-          return instance(req);
+          return authApi(req);
         } else {
           console.log('리프레쉬 토큰이 없습니다');
         }

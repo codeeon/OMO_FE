@@ -51,7 +51,7 @@ const Posts: React.FC<Props> = ({
 
   useEffect(() => {
     refetch();
-  }, []);
+  }, [currentLocation, category]);
 
   return (
     <Base>
