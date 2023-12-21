@@ -4,7 +4,6 @@ import { instance } from '../../../apis/apis';
 
 const getDetailContent = async (postId: number): Promise<PostDetailType> => {
   const response = await instance.get(`/posts/${postId}`);
-
   return response.data;
 };
 

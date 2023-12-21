@@ -24,6 +24,7 @@ const Posts: React.FC<Props> = ({
   themeMode,
 }) => {
   const [category, setCategory] = useState<string>('전체');
+
   const {
     isModalOpen: isSubModalOpen,
     handleModalOpen: opeSubModal,
@@ -122,7 +123,8 @@ export default Posts;
 
 const Base = styled.div`
   box-sizing: border-box;
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
+  height: auto;
   padding-top: 35px;
   display: flex;
   flex-direction: column;

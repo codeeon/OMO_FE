@@ -13,7 +13,11 @@ const postComment: MutationFunction<
   return response.data;
 };
 
-const usePostCommentQuery = () => {
+const usePostCommentQuery = ({
+  contentId,
+}: {
+  contentId: number | undefined;
+}) => {
   const queryClient = useQueryClient();
   const mutation = useMutation<
     void,
@@ -21,7 +25,7 @@ const usePostCommentQuery = () => {
     { contentId: number | undefined; newComment: PostCommentType }
   >(postComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries('contents');
+      queryClient.invalidateQueries(['posts', contentId]);
     },
   });
   return {

@@ -14,7 +14,7 @@ const Dropdown: React.FC<Props> = ({ commentId, contentId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const { deleteMutate, isDeleteLoading } = useDeleteCommentMutation();
+  const { deleteMutate, isDeleteLoading } = useDeleteCommentMutation({contentId});
 
   const toggleDropdownHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
