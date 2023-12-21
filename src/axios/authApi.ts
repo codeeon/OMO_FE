@@ -22,8 +22,13 @@ authApi.interceptors.request.use(
   },
 );
 
-authApi.interceptors.response.use(
-  (response: AxiosResponse) => response,
+instance.interceptors.response.use(
+  (response: AxiosResponse) =>
+    // response,
+    {
+      console.log('인터셉터 응답 -> ', response);
+      return response;
+    },
   async (error) => {
     console.log('에러 발생 -> ', error);
     const req = error.config;
@@ -38,19 +43,29 @@ authApi.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
-        console.log('try 진입');
+        if (refreshToken) {
+          console.log('try 진입');
 
-        const refreshResponse = await auth.post(
-          '/tokens/refresh',
-          { refreshToken },
-          // { withCredentials: true },
-        );
+          const refreshResponse = await auth.post(
+            '/tokens/refresh',
+            null,
+            {
+              headers: {
+                refreshToken: `${refreshToken}`,
+              },
+            },
+            // { withCredentials: true },
+          );
 
-        console.log('리프레쉬 응답 데이터 -> ', refreshResponse);
+          console.log('리프레쉬 응답 데이터 -> ', refreshResponse);
 
-        // 새로 갱신된 토큰으로 원래 요청을 다시 시도
-        req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
-        return authApi(req);
+          req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
+
+          req._retry = false;
+          return instance(req);
+        } else {
+          console.log('리프레쉬 토큰이 없습니다');
+        }
       } catch (refreshError) {
         console.error('토큰 새로 고침 실패:', refreshError);
         throw refreshError;

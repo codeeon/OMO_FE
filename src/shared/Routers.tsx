@@ -4,8 +4,6 @@ import Navbar from '../components/share/Navbar';
 import Home from '../pages/Home';
 import Contents from '../pages/Contents';
 import Map from '../pages/Map';
-
-import Signup from '../pages/Signup';
 import Login from '../pages/Login';
 import {
   LocationType,
@@ -15,6 +13,7 @@ import {
 } from '../model/interface';
 import { getCurrentCoords } from '../function/kakao';
 import Mypage from '../pages/Mypage';
+import Email from '../pages/Email';
 
 const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const [currentLocation, setCurrentLocation] = useState<string | undefined>(
@@ -99,7 +98,7 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
             />
           }
         />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<Email />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/mypage"

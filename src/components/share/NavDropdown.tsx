@@ -40,11 +40,14 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
 
   const navigate = useNavigate();
 
+  const userId = localStorage.getItem('userId');
+
   const handleLogout = () => {
+    // 여기에 auth.POST /logout req 넣을 예정
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userId');
     alert('로그아웃이 완료되었습니다.');
-    // redirect를 홈으로 둘지 어떨지.
     navigate('/');
   };
 
@@ -104,13 +107,23 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
             </>
           )}
         </DropdownItem>
-        <DropdownItem
-          onClick={handleLogout}
-          variants={itemVariants}
-          style={{ color: 'red' }}
-        >
-          로그아웃
-        </DropdownItem>
+        {userId ? (
+          <DropdownItem
+            onClick={handleLogout}
+            variants={itemVariants}
+            style={{ color: 'red' }}
+          >
+            로그아웃
+          </DropdownItem>
+        ) : (
+          <DropdownItem
+            onClick={() => navigate('/login')}
+            variants={itemVariants}
+            style={{ color: 'red' }}
+          >
+            로그인
+          </DropdownItem>
+        )}
       </DropdownList>
     </NavContainer>
   );
