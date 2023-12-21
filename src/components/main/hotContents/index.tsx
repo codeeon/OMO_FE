@@ -1,9 +1,9 @@
-import { useState, useEffect, SetStateAction } from 'react';
-import styled, { css } from 'styled-components';
+import { useState, useEffect, SetStateAction, useId } from 'react';
+import styled from 'styled-components';
 import CardSkeleton from './CardSkeleton';
 import useGetHotPosts from '../../../hooks/reactQuery/main/useGetHotPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
-import { MapLocationType } from '../../../model/interface';
+import { LocationType, MapLocationType } from '../../../model/interface';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
 
@@ -21,6 +21,8 @@ const HotContents: React.FC<Props> = ({
   setMapCenterLocation,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const uniqueId = useId();
 
   const {
     data: hotPosts,
@@ -42,7 +44,7 @@ const HotContents: React.FC<Props> = ({
     >
       {!isLoading
         ? hotPosts?.map((post) => (
-            <CarouselItem activeIndex={activeIndex}>
+            <CarouselItem activeIndex={activeIndex} key={post.imgUrl[0]}>
               <Card
                 post={post}
                 mapCenterLocation={mapCenterLocation}
@@ -53,12 +55,12 @@ const HotContents: React.FC<Props> = ({
         : themeMode === 'LightMode'
         ? Array.from({ length: 9 }).map((_, idx) => (
             <CarouselItem activeIndex={activeIndex} key={idx}>
-              <CardSkeleton />
+              <CardSkeleton key={idx} />
             </CarouselItem>
           ))
         : Array.from({ length: 9 }).map((_, idx) => (
             <CarouselItem activeIndex={activeIndex} key={idx}>
-              <CardDarkSkeleton />
+              <CardDarkSkeleton key={idx} />
             </CarouselItem>
           ))}
     </Carousel>

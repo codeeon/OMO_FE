@@ -23,7 +23,7 @@ const Mypage: React.FC<{ currentLocation: string | undefined }> = ({
   currentLocation,
 }) => {
   const { data: userData } = useGetUserDataQuery();
-  console.log(userData);
+
   // 위에 유저 데이터, 아래 무한 스크롤
 
   // const targetElementRef = useRef(null);

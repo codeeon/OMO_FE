@@ -31,7 +31,6 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
   };
 
   useEffect(() => {
-    console.log(selectedCateogry);
     refetch();
   }, [currentLocation, selectedCateogry]);
 
@@ -58,6 +57,7 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
               <CategoryBtn
                 isSelected={selectedCateogry === category}
                 onClick={() => changeCateogryHandler(category)}
+                key={category}
               >
                 {category}
               </CategoryBtn>
@@ -71,18 +71,18 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
     >
       {!isLoading
         ? recentPosts?.map((post) => (
-            <CarouselItem activeIndex={activeIndex}>
+            <CarouselItem activeIndex={activeIndex} key={post.postId}>
               <RecentCard key={post.postId} post={post} />
             </CarouselItem>
           ))
         : themeMode === 'LightMode'
         ? Array.from({ length: 4 }).map((_, idx) => (
-            <CarouselItem activeIndex={activeIndex}>
+            <CarouselItem activeIndex={activeIndex} key={idx}>
               <ContentCardSkeleton key={idx} />
             </CarouselItem>
           ))
         : Array.from({ length: 4 }).map((_, idx) => (
-            <CarouselItem activeIndex={activeIndex}>
+            <CarouselItem activeIndex={activeIndex} key={idx}>
               <CardDarkSkeleton key={idx} />
             </CarouselItem>
           ))}
@@ -143,7 +143,7 @@ const CarouselItem = styled.li<{ activeIndex: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(-${({ activeIndex }) => activeIndex * 425}%);
+  transform: translateX(-${({ activeIndex }) => activeIndex * 428.5}%);
   transition: 500ms ease;
 `;
 

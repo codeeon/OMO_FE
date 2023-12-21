@@ -15,7 +15,7 @@ const Svg = styled.svg`
 `;
 
 const Path = styled.path`
-  stroke: ${({ theme }) => theme.color.sub2};
+  stroke: ${({ theme }) => theme.color.border};
   stroke-width: 2.5;
   stroke-miterlimit: 10;
   stroke-linecap: round;

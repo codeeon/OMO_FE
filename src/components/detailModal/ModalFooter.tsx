@@ -6,19 +6,19 @@ import LikeBtn from './LikeBtn';
 
 interface Props {
   likeCount: number;
-  contentId: number | undefined;
+  postId: number | undefined;
   commentLength: number;
 }
 
 const ModalFooter: React.FC<Props> = ({
   likeCount,
-  contentId,
+  postId,
   commentLength,
 }) => {
   return (
     <Footer>
       <FooterItem color="red">
-        <LikeBtn contentId={contentId} />
+        <LikeBtn postId={postId} />
         <span>{likeCount}</span>
       </FooterItem>
       <FooterItem color="blue">

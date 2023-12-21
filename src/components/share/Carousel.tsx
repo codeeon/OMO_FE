@@ -73,8 +73,8 @@ const Carousel: React.FC<Props> = ({
       </CarouselList>
       {repeatCounts.length && (
         <Nav>
-          {carouselCounts.map((i) => (
-            <NavItem key={i}>
+          {carouselCounts.map((i, idx) => (
+            <NavItem key={idx}>
               <NavButton
                 isActive={activeIndex === i}
                 onClick={() => handleGoTo(i)}

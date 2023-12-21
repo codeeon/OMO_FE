@@ -30,7 +30,6 @@ const Login: React.FC = () => {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
 
-        console.log(response);
         return response.data;
       } catch (error) {
         throw new Error(

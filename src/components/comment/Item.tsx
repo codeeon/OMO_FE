@@ -9,14 +9,14 @@ const CommentItem: React.FC<{
   contentId: number;
 }> = ({ comment, contentId }) => {
   const { commentId, content, createdAt, User } = comment;
-
+  
   return (
     <Base>
-      <UserProfile />
+      <UserProfile profileImg={User.imgUrl} />
       <BodyContainer>
         <UserInfoContainer>
           <UserName>{User.nickname}</UserName>
-          <CreateAt>{createdAt}</CreateAt>
+          <CreateAt>{createdAt.split('T')[0]}</CreateAt>
           <Dropdown commentId={commentId} contentId={contentId} />
         </UserInfoContainer>
         <CommentText>{content}</CommentText>
@@ -37,7 +37,11 @@ const Base = styled.div`
   }
 `;
 
-const UserProfile = styled.div`
+const UserProfile = styled.div<{ profileImg: string }>`
+  background-image: ${({ profileImg }) => `url('${profileImg}')`};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 50px;
   height: 50px;
   background: #d9d9d9;

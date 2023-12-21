@@ -9,7 +9,6 @@ import {
   MapCurrentLocationType,
   MapLocationType,
 } from '../../../model/interface.ts';
-import CustomInfoMap from './customInfo/PlaceMarker.tsx';
 import { IoMdCafe } from 'react-icons/io';
 import { IoRestaurant } from 'react-icons/io5';
 import { FaLocationDot } from 'react-icons/fa6';

@@ -107,23 +107,20 @@ export interface RecentPostsType {
 }
 
 export interface CommentPostsType {
-  User: { nickname: string };
-  commentCount: number;
+  Post: { Location: { address: string } };
+  PostId: number;
   content: string;
   createdAt: string;
-  imgUrl: string[];
-  likeCount: number;
-  postId: number;
 }
 
 export interface LocationType {
   Category: { categoryName: string };
-  Posts: { postId: number; imgUrl: string; star: number }[];
+  Posts: { postId: number; imgUrl: string; star: number | undefined }[];
   address: string;
   distance: number;
-  latitude: string;
   locationId: number;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   starAvg: number;
   postCount: number;
   storeName: string;
@@ -132,7 +129,7 @@ export interface LocationType {
 export interface PostContentType {
   content: string;
   categoryName: string;
-  imgUrl: string[];
+  imgUrl?: File[];
   storeName: string;
   address: string;
   latitude: string;
@@ -143,4 +140,37 @@ export interface PostContentType {
 export interface PostCommentType {
   PostId: number | undefined;
   content: string;
+}
+
+export interface CommentType {
+  User: {
+    imgUrl: string;
+    nickname: string;
+  };
+  commentId: number;
+  content: string;
+  createdAt: string;
+}
+
+export interface LocationPostType {
+  User: { imgUrl: string; nickname: string };
+  commentCount: number;
+  content: string;
+  createdAt: string;
+  imgUrl: string[];
+  likeCount: number;
+  postId: number;
+  star: number;
+}
+
+export interface LocationPostsType {
+  location: {
+    Posts: [{ imgUrl: string | undefined }];
+    address: string;
+    locationId: number;
+    postCount: number;
+    starAvg: number;
+    storeName: string;
+  };
+  posts: LocationPostType[];
 }

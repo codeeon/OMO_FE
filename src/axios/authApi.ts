@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import auth from './auth';
 
-const instance: AxiosInstance = axios.create({
+export const authApi: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_SERVER_URL,
   // withCredentials: true,
 });
 
-instance.interceptors.request.use(
+authApi.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken');
 
@@ -22,7 +22,7 @@ instance.interceptors.request.use(
   },
 );
 
-instance.interceptors.response.use(
+authApi.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error) => {
     console.log('에러 발생 -> ', error);
@@ -50,7 +50,7 @@ instance.interceptors.response.use(
 
         // 새로 갱신된 토큰으로 원래 요청을 다시 시도
         req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
-        return instance(req);
+        return authApi(req);
       } catch (refreshError) {
         console.error('토큰 새로 고침 실패:', refreshError);
         throw refreshError;
@@ -63,4 +63,4 @@ instance.interceptors.response.use(
   },
 );
 
-export default instance;
+export default authApi;

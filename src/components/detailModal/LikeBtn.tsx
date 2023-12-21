@@ -5,35 +5,36 @@ import usePostLikeMutation from '../../hooks/reactQuery/like/usePostLikeMutation
 import useDeleteLikeMutation from '../../hooks/reactQuery/like/useDeleteLikeMutation';
 
 interface Props {
-  contentId: number | undefined;
+  postId: number | undefined;
 }
 
-const LikeBtn: React.FC<Props> = ({ contentId }) => {
+const LikeBtn: React.FC<Props> = ({ postId }) => {
   const [isLiked, setLiked] = useState(false);
   const [isHover, setIsHover] = useState(true);
 
-  const { postMutate, isPostLoading } = usePostLikeMutation();
-  const { deleteMutate, isDeleteLoading } = useDeleteLikeMutation();
+  const { postMutate, isPostLoading } = usePostLikeMutation(postId);
+  const { deleteMutate, isDeleteLoading } = useDeleteLikeMutation(postId);
 
-  const handleLikeClick = () => {
+  const handleLikeClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
     if (isLiked) {
+      deleteMutate({ postId });
       setLiked(false);
-      deleteMutate({ contentId });
     } else {
+      postMutate({ postId });
       setLiked(true);
-      postMutate({ contentId });
     }
   };
+
   return (
     <LikeBtnWrapper
-      onClick={handleLikeClick}
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
       <MotionDiv
+        onClick={(e) => handleLikeClick(e)}
         whileTap={{ scale: 3 }}
         transition={{ duration: 0.5 }}
-        onClick={handleLikeClick}
         style={{
           cursor: 'pointer',
         }}

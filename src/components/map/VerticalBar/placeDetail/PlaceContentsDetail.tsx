@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { LocationType } from '../../../../model/interface';
 import { HiLocationMarker } from 'react-icons/hi';
@@ -6,31 +6,41 @@ import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa';
 import BookmarkBtn from './BookmarkBtn';
 import ContentsSection from './ContentsSection';
+import useGetLocationPostsQuery from '../../../../hooks/reactQuery/map/useGetLocationPostsQuery';
 
 const PlaceContentsDetail: React.FC<{ placeDb: LocationType | null }> = ({
   placeDb,
 }) => {
-  if (!placeDb) return;
-  const { Category, storeName, address, Posts, starAvg } = placeDb;
+  const { locationId, latitude, longitude } = placeDb || {}; // Provide default values or an empty object to avoid null-related issues
+
+  const { data: posts, refetch } = useGetLocationPostsQuery(
+    locationId,
+    latitude,
+    longitude,
+  );
+  useEffect(() => {
+    refetch();
+  }, [placeDb]);
+
   return (
     <Base>
       <BodyContainer>
-        <ImageHeader imageURL={Posts[0].imgUrl} />
-        <PlaceName>{storeName}</PlaceName>
+        <ImageHeader imageURL={posts?.location.Posts[0].imgUrl} />
+        <PlaceName>{posts?.location.storeName}</PlaceName>
         <Address>
           <HiLocationMarker />
-          {address}
+          {posts?.location.address}
         </Address>
-        <RatingContainer>
+        {/* <RatingContainer>
           {Array.from({ length: 5 }, (_, idx) => (
             <StarWrapper key={idx}>
-              {idx < starAvg ? <FaStar /> : <FaRegStar />}
+              {idx < posts.posts ? <FaStar /> : <FaRegStar />}
             </StarWrapper>
           ))}
-          <span>{starAvg}점</span>
-        </RatingContainer>
+          <span>{posts?.location.starAvg}점</span>
+        </RatingContainer> */}
         <BookmarkBtn />
-        {/* <ContentsSection Posts={Posts} /> */}
+        <ContentsSection posts={posts} />
       </BodyContainer>
     </Base>
   );
@@ -55,7 +65,7 @@ const Base = styled.div`
   transition: all 600ms ease;
 `;
 
-const ImageHeader = styled.div<{ imageURL: string }>`
+const ImageHeader = styled.div<{ imageURL: string | undefined }>`
   width: 100%;
   height: 186px;
   background: gray;

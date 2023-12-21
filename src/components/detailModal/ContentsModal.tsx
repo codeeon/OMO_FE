@@ -47,7 +47,7 @@ const DetailContentsModal: React.FC<{
       />
       <DetailModalFooter
         likeCount={likeCount}
-        contentId={postId}
+        postId={postId}
         commentLength={commentLength}
       />
       <Comment contentId={postId} comments={Comments} />
