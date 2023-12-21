@@ -3,12 +3,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-// import Cookies from 'js-cookie';
-import KakaoLogin from '../components/auth/KakaoLogin';
+// import KakaoLogin from '../components/auth/KakaoLogin';
 import auth from '..//axios/auth';
-// import KakaoLogin2 from '../components/auth/KakaoLogin2';
 
 interface LoginData {
   email: string;
@@ -26,9 +23,11 @@ const Login: React.FC = () => {
 
         const accessToken = response.headers.authorization;
         const refreshToken = response.headers.refreshtoken;
+        const userId = response.data.userId;
 
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('userId', userId);
 
         console.log(response);
         return response.data;
@@ -40,12 +39,10 @@ const Login: React.FC = () => {
     },
     {
       onSuccess: () => {
-        // 로그인 성공 (redirect)
-        navigate(`/`); // `${import.meta.env.VITE_APP_SERVER_URL}/`
+        navigate(`/`);
       },
       onError: (error: Error) => {
-        // 로그인 실패 시 에러 메시지 출력 등의 처리
-        console.error(error.message);
+        console.error('로그인 실패 -> ', error.message);
       },
     },
   );
@@ -74,8 +71,7 @@ const Login: React.FC = () => {
             <Text>로그인</Text>
           </LargeBtn>
         </form>
-        {/* <KakaoLogin2 /> */}
-        <KakaoLogin />
+        {/* <KakaoLogin /> */}
         <OrLine>
           <div>{line}</div>{' '}
           <div style={{ display: 'flex', alignItems: 'flex-end' }}>
