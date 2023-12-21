@@ -6,9 +6,9 @@ import PostModalPlace from './Place';
 import PostModalText from './Text';
 import ConfirmModal from './ConfirmModal';
 import { PostDetailType, SelectedInfoType } from '../../../model/interface';
-import { getToday } from '../../../function/getToday';
 import Stars from './Stars';
 import SubModal from '../../Modal/SubModal';
+import usePatchPostMutation from '../../../hooks/reactQuery/post/usePatchPostMutation';
 
 interface Props {
   post: PostDetailType;
@@ -45,7 +45,7 @@ const PatchModal: React.FC<Props> = ({
     longitude: post.Location.longitude,
   });
   const [text, setText] = useState(content);
-
+  const { patchMutate, isPatchLoading } = usePatchPostMutation();
   const clearPostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
@@ -73,35 +73,17 @@ const PatchModal: React.FC<Props> = ({
   const savePostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
-    const newContent = {
-      // UserId: 1, //TODO 추후에 추가
-      // categoryName: selectedInfo.categoryName,
-      // CategoryId: 1,
-      // locationName: selectedInfo.addressName,
-      // LocationId: 1,
+    const newPost = {
       content: text.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
-      imageURL: imageURL,
-      likeCount: 0,
-      placeName: selectedInfo.placeName,
-      latitude: Number(selectedInfo.latitude),
-      longitude: Number(selectedInfo.longitude),
-      createdAt: getToday(),
-      updatedAt: getToday(),
       star: starNum,
-    };
-    const newLocation = {
-      imageURL: imageURL[0],
       categoryName: selectedInfo.categoryName,
-      districName: selectedInfo.addressName.split('')[1],
       storeName: selectedInfo.placeName,
       address: selectedInfo.addressName,
-      latitude: Number(selectedInfo.latitude),
-      longitude: Number(selectedInfo.longitude),
-      star: starNum,
+      latitude: selectedInfo.latitude,
+      longitude: selectedInfo.longitude,
     };
     if (isValidate) {
-      // postContentMutate(newContent);
-
+      patchMutate({ postId, newPost });
       clearPostHandler(e);
     }
   };
@@ -141,7 +123,7 @@ export default PatchModal;
 
 const Base = styled.div`
   width: 700px;
-  height: 900px;
+  height: 950px;
   border-radius: 16px;
   background: ${({ theme }) => theme.color.bg};
 

@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { instance } from '../../../apis/apis';
+import authApi from '../../../axios/authApi';
 
 const deleteContent = async (contentId: number | undefined) => {
-  return await instance.delete(`posts/${contentId}`);
+  return await authApi.delete(`posts/${contentId}`);
 };
 
 const useDeleteContentMutation = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation(deleteContent, {
     onSuccess: () => {
-      queryClient.invalidateQueries('contents');
+      queryClient.invalidateQueries('posts');
     },
   });
   return {

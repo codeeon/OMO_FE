@@ -3,7 +3,21 @@ import authApi from '../../../axios/authApi';
 import { PostContentType } from '../../../model/interface';
 
 const postContent = async (newContent: PostContentType) => {
-  const response = await authApi.post('/posts', newContent);
+  const formData = new FormData();
+  formData.append('content', newContent.content);
+  formData.append('star', String(newContent.star));
+  formData.append('categoryName', newContent.categoryName);
+  formData.append('storeName', newContent.storeName);
+  formData.append('address', newContent.address);
+  formData.append('latitude', newContent.latitude);
+  formData.append('longitude', newContent.longitude);
+
+  // Append each file to the formData
+  newContent.imgUrl.forEach((file, index) => {
+    formData.append('imgUrl', file);
+  });
+
+  const response = await authApi.post('/posts', formData);
   return response.data;
 };
 

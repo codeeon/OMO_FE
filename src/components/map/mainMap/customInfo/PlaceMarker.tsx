@@ -35,21 +35,21 @@ const PlaceMarker: React.FC<Props> = ({
       position={{ lat: Number(latitude), lng: Number(longitude) }}
       yAnchor={1.4}
       xAnchor={0.25}
-      zIndex={selectedPlace?.storeName === storeName ? 99 : 1}
+      zIndex={selectedPlace === placeDb ? 99 : 1}
     >
       <CustomMarkerContainer
         onClick={clikcMarkerHandler}
-        isSelected={selectedPlace?.storeName === storeName}
+        isSelected={selectedPlace === placeDb}
       >
-        <MarkerIcon isSelected={selectedPlace?.storeName === storeName}>
+        <MarkerIcon isSelected={selectedPlace === placeDb}>
           {children}
         </MarkerIcon>
 
-        <PlaceInfoContainer isSelected={selectedPlace?.storeName === storeName}>
-          <PlaceName isSelected={selectedPlace?.storeName === storeName}>
+        <PlaceInfoContainer isSelected={selectedPlace === placeDb}>
+          <PlaceName isSelected={selectedPlace === placeDb}>
             {storeName}
           </PlaceName>
-          <CategoryName isSelected={selectedPlace?.storeName === storeName}>
+          <CategoryName isSelected={selectedPlace === placeDb}>
             {Category.categoryName}
           </CategoryName>
         </PlaceInfoContainer>

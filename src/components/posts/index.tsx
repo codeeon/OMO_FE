@@ -43,7 +43,6 @@ const Posts: React.FC<Props> = ({
     isFetchingNextPage,
     refetch,
   } = useGetAllContentsQuery(currentLocation, category);
-  console.log(contents);
 
   const { setTarget } = useIntersectionObserver({
     hasNextPage,
