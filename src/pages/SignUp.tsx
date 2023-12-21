@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import auth from '..//axios/auth';
+import auth from '../axios/auth';
 import useInput from '../hooks/useInput';
-import Check from '..//components/auth/signup/Check';
+import Check from '../components/auth/signup/Check';
 import Register from './Register';
 
 // interface UserData {
@@ -21,7 +21,7 @@ import Register from './Register';
 // interface UserEmail {
 // }
 
-const Email: React.FC = () => {
+const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
   const [email, setEmail, onChangeEmail] = useInput();
@@ -32,9 +32,9 @@ const Email: React.FC = () => {
 
   const [confirmedEmail, setConfirmedEmail] = useState<string>('');
   const [isValidated, setIsValidated] = useState<boolean>(false);
-  const [signUpPage, setSignUpPage] = useState<boolean>(false);
+  const [registerPage, setRegisterPage] = useState<boolean>(true);
 
-  const title = signUpPage ? '회원가입' : '이메일 인증';
+  const title = registerPage ? '회원가입' : '이메일 인증';
   const checkingEmail =
     emailCheck === 'rejected'
       ? '올바른 이메일이 아니거나, 이미 가입한 이메일입니다.'
@@ -87,7 +87,7 @@ const Email: React.FC = () => {
 
   const onClickNextStep = () => {
     isValidated
-      ? setSignUpPage(true)
+      ? setRegisterPage(true)
       : emailCheck === 'confirmed'
       ? setCodeCheck('rejected')
       : setEmailCheck('rejected');
@@ -98,13 +98,11 @@ const Email: React.FC = () => {
       <RegisterBox>
         <Title>{title}</Title>
         <Step>
-          <Number onClick>1</Number>
-          <Bar yet={!isValidated} />
-          <Number onClick yet={!signUpPage}>
-            2
-          </Number>
+          <Number validation={true}>1</Number>
+          <Bar validation={isValidated} />
+          <Number validation={registerPage}>2</Number>
         </Step>
-        {signUpPage ? (
+        {registerPage ? (
           <Register confirmedEmail={confirmedEmail} />
         ) : (
           <>
@@ -155,7 +153,7 @@ const Email: React.FC = () => {
             </EmailBox>
             <div style={{ height: '214px' }}>
               <div>
-                <LargeBtn onClick={onClickNextStep} yet={!isValidated}>
+                <LargeBtn onClick={onClickNextStep} validation={isValidated}>
                   다음
                 </LargeBtn>
               </div>
@@ -182,7 +180,7 @@ const Email: React.FC = () => {
   );
 };
 
-export default Email;
+export default SignUp;
 
 const Base = styled.div`
   box-sizing: border-box;
@@ -228,10 +226,10 @@ const Number = styled.div`
   height: 17px;
   border-radius: 100%;
   flex-shrink: 0;
-  background-color: ${({ yet }) =>
-    yet ? '#D9D9D9' : 'var(--primary, #f97393)'};
-  color: ${({ yet }) =>
-    yet ? 'var(--light-4_sub2, #808080)' : 'var(--dark-1_txt, #FFF)'};
+  background-color: ${({ validation }) =>
+    validation ? 'var(--primary, #f97393)' : '#D9D9D9'};
+  color: ${({ validation }) =>
+    validation ? 'var(--dark-1_txt, #FFF)' : 'var(--light-4_sub2, #808080)'};
   font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
@@ -247,7 +245,8 @@ const Bar = styled.div`
   width: 26px;
   height: 2px;
   flex-shrink: 0;
-  background: ${({ yet }) => (yet ? '#D9D9D9' : 'var(--primary, #f97393)')};
+  background: ${({ validation }) =>
+    validation ? 'var(--primary, #f97393)' : '#D9D9D9'};
 `;
 
 const EmailBox = styled.div`
@@ -332,8 +331,8 @@ const LargeBtn = styled.button`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${({ yet }) =>
-    yet ? 'var(--light-5_btn_bg, #B1B1B1)' : 'var(--primary, #f97393)'};
+  background: ${({ validation }) =>
+    validation ? 'var(--primary, #f97393)' : 'var(--light-5_btn_bg, #B1B1B1)'};
   border: none;
   margin: 0 0 61px 0;
   color: #fff;
