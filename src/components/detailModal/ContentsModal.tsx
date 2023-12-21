@@ -28,6 +28,7 @@ const DetailContentsModal: React.FC<{
   } = post;
 
   const commentLength = Comments.length;
+  console.log(postId);
 
   return (
     <Base>

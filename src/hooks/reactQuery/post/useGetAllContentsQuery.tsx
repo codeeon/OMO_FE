@@ -10,11 +10,26 @@ const getContents = async (
 ): Promise<PostType[]> => {
   const params =
     districtName === '전체' && categoryName === '전체'
-      ? { lastSeenPage: lastSeenPage, page: page }
+      ? {
+          districtName: '',
+          categoryName: '',
+          lastSeenPage: lastSeenPage,
+          page: page,
+        }
       : districtName === '전체' && categoryName !== '전체'
-      ? { categoryName: categoryName, lastSeenPage: lastSeenPage, page: page }
+      ? {
+          districtName: '',
+          categoryName: categoryName,
+          lastSeenPage: lastSeenPage,
+          page: page,
+        }
       : districtName !== '전체' && categoryName === '전체'
-      ? { districtName: districtName, lastSeenPage: lastSeenPage, page: page }
+      ? {
+          districtName: districtName,
+          categoryName: '',
+          lastSeenPage: lastSeenPage,
+          page: page,
+        }
       : {
           districtName: districtName,
           categoryName: categoryName,

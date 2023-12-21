@@ -13,7 +13,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
     setText(e.target.value);
   };
 
-  const { postMutate, isPostLoading } = usePostCommentMutation();
+  const { postMutate, isPostLoading } = usePostCommentMutation({ contentId });
 
   // TODO 토큰 문제
   const postCommentHandler = () => {

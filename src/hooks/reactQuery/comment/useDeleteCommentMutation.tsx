@@ -15,7 +15,7 @@ const deleteComment: MutationFunction<
   return response.data;
 };
 
-const useDeleteCommentMutation = () => {
+const useDeleteCommentMutation = ({ contentId }: { contentId: number }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation<
     void,
@@ -23,7 +23,7 @@ const useDeleteCommentMutation = () => {
     { contentId: number | undefined; commentId: number | undefined }
   >(deleteComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries('contents');
+      queryClient.invalidateQueries(['posts', contentId]);
     },
   });
   return {
