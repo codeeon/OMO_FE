@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { LuImagePlus } from 'react-icons/lu';
 import { GrFormClose } from 'react-icons/gr';
-import { useMutation } from 'react-query';
-
+import { useMutation, useQueryClient } from 'react-query';
+import { onImageChange } from '../../function/uploadImage.ts';
 import { MoonLoader } from 'react-spinners';
-import { onImageChange } from '../../function/uploadImage';
 
 interface Props {
   imageURL: string[];
@@ -19,6 +18,55 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
 
   const deleteImageHandler = (image: string) => {
     setImageUrl(imageURL.filter((img) => img !== image));
+  };
+
+  const isValidImageFileType = (file: File): boolean => {
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    return allowedTypes.includes(file.type);
+  };
+
+  const fileToUrl = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const dataUrl = event.target?.result as string;
+        resolve(dataUrl);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const uploadImage = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    const changeHandler = async () => {
+      const file = input.files?.[0];
+      if (!file) return null;
+      if (!isValidImageFileType(file)) {
+        alert('jpg 혹은 png 파일만 업로드 가능합니다.');
+        return;
+      }
+
+      try {
+        const imageUrl = await fileToUrl(file);
+        setImageUrl((prev) => [...prev, imageUrl]);
+      } catch (error) {
+        console.error('Error converting file to URL:', error);
+      } finally {
+        input.removeEventListener('change', changeHandler);
+      }
+    };
+
+    input.addEventListener('change', changeHandler);
   };
 
   return (
@@ -39,18 +87,19 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
           <Description fontsize="18px">이미지 추가하기</Description>
         </Base>
       )}
-      {/* {imageURL.length > 0 ? (
+      {imageURL.length > 0 ? (
         <ImageBox imageURL={imageURL[imageURL.length - 1]} />
       ) : (
-        <Base
+        <Base onClick={uploadImage}>
+          {/* <Base
           onClick={() => mutate({ setImageUrl, imageURL, setProgressPercent })}
-        >
+        > */}
           <ImageIcon fontsize="45px">
             <LuImagePlus />
           </ImageIcon>
           <Description fontsize="18px">이미지 추가하기</Description>
         </Base>
-      )} */}
+      )}
 
       {imageURL.length > 0 && (
         <ImageContainer>
@@ -63,11 +112,12 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
             </ImageCard>
           ))}
           {imageURL.length !== 5 ? (
-            <AddImageCard
+            <AddImageCard onClick={uploadImage}>
+              {/* <AddImageCard
               onClick={() =>
                 mutate({ setImageUrl, imageURL, setProgressPercent })
               }
-            >
+            > */}
               <ImageIcon fontsize="30px">
                 <LuImagePlus />
               </ImageIcon>

@@ -1,20 +1,21 @@
-import React, { MouseEventHandler, ReactNode } from 'react';
+import React, { MouseEventHandler, ReactNode, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import Portal from '../../Portal';
-import './MapModal.css';
+import './modal.css';
 
 interface Props {
   children: ReactNode;
+  onClose?: MouseEventHandler<HTMLDivElement>;
   isOpen: boolean;
   selector?: string;
 }
 
-const Modal: React.FC<Props> = ({ children, isOpen }) => {
+const AlertModal: React.FC<Props> = ({ children, onClose, isOpen }) => {
   return (
-    <CSSTransition in={isOpen} timeout={10000} unmountOnExit>
+    <CSSTransition in={isOpen} timeout={300} classNames="modal" unmountOnExit>
       <Portal>
-        <Overlay isOpen={isOpen}>
+        <Overlay>
           <Container>{children}</Container>
         </Overlay>
       </Portal>
@@ -22,24 +23,24 @@ const Modal: React.FC<Props> = ({ children, isOpen }) => {
   );
 };
 
-export default Modal;
+export default AlertModal;
 
-const Overlay = styled.div<{ isOpen: boolean }>`
+const Overlay = styled.div`
   position: fixed;
-  z-index: 3;
-  top: 51.8%;
-  transform: translate(0, -50%);
-
-  left: ${({ isOpen }) => (isOpen ? '420px' : '-420px')};
+  z-index: 10;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: left 300ms ease;
 `;
+
 const Container = styled.div`
-  width: 420px;
-  height: calc(100vh - 60px);
+  width: 700px;
+  height: 900px;
 
   position: relative;
 

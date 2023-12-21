@@ -42,7 +42,12 @@ export default Banner;
 
 const Base = styled.div<{ bannerimg: string }>`
   box-sizing: border-box;
-  background-image: url(${({ bannerimg }) => bannerimg});
+  background-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.3) 100%
+    ),
+    url(${({ bannerimg }) => bannerimg});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

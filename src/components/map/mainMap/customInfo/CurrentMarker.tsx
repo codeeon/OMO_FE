@@ -4,12 +4,13 @@ import styled from 'styled-components';
 import { TiLocation } from 'react-icons/ti';
 
 interface Props {
-  lat: number;
-  lng: number;
+  lat: number | null;
+  lng: number | null;
   placeName: string | null;
 }
 
 const CurrentMarker: React.FC<Props> = ({ lat, lng, placeName }) => {
+  if (lat === null || lng === null) return;
   return (
     <CustomOverlayMap
       position={{ lat: lat, lng: lng }}

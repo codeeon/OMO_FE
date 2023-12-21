@@ -5,16 +5,21 @@ import PlaceComments from '../components/main/comment';
 import HotContents from '../components/main/hotContents';
 import Banner from '../components/main/banner';
 import Footer from '../components/share/Footer';
+import { MapLocationType } from '../model/interface';
 interface Props {
   currentLocation: string | undefined;
   setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
   themeMode: string | null;
+  mapCenterLocation: MapLocationType;
+  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
 }
 
 const Home: React.FC<Props> = ({
   currentLocation,
   setCurrentLocation,
   themeMode,
+  mapCenterLocation,
+  setMapCenterLocation,
 }) => {
   return (
     <Base>
@@ -22,7 +27,12 @@ const Home: React.FC<Props> = ({
         currentLocation={currentLocation}
         setCurrentLocation={setCurrentLocation}
       />
-      <HotContents currentLocation={currentLocation} themeMode={themeMode} />
+      <HotContents
+        currentLocation={currentLocation}
+        themeMode={themeMode}
+        mapCenterLocation={mapCenterLocation}
+        setMapCenterLocation={setMapCenterLocation}
+      />
       <RecentContents currentLocation={currentLocation} themeMode={themeMode} />
       <PlaceComments currentLocation={currentLocation} themeMode={themeMode} />
       <Footer />

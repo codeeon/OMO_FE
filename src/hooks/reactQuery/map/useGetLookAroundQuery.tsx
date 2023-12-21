@@ -3,32 +3,35 @@ import { instance } from '../../../apis/apis';
 
 export const getLocations = async (
   latitude: number | null,
-  longitude: number,
-  categoryName: string,
-  ha: number,
-  oa: number,
-  pa: number,
-  qa: number,
+  longitude: number | null,
+  categoryName: string | null,
+  ha: number | null,
+  oa: number | null,
+  pa: number | null,
+  qa: number | null,
 ) => {
   const params = { latitude, longitude, categoryName, qa, pa, ha, oa };
 
   const response = await instance.get(`/locations`, { params });
-  console.log(response.data);
 
-  return response.data.locations;
+  return response.data.location || response.data;
 };
 
 const useGetLookAroundQuery = (
-  latitude: number,
-  longitude: number,
-  categoryName: string,
-  ha: number,
-  oa: number,
-  pa: number,
-  qa: number,
+  latitude: number | null,
+  longitude: number | null,
+  categoryName: string | null,
+  ha: number | null,
+  oa: number | null,
+  pa: number | null,
+  qa: number | null,
 ) =>
-  useQuery('locations', () =>
-    getLocations(latitude, longitude, categoryName, ha, oa, pa, qa),
+  useQuery(
+    'locations',
+    () => getLocations(latitude, longitude, categoryName, ha, oa, pa, qa),
+    {
+      enabled: false,
+    },
   );
 
 export default useGetLookAroundQuery;

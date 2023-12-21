@@ -1,9 +1,7 @@
-import React, { useId, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../share/Button';
-import { getToday } from '../../function/getToday';
 import usePostCommentMutation from '../../hooks/reactQuery/comment/usePostCommentMutation';
-import axios from 'axios';
 
 const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   contentId,
@@ -15,13 +13,10 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
 
   const { postMutate, isPostLoading } = usePostCommentMutation();
 
-  // TODO 토큰 문제
   const postCommentHandler = () => {
     const newComment = {
       PostId: contentId,
-      UserId: 3, // TODO 유저와 연결
       content: text,
-      createdAt: getToday(),
     };
     postMutate({ contentId, newComment });
     setText('');

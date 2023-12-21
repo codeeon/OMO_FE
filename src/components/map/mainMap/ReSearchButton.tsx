@@ -14,13 +14,7 @@ interface Props {
   setMapCenterLocation: React.Dispatch<React.SetStateAction<MapLocationType>>;
 }
 
-const ReSearchButton: React.FC<Props> = ({
-  setMyLoca,
-  mapRef,
-  myLoca,
-  setMapCenterLocation,
-  mapCenterLocation,
-}) => {
+const ReSearchButton: React.FC<Props> = ({ mapRef, setMapCenterLocation }) => {
   const reSearchHandler = () => {
     if (!mapRef.current) return;
     const bounds = mapRef.current.getBounds();

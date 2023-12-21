@@ -1,38 +1,27 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import useGetContentsQuery from '../../../../hooks/useGetContentsQuery';
 import { IoIosArrowForward } from 'react-icons/io';
 import ContentCard from './ContentCard';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSk from './ContentCardSk';
 
 interface Props {
-  storeName: string;
+  Posts: { postId: number; imgUrl: string; star: number }[];
 }
 
-const ContentsSection: React.FC<Props> = ({ storeName }) => {
-  const { data: contents, isLoading, refetch } = useGetContentsQuery(storeName);
-
-  const contentsAtPlace = contents?.filter(
-    (content) => content.placeName === storeName,
-  );
-
+const ContentsSection: React.FC<Props> = ({ Posts }) => {
   const navigate = useNavigate();
 
   const goToContentsPage = () => {
     navigate('/contents');
   };
 
-  useEffect(() => {
-    refetch();
-  }, [storeName, refetch]);
-
   return (
     <Base>
       <Header>
         <Title>
           <span>게시글</span>
-          <span>{contentsAtPlace?.length}</span>
+          <span>{Posts?.length}</span>
         </Title>
         <AllBtn onClick={goToContentsPage}>
           <span>전체보기</span>
@@ -40,11 +29,9 @@ const ContentsSection: React.FC<Props> = ({ storeName }) => {
         </AllBtn>
       </Header>
       <ListContainer>
-        {isLoading
-          ? contentsAtPlace?.map((_) => <ContentCardSk />)
-          : contentsAtPlace?.map((content) => (
-              <ContentCard key={content.id} cont={content} />
-            ))}
+        {Posts?.map((post) => (
+          <ContentCard key={post.postId} post={post} />
+        ))}
       </ListContainer>
     </Base>
   );

@@ -14,11 +14,14 @@ import PlaceCard from '../components/auth/mypage/PlaceCard';
 
 // 유저 데이터(인가) 테스트
 import useGetUserDataQuery from '../hooks/reactQuery/mypage/useGetUserDataQuery';
-// 임시 데이터 두 개
 import useGetAllContentsQuery from '../hooks/reactQuery/post/useGetAllContentsQuery';
-import useGetHotPlaceQuery from '../hooks/useGetHotPlaceQuery';
+// 임시 데이터 두 개
+// import useGetAllContentsQuery from '../hooks/reactQuery/post/useGetAllContentsQuery';
+// import useGetHotPlaceQuery from '../hooks/useGetHotPlaceQuery';
 
-const Mypage = ({ currentLocation }) => {
+const Mypage: React.FC<{ currentLocation: string | undefined }> = ({
+  currentLocation,
+}) => {
   const { data: userData } = useGetUserDataQuery();
   console.log(userData);
   // 위에 유저 데이터, 아래 무한 스크롤
@@ -61,11 +64,9 @@ const Mypage = ({ currentLocation }) => {
 
   // const { data: userData, isLoading: userLoading } = useGetUserDataQuery();
   // 임시 GET 두 개
-  const { data: placeData, isLoading: placesLoading } = useGetHotPlaceQuery();
+  // const { data: placeData, isLoading: placesLoading } = useGetHotPlaceQuery();
   const { data: myContents, isLoading: contentsLoading } =
     useGetAllContentsQuery(currentLocation, '전체');
-
-  console.log(placeData);
 
   const onClickSelectBookmark = () => {
     setIsSelect('Bookmark');
@@ -187,7 +188,7 @@ const Select = styled.div`
   justify-content: flex-start;
 `;
 
-const Item = styled.div`
+const Item = styled.div<{ selected: boolean }>`
   color: var(--light-1_txt, #111);
   font-family: Wanted Sans;
   font-size: 20px;
