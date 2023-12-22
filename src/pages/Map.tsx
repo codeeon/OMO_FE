@@ -30,9 +30,7 @@ const Map: React.FC<Props> = ({
   setSelectedPlace,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
-  const [isListOpen, setIsListOpen] = useState<boolean>(true);
-
-  const mapRef = useRef<kakao.maps.Map>(null);
+  const [isListOpen, setIsListOpen] = useState<boolean>(true);  const mapRef = useRef<kakao.maps.Map>(null);
 
   const {
     data: placeDatas,
