@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import auth from './auth';
 
-export const authApi: AxiosInstance = axios.create({
+const authApi: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_SERVER_URL,
   // withCredentials: true,
 });
@@ -22,7 +22,7 @@ authApi.interceptors.request.use(
   },
 );
 
-instance.interceptors.response.use(
+authApi.interceptors.response.use(
   (response: AxiosResponse) =>
     // response,
     {
@@ -34,10 +34,7 @@ instance.interceptors.response.use(
     const req = error.config;
 
     // _retry는 axios interceptor의 커스텀 플래그, 재시도 된 요청에 인터셉터 로직이 실행되는 것을 방지함
-    if (
-      (error.response?.status === 401 || error.response?.status === 500) &&
-      !req._retry
-    ) {
+    if (error.response?.status === 401 && !req._retry) {
       req._retry = true;
 
       try {
@@ -62,7 +59,7 @@ instance.interceptors.response.use(
           req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
 
           req._retry = false;
-          return instance(req);
+          return authApi(req);
         } else {
           console.log('리프레쉬 토큰이 없습니다');
         }

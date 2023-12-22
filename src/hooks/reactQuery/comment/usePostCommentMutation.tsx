@@ -13,7 +13,13 @@ const postComment: MutationFunction<
   return response.data;
 };
 
-const usePostCommentQuery = () => {
+const usePostCommentQuery = ({
+  contentId,
+  handleSuccessAlertOpen,
+}: {
+  contentId: number | undefined;
+  handleSuccessAlertOpen: () => void;
+}) => {
   const queryClient = useQueryClient();
   const mutation = useMutation<
     void,
@@ -21,12 +27,18 @@ const usePostCommentQuery = () => {
     { contentId: number | undefined; newComment: PostCommentType }
   >(postComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries('contents');
+      queryClient.invalidateQueries(['posts', contentId]);
+      handleSuccessAlertOpen();
+    },
+    onError: () => {
+      handleSuccessAlertOpen();
     },
   });
   return {
     postMutate: mutation.mutate,
     isPostLoading: mutation.isLoading,
+    isPostError: mutation.isError,
+    isPostSuccess: mutation.isSuccess,
   };
 };
 

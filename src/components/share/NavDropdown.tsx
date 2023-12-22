@@ -36,6 +36,7 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const clickToggleBtn = () => {
     toggleTheme();
     setIsOpen(false);
+    window.document.location.reload();
   };
 
   const navigate = useNavigate();
@@ -89,7 +90,9 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
         <DropdownItem
-          onClick={() => navigate('/mypage')}
+          onClick={() =>
+            userId ? navigate('/mypage') : alert('로그인 후 이용해주세요.')
+          }
           variants={itemVariants}
         >
           내 정보

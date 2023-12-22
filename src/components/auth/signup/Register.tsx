@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import auth from '../axios/auth';
-import useInput from '../hooks/useInput';
-import Check from '../components/auth/signup/Check';
+import auth from '..//..//..//axios/auth';
+import useInput from '../../../hooks/useInput';
+import Check from './Check';
 
 interface UserEmail {
   email: string;
@@ -23,12 +23,12 @@ interface UserData extends UserEmail, SignUpData {}
 const Register: React.FC = (props: string) => {
   const { confirmedEmail } = props;
 
-  const [nickname, setNickname, onChangeNickname] = useInput();
+  const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
+    mode: 'onChange',
+  });
+  const navigate = useNavigate();
 
-  const [password, setPassword] = useState('');
-  // , onChangePassword] = useInput();
-  const [confirmedPassword, setConfirmedPassword] = useState('');
-  // , onChangeConfimedPassword] = useInput();
+  const [nickname, setNickname, onChangeNickname] = useInput();
 
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
@@ -37,15 +37,20 @@ const Register: React.FC = (props: string) => {
   const [confirmedPasswordCheck, setConfirmedPasswordCheck] =
     useState<string>('');
 
+  const allValidated =
+    nicknameCheck === 'confirmed' &&
+    passwordCheck === 'confirmed' &&
+    confirmedPasswordCheck === 'confirmed';
+
   const checkingNickname =
     nicknameCheck === 'rejected'
-      ? '이미 사용 중인 닉네임입니다.'
+      ? '이미 사용 중이거나 사용할 수 없는 닉네임입니다.'
       : nicknameCheck === 'confirmed'
       ? '사용할 수 있는 닉네임입니다.'
       : '';
   const checkingPassword =
     passwordCheck === 'rejected'
-      ? '6자 이상, 영문과 숫자 입력이 필수입니다.'
+      ? '반드시 영문과 숫자를 포함해 6자 이상 입력해야 합니다.'
       : passwordCheck === 'confirmed'
       ? '사용 가능한 비밀번호입니다.'
       : '';
@@ -56,17 +61,27 @@ const Register: React.FC = (props: string) => {
       ? '비밀번호가 일치합니다.'
       : '';
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    setError,
-  } = useForm<SignUpData>({ mode: 'onBlur' });
+  const onValid = async (data: SignUpData) => {
+    if (
+      data.password.length > 5 &&
+      /[a-zA-Z]/.test(data.password) &&
+      /\d/.test(data.password)
+    ) {
+      setPasswordCheck('confirmed');
+    } else {
+      setPasswordCheck('rejected');
+      setError('password');
+    }
 
-  // let passwordErrorMessage;
-  // let confirmedPasswordErrorMessage;
+    if (data.password === data.confirmedPassword) {
+      setConfirmedPasswordCheck('confirmed');
+    } else {
+      setConfirmedPasswordCheck('rejected');
+      setError('confirmedPassword');
+    }
 
-  const navigate = useNavigate();
+    await trigger(['password', 'confirmedPassword']);
+  };
 
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
@@ -79,7 +94,7 @@ const Register: React.FC = (props: string) => {
     {
       onSuccess: () => {
         setNicknameCheck('confirmed');
-        setConfirmedNickname('nickname');
+        setConfirmedNickname(nickname);
       },
       onError: () => {
         setNicknameCheck('rejected');
@@ -104,23 +119,19 @@ const Register: React.FC = (props: string) => {
     },
   );
 
-  const onClickSubmit = (data: SignUpData): void => {
+  const onClickSubmit = async (data: SignUpData): void => {
     data.email = confirmedEmail;
     data.nickname = confirmedNickname;
-    signupMutation.mutate(data);
-  };
 
-  const onChangePassword = (e) => {
-    setPassword(e.target.value);
-    register('password', { required: true, minLength: 6 })(e);
-  };
-  const onChangeConfirmedPassword = (e) => {
-    setConfirmedPassword(e.target.value);
-    register('confirmedPassword', { required: true, minLength: 6 })(e);
+    await onValid(data);
+
+    if (allValidated) {
+      signupMutation.mutate(data);
+    }
   };
 
   return (
-    <Form onSubmit={handleSubmit(onClickSubmit)}>
+    <Form onChange={handleSubmit(onClickSubmit)}>
       <InputBox>
         <div>
           <div>
@@ -131,11 +142,6 @@ const Register: React.FC = (props: string) => {
               type="text"
               value={nickname}
               onChange={onChangeNickname}
-              // {...register('nickname', {
-              //   required: true,
-              //   minLength: 2,
-              //   maxLength: 15,
-              // })}
             />
             <SmallBtn
               onClick={() => checkNicknameMutation.mutate(nickname)}
@@ -149,29 +155,22 @@ const Register: React.FC = (props: string) => {
         <div>
           <div>
             <Input
-              // value={password}
-              // onChange={onChangePassword}
+              check={passwordCheck}
               placeholder="비밀번호를 입력해 주세요."
               type="password"
-              {...register('password', {
-                required: true,
-                minLength: 6,
-              })}
+              {...register('password')}
             />
           </div>
           <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
         </div>
+
         <div>
           <div>
             <Input
-              // value={confirmedPassword}
-              // onChange={onChangeConfirmedPassword}
+              check={confirmedPasswordCheck}
               placeholder="비밀번호를 다시 입력해 주세요."
               type="password"
-              {...register('confirmedPassword', {
-                required: true,
-                minLength: 6,
-              })}
+              {...register('confirmedPassword')}
             />
           </div>
           <Check verifyCheck={confirmedPasswordCheck}>
@@ -181,7 +180,12 @@ const Register: React.FC = (props: string) => {
       </InputBox>
       <div style={{ height: '214px' }}>
         <div>
-          <LargeBtn yet={nicknameCheck === 'confirmed'}>회원가입 완료</LargeBtn>
+          <LargeBtn
+            onClick={handleSubmit(onClickSubmit)}
+            validation={allValidated}
+          >
+            회원가입 완료
+          </LargeBtn>
         </div>
         <div
           style={{
@@ -264,8 +268,8 @@ const LargeBtn = styled.button`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${({ yet }) =>
-    yet ? 'var(--light-5_btn_bg, #B1B1B1)' : 'var(--primary, #f97393)'};
+  background: ${({ validation }) =>
+    validation ? 'var(--primary, #f97393)' : 'var(--light-5_btn_bg, #B1B1B1)'};
   border: none;
   margin: 0 0 61px 0;
   color: #fff;

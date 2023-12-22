@@ -4,6 +4,7 @@ import MapSearchInput from './MapSearchInput';
 import MapPlaceHeader from './MapPlaceHeader';
 import MapPlaceCard from './MapPlaceCard';
 import {
+  BookmarkLocationType,
   LocationType,
   MapCurrentLocationType,
   MapLocationType,
@@ -20,6 +21,7 @@ interface Props {
   setMapCenterLocation: React.Dispatch<React.SetStateAction<MapLocationType>>;
   setMyLoca: React.Dispatch<React.SetStateAction<MapCurrentLocationType>>;
   mapRef: React.RefObject<kakao.maps.Map>;
+  bookmarkPlaceDb: BookmarkLocationType;
 }
 
 const MapPlaceList: React.FC<Props> = ({

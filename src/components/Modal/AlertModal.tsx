@@ -6,12 +6,23 @@ import './modal.css';
 
 interface Props {
   children: ReactNode;
-  onClose?: MouseEventHandler<HTMLDivElement>;
+  onClose?: () => void;
   isOpen: boolean;
   selector?: string;
 }
 
-const AlertModal: React.FC<Props> = ({ children, onClose, isOpen }) => {
+const AlertModal: React.FC<Props> = ({ children, isOpen, onClose }) => {
+  useEffect(() => {
+    // Execute onClose after 3 seconds
+    const timeoutId = setTimeout(() => {
+      if (onClose) {
+        onClose();
+      }
+    }, 3000);
+
+    // Clear the timeout to avoid memory leaks
+    return () => clearTimeout(timeoutId);
+  }, [isOpen, onClose]);
   return (
     <CSSTransition in={isOpen} timeout={300} classNames="modal" unmountOnExit>
       <Portal>
@@ -28,10 +39,11 @@ export default AlertModal;
 const Overlay = styled.div`
   position: fixed;
   z-index: 10;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+
+  right: 15px;
+  bottom: 0px;
+  padding: 10px;
+
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -39,8 +51,8 @@ const Overlay = styled.div`
 `;
 
 const Container = styled.div`
-  width: 700px;
-  height: 900px;
+  width: auto;
+  height: 100px;
 
   position: relative;
 

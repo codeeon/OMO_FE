@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { LocationType } from '../../../../model/interface';
+import {
+  BookmarkLocationType,
+  LocationType,
+} from '../../../../model/interface';
 import { HiLocationMarker } from 'react-icons/hi';
-import { FaStar } from 'react-icons/fa';
-import { FaRegStar } from 'react-icons/fa';
 import BookmarkBtn from './BookmarkBtn';
 import ContentsSection from './ContentsSection';
 import useGetLocationPostsQuery from '../../../../hooks/reactQuery/map/useGetLocationPostsQuery';
 
-const PlaceContentsDetail: React.FC<{ placeDb: LocationType | null }> = ({
-  placeDb,
-}) => {
+interface Props {
+  placeDb: LocationType | null;
+  bookmarkPlaceDb: BookmarkLocationType[];
+}
+
+const PlaceContentsDetail: React.FC<Props> = ({ placeDb, bookmarkPlaceDb }) => {
   const { locationId, latitude, longitude } = placeDb || {}; // Provide default values or an empty object to avoid null-related issues
 
   const { data: posts, refetch } = useGetLocationPostsQuery(
@@ -18,6 +22,7 @@ const PlaceContentsDetail: React.FC<{ placeDb: LocationType | null }> = ({
     latitude,
     longitude,
   );
+
   useEffect(() => {
     refetch();
   }, [placeDb]);
@@ -39,7 +44,10 @@ const PlaceContentsDetail: React.FC<{ placeDb: LocationType | null }> = ({
           ))}
           <span>{posts?.location.starAvg}점</span>
         </RatingContainer> */}
-        <BookmarkBtn />
+        {/* <BookmarkBtn
+          locationId={locationId}
+          bookmarkPlaceDb={bookmarkPlaceDb}
+        /> */}
         <ContentsSection posts={posts} />
       </BodyContainer>
     </Base>

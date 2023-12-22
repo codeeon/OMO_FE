@@ -1,28 +1,39 @@
-import { motion } from 'framer-motion';
-import React, { useState } from 'react';
+import { motion, useAnimate } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import usePostLikeMutation from '../../hooks/reactQuery/like/usePostLikeMutation';
 import useDeleteLikeMutation from '../../hooks/reactQuery/like/useDeleteLikeMutation';
+import useGetLikeQuery from '../../hooks/reactQuery/like/useGetLikeQuery';
+import { LikePostsType } from '../../model/interface';
 
 interface Props {
   postId: number | undefined;
 }
 
 const LikeBtn: React.FC<Props> = ({ postId }) => {
-  const [isLiked, setLiked] = useState(false);
+  const { data, isLoading } = useGetLikeQuery();
+  const [isLiked, setIsLiked] = useState(false);
   const [isHover, setIsHover] = useState(true);
+  const [scope, animate] = useAnimate();
+
+  useEffect(() => {
+    if (!isLoading) {
+      setIsLiked(data?.some((db: LikePostsType) => db.PostId === postId));
+    }
+  }, [data, isLoading, postId]);
 
   const { postMutate, isPostLoading } = usePostLikeMutation(postId);
   const { deleteMutate, isDeleteLoading } = useDeleteLikeMutation(postId);
 
   const handleLikeClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
+    animate([]);
     if (isLiked) {
       deleteMutate({ postId });
-      setLiked(false);
+      setIsLiked(false);
     } else {
       postMutate({ postId });
-      setLiked(true);
+      setIsLiked(true);
     }
   };
 
@@ -30,14 +41,12 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
     <LikeBtnWrapper
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
+      ref={scope}
     >
       <MotionDiv
         onClick={(e) => handleLikeClick(e)}
         whileTap={{ scale: 3 }}
         transition={{ duration: 0.5 }}
-        style={{
-          cursor: 'pointer',
-        }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -77,4 +86,5 @@ const LikeBtnWrapper = styled.div`
 
 const MotionDiv = styled(motion.div)`
   margin-top: 4px;
+  cursor: 'pointer';
 `;

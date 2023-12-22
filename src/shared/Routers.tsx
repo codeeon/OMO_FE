@@ -13,7 +13,7 @@ import {
 } from '../model/interface';
 import { getCurrentCoords } from '../function/kakao';
 import Mypage from '../pages/Mypage';
-import Email from '../pages/Email';
+import SignUp from '../pages/SignUp';
 
 const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const [currentLocation, setCurrentLocation] = useState<string | undefined>(
@@ -98,7 +98,7 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
             />
           }
         />
-        <Route path="/signup" element={<Email />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="/mypage"

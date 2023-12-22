@@ -174,3 +174,17 @@ export interface LocationPostsType {
   };
   posts: LocationPostType[];
 }
+
+export interface BookmarkLocationType {
+  Location: {
+    latitude: string;
+    locationId: number;
+    longitude: string;
+  };
+}
+
+export interface LikePostsType {
+  PostId: number;
+  userId: number;
+  likeId: number;
+}
