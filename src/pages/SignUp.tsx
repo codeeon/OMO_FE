@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import auth from '../axios/auth';
 import useInput from '../hooks/useInput';
 import Check from '../components/auth/signup/Check';
-import Register from './Register';
+import Register from '../components/auth/signup/Register';
 
 // interface UserData {
 //   nickname: string;
@@ -32,7 +32,7 @@ const SignUp: React.FC = () => {
 
   const [confirmedEmail, setConfirmedEmail] = useState<string>('');
   const [isValidated, setIsValidated] = useState<boolean>(false);
-  const [registerPage, setRegisterPage] = useState<boolean>(true);
+  const [registerPage, setRegisterPage] = useState<boolean>(false);
 
   const title = registerPage ? '회원가입' : '이메일 인증';
   const checkingEmail =

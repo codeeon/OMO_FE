@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import auth from '../axios/auth';
-import useInput from '../hooks/useInput';
-import Check from '../components/auth/signup/Check';
+import auth from '..//..//..//axios/auth';
+import useInput from '../../../hooks/useInput';
+import Check from './Check';
 
 interface UserEmail {
   email: string;
@@ -24,7 +24,7 @@ const Register: React.FC = (props: string) => {
   const { confirmedEmail } = props;
 
   const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
-    mode: 'onBlur',
+    mode: 'onChange',
   });
   const navigate = useNavigate();
 
@@ -94,7 +94,7 @@ const Register: React.FC = (props: string) => {
     {
       onSuccess: () => {
         setNicknameCheck('confirmed');
-        setConfirmedNickname('nickname');
+        setConfirmedNickname(nickname);
       },
       onError: () => {
         setNicknameCheck('rejected');
@@ -131,7 +131,7 @@ const Register: React.FC = (props: string) => {
   };
 
   return (
-    <Form onBlur={handleSubmit(onClickSubmit)}>
+    <Form onChange={handleSubmit(onClickSubmit)}>
       <InputBox>
         <div>
           <div>
@@ -163,6 +163,7 @@ const Register: React.FC = (props: string) => {
           </div>
           <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
         </div>
+
         <div>
           <div>
             <Input

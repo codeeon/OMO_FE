@@ -4,69 +4,65 @@ import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../components/share/ContentCardSkeleton';
 import ContentCard from '../components/share/ContentCard';
 import PlaceCardSkeleton from '../components/auth/mypage/PlaceCardSkeleton';
-// 무한스크롤 테스트
-// import api from '..//axios/api';
-// import useInfiniteScroll from '../hooks/infiniteScroll/useInfiniteScroll';
-// import { useInfiniteQuery } from 'react-query';
-
-// import MapPlaceCard from '../components/map/VerticalBar/placeList/MapPlaceCard';
 import PlaceCard from '../components/auth/mypage/PlaceCard';
-
-// 유저 데이터(인가) 테스트
 import useGetUserDataQuery from '../hooks/reactQuery/mypage/useGetUserDataQuery';
-import useGetAllContentsQuery from '../hooks/reactQuery/post/useGetAllContentsQuery';
-// 임시 데이터 두 개
-// import useGetAllContentsQuery from '../hooks/reactQuery/post/useGetAllContentsQuery';
-// import useGetHotPlaceQuery from '../hooks/useGetHotPlaceQuery';
+import useGetMyPostsQuery from '../hooks/reactQuery/mypage/useGetMyPostsQuery';
+import useGetMyBookmarkQuery from '../hooks/reactQuery/mypage/useGetMyBookmarkQuery';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
-const Mypage: React.FC<{ currentLocation: string | undefined }> = ({
-  currentLocation,
-}) => {
-  const { data: userData } = useGetUserDataQuery();
-
-  // 위에 유저 데이터, 아래 무한 스크롤
-
-  // const targetElementRef = useRef(null);
-
-  // const fetchMoreData = async (key, nextPage = 1) => {
-  //   const response = await api.get(`posts?page=${nextPage}`);
-  //   return response.data;
-  // };
-
-  // const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
-  //   'posts',
-  //   fetchMoreData,
-  //   {
-  //     getNextPageParam: (lastPage, allPages) => {
-  //       return allPages.length + 1;
-  //     },
-  //   },
-  // );
-
-  // const handleIntersect = () => {
-  //   if (hasNextPage && !isFetching) {
-  //     fetchNextPage();
-  //   }
-  // };
-
-  // const [isFetchingMore, setIsFetchingMore] = useInfiniteScroll(
-  //   handleIntersect,
-  //   targetElementRef.current,
-  // );
-
-  // useEffect(() => {
-  //   fetchNextPage();
-  // }, [fetchNextPage]);
-
-  // 위에 무한스크롤 테스트 아래 원본
+const Mypage: React.FC = () => {
+  // 무한 스크롤 추가하기, 데이터 잘 처리하기
   const navigate = useNavigate();
+
   const [isSelect, setIsSelect] = useState('Bookmark');
 
-  // const { data: userData, isLoading: userLoading } = useGetUserDataQuery();
-  // 임시 GET 두 개
-  // const { data: placeData, isLoading: placesLoading } = useGetHotPlaceQuery();
-  const { data: myContents, isLoading: contentsLoading } =
-    useGetAllContentsQuery(currentLocation, '전체');
+  const { data: userData, isError: userError } = useGetUserDataQuery();
+  const {
+    data: myBookmark,
+    fetchNextPage: fetchNextBookmark,
+    hasNextPage: hasNextBookmark,
+    isFetching: isFetchingBookmark,
+    isFetchingNextPage: isFetchingNextBookmark,
+    refetch: refetchBookmark,
+  } = useGetMyBookmarkQuery();
+  const {
+    data: myPosts,
+    fetchNextPage: fetchNextMyPosts,
+    hasNextPage: hasNextMyPosts,
+    isFetching: isFetchingMyPosts,
+    isFetchingNextPage: isFetchingNextMyPosts,
+    refetch: refetchMyPosts,
+  } = useGetMyPostsQuery();
+
+  const { setTarget: setTargetBookmark } = useIntersectionObserver({
+    hasNextBookmark,
+    fetchNextBookmark,
+  });
+
+  const { setTarget: setTargetMyPosts } = useIntersectionObserver({
+    hasNextMyPosts,
+    fetchNextMyPosts,
+  });
+
+  useEffect(() => {
+    refetchBookmark();
+    refetchMyPosts();
+  }, [isSelect]);
+
+  console.log('유저 데이터 -> ', userData);
+  console.log('유저 데이터 에러 -> ', userError);
+  console.log('내 북마크 -> ', myBookmark);
+  console.log('내 게시글 -> ', myPosts);
+
+  useEffect(() => {
+    userError
+      ? (alert('다시 로그인 후 이용해주세요.'),
+        localStorage.removeItem('userId'),
+        localStorage.removeItem('accessToken'),
+        localStorage.removeItem('refreshToken'),
+        navigate('/'))
+      : console.log(localStorage.getItem('userId'));
+  });
 
   const onClickSelectBookmark = () => {
     setIsSelect('Bookmark');
@@ -79,7 +75,7 @@ const Mypage: React.FC<{ currentLocation: string | undefined }> = ({
     <Base>
       <Header>
         <Profile>
-          <MyImg src="" alt=""></MyImg>
+          <MyImg src={userData?.data.imgUrl} alt=""></MyImg>
           <Nickname style={{ marginLeft: '22px' }}>
             {userData?.data.nickname}
           </Nickname>
@@ -91,31 +87,42 @@ const Mypage: React.FC<{ currentLocation: string | undefined }> = ({
           onClick={onClickSelectBookmark}
           selected={isSelect === 'Bookmark'}
         >
-          북마크 {}
+          북마크
         </Item>
         <Item
           onClick={onClickSelectContents}
           selected={isSelect === 'Contents'}
           style={{ marginLeft: '30px' }}
         >
-          내 게시글 {}
+          내 게시글
         </Item>
       </Select>
       <Contents>
-        {placesLoading && isSelect === 'Bookmark'
+        {isFetchingBookmark &&
+        !isFetchingNextBookmark &&
+        isSelect === 'Bookmark'
           ? Array.from({ length: 12 }).map((_, idx) => (
               <PlaceCardSkeleton key={idx} />
             ))
-          : isSelect === 'Bookmark' &&
-            placeData?.map((placeData) => <PlaceCard placeData={placeData} />)}
-        {contentsLoading && isSelect === 'Contents'
+          : !isFetchingBookmark &&
+            isFetchingNextBookmark &&
+            isSelect === 'Bookmark' &&
+            myBookmark?.map((placeData) => <PlaceCard placeData={placeData} />)}
+        {isFetchingMyPosts && !isFetchingNextMyPosts && isSelect === 'Contents'
           ? Array.from({ length: 12 }).map((_, idx) => (
               <ContentCardSkeleton key={idx} />
             ))
-          : isSelect === 'Contents' &&
-            myContents?.map((contentData) => (
+          : !isFetchingMyPosts &&
+            isFetchingNextMyPosts &&
+            isSelect === 'Contents' &&
+            myPosts?.map((contentData) => (
               <ContentCard contentData={contentData} />
             ))}
+        {isSelect === 'Bookmark' ? (
+          <ObserverContainer ref={setTargetBookmark}></ObserverContainer>
+        ) : (
+          <ObserverContainer ref={setTargetMyPosts}></ObserverContainer>
+        )}
       </Contents>
     </Base>
   );
@@ -210,4 +217,7 @@ const Contents = styled.div`
   margin: 20px 0px 40px 0;
 
   grid-area: main;
+`;
+const ObserverContainer = styled.div`
+  height: 100px;
 `;

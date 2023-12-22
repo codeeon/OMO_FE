@@ -34,10 +34,7 @@ authApi.interceptors.response.use(
     const req = error.config;
 
     // _retry는 axios interceptor의 커스텀 플래그, 재시도 된 요청에 인터셉터 로직이 실행되는 것을 방지함
-    if (
-      (error.response?.status === 401 || error.response?.status === 500) &&
-      !req._retry
-    ) {
+    if (error.response?.status === 401 && !req._retry) {
       req._retry = true;
 
       try {
