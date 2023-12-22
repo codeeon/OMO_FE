@@ -4,16 +4,31 @@ import Button from '../share/Button';
 import { getToday } from '../../function/getToday';
 import usePostCommentMutation from '../../hooks/reactQuery/comment/usePostCommentMutation';
 import axios from 'axios';
+import AlertModal from '../Modal/AlertModal';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import CommentSuccess from '../share/alert/CommentSuccess';
+import CommentError from '../share/alert/CommentError';
 
 const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   contentId,
 }) => {
   const [text, setText] = useState<string>('');
+  const {
+    isModalOpen: successAlertOpen,
+    handleModalOpen: handleSuccessAlertOpen,
+    handleModalClose: handleSuccessAlertClose,
+  } = useAlertModalCtr();
+  // const {
+  //   isModalOpen: ErrorAlertOpen,
+  //   handleModalOpen: handleErrorAlertOpen,
+  //   handleModalClose: handleErrorsAlertOpen,
+  // } = useAlertModalCtr();
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
 
-  const { postMutate, isPostLoading } = usePostCommentMutation({ contentId });
+  const { postMutate, isPostLoading, isPostError, isPostSuccess } =
+    usePostCommentMutation({ contentId, handleSuccessAlertOpen });
 
   // TODO 토큰 문제
   const postCommentHandler = () => {
@@ -28,16 +43,21 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   };
 
   return (
-    <Base>
-      <TextArea
-        placeholder="여기에 댓글을 입력해주세요."
-        value={text}
-        onChange={(e) => onChangeText(e)}
-      />
-      <Button theme="gray" padding="5px 10px" onClick={postCommentHandler}>
-        댓글등록
-      </Button>
-    </Base>
+    <>
+      <Base>
+        <TextArea
+          placeholder="여기에 댓글을 입력해주세요."
+          value={text}
+          onChange={(e) => onChangeText(e)}
+        />
+        <Button theme="gray" padding="5px 10px" onClick={postCommentHandler}>
+          댓글등록
+        </Button>
+      </Base>
+      <AlertModal isOpen={successAlertOpen} onClose={handleSuccessAlertClose}>
+        {isPostSuccess ? <CommentSuccess /> : <CommentError />}
+      </AlertModal>
+    </>
   );
 };
 

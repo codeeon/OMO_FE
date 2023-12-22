@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { CommentType } from '../../model/interface';
 import { TbMessage } from 'react-icons/tb';
 import LikeBtn from './LikeBtn';
 

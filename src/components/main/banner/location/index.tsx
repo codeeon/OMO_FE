@@ -75,6 +75,7 @@ const Location: React.FC<Props> = ({
       <Menu
         refetch={refetch}
         isOpen={isOpen}
+        isLoading={isLoading}
         setCurrentLocation={setCurrentLocation}
       />
     </NavContainer>

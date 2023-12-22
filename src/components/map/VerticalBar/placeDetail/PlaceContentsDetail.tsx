@@ -44,10 +44,10 @@ const PlaceContentsDetail: React.FC<Props> = ({ placeDb, bookmarkPlaceDb }) => {
           ))}
           <span>{posts?.location.starAvg}점</span>
         </RatingContainer> */}
-        <BookmarkBtn
+        {/* <BookmarkBtn
           locationId={locationId}
           bookmarkPlaceDb={bookmarkPlaceDb}
-        />
+        /> */}
         <ContentsSection posts={posts} />
       </BodyContainer>
     </Base>

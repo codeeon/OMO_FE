@@ -15,8 +15,10 @@ const postComment: MutationFunction<
 
 const usePostCommentQuery = ({
   contentId,
+  handleSuccessAlertOpen,
 }: {
   contentId: number | undefined;
+  handleSuccessAlertOpen: () => void;
 }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation<
@@ -26,11 +28,17 @@ const usePostCommentQuery = ({
   >(postComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(['posts', contentId]);
+      handleSuccessAlertOpen();
+    },
+    onError: () => {
+      handleSuccessAlertOpen();
     },
   });
   return {
     postMutate: mutation.mutate,
     isPostLoading: mutation.isLoading,
+    isPostError: mutation.isError,
+    isPostSuccess: mutation.isSuccess,
   };
 };
 

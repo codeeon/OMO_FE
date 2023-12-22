@@ -9,7 +9,7 @@ export const getLocations = async (
 ): Promise<LocationPostsType> => {
   const params = { latitude, longitude };
   const response = await instance.get(`/locations/${locationId}`, { params });
-
+  console.log('location포스트',response.data);
   return response.data;
 };
 
