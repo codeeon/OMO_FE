@@ -15,9 +15,10 @@ const BookmarkBtn: React.FC<Props> = ({ locationId, bookmarkPlaceDb }) => {
   const { data, isLoading, refetch } = useGetBookmarkQuery();
 
   const isBookmarking =
-    !isLoading && data?.some((db) => db.Location.locationId === locationId);
-  console.log(data);
-  console.log(locationId);
+    !isLoading &&
+    data?.some(
+      (db: BookmarkLocationType) => db.Location.locationId === locationId,
+    );
 
   const { postBookmarkingMutate, isPostBookmarkingLoading } =
     usePostBookmarkMutation(locationId);

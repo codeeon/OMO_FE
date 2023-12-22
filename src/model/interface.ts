@@ -182,3 +182,9 @@ export interface BookmarkLocationType {
     longitude: string;
   };
 }
+
+export interface LikePostsType {
+  PostId: number;
+  userId: number;
+  likeId: number;
+}
