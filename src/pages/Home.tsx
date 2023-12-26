@@ -5,36 +5,37 @@ import PlaceComments from '../components/main/comment';
 import HotContents from '../components/main/hotContents';
 import Banner from '../components/main/banner';
 import Footer from '../components/share/Footer';
-import { MapLocationType } from '../model/interface';
+import { CurrentLocationType, LocationType } from '../model/interface';
 interface Props {
-  currentLocation: string | undefined;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
   themeMode: string | null;
-  mapCenterLocation: MapLocationType;
-  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
+  setSelectedPlace: React.Dispatch<SetStateAction<LocationType | null>>;
+  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+  currentDistrict: string | undefined;
+  setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
 const Home: React.FC<Props> = ({
-  currentLocation,
-  setCurrentLocation,
   themeMode,
-  mapCenterLocation,
-  setMapCenterLocation,
+  setSelectedPlace,
+  setCurrentLocation,
+  currentDistrict,
+  setCurrentDistrict,
 }) => {
   return (
     <Base>
       <Banner
-        currentLocation={currentLocation}
-        setCurrentLocation={setCurrentLocation}
+        currentDistrict={currentDistrict}
+        setCurrentDistrict={setCurrentDistrict}
       />
       <HotContents
-        currentLocation={currentLocation}
         themeMode={themeMode}
-        mapCenterLocation={mapCenterLocation}
-        setMapCenterLocation={setMapCenterLocation}
+        setSelectedPlace={setSelectedPlace}
+        setCurrentLocation={setCurrentLocation}
+        currentDistrict={currentDistrict}
+        setCurrentDistrict={setCurrentDistrict}
       />
-      <RecentContents currentLocation={currentLocation} themeMode={themeMode} />
-      <PlaceComments currentLocation={currentLocation} themeMode={themeMode} />
+      <RecentContents currentDistrict={currentDistrict} themeMode={themeMode} />
+      <PlaceComments currentDistrict={currentDistrict} themeMode={themeMode} />
       <Footer />
     </Base>
   );

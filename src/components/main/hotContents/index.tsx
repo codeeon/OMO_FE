@@ -3,22 +3,24 @@ import styled from 'styled-components';
 import CardSkeleton from './CardSkeleton';
 import useGetHotPosts from '../../../hooks/reactQuery/main/useGetHotPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
-import { LocationType, MapLocationType } from '../../../model/interface';
+import { CurrentLocationType, LocationType } from '../../../model/interface';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
 
 interface Props {
-  currentLocation: string | undefined;
   themeMode: string | null;
-  mapCenterLocation: MapLocationType;
-  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
+  setSelectedPlace: React.Dispatch<SetStateAction<LocationType | null>>;
+  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+  currentDistrict: string | undefined;
+  setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
 const HotContents: React.FC<Props> = ({
-  currentLocation,
   themeMode,
-  mapCenterLocation,
-  setMapCenterLocation,
+  setSelectedPlace,
+  setCurrentLocation,
+  currentDistrict,
+  setCurrentDistrict,
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -28,11 +30,11 @@ const HotContents: React.FC<Props> = ({
     data: hotPosts,
     isLoading,
     refetch,
-  } = useGetHotPosts(currentLocation);
+  } = useGetHotPosts(currentDistrict);
 
   useEffect(() => {
     refetch();
-  }, [currentLocation]);
+  }, [currentDistrict]);
 
   return (
     <Carousel
@@ -45,11 +47,7 @@ const HotContents: React.FC<Props> = ({
       {!isLoading
         ? hotPosts?.map((post) => (
             <CarouselItem activeIndex={activeIndex} key={post.imgUrl[0]}>
-              <Card
-                post={post}
-                mapCenterLocation={mapCenterLocation}
-                setMapCenterLocation={setMapCenterLocation}
-              />
+              <Card post={post} setCurrentLocation={setCurrentLocation} />
             </CarouselItem>
           ))
         : themeMode === 'LightMode'

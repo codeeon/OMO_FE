@@ -8,19 +8,52 @@ import {
   RefetchQueryFilters,
 } from 'react-query';
 import { itemVariants } from '../../../styles/Motion';
+import useAlertModalCtr from '../../../hooks/useAlertModalCtr';
+import AlertModal from '../../Modal/AlertModal';
+import LocationAlert from '../../share/alert/LocationAlert';
 
 interface Props {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<string | undefined, unknown>>;
+  isLoading: boolean;
+  toggleDropdownHandler: (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+  ) => void;
 }
 
-const MenuHeader: React.FC<Props> = ({ refetch }) => {
+const MenuHeader: React.FC<Props> = ({
+  refetch,
+  isLoading,
+  toggleDropdownHandler,
+}) => {
+  const { isModalOpen, setModalIsOpen, handleModalOpen, handleModalClose } =
+    useAlertModalCtr();
+
+  const onClickCurrentLocationHandler = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    refetch();
+    handleModalOpen();
+    toggleDropdownHandler(e);
+  };
   return (
-    <Header variants={itemVariants} onClick={() => refetch()}>
-      <FaLocationCrosshairs />
-      <span>현재 위치에서 보기</span>
-    </Header>
+    <>
+      <Header
+        variants={itemVariants}
+        onClick={(e) => onClickCurrentLocationHandler(e)}
+      >
+        <FaLocationCrosshairs />
+        <span>현재 위치에서 보기</span>
+      </Header>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <LocationAlert isLoading={isLoading} />
+      </AlertModal>
+    </>
   );
 };
 

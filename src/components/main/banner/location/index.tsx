@@ -8,20 +8,13 @@ import { BounceLoader } from 'react-spinners';
 import useCurrentLocationQuery from '../../../../hooks/reactQuery/location/useCurrentLocationQuery';
 
 interface Props {
-  currentLocation: string | undefined;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
-  width?: string;
-  height?: string;
+  currentDistrict: string | undefined;
+  setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
-const Location: React.FC<Props> = ({
-  currentLocation,
-  setCurrentLocation,
-  width,
-  height,
-}) => {
+const Location: React.FC<Props> = ({ currentDistrict, setCurrentDistrict }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, refetch } = useCurrentLocationQuery(setCurrentLocation);
+  const { isLoading, refetch } = useCurrentLocationQuery(setCurrentDistrict);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -59,7 +52,7 @@ const Location: React.FC<Props> = ({
         {isLoading ? (
           <BounceLoader color="#f97393" size={30} />
         ) : (
-          <span>{currentLocation}</span>
+          <span>{currentDistrict}</span>
         )}
         <motion.div
           variants={{
@@ -76,7 +69,8 @@ const Location: React.FC<Props> = ({
         refetch={refetch}
         isOpen={isOpen}
         isLoading={isLoading}
-        setCurrentLocation={setCurrentLocation}
+        setCurrentLocation={setCurrentDistrict}
+        setIsOpen={setIsOpen}
       />
     </NavContainer>
   );

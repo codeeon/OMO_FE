@@ -8,6 +8,8 @@ const getDetailContent = async (postId: number): Promise<PostDetailType> => {
 };
 
 const useGetContentDetailQuery = (postId: number) =>
-  useQuery(['posts', postId], () => getDetailContent(postId));
+  useQuery(['posts', postId], () => getDetailContent(postId), {
+    keepPreviousData: true,
+  });
 
 export default useGetContentDetailQuery;

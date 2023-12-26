@@ -5,6 +5,9 @@ import usePostLikeMutation from '../../hooks/reactQuery/like/usePostLikeMutation
 import useDeleteLikeMutation from '../../hooks/reactQuery/like/useDeleteLikeMutation';
 import useGetLikeQuery from '../../hooks/reactQuery/like/useGetLikeQuery';
 import { LikePostsType } from '../../model/interface';
+import AlertModal from '../Modal/AlertModal';
+import CommentError from '../share/alert/CommentError';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 
 interface Props {
   postId: number | undefined;
@@ -14,6 +17,7 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
   const { data, isLoading } = useGetLikeQuery();
   const [isLiked, setIsLiked] = useState(false);
   const [isHover, setIsHover] = useState(true);
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const [scope, animate] = useAnimate();
 
   useEffect(() => {
@@ -22,7 +26,11 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
     }
   }, [data, isLoading, postId]);
 
-  const { postMutate, isPostLoading } = usePostLikeMutation(postId);
+  const { postMutate, isPostLoading } = usePostLikeMutation(
+    postId,
+    handleModalOpen,
+    setIsLiked,
+  );
   const { deleteMutate, isDeleteLoading } = useDeleteLikeMutation(postId);
 
   const handleLikeClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -74,6 +82,13 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
           )}
         </svg>
       </MotionDiv>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <CommentError />
+      </AlertModal>
     </LikeBtnWrapper>
   );
 };

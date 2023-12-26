@@ -21,7 +21,7 @@ interface Props {
   setSelectedPlace: React.Dispatch<SetStateAction<LocationType | null>>;
 }
 
-const Map: React.FC<Props> = ({
+const KakaoMap: React.FC<Props> = ({
   myLoca,
   setMyLoca,
   mapCenterLocation,
@@ -30,24 +30,23 @@ const Map: React.FC<Props> = ({
   setSelectedPlace,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
-  const [isListOpen, setIsListOpen] = useState<boolean>(true);  const mapRef = useRef<kakao.maps.Map>(null);
+  const [isListOpen, setIsListOpen] = useState<boolean>(true);
+  const mapRef = useRef<kakao.maps.Map>(null);
 
   const {
     data: placeDatas,
     isLoading,
     refetch,
   } = useGetLookAroundQuery(
-    mapCenterLocation.center.lat,
-    mapCenterLocation.center.lng,
     selectedCategory === '전체' ? '' : selectedCategory,
-    mapCenterLocation.bounds?.ha,
-    mapCenterLocation.bounds?.oa,
-    mapCenterLocation.bounds?.pa,
-    mapCenterLocation.bounds?.qa,
+    mapCenterLocation.bounds?.ha.toFixed(10),
+    mapCenterLocation.bounds?.oa.toFixed(10),
+    mapCenterLocation.bounds?.pa.toFixed(10),
+    mapCenterLocation.bounds?.qa.toFixed(10),
   );
 
   const { data: bookmarkPlaceDb } = useGetBookmarkQuery();
-  
+
   const onClickToggleBtn = () => {
     if (selectedPlace !== null) {
       setSelectedPlace(null);
@@ -62,7 +61,7 @@ const Map: React.FC<Props> = ({
         refetch();
       }
     }
-  }, [myLoca, mapCenterLocation.bounds, selectedCategory]);
+  }, [myLoca, mapCenterLocation, selectedCategory]);
 
   return (
     <Base>
@@ -115,7 +114,7 @@ const Map: React.FC<Props> = ({
   );
 };
 
-export default Map;
+export default KakaoMap;
 
 const Base = styled.div`
   width: 100%;

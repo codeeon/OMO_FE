@@ -10,6 +10,10 @@ import SubModal from '../Modal/SubModal';
 import Image2 from './Image';
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
 import ImageFile from './Image2';
+import GooglePlace from './GooglePlace';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import AlertModal from '../Modal/AlertModal';
+import ContentAlert from '../share/alert/ContentAlert';
 
 interface Props {
   closeMainModal: (
@@ -31,6 +35,7 @@ const PostModal: React.FC<Props> = ({
   closeSubModal,
 }) => {
   const [isValidate, setIsValidate] = useState<boolean>(false);
+  const { isModalOpen, handleModalOpen, handleModalClose } = useAlertModalCtr();
   const [imageURL, setImageUrl] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [starNum, setStarNum] = useState(0);
@@ -45,7 +50,12 @@ const PostModal: React.FC<Props> = ({
   });
   const [text, setText] = useState('');
 
-  const { postContentMutate, isPostContentLoading } = usePostContentMutate();
+  const {
+    postContentMutate,
+    isPostContentLoading,
+    isPostContentError,
+    isPostContentSuccess,
+  } = usePostContentMutate();
 
   const clearPostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
@@ -62,8 +72,6 @@ const PostModal: React.FC<Props> = ({
     });
     setText('');
   };
-
-  
 
   useEffect(() => {
     if (imageURL.length !== 0 && text && selectedInfo.placeName) {
@@ -86,10 +94,11 @@ const PostModal: React.FC<Props> = ({
       latitude: selectedInfo.latitude,
       longitude: selectedInfo.longitude,
     };
-    
+
     if (isValidate) {
       postContentMutate(newContent);
       clearPostHandler(e);
+      handleModalOpen();
     }
   };
 
@@ -110,12 +119,18 @@ const PostModal: React.FC<Props> = ({
         setFiles={setFiles}
         files={files}
       />
-      <PostModalPlace
+      <GooglePlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
       />
+      {/* <PostModalPlace
+        selectedInfo={selectedInfo}
+        setSelectedInfo={setSelectedInfo}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+      /> */}
       <Stars starNum={starNum} setStarNum={setStarNum} />
       <PostModalText text={text} setText={setText} />
       <SubModal isOpen={isSubModalOpen}>
@@ -124,6 +139,17 @@ const PostModal: React.FC<Props> = ({
           closeModalHandler={closeSubModal}
         />
       </SubModal>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <ContentAlert
+          isPostContentLoading={isPostContentLoading}
+          isPostContentError={isPostContentError}
+          isPostContentSuccess={isPostContentSuccess}
+        />
+      </AlertModal>
     </Base>
   );
 };
