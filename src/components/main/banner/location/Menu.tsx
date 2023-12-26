@@ -17,6 +17,7 @@ interface MenuProps {
   ) => Promise<QueryObserverResult<string | undefined, unknown>>;
   setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
   isLoading: boolean;
+  setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const Menu: React.FC<MenuProps> = ({
@@ -24,6 +25,7 @@ const Menu: React.FC<MenuProps> = ({
   refetch,
   setCurrentLocation,
   isLoading,
+  setIsOpen,
 }) => {
   return (
     <Base
@@ -49,7 +51,11 @@ const Menu: React.FC<MenuProps> = ({
       }}
       style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
     >
-      <MenuHeader refetch={refetch} isLoading={isLoading} />
+      <MenuHeader
+        refetch={refetch}
+        isLoading={isLoading}
+        setIsOpen={setIsOpen}
+      />
       <BodyContainer variants={itemVariants}>
         <CityDivider>서울</CityDivider>
         <DistrictList>

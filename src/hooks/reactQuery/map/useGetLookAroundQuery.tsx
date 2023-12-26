@@ -1,37 +1,26 @@
 import { useQuery } from 'react-query';
 import { instance } from '../../../apis/apis';
+import { LocationType } from '../../../model/interface';
 
 export const getLocations = async (
-  latitude: number | null,
-  longitude: number | null,
   categoryName: string | null,
   ha: number | null,
   oa: number | null,
   pa: number | null,
   qa: number | null,
-) => {
-  const params = { latitude, longitude, categoryName, qa, pa, ha, oa };
-
+): Promise<LocationType[]> => {
+  const params = { categoryName, qa, pa, ha, oa };
   const response = await instance.get(`/locations`, { params });
-  console.log(response.data);
+
   return response.data.location || response.data;
 };
 
 const useGetLookAroundQuery = (
-  latitude: number | null,
-  longitude: number | null,
   categoryName: string | null,
   ha: number | null,
   oa: number | null,
   pa: number | null,
   qa: number | null,
-) =>
-  useQuery(
-    'locations',
-    () => getLocations(latitude, longitude, categoryName, ha, oa, pa, qa),
-    {
-      enabled: false,
-    },
-  );
+) => useQuery('Locations', () => getLocations(categoryName, oa, ha, pa, qa));
 
 export default useGetLookAroundQuery;

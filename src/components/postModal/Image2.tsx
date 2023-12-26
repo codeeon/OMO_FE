@@ -48,16 +48,16 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, setFiles, files }) => {
   const uploadImage = () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
+    // input.setAttribute('accept', 'image/*');
     input.click();
 
     const changeHandler = async () => {
       const file = input.files?.[0];
       if (!file) return null;
-      if (!isValidImageFileType(file)) {
-        alert('jpg 혹은 png 파일만 업로드 가능합니다.');
-        return;
-      }
+      // if (!isValidImageFileType(file)) {
+      //   alert('jpg 혹은 png 파일만 업로드 가능합니다.');
+      //   return;
+      // }
 
       try {
         const imageUrl = await fileToUrl(file);

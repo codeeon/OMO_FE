@@ -16,9 +16,19 @@ interface MenuProps {
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<string | undefined, unknown>>;
   setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
+  isLoading: boolean;
+  toggleDropdownHandler: (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+  ) => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ isOpen, refetch, setCurrentLocation }) => {
+const Menu: React.FC<MenuProps> = ({
+  isOpen,
+  refetch,
+  setCurrentLocation,
+  isLoading,
+  toggleDropdownHandler,
+}) => {
   return (
     <Base
       variants={{
@@ -43,7 +53,11 @@ const Menu: React.FC<MenuProps> = ({ isOpen, refetch, setCurrentLocation }) => {
       }}
       style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
     >
-      <MenuHeader refetch={refetch} />
+      <MenuHeader
+        refetch={refetch}
+        isLoading={isLoading}
+        toggleDropdownHandler={toggleDropdownHandler}
+      />
       <BodyContainer variants={itemVariants}>
         <CityDivider>서울</CityDivider>
         <DistrictList>

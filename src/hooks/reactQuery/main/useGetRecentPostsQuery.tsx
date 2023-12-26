@@ -12,7 +12,7 @@ export const getRecentPosts = async (
   const params = {
     districtName: districtName !== '전체' ? districtName : '',
     categoryName: categoryName !== '전체' ? categoryName : '',
-    limit: 12,
+    limit: 16,
   };
   const response = await instance.get(`/main/recent`, { params });
   return response.data;

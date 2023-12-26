@@ -1,6 +1,7 @@
 import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 import {
+  CurrentLocationType,
   HotPostsType,
   LocationType,
   MapLocationType,
@@ -10,25 +11,17 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
   post: HotPostsType;
-  mapCenterLocation: MapLocationType;
-  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
+  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
 }
 
-const Card: React.FC<Props> = ({
-  post,
-  mapCenterLocation,
-  setMapCenterLocation,
-}) => {
+const Card: React.FC<Props> = ({ post, setCurrentLocation }) => {
   const { imgUrl, Location, content, Category: category } = post;
   const navigate = useNavigate();
 
   const moveMapHandler = () => {
-    setMapCenterLocation({
-      ...mapCenterLocation,
-      center: {
-        lat: Location.latitude,
-        lng: Location.longitude,
-      },
+    setCurrentLocation({
+      lat: Location.latitude,
+      lng: Location.longitude,
     });
 
     navigate('/map');

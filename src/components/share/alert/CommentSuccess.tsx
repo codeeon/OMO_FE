@@ -8,7 +8,7 @@ const CommentSuccess = () => {
     <Base>
       <Wrapper>
         <FaCheckCircle />
-        <span>댓글이 업로드 성공.</span>
+        <span>댓글 업로드에 성공하였습니다.</span>
       </Wrapper>
     </Base>
   );

@@ -28,11 +28,11 @@ const DetailContentsModal: React.FC<{
   } = post;
 
   const commentLength = Comments.length;
-  console.log(postId);
 
   return (
     <Base>
       <DetailModalHeader
+        userProfile={User.imgUrl}
         userId={User.nickname}
         createdAt={createdAt}
         contentId={postId}
@@ -66,7 +66,7 @@ const Base = styled.div`
 
   padding: 50px;
   z-index: 99;
-  overflow-y: scroll;
+  overflow: auto;
 `;
 
 const ImageContainer = styled.div<{ imageURL: string[] }>`

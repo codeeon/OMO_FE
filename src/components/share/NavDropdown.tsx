@@ -6,11 +6,15 @@ import { MdOutlineDarkMode, MdOutlineWbSunny } from 'react-icons/md';
 import { FiUser } from 'react-icons/fi';
 import { ThemeType } from '../../model/interface';
 import { useNavigate } from 'react-router-dom';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import AlertModal from '../Modal/AlertModal';
+import CommentError from './alert/CommentError';
 // import Cookies from 'js-cookie';
 
 const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
 
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
@@ -36,7 +40,6 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const clickToggleBtn = () => {
     toggleTheme();
     setIsOpen(false);
-    window.document.location.reload();
   };
 
   const navigate = useNavigate();
@@ -50,6 +53,15 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
     localStorage.removeItem('userId');
     alert('로그아웃이 완료되었습니다.');
     navigate('/');
+  };
+
+  const onClickMyPageBtn = () => {
+    if (userId) {
+      navigate('/mypage');
+    } else {
+      handleModalOpen();
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -89,12 +101,7 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
         }}
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
-        <DropdownItem
-          onClick={() =>
-            userId ? navigate('/mypage') : alert('로그인 후 이용해주세요.')
-          }
-          variants={itemVariants}
-        >
+        <DropdownItem onClick={onClickMyPageBtn} variants={itemVariants}>
           내 정보
         </DropdownItem>
         <DropdownItem variants={itemVariants} onClick={clickToggleBtn}>
@@ -128,6 +135,13 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
           </DropdownItem>
         )}
       </DropdownList>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <CommentError />
+      </AlertModal>
     </NavContainer>
   );
 };

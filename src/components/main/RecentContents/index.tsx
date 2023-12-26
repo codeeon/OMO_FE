@@ -9,12 +9,12 @@ import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
 
 interface Props {
-  currentLocation: string | undefined;
+  currentDistrict: string | undefined;
   themeMode: string | null;
 }
 const categories = ['전체', '음식점', '카페', '기타'];
 
-const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
+const RecentContents: React.FC<Props> = ({ currentDistrict, themeMode }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [selectedCateogry, setSelectedCategory] = useState<string>('전체');
 
@@ -22,7 +22,7 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
     data: recentPosts,
     isLoading,
     refetch,
-  } = useGetRecentPostsQuery(currentLocation, selectedCateogry);
+  } = useGetRecentPostsQuery(currentDistrict, selectedCateogry);
 
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
 
   useEffect(() => {
     refetch();
-  }, [currentLocation, selectedCateogry]);
+  }, [currentDistrict, selectedCateogry]);
 
   const changeCateogryHandler = (category: string) => {
     setSelectedCategory(category);
