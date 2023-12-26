@@ -22,14 +22,13 @@ const AlertModal: React.FC<Props> = ({
   isLoading,
   isError,
 }) => {
-  const navigate = useNavigate();
   useEffect(() => {
     if (!isLoading) {
       const timeoutId = setTimeout(() => {
         if (onClose) {
           onClose();
         }
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timeoutId);
     }
