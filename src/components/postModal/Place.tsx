@@ -143,6 +143,7 @@ const Base = styled.div`
   width: 100%;
   gap: 5px;
   position: relative;
+  font-family: 'Wanted Sans Variable';
 `;
 
 const SearchContainer = styled.div`
@@ -156,7 +157,7 @@ const SearchContainer = styled.div`
 `;
 
 const SearchInput = styled.input`
-  width: 250px;
+  width: 100%;
   height: 20px;
   outline: none;
   border: none;
@@ -168,7 +169,9 @@ const SearchInput = styled.input`
     font-size: 16px;
     font-weight: 700;
     color: ${({ theme }) => theme.color.sub};
+    font-family: 'Wanted Sans Variable';
   }
+  font-family: 'Wanted Sans Variable';
 `;
 
 const ResultList = styled.div`

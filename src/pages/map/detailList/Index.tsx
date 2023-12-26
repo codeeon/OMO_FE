@@ -54,6 +54,20 @@ const Base = styled.div`
   z-index: 4;
   overflow-y: scroll;
   transition: all 600ms ease;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.border};
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;
 
 const ImageHeader = styled.div<{ imageURL: string | undefined }>`

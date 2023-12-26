@@ -5,7 +5,7 @@ import useInput from '../../../hooks/useInput';
 import { CurrentLocationType } from '../../../model/interface';
 
 interface Props {
-  map: any;
+  map: google.maps.Map | null;
   setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
 }
 
@@ -49,10 +49,18 @@ const Search: React.FC<Props> = ({ map, setCurrentLocation }) => {
         'photos',
         'types',
         'place_id',
+        'current_opening_hours',
+        'business_status',
+        'address_components',
+        'delivery',
+        'editorial_summary',
+        'formatted_address',
+        'formatted_phone_number',
       ],
     };
 
-    service.findPlaceFromQuery(request, placeSearchCallback);
+    service.textSearch(request, placeSearchCallback);
+    // service.findPlaceFromQuery(request, placeSearchCallback);
 
     if (!value) {
       setSearchResult(null);
@@ -177,8 +185,7 @@ const ResultContainer = styled.div`
 const ResultItem = styled.div`
   box-sizing: border-box;
   width: 100%;
-  min-height: 50px;
-  height: 70px;
+  min-height: 70px; // Adjusted the min-height for better spacing
 
   display: flex;
   flex-direction: column;
@@ -193,10 +200,18 @@ const ResultItem = styled.div`
   &:hover {
     background: ${({ theme }) => theme.color.hover};
   }
+
   span {
     font-size: 14px;
     font-weight: 500;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap; // Prevents wrapping to the next line
+    overflow: hidden; // Hides the content that overflows
   }
+  text-overflow: ellipsis;
+  white-space: nowrap; // Prevents wrapping to the next line
+  overflow: hidden; // Hides the content that overflows
   font-size: 16px;
   font-weight: 700;
 `;

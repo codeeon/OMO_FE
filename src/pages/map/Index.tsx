@@ -13,6 +13,8 @@ interface Props {
   setSelectedPlace: React.Dispatch<SetStateAction<LocationType | null>>;
   currentLocation: CurrentLocationType;
   setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
+  map: google.maps.Map | null;
+  setMap: React.Dispatch<React.SetStateAction<google.maps.Map | null>>;
 }
 
 const Map: React.FC<Props> = ({
@@ -21,9 +23,9 @@ const Map: React.FC<Props> = ({
   setSelectedPlace,
   currentLocation,
   setCurrentLocation,
+  map,
+  setMap,
 }) => {
-  const [map, setMap] = useState(null);
-
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
   const [isListOpen, setIsListOpen] = useState<boolean>(true);
 
@@ -113,7 +115,7 @@ const PlaceListContainer = styled.div<{ isListOpen: boolean }>`
   height: 100%;
   background: ${({ theme }) => theme.color.cardBg};
   z-index: 3;
-  transition: left 400ms ease;
+  transition: left 300ms ease;
   border-right: 1px solid ${({ theme }) => theme.color.border2};
 `;
 
@@ -133,7 +135,7 @@ const DetailListContainer = styled.div<{
   height: 100%;
   background: ${({ theme }) => theme.color.cardBg};
   z-index: 2;
-  transition: left 400ms ease;
+  transition: left 300ms ease;
   border-right: 1px solid ${({ theme }) => theme.color.border2};
 `;
 
@@ -166,5 +168,5 @@ const ListBtnContainer = styled.div<{
     background: ${({ theme }) => theme.color.border2};
   }
 
-  transition: left 400ms ease;
+  transition: left 300ms ease;
 `;

@@ -7,7 +7,7 @@ import ConfirmModal from './ConfirmModal';
 import { SelectedInfoType } from '../../model/interface';
 import Stars from './Stars';
 import SubModal from '../Modal/SubModal';
-import Image2 from './Image';
+
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
 import ImageFile from './Image2';
 import GooglePlace from './GooglePlace';
@@ -26,6 +26,7 @@ interface Props {
   closeSubModal: (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => void;
+  map: google.maps.Map | null;
 }
 
 const PostModal: React.FC<Props> = ({
@@ -33,6 +34,7 @@ const PostModal: React.FC<Props> = ({
   isSubModalOpen,
   openSubModal,
   closeSubModal,
+  map,
 }) => {
   const [isValidate, setIsValidate] = useState<boolean>(false);
   const { isModalOpen, handleModalOpen, handleModalClose } = useAlertModalCtr();
@@ -119,18 +121,19 @@ const PostModal: React.FC<Props> = ({
         setFiles={setFiles}
         files={files}
       />
-      <GooglePlace
+      {/* <GooglePlace
+        selectedInfo={selectedInfo}
+        setSelectedInfo={setSelectedInfo}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        map={map}
+      /> */}
+      <PostModalPlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
       />
-      {/* <PostModalPlace
-        selectedInfo={selectedInfo}
-        setSelectedInfo={setSelectedInfo}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-      /> */}
       <Stars starNum={starNum} setStarNum={setStarNum} />
       <PostModalText text={text} setText={setText} />
       <SubModal isOpen={isSubModalOpen}>
@@ -157,8 +160,13 @@ const PostModal: React.FC<Props> = ({
 export default PostModal;
 
 const Base = styled.div`
-  width: 700px;
-  height: 900px;
+  box-sizing: border-box;
+  width: 600px;
+
+  min-height: 700px;
+  max-height: 900px;
+  height: 80%;
+
   border-radius: 16px;
   background: ${({ theme }) => theme.color.bg};
 

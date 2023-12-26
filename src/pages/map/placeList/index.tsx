@@ -8,7 +8,7 @@ import Card from './Card';
 const categories = ['전체', '음식점', '카페', '기타'];
 
 interface Props {
-  map: any;
+  map: google.maps.Map | null;
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   placeDatas: LocationType[] | undefined;
@@ -63,7 +63,20 @@ const Base = styled.div`
 
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.border};
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;
 const PlaceCategoryContainer = styled.div`
   box-sizing: border-box;

@@ -19,12 +19,14 @@ interface Props {
   currentDistrict: string | undefined;
   setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
   themeMode: string | null;
+  map: google.maps.Map | null;
 }
 
 const Posts: React.FC<Props> = ({
   currentDistrict,
   setCurrentDistrict,
   themeMode,
+  map,
 }) => {
   const [category, setCategory] = useState<string>('전체');
   const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
@@ -129,9 +131,14 @@ const Posts: React.FC<Props> = ({
           isSubModalOpen={isSubModalOpen}
           openSubModal={opeSubModal}
           closeSubModal={closeSubModal}
+          map={map}
         />
       </Modal>
-      <AlertModal isOpen={isModalOpen} onClose={handleModalClose} position='topRight'>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
         <CommentError />
       </AlertModal>
     </Base>
