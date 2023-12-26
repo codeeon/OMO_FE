@@ -6,12 +6,14 @@ interface Props {
   currentDistrict: string | undefined;
   setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
   themeMode: string | null;
+  map: google.maps.Map | null;
 }
 
 const Contents: React.FC<Props> = ({
   currentDistrict,
   setCurrentDistrict,
   themeMode,
+  map,
 }) => {
   return (
     <Base>
@@ -19,6 +21,7 @@ const Contents: React.FC<Props> = ({
         themeMode={themeMode}
         currentDistrict={currentDistrict}
         setCurrentDistrict={setCurrentDistrict}
+        map={map}
       />
     </Base>
   );

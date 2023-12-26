@@ -12,6 +12,7 @@ interface Props {
   setSearchValue: React.Dispatch<
     SetStateAction<kakao.maps.services.PlacesSearchResult>
   >;
+  map: google.maps.Map | null;
 }
 
 const GooglePlace: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const GooglePlace: React.FC<Props> = ({
   setSelectedInfo,
   searchValue,
   setSearchValue,
+  map,
 }) => {
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -39,12 +41,22 @@ const GooglePlace: React.FC<Props> = ({
     setInputValue('');
   };
 
-  const searchPlaceDetailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const service = new google.maps.places.PlacesService(map)
-  }
+  const findPlaceId = async (query: string) => {
+    const { Place } = (await google.maps.importLibrary(
+      'places',
+    )) as google.maps.PlacesLibrary;
+    const request = {
+      query: query,
+      fields: ['displayName', 'location'],
+    };
+
+    const { places } = await Place.findPlaceFromQuery(request);
+    console.log(places[0].id);
+  };
 
   const searchPlaceHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const ps = new kakao.maps.services.Places();
+
     ps.keywordSearch(event.target.value, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         setSearchValue(data);
@@ -66,6 +78,33 @@ const GooglePlace: React.FC<Props> = ({
     setSelectedInfo({
       placeName: placeName,
       addressName: adressName,
+      categoryName: filteredCategoryName,
+      latitude: latitude,
+      longitude: longitude,
+    });
+    setInputValue('');
+  };
+
+  const selectPlaceHandler = (
+    result: kakao.maps.services.PlacesSearchResultItem,
+  ) => {
+    const address =
+      result.road_address_name === ''
+        ? result.address_name
+        : result.road_address_name;
+    const placeName = result.place_name;
+    const addressName = address;
+    const categoryName = result.category_group_name;
+    const latitude = result.y;
+    const longitude = result.x;
+    const filteredCategoryName =
+      categoryName === '음식점' || categoryName === '카페'
+        ? categoryName
+        : '기타';
+    findPlaceId(placeName);
+    setSelectedInfo({
+      placeName: placeName,
+      addressName: addressName,
       categoryName: filteredCategoryName,
       latitude: latitude,
       longitude: longitude,
@@ -107,21 +146,7 @@ const GooglePlace: React.FC<Props> = ({
       {inputValue && (
         <ResultList>
           {searchValue.map((result) => (
-            <ResultItemContainer
-              onClick={() => {
-                const address =
-                  result.road_address_name === ''
-                    ? result.address_name
-                    : result.road_address_name;
-                selectInfoHandler(
-                  result.place_name,
-                  address,
-                  result.category_group_name,
-                  result.y,
-                  result.x,
-                );
-              }}
-            >
+            <ResultItemContainer onClick={() => selectPlaceHandler(result)}>
               <ResultPlaceName>{result.place_name}</ResultPlaceName>
               <ResultAdress>
                 {result.road_address_name === ''
@@ -172,7 +197,9 @@ const SearchInput = styled.input`
     font-size: 16px;
     font-weight: 700;
     color: ${({ theme }) => theme.color.sub};
+    font-family: 'Wanted Sans Variable';
   }
+  font-family: 'Wanted Sans Variable';
 `;
 
 const ResultList = styled.div`

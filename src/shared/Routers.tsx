@@ -24,7 +24,7 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
 
   const excludedRoutes = ['/map'];
   const location = useLocation();
-
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   return (
     <>
       <Navbar
@@ -52,6 +52,7 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
               themeMode={themeMode}
               currentDistrict={currentDistrict}
               setCurrentDistrict={setCurrentDistrict}
+              map={map}
             />
           }
         />
@@ -64,6 +65,8 @@ const Routers: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
               setSelectedPlace={setSelectedPlace}
               currentLocation={currentLocation}
               setCurrentLocation={setCurrentLocation}
+              map={map}
+              setMap={setMap}
             />
           }
         />

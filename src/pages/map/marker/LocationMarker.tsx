@@ -6,7 +6,7 @@ import {
   LocationPostsType,
   LocationType,
 } from '../../../model/interface';
-import { OverlayView } from '@react-google-maps/api';
+import { OverlayView, OverlayViewF } from '@react-google-maps/api';
 import { IoMdCafe } from 'react-icons/io';
 import { IoRestaurant } from 'react-icons/io5';
 import { FaLocationDot } from 'react-icons/fa6';
@@ -40,7 +40,7 @@ const LocationMarker: React.FC<Props> = ({
   };
 
   return (
-    <OverlayView
+    <OverlayViewF
       position={{ lat: latitude, lng: longitude }}
       mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
     >
@@ -68,7 +68,7 @@ const LocationMarker: React.FC<Props> = ({
           </CategoryName>
         </PlaceInfoContainer>
       </CustomMarkerContainer>
-    </OverlayView>
+    </OverlayViewF>
   );
 };
 

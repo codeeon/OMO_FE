@@ -38,8 +38,8 @@ interface Props {
   lookAroundRefetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<LocationType[], unknown>>;
-  map: any;
-  setMap: React.Dispatch<SetStateAction<any>>;
+  map: google.maps.Map | null;
+  setMap: React.Dispatch<React.SetStateAction<google.maps.Map | null>>;
   setSelectedPlace: React.Dispatch<React.SetStateAction<LocationType | null>>;
   selectedPlace: LocationType | null;
   isListOpen: boolean;
@@ -72,7 +72,7 @@ const MapGoogle: React.FC<Props> = ({
         : '100%',
     height: 'calc(100vh - 60px)',
     marginLeft: 'auto',
-    transition: 'all 300ms ease',
+    transition: 'all 200ms ease',
   };
 
   // 구글 맵 불러오기.
@@ -123,7 +123,7 @@ const MapGoogle: React.FC<Props> = ({
   }, [isLoading]);
 
   const onTileLoaded = () => {
-    const bounds = map.getBounds();
+    const bounds = map?.getBounds();
     const northEast = bounds.getNorthEast();
     const southWest = bounds.getSouthWest();
     setMapBounds({
@@ -161,13 +161,13 @@ const MapGoogle: React.FC<Props> = ({
         backgroundColor: 'transparent',
       }}
     >
-      <OverlayView
+      <OverlayViewF
         position={currentLocation}
         mapPaneName={OverlayView.OVERLAY_LAYER}
         getPixelPositionOffset={getPixelPositionOffset}
       >
         <CurrentLocationMarker />
-      </OverlayView>
+      </OverlayViewF>
       {placeDatas?.map((db) => (
         <LocationMarker
           placeDb={db}
