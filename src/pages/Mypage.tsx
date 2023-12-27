@@ -57,12 +57,12 @@ const Mypage: React.FC = () => {
   useEffect(() => {
     userError
       ? (alert('다시 로그인 후 이용해주세요.'),
-        localStorage.removeItem('userId'),
-        localStorage.removeItem('accessToken'),
-        localStorage.removeItem('refreshToken'),
-        navigate('/'))
-      : console.log(localStorage.getItem('userId'));
-  });
+        sessionStorage.removeItem('userId'),
+        sessionStorage.removeItem('accessToken'),
+        sessionStorage.removeItem('refreshToken'),
+        navigate('/login'))
+      : console.log(sessionStorage.getItem('userId'));
+  }, []);
 
   const onClickSelectBookmark = () => {
     setIsSelect('Bookmark');

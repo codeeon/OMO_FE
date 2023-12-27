@@ -41,13 +41,13 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
 
   const navigate = useNavigate();
 
-  const userId = localStorage.getItem('userId');
+  const userId = sessionStorage.getItem('userId');
 
   const handleLogout = () => {
     // 여기에 auth.POST /logout req 넣을 예정
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userId');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('userId');
     alert('로그아웃이 완료되었습니다.');
     navigate('/');
   };

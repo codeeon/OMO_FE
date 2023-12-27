@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import auth from '..//..//..//axios/auth';
 import useInput from '../../../hooks/useInput';
 import Check from './Check';
@@ -73,11 +72,19 @@ const Register: React.FC = (props: string) => {
       setError('password');
     }
 
-    if (data.password === data.confirmedPassword) {
+    if (data.password.length > 0 && data.password === data.confirmedPassword) {
       setConfirmedPasswordCheck('confirmed');
     } else {
       setConfirmedPasswordCheck('rejected');
       setError('confirmedPassword');
+    }
+
+    if (!data.password.length) {
+      setPasswordCheck('');
+    }
+
+    if (!data.confirmedPassword.length) {
+      setConfirmedPasswordCheck('');
     }
 
     await trigger(['password', 'confirmedPassword']);
@@ -131,7 +138,7 @@ const Register: React.FC = (props: string) => {
   };
 
   return (
-    <Form onChange={handleSubmit(onClickSubmit)}>
+    <>
       <InputBox>
         <div>
           <div>
@@ -152,35 +159,38 @@ const Register: React.FC = (props: string) => {
           </div>
           <Check verifyCheck={nicknameCheck}>{checkingNickname}</Check>
         </div>
-        <div>
+        <Form onChange={handleSubmit(onValid)}>
           <div>
-            <Input
-              check={passwordCheck}
-              placeholder="비밀번호를 입력해 주세요."
-              type="password"
-              {...register('password')}
-            />
+            <div>
+              <Input
+                check={passwordCheck}
+                placeholder="비밀번호를 입력해 주세요."
+                type="password"
+                {...register('password')}
+              />
+            </div>
+            <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
           </div>
-          <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
-        </div>
 
-        <div>
           <div>
-            <Input
-              check={confirmedPasswordCheck}
-              placeholder="비밀번호를 다시 입력해 주세요."
-              type="password"
-              {...register('confirmedPassword')}
-            />
+            <div>
+              <Input
+                check={confirmedPasswordCheck}
+                placeholder="비밀번호를 다시 입력해 주세요."
+                type="password"
+                {...register('confirmedPassword')}
+              />
+            </div>
+            <Check verifyCheck={confirmedPasswordCheck}>
+              {checkingConfirmedPassword}
+            </Check>
           </div>
-          <Check verifyCheck={confirmedPasswordCheck}>
-            {checkingConfirmedPassword}
-          </Check>
-        </div>
+        </Form>
       </InputBox>
       <div style={{ height: '214px' }}>
         <div>
           <LargeBtn
+            type="button"
             onClick={handleSubmit(onClickSubmit)}
             validation={allValidated}
           >
@@ -203,13 +213,11 @@ const Register: React.FC = (props: string) => {
           </Link>
         </div>
       </div>
-    </Form>
+    </>
   );
 };
 
 export default Register;
-
-const Form = styled.form``;
 
 const InputBox = styled.div`
   display: flex;
@@ -217,6 +225,14 @@ const InputBox = styled.div`
   box-sizing: border-box;
   height: 380px;
   padding-top: 58px;
+  gap: 30px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 380px;
   gap: 30px;
 `;
 
