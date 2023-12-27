@@ -10,7 +10,9 @@ const Image: React.FC<{ imgUrl: string[] }> = ({ imgUrl }) => {
   };
 
   const prevPageHandler = () => {
-    setActiveIndex((activeIndex) => (activeIndex - 1) % imgUrl.length);
+    setActiveIndex(
+      (activeIndex) => (activeIndex - 1 + imgUrl.length) % imgUrl.length,
+    );
   };
 
   return (

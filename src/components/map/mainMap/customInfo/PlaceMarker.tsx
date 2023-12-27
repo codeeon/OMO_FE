@@ -15,8 +15,8 @@ interface Props {
 const PlaceMarker: React.FC<Props> = ({
   placeDb,
   children,
-  selectedPlace,
   setSelectedPlace,
+  selectedPlace,
   setIsListOpen,
   isListOpen,
 }) => {

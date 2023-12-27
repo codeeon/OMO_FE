@@ -11,19 +11,25 @@ import CategoryDropdown from './CateogryDropdown';
 import ContentCardSkeleton from '../share/ContentCardSkeleton';
 import CardDarkSkeleton from './CardDarkSkeleton';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import AlertModal from '../Modal/AlertModal';
+import CommentError from '../share/alert/CommentError';
 
 interface Props {
-  currentLocation: string | undefined;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
+  currentDistrict: string | undefined;
+  setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
   themeMode: string | null;
+  map: google.maps.Map | null;
 }
 
 const Posts: React.FC<Props> = ({
-  currentLocation,
-  setCurrentLocation,
+  currentDistrict,
+  setCurrentDistrict,
   themeMode,
+  map,
 }) => {
   const [category, setCategory] = useState<string>('전체');
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
 
   const {
     isModalOpen: isSubModalOpen,
@@ -43,7 +49,7 @@ const Posts: React.FC<Props> = ({
     isFetching,
     isFetchingNextPage,
     refetch,
-  } = useGetAllContentsQuery(currentLocation, category);
+  } = useGetAllContentsQuery(currentDistrict, category);
 
   const { setTarget } = useIntersectionObserver({
     hasNextPage,
@@ -52,14 +58,26 @@ const Posts: React.FC<Props> = ({
 
   useEffect(() => {
     refetch();
-  }, [currentLocation, category]);
+  }, [currentDistrict, category]);
+
+  const openPostModalHandler = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const userId = localStorage.getItem('userId');
+
+    if (userId) {
+      openMainModal(e);
+    } else {
+      handleModalOpen();
+    }
+  };
 
   return (
     <Base>
       <Wrapper>
         <Header>
           <Title>게시글</Title>
-          <PostBtn onClick={(e) => openMainModal(e)}>
+          <PostBtn onClick={openPostModalHandler}>
             <FiEdit3 />
             <span>새 게시글</span>
           </PostBtn>
@@ -67,8 +85,8 @@ const Posts: React.FC<Props> = ({
         <Navigator>{'홈 > 게시글'}</Navigator>
         <FilterContainer>
           <Location
-            currentLocation={currentLocation}
-            setCurrentLocation={setCurrentLocation}
+            currentDistrict={currentDistrict}
+            setCurrentDistrict={setCurrentDistrict}
           />
           <CategoryDropdown category={category} setCategory={setCategory} />
         </FilterContainer>
@@ -113,8 +131,16 @@ const Posts: React.FC<Props> = ({
           isSubModalOpen={isSubModalOpen}
           openSubModal={opeSubModal}
           closeSubModal={closeSubModal}
+          map={map}
         />
       </Modal>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <CommentError />
+      </AlertModal>
     </Base>
   );
 };

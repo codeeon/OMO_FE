@@ -15,27 +15,27 @@ interface Props {
 }
 
 const PlaceContentsDetail: React.FC<Props> = ({ placeDb, bookmarkPlaceDb }) => {
-  const { locationId, latitude, longitude } = placeDb || {}; // Provide default values or an empty object to avoid null-related issues
+  // const { locationId, latitude, longitude } = placeDb || {}; // Provide default values or an empty object to avoid null-related issues
 
-  const { data: posts, refetch } = useGetLocationPostsQuery(
-    locationId,
-    latitude,
-    longitude,
-  );
+  // const { data: posts, refetch } = useGetLocationPostsQuery(
+  //   locationId,
+  //   latitude,
+  //   longitude,
+  // );
 
-  useEffect(() => {
-    refetch();
-  }, [placeDb]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [placeDb]);
 
   return (
     <Base>
       <BodyContainer>
-        <ImageHeader imageURL={posts?.location.Posts[0].imgUrl} />
+        {/* <ImageHeader imageURL={posts?.location.Posts[0].imgUrl} />
         <PlaceName>{posts?.location.storeName}</PlaceName>
         <Address>
           <HiLocationMarker />
           {posts?.location.address}
-        </Address>
+        </Address> */}
         {/* <RatingContainer>
           {Array.from({ length: 5 }, (_, idx) => (
             <StarWrapper key={idx}>
@@ -48,7 +48,7 @@ const PlaceContentsDetail: React.FC<Props> = ({ placeDb, bookmarkPlaceDb }) => {
           locationId={locationId}
           bookmarkPlaceDb={bookmarkPlaceDb}
         /> */}
-        <ContentsSection posts={posts} />
+        {/* <ContentsSection posts={posts} /> */}
       </BodyContainer>
     </Base>
   );

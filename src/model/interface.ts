@@ -79,7 +79,27 @@ export interface PostDetailType {
   Comments: CommentType[];
 }
 
+export interface RepleType {
+  commentId: number;
+  content: string;
+  createdAt: string;
+  User: {
+    imgUrl: string;
+    nickname: string;
+  };
+}
+
+export interface RepleType2 {
+  Comment: {
+    commentId: number;
+    content: string;
+    createAt: string;
+  };
+  User : 
+}
+
 export interface CommentType {
+  Replies: RepleType[];
   commentId: number;
   content: string;
   createdAt: string;
@@ -187,4 +207,18 @@ export interface LikePostsType {
   PostId: number;
   userId: number;
   likeId: number;
+}
+
+// 여기부터 구글 맵
+
+// 현위치
+export interface CurrentLocationType {
+  lat: number | null;
+  lng: number | null;
+}
+
+export interface mapBoundsType {
+  initialLoad: boolean;
+  northEast: { lat: number; lng: number };
+  southWest: { lat: number; lng: number };
 }

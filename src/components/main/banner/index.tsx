@@ -6,11 +6,11 @@ const BANNERIMG =
   'https://firebasestorage.googleapis.com/v0/b/photo-zone-b66e9.appspot.com/o/files%2Fseoul-cityscape-at-twilight-in-south-korea.jpg?alt=media&token=94ed1302-6aaf-42ee-8e54-5b991002fc88';
 
 interface Props {
-  currentLocation: string | undefined;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
+  currentDistrict: string|undefined;
+  setCurrentDistrict: React.Dispatch<SetStateAction<string|undefined>>;
 }
 
-const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
+const Banner: React.FC<Props> = ({ currentDistrict, setCurrentDistrict }) => {
   return (
     <Base bannerimg={BANNERIMG}>
       <Wrapper>
@@ -29,8 +29,8 @@ const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
             </h2>
           </BannerTitle>
           <Location
-            currentLocation={currentLocation}
-            setCurrentLocation={setCurrentLocation}
+            currentDistrict={currentDistrict}
+            setCurrentDistrict={setCurrentDistrict}
           />
         </TitleContainer>
       </Wrapper>

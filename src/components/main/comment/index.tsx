@@ -7,22 +7,22 @@ import Carousel from '../../share/Carousel';
 import Card from './Card';
 
 interface Props {
-  currentLocation: string | undefined;
+  currentDistrict: string | undefined;
   themeMode: string | null;
 }
 
-const PlaceComments: React.FC<Props> = ({ currentLocation, themeMode }) => {
+const PlaceComments: React.FC<Props> = ({ currentDistrict, themeMode }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const {
     data: comments,
     isLoading,
     refetch,
-  } = useGetCommentPostsQuery(currentLocation);
+  } = useGetCommentPostsQuery(currentDistrict);
 
   useEffect(() => {
     refetch();
-  }, [currentLocation]);
+  }, [currentDistrict]);
 
   return (
     <Carousel

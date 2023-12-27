@@ -30,7 +30,8 @@ const usePostCommentQuery = ({
       queryClient.invalidateQueries(['posts', contentId]);
       handleSuccessAlertOpen();
     },
-    onError: () => {
+    onError: (error) => {
+      console.log('에러메세지', error.response.data.errorMessage);
       handleSuccessAlertOpen();
     },
   });

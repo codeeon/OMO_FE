@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Map } from 'react-kakao-maps-sdk';
 import MapLevelButton from './LevelButton.tsx';
@@ -17,7 +17,6 @@ import PlaceMarker from './customInfo/PlaceMarker.tsx';
 import CurrentMarker from './customInfo/CurrentMarker.tsx';
 import ReSearchButton from './ReSearchButton.tsx';
 import BookmarkButton from './BookmarkButton.tsx';
-import useGetBookmarkQuery from '../../../hooks/reactQuery/bookmark/useGetBookmarkQuery.tsx';
 import BookMarker from './customInfo/BookMarker.tsx';
 
 declare global {
@@ -63,6 +62,8 @@ const MapMain: React.FC<Props> = ({
     <CustomMap
       center={mapCenterLocation.center}
       level={level}
+      // minLevel={3}
+      // maxLevel={2}
       ref={mapRef}
       zoomable={true}
       isPanto={mapCenterLocation.isPanto}
@@ -70,9 +71,10 @@ const MapMain: React.FC<Props> = ({
       isSelectedPlace={selectedPlace !== null}
       onTileLoaded={(map) => {
         const bounds = map.getBounds();
-
+        console.log('타일로드');
         setMapCenterLocation({
           ...mapCenterLocation,
+
           bounds: {
             ha: bounds?.ha,
             oa: bounds?.oa,
@@ -139,30 +141,4 @@ const CustomMap = styled(Map)<{
   position: relative;
   z-index: 1;
   transition: width 600ms ease;
-`;
-
-const LocIconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 100px;
-  svg {
-    color: #f97393;
-    font-size: 36px;
-  }
-  position: relative;
-  z-index: 2;
-`;
-
-const ShadowBox = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 65px;
-  width: 12px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.3);
 `;

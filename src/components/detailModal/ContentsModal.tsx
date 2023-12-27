@@ -28,11 +28,11 @@ const DetailContentsModal: React.FC<{
   } = post;
 
   const commentLength = Comments.length;
-  console.log(postId);
 
   return (
     <Base>
       <DetailModalHeader
+        userProfile={User.imgUrl}
         userId={User.nickname}
         createdAt={createdAt}
         contentId={postId}
@@ -59,24 +59,29 @@ const DetailContentsModal: React.FC<{
 export default DetailContentsModal;
 
 const Base = styled.div`
-  width: 700px;
-  height: 900px;
+  box-sizing: border-box;
+  width: 600px;
+
+  min-height: 700px;
+  max-height: 900px;
+  height: 80%;
   background-color: ${({ theme }) => theme.color.bg};
   border-radius: 16px;
 
-  padding: 50px;
+  padding: 40px;
   z-index: 99;
-  overflow-y: scroll;
-`;
+  overflow: auto;
 
-const ImageContainer = styled.div<{ imageURL: string[] }>`
-  margin-top: 16px;
-  width: 100%;
-  height: 600px;
-  border-radius: 16px;
-  background: ${({ theme }) => theme.color.bg};
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.border};
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;

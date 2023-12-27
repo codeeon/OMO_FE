@@ -12,8 +12,7 @@ const postContent = async (newContent: PostContentType) => {
   formData.append('latitude', newContent.latitude);
   formData.append('longitude', newContent.longitude);
 
-  // Append each file to the formData
-  newContent.imgUrl.forEach((file, index) => {
+  newContent.imgUrl?.forEach((file, index) => {
     formData.append('imgUrl', file);
   });
 
@@ -31,6 +30,8 @@ const usePostContentMutate = () => {
   return {
     postContentMutate: mutation.mutate,
     isPostContentLoading: mutation.isLoading,
+    isPostContentSuccess: mutation.isSuccess,
+    isPostContentError: mutation.isLoading,
   };
 };
 

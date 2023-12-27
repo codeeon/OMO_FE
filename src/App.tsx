@@ -16,7 +16,6 @@ const App = () => {
       setThemeMode('LightMode');
       window.localStorage.setItem('theme', 'LightMode');
     }
-    // window.location.reload();
   };
 
   return (

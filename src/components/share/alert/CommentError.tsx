@@ -7,7 +7,7 @@ const CommentError = () => {
     <Base>
       <Wrapper>
         <PiWarningCircleFill />
-        <span>댓글 등록에 실패했습니다.</span>
+        <span>로그인 후 사용해주세요.</span>
       </Wrapper>
     </Base>
   );
