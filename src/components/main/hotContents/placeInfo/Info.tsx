@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { HotPostsType } from '../../../../model/interface';
 import LocationIcon from '../../../../assets/icons/LocationIcon';
@@ -17,6 +17,11 @@ interface Props {
 
 const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
   const { Category, Location } = post;
+  const [isOpen, setIsOpen] = useState(false);
+
+  const detailToggleHandler = () => {
+    setIsOpen(!isOpen);
+  };
 
   const navigate = useNavigate();
 
@@ -37,19 +42,24 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
       <StarContainer>
         <StarCount count={Location.starAvg} />
       </StarContainer>
-      <InfoContainer>
+      <InfoContainer onClick={detailToggleHandler}>
         <ClockIcon />
         <span>
-          {!googleSearchResult?.business_status
-            ? '영업 정보 없음'
-            : googleSearchResult?.business_status === 'OPERATIONAL'
-            ? '영업중'
-            : '영업종료'}
+          {googleSearchResult?.opening_hours?.isOpen ? '영업중' : '영업종료'}
         </span>
         <DividingPointIcon />
         <span>영업시간</span>
         <DownArrow />
       </InfoContainer>
+      {isOpen && (
+        <WeekDayContainer>
+          {googleSearchResult?.opening_hours?.weekday_text?.map((dayText) => (
+            <BusinessContainer>
+              <BusinessHour>{dayText}</BusinessHour>
+            </BusinessContainer>
+          ))}
+        </WeekDayContainer>
+      )}
       <InfoContainer>
         <PhoneIcon />
         <span>
@@ -75,6 +85,7 @@ const Base = styled.div`
   justify-content: start;
   align-items: start;
   width: 100%;
+  
 `;
 
 const Header = styled.div`
@@ -164,3 +175,24 @@ const MapBtnContainer = styled.div`
   }
   cursor: pointer;
 `;
+
+const WeekDayContainer = styled.div`
+  margin-top: 10px;
+  margin-left: 23px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
+const BusinessContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
+const BusinessDay = styled.div``;
+
+const BusinessHour = styled.div``;
