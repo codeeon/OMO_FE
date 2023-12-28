@@ -226,3 +226,9 @@ export interface mapBoundsType {
   northEast: { lat: number | undefined; lng: number | undefined };
   southWest: { lat: number | undefined; lng: number | undefined };
 }
+
+export interface SelectedPlaceType {
+  locationId: number;
+  latitude: number;
+  longitude: number;
+}

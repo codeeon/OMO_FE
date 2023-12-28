@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { LocationType } from '../../../model/interface';
+import { SelectedPlaceType } from '../../../model/interface';
 import { HiLocationMarker } from 'react-icons/hi';
 import ContentsSection from './ContentsSection';
 import useGetLocationPostsQuery from '../../../hooks/reactQuery/map/useGetLocationPostsQuery';
 
 interface Props {
-  selectedPlace: LocationType | null;
+  selectedPlace: SelectedPlaceType | null;
 }
 
 const DetailList: React.FC<Props> = ({ selectedPlace }) => {

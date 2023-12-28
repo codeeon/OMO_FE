@@ -3,10 +3,9 @@ import { LocationPostType } from '../../../model/interface';
 import styled from 'styled-components';
 import { TbMessage } from 'react-icons/tb';
 import LikeBtn from '../../../components/detailModal/LikeBtn';
-import { FaStar } from 'react-icons/fa';
-import { FaRegStar } from 'react-icons/fa';
 import Modal from '../../../components/Modal/Modal';
 import DetailContentsModal from '../../../components/detailModal/ContentsModal';
+import StarCount from '../../../components/share/StarCount';
 interface Props {
   post: LocationPostType;
 }
@@ -31,14 +30,7 @@ const ContentCard: React.FC<Props> = ({ post }) => {
           </UserInfoContainer>
         </UserContainer>
         <ImageBox imageURL={post.imgUrl[0]} />
-        <RatingContainer>
-          {Array.from({ length: 5 }, (_, idx) => (
-            <StarWrapper key={idx}>
-              {idx < post.star ? <FaStar /> : <FaRegStar />}
-            </StarWrapper>
-          ))}
-          <span>{post.star}점</span>
-        </RatingContainer>
+        <StarCount count={post.star} margin="17px 20px" />
         <Text dangerouslySetInnerHTML={{ __html: post.content }} />
         <Footer>
           <FooterItem color="red">
