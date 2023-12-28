@@ -11,7 +11,7 @@ const App = () => {
   return (
     <ThemeProvider theme={themeMode === 'LightMode' ? LightTheme : DarkTheme}>
       <BrowserRouter>
-        <Routers toggleTheme={toggleTheme} themeMode={themeMode} />
+        <Routers />
       </BrowserRouter>
     </ThemeProvider>
   );
