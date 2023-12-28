@@ -5,6 +5,7 @@ import MiniMap from './MiniMap';
 import Info from './Info';
 import useMapStore from '../../../../store/location/googleMapStore';
 import { detailSearchFields } from '../../../../function/googleSearch.ts/detailSearch';
+import usePlaceStore from '../../../../store/location/placeStore';
 
 interface Props {
   handleModalClose: (
@@ -16,6 +17,7 @@ interface Props {
 const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
   const { Location } = post;
   const { map } = useMapStore();
+  const { setPlace } = usePlaceStore();
   const [googleSearchResult, setGoogleSearchResult] =
     useState<google.maps.places.PlaceResult | null>(null);
 
@@ -37,11 +39,16 @@ const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
         setGoogleSearchResult(place);
       }
     }
+    setPlace({
+      locationId: Location.locationId,
+      latitude: Location.latitude,
+      longitude: Location.longitude,
+    });
   }, []);
   return (
     <Base>
       <MiniMap post={post} />
-      <Info googleSearchResult={googleSearchResult} />
+      <Info googleSearchResult={googleSearchResult} post={post} />
     </Base>
   );
 };
@@ -49,11 +56,15 @@ const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
 export default PlaceInfoModal;
 
 const Base = styled.div`
-  height: 600px;
-  width: 1500px;
+  width: 100%;
+  height: 100%;
+
   background: ${({ theme }) => theme.color.bg};
-  border-radius: 25px;
+  border-radius: 16px;
   display: flex;
-  justify-content: center;
+
+  flex-direction: column;
+  justify-content: start;
   align-content: center;
+  padding: 45px;
 `;

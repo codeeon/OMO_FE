@@ -17,14 +17,16 @@ interface Props {
 const MiniMap: React.FC<Props> = ({ post }) => {
   const { Location } = post;
 
-  const { setMap } = useMapStore();
+  const { setMap, currentLocation, setCurrentLocation } = useMapStore();
   const { themeMode } = useThemeStore();
-
-  
 
   const onLoad = useCallback(function callback(map: google.maps.Map) {
     // @ts-ignore
     const bounds = new window.google.maps.LatLngBounds({
+      lat: Number(Location.latitude),
+      lng: Number(Location.longitude),
+    });
+    setCurrentLocation({
       lat: Number(Location.latitude),
       lng: Number(Location.longitude),
     });
@@ -39,11 +41,11 @@ const MiniMap: React.FC<Props> = ({ post }) => {
         mapContainerStyle={{
           width: '100%',
           height: '100%',
-          borderRadius: '25px 0 0 25px',
+          borderRadius: '25px',
         }}
         center={{
-          lat: Number(Location.latitude),
-          lng: Number(Location.longitude),
+          lat: currentLocation.lat!,
+          lng: currentLocation.lng!,
         }}
         onLoad={onLoad}
         options={{
@@ -55,9 +57,7 @@ const MiniMap: React.FC<Props> = ({ post }) => {
           clickableIcons: false,
           styles: themeMode === 'LightMode' ? lightMapTheme : darkMapTheme,
           backgroundColor: 'transparent',
-          
         }}
-        
       >
         <MiniLocationMarker placeDb={post} />
       </GoogleMap>
@@ -68,5 +68,7 @@ const MiniMap: React.FC<Props> = ({ post }) => {
 export default MiniMap;
 
 const Base = styled.div`
-  flex: 1;
+  width: 100%;
+  height: 300px;
+  border-radius: 55px;
 `;

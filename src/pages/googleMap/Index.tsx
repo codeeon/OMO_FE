@@ -57,7 +57,6 @@ const Map = () => {
       </ListBtnContainer>
       <MapGoogle
         placeDatas={placeDatas}
-        lookAroundRefetch={lookAroundRefetch}
         isListOpen={isListOpen}
         setIsListOpen={setIsListOpen}
       />

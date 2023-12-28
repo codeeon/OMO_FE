@@ -19,11 +19,15 @@ const LocationMarker: React.FC<Props> = ({
   isListOpen,
   setIsListOpen,
 }) => {
-  const { latitude, longitude, Category, storeName } = placeDb;
+  const { locationId, latitude, longitude, Category, storeName } = placeDb;
   const { place, setPlace } = usePlaceStore();
 
   const selectPlaceHandler = () => {
-    setPlace(placeDb);
+    setPlace({
+      locationId: locationId,
+      latitude: latitude,
+      longitude: longitude,
+    });
   };
 
   const clikcMarkerHandler = () => {
@@ -38,11 +42,11 @@ const LocationMarker: React.FC<Props> = ({
     >
       <CustomMarkerContainer
         onClick={clikcMarkerHandler}
-        isSelected={place === placeDb}
+        isSelected={place?.locationId === locationId}
         whileTap={{ scale: 1.2 }}
         transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       >
-        <MarkerIcon isSelected={place === placeDb}>
+        <MarkerIcon isSelected={place?.locationId === locationId}>
           {placeDb.Category.categoryName === '카페' ? (
             <IoMdCafe />
           ) : placeDb.Category.categoryName === '음식점' ? (
@@ -51,9 +55,11 @@ const LocationMarker: React.FC<Props> = ({
             <FaLocationDot />
           )}
         </MarkerIcon>
-        <PlaceInfoContainer isSelected={place === placeDb}>
-          <PlaceName isSelected={place === placeDb}>{storeName}</PlaceName>
-          <CategoryName isSelected={place === placeDb}>
+        <PlaceInfoContainer isSelected={place?.locationId === locationId}>
+          <PlaceName isSelected={place?.locationId === locationId}>
+            {storeName}
+          </PlaceName>
+          <CategoryName isSelected={place?.locationId === locationId}>
             {Category.categoryName}
           </CategoryName>
         </PlaceInfoContainer>

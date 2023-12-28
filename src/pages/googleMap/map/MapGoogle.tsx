@@ -9,11 +9,6 @@ import styled from 'styled-components';
 import { LocationType } from '../../../model/interface';
 import { darkMapTheme, lightMapTheme } from './maptheme';
 import CurrentLocationMarker from '../marker/CurrentLocationMarker';
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from 'react-query';
 import LocationMarker from '../marker/LocationMarker';
 import ReSearchButton from '../actionBtn/ReSearchButton';
 import CurrentLocationButton from '../actionBtn/CurrentLocationButton';
@@ -24,16 +19,13 @@ import usePlaceStore from '../../../store/location/placeStore';
 
 interface Props {
   placeDatas: LocationType[] | undefined;
-  lookAroundRefetch: <TPageData>(
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
-  ) => Promise<QueryObserverResult<LocationType[], unknown>>;
   isListOpen: boolean;
   setIsListOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MapGoogle: React.FC<Props> = ({
   placeDatas,
-  lookAroundRefetch,
+
   isListOpen,
   setIsListOpen,
 }) => {

@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { HotPostsType } from '../../../model/interface';
-import { HiArrowNarrowRight } from 'react-icons/hi';
-import { useNavigate } from 'react-router-dom';
-import useMapStore from '../../../store/location/googleMapStore';
+
+
 import useModalCtr from '../../../hooks/useModalCtr';
-import Modal from '../../Modal/Modal';
 import PlaceInfoModal from './placeInfo/PlaceInfoModal';
+import LocationModal from '../../Modal/LocationModal';
 
 interface Props {
   post: HotPostsType;
@@ -15,21 +14,11 @@ interface Props {
 const Card: React.FC<Props> = ({ post }) => {
   const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
   const { imgUrl, Location, content, Category: category } = post;
-  const { setCurrentLocation } = useMapStore();
-  const navigate = useNavigate();
 
-  const moveMapHandler = () => {
-    setCurrentLocation({
-      lat: Location.latitude,
-      lng: Location.longitude,
-    });
-
-    navigate('/map');
-  };
 
   return (
-    // <Base onClick={(e) => handleModalOpen(e)}>
-    <Base>
+    <Base onClick={(e) => handleModalOpen(e)}>
+      {/* // <Base> */}
       <Wrapper>
         <ImageContainer $imageURL={imgUrl}></ImageContainer>
         <Title>{Location.storeName}</Title>
@@ -37,16 +26,13 @@ const Card: React.FC<Props> = ({ post }) => {
           <Text dangerouslySetInnerHTML={{ __html: content }} />
           <FooterContainer>
             <Category>#{category.categoryName}</Category>
-            {/* <MapBtnContainer onClick={moveMapHandler}>
-              <span>지도로 보기</span>
-              <HiArrowNarrowRight />
-            </MapBtnContainer> */}
+            
           </FooterContainer>
         </BodyConatiner>
       </Wrapper>
-      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+      <LocationModal isOpen={isModalOpen} onClose={handleModalClose}>
         <PlaceInfoModal handleModalClose={handleModalClose} post={post} />
-      </Modal>
+      </LocationModal>
     </Base>
   );
 };
@@ -130,28 +116,3 @@ const Category = styled.div`
   font-weight: 700;
 `;
 
-const MapBtnContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2px;
-  span {
-    color: #44a5ff;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    &:hover {
-      color: #3765ff;
-    }
-  }
-  svg {
-    width: 18px;
-    height: 18px;
-    color: #44a5ff;
-    margin-bottom: 2px;
-    &:hover {
-      color: #3765ff;
-    }
-  }
-  cursor: pointer;
-`;

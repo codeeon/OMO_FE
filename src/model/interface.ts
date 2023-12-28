@@ -192,6 +192,7 @@ export interface LocationPostsType {
     Posts: [{ imgUrl: string | undefined }];
     address: string;
     locationId: number;
+    placeInfoId: string;
     postCount: number;
     starAvg: number;
     storeName: string;
@@ -225,4 +226,10 @@ export interface mapBoundsType {
   initialLoad?: boolean | undefined;
   northEast: { lat: number | undefined; lng: number | undefined };
   southWest: { lat: number | undefined; lng: number | undefined };
+}
+
+export interface SelectedPlaceType {
+  locationId: number;
+  latitude: number;
+  longitude: number;
 }
