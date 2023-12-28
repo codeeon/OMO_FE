@@ -6,7 +6,6 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 // import KakaoLogin from '../components/auth/KakaoLogin';
 import auth from '..//axios/auth';
-import useUserStore from '../store/user/useUserStore';
 
 interface LoginData {
   email: string;
@@ -30,7 +29,6 @@ const Login: React.FC = () => {
         sessionStorage.setItem('accessToken', accessToken);
         sessionStorage.setItem('refreshToken', refreshToken);
         sessionStorage.setItem('userId', userId);
-        setUserId(userId);
 
         return response.data;
       } catch (error) {
