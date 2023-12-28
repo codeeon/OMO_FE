@@ -7,9 +7,7 @@ import { FiUser } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 import AlertModal from '../Modal/AlertModal';
-import CommentError from './alert/CommentError';
 import useThemeStore from '../../store/theme/themeStore';
-import useUserStore from '../../store/user/useUserStore';
 import PostErrorAlert from './alert/PostErrorAlert';
 import PostSuccessAlert from './alert/PostSuccessAlert';
 
@@ -19,7 +17,6 @@ const NavDropdown = () => {
   const [errorType, setErrorType] = useState<string | null>(null);
   const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const { themeMode, toggleTheme } = useThemeStore();
-  const { setUserId } = useUserStore();
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
       if (
@@ -54,7 +51,6 @@ const NavDropdown = () => {
     // 여기에 auth.POST /logout req 넣을 예정
     setErrorType('logout');
     handleModalOpen();
-    setUserId(null);
     setIsOpen(false);
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('refreshToken');
