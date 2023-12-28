@@ -13,10 +13,20 @@ const randomNumberBetween = (min: number, max: number) => {
 type AnimationSequence = Parameters<typeof animate>[0];
 
 interface Props {
-  locationId: number;
+  locationId: number | undefined;
+  top?: string;
+  left?: string;
+  bottom?: string;
+  right?: string;
 }
 
-const BookMarkBtn: React.FC<Props> = ({ locationId }) => {
+const BookMarkBtn: React.FC<Props> = ({
+  locationId,
+  top,
+  left,
+  bottom,
+  right,
+}) => {
   const [scope, animate] = useAnimate();
   const [isBookMarking, setIsBookMarking] = useState(false);
 
@@ -91,7 +101,13 @@ const BookMarkBtn: React.FC<Props> = ({ locationId }) => {
   };
 
   return (
-    <Container ref={scope}>
+    <Container
+      ref={scope}
+      $top={top}
+      $left={left}
+      $right={right}
+      $bottom={bottom}
+    >
       <Button
         onClick={onButtonClick}
         whileHover={{ scale: 1.1 }}
@@ -136,10 +152,17 @@ const BookMarkBtn: React.FC<Props> = ({ locationId }) => {
 
 export default BookMarkBtn;
 
-const Container = styled.div`
+const Container = styled.div<{
+  $top?: string;
+  $bottom?: string;
+  $right?: string;
+  $left?: string;
+}>`
   position: absolute;
-  right: 0;
-  top: -10px;
+  bottom: ${({ $bottom }) => ($bottom ? $bottom : null)};
+  top: ${({ $top }) => ($top ? $top : null)};
+  right: ${({ $right }) => ($right ? $right : null)};
+  left: ${({ $left }) => ($left ? $left : null)};
 `;
 
 const Button = styled(motion.div)<{ $isBookMarking: boolean }>`

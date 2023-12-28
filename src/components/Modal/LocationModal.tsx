@@ -70,7 +70,20 @@ const Container = styled.div`
   align-items: start;
 
   width: 725px;
-  height: 500px;
+  max-height: 550px;
 
   border-radius: 16px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.border};
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;

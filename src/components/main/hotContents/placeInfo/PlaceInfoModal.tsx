@@ -20,7 +20,7 @@ const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
   const { setPlace } = usePlaceStore();
   const [googleSearchResult, setGoogleSearchResult] =
     useState<google.maps.places.PlaceResult | null>(null);
-  console.log(post.Location.placeInfoId);
+
   useEffect(() => {
     const request = {
       placeId: Location.placeInfoId,
@@ -58,12 +58,13 @@ export default PlaceInfoModal;
 const Base = styled.div`
   width: 100%;
   height: 100%;
+
   background: ${({ theme }) => theme.color.bg};
   border-radius: 16px;
   display: flex;
+
   flex-direction: column;
   justify-content: start;
   align-content: center;
   padding: 45px;
-  overflow: scroll;
 `;

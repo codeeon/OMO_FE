@@ -69,6 +69,6 @@ export default MiniMap;
 
 const Base = styled.div`
   width: 100%;
-  min-height: 300px;
+  height: 300px;
   border-radius: 55px;
 `;

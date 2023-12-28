@@ -192,6 +192,7 @@ export interface LocationPostsType {
     Posts: [{ imgUrl: string | undefined }];
     address: string;
     locationId: number;
+    placeInfoId: string;
     postCount: number;
     starAvg: number;
     storeName: string;

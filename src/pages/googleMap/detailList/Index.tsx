@@ -1,9 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SelectedPlaceType } from '../../../model/interface';
 import { HiLocationMarker } from 'react-icons/hi';
 import ContentsSection from './ContentsSection';
 import useGetLocationPostsQuery from '../../../hooks/reactQuery/map/useGetLocationPostsQuery';
+import BookMarkBtn from '../../../components/share/BookMarkBtn';
+import { detailSearchFields } from '../../../function/googleSearch.ts/detailSearch';
+import useMapStore from '../../../store/location/googleMapStore';
+import ClockIcon from '../../../assets/icons/ClockIcon';
+import DividingPointIcon from '../../../assets/icons/DividingPointIcon';
+import DownArrow from '../../../assets/icons/DownArrow';
+import PhoneIcon from '../../../assets/icons/PhoneIcon';
 
 interface Props {
   selectedPlace: SelectedPlaceType | null;
@@ -11,7 +18,14 @@ interface Props {
 
 const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   const { locationId, latitude, longitude } = selectedPlace || {};
+  const { map } = useMapStore();
+  const [googleSearchResult, setGoogleSearchResult] =
+    useState<google.maps.places.PlaceResult | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
+  const detailToggleHandler = () => {
+    setIsOpen(!isOpen);
+  };
   const { data: posts, refetch } = useGetLocationPostsQuery(
     locationId,
     latitude,
@@ -22,6 +36,30 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
     refetch();
   }, [selectedPlace]);
 
+  useEffect(() => {
+    if (!posts) return;
+    if (!posts.location.placeInfoId) return setGoogleSearchResult(null);
+    const request = {
+      placeId: posts?.location.placeInfoId,
+      fields: detailSearchFields,
+    };
+    // @ts-ignore
+    const service = new google.maps.places.PlacesService(map);
+    service.getDetails(request, callback);
+
+    function callback(
+      place: google.maps.places.PlaceResult | null,
+      status: google.maps.places.PlacesServiceStatus,
+    ) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        console.log(place);
+        setGoogleSearchResult(place);
+      } else {
+        setGoogleSearchResult(null);
+      }
+    }
+  }, [posts]);
+
   return (
     <Base>
       <BodyContainer>
@@ -31,6 +69,36 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
           <HiLocationMarker />
           {posts?.location.address}
         </Address>
+
+        <InfoContainer onClick={detailToggleHandler}>
+          <ClockIcon />
+          <span>
+            {googleSearchResult?.opening_hours?.isOpen ? '영업중' : '영업종료'}
+          </span>
+          <DividingPointIcon />
+          <span>영업시간</span>
+          <DownArrow />
+        </InfoContainer>
+        {isOpen && googleSearchResult ? (
+          <WeekDayContainer>
+            {googleSearchResult?.opening_hours?.weekday_text?.map((dayText) => (
+              <BusinessContainer>
+                <div>{dayText}</div>
+              </BusinessContainer>
+            ))}
+          </WeekDayContainer>
+        ) : null}
+        <InfoContainer>
+          <PhoneIcon />
+          <span>
+            {googleSearchResult?.formatted_phone_number
+              ? googleSearchResult?.formatted_phone_number
+              : '전화번호 정보 없음'}
+          </span>
+        </InfoContainer>
+        <BookMarContainer>
+          <BookMarkBtn locationId={locationId} top="50px" left="160px" />
+        </BookMarContainer>
         <ContentsSection posts={posts} />
       </BodyContainer>
     </Base>
@@ -104,31 +172,41 @@ const Address = styled.div`
   padding: 0 20px;
 `;
 
-const RatingContainer = styled.div`
-  margin-top: 10px;
+const BookMarContainer = styled.div`
+  width: 100%;
+  height: 100px;
+  position: relative;
+`;
 
+const InfoContainer = styled.div`
+  margin-left: 20px;
+  margin-top: 10px;
   width: 100%;
   display: flex;
   justify-content: start;
   align-items: center;
-  gap: 2px;
-  span {
-    margin-top: 5px;
-    text-align: center;
-    color: ${({ theme }) => theme.color.text};
-    font-size: 16px;
-    font-weight: 700;
-  }
-  margin-bottom: 15px;
-  padding: 0 20px;
+  gap: 5px;
+  color: ${({ theme }) => theme.color.sub};
+  font-size: 16px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: color 300ms ease;
 `;
 
-const StarWrapper = styled.div`
+const WeekDayContainer = styled.div`
+  margin-top: 10px;
+  margin-left: 23px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
+const BusinessContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
-
-  font-size: 20px;
-  color: #f97393;
+  gap: 10px;
 `;

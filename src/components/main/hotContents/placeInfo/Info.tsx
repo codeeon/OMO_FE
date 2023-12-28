@@ -33,7 +33,7 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
       <Header>
         <PlaceNameContainer>{Location.storeName}</PlaceNameContainer>
         <CategoryName>{Category.categoryName}</CategoryName>
-        <BookMarkBtn locationId={Location.locationId} />
+        <BookMarkBtn locationId={Location.locationId} right="0" top="-10px" />
       </Header>
       <AddressNameContainer>
         <LocationIcon />
@@ -55,7 +55,7 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
         <WeekDayContainer>
           {googleSearchResult?.opening_hours?.weekday_text?.map((dayText) => (
             <BusinessContainer>
-              <BusinessHour>{dayText}</BusinessHour>
+              <div>{dayText}</div>
             </BusinessContainer>
           ))}
         </WeekDayContainer>
@@ -85,7 +85,7 @@ const Base = styled.div`
   justify-content: start;
   align-items: start;
   width: 100%;
-  
+  height: auto;
 `;
 
 const Header = styled.div`
@@ -192,7 +192,3 @@ const BusinessContainer = styled.div`
   align-items: center;
   gap: 10px;
 `;
-
-const BusinessDay = styled.div``;
-
-const BusinessHour = styled.div``;
