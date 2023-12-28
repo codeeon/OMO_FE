@@ -65,6 +65,7 @@ export interface PostDetailType {
   User: {
     nickname: string;
     imgUrl: string;
+    userId: number;
   };
   Location: {
     Category: {
@@ -80,22 +81,14 @@ export interface PostDetailType {
 }
 
 export interface RepleType {
-  commentId: number;
+  replyId: number;
   content: string;
   createdAt: string;
   User: {
     imgUrl: string;
     nickname: string;
+    userId: number;
   };
-}
-
-export interface RepleType2 {
-  Comment: {
-    commentId: number;
-    content: string;
-    createAt: string;
-  };
-  User : 
 }
 
 export interface CommentType {
@@ -106,12 +99,22 @@ export interface CommentType {
   User: {
     imgUrl: string;
     nickname: string;
+    userId: number;
   };
 }
 
 export interface HotPostsType {
   Category: { categoryName: string };
-  Location: { storeName: string; latitude: number; longitude: number };
+  Location: {
+    address: string;
+    latitude: number;
+    locationId: number;
+    longitude: number;
+    placeInfoId: string;
+    postCount: 1;
+    starAvg: 0;
+    storeName: string;
+  };
   content: string;
   imgUrl: string[];
 }
@@ -155,6 +158,7 @@ export interface PostContentType {
   latitude: string;
   longitude: string;
   star: number;
+  placeInfoId: string;
 }
 
 export interface PostCommentType {
@@ -218,7 +222,7 @@ export interface CurrentLocationType {
 }
 
 export interface mapBoundsType {
-  initialLoad: boolean;
-  northEast: { lat: number; lng: number };
-  southWest: { lat: number; lng: number };
+  initialLoad?: boolean | undefined;
+  northEast: { lat: number | undefined; lng: number | undefined };
+  southWest: { lat: number | undefined; lng: number | undefined };
 }

@@ -95,7 +95,7 @@ const PatchModal: React.FC<Props> = ({
           <IoIosArrowRoundBack />
         </BackBtn>
         <Title>새 게시글</Title>
-        <CompleteBtn onClick={(e) => savePostHandler(e)} disable={!isValidate}>
+        <CompleteBtn onClick={(e) => savePostHandler(e)} $disable={!isValidate}>
           작성완료
         </CompleteBtn>
       </Header>
@@ -163,14 +163,14 @@ const Title = styled.div`
   letter-spacing: -0.2px;
 `;
 
-const CompleteBtn = styled.div<{ disable: boolean }>`
+const CompleteBtn = styled.div<{ $disable: boolean }>`
   padding: 10px 15px;
   font-size: 14px;
   font-weight: 700;
   border-radius: 8px;
   color: #fff;
   cursor: pointer;
-  ${({ disable }) =>
+  ${({ $disable }) =>
     disable
       ? css`
           background: #b1b1b1;

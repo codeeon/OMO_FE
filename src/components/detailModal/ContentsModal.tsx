@@ -33,7 +33,8 @@ const DetailContentsModal: React.FC<{
     <Base>
       <DetailModalHeader
         userProfile={User.imgUrl}
-        userId={User.nickname}
+        userName={User.nickname}
+        userId={User.userId}
         createdAt={createdAt}
         contentId={postId}
         closeModalHandler={closeModalHandler}
@@ -60,28 +61,13 @@ export default DetailContentsModal;
 
 const Base = styled.div`
   box-sizing: border-box;
-  width: 600px;
-
-  min-height: 700px;
-  max-height: 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 720px;
+  min-height: 800px;
+  max-height: 1000px;
   height: 80%;
-  background-color: ${({ theme }) => theme.color.bg};
-  border-radius: 16px;
-
-  padding: 40px;
-  z-index: 99;
-  overflow: auto;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.color.border};
-    border-radius: 20px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
+  padding: 45px;
 `;

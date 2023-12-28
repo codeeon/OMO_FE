@@ -2,15 +2,16 @@ import React, { ReactNode, SetStateAction } from 'react';
 import { motion, Variants } from 'framer-motion';
 import styled from 'styled-components';
 import { itemVariants } from '../../../../styles/Motion';
+import useDistrictStore from '../../../../store/location/districtStore';
 
 interface Props {
   dist: string;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
 }
 
-const DistrictItem: React.FC<Props> = ({ dist, setCurrentLocation }) => {
+const DistrictItem: React.FC<Props> = ({ dist }) => {
+  const { setDistrict } = useDistrictStore();
   const saveCurLocHandler = () => {
-    setCurrentLocation(dist);
+    setDistrict(dist);
   };
 
   return (

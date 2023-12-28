@@ -6,15 +6,12 @@ import { FaCaretDown } from 'react-icons/fa';
 import { SlLocationPin } from 'react-icons/sl';
 import { BounceLoader } from 'react-spinners';
 import useCurrentLocationQuery from '../../../../hooks/reactQuery/location/useCurrentLocationQuery';
+import useDistrictStore from '../../../../store/location/districtStore';
 
-interface Props {
-  currentDistrict: string | undefined;
-  setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
-}
-
-const Location: React.FC<Props> = ({ currentDistrict, setCurrentDistrict }) => {
+const Location = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, refetch } = useCurrentLocationQuery(setCurrentDistrict);
+  const { district, setDistrict } = useDistrictStore();
+  const { isLoading, refetch } = useCurrentLocationQuery(setDistrict);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -52,7 +49,7 @@ const Location: React.FC<Props> = ({ currentDistrict, setCurrentDistrict }) => {
         {isLoading ? (
           <BounceLoader color="#f97393" size={30} />
         ) : (
-          <span>{currentDistrict}</span>
+          <span>{district}</span>
         )}
         <motion.div
           variants={{
@@ -69,7 +66,6 @@ const Location: React.FC<Props> = ({ currentDistrict, setCurrentDistrict }) => {
         refetch={refetch}
         isOpen={isOpen}
         isLoading={isLoading}
-        setCurrentLocation={setCurrentDistrict}
         setIsOpen={setIsOpen}
       />
     </NavContainer>

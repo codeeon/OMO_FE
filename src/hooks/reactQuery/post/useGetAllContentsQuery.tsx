@@ -38,7 +38,7 @@ const getContents = async (
         };
 
   const response = await instance.get('/posts', { params });
-  console.log(response.data);
+
   return response.data;
 };
 

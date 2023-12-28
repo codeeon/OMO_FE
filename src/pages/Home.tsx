@@ -1,41 +1,18 @@
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/comment';
 import HotContents from '../components/main/hotContents';
 import Banner from '../components/main/banner';
 import Footer from '../components/share/Footer';
-import { CurrentLocationType, LocationType } from '../model/interface';
-interface Props {
-  themeMode: string | null;
-  setSelectedPlace: React.Dispatch<SetStateAction<LocationType | null>>;
-  setCurrentLocation: React.Dispatch<SetStateAction<CurrentLocationType>>;
-  currentDistrict: string | undefined;
-  setCurrentDistrict: React.Dispatch<SetStateAction<string | undefined>>;
-}
 
-const Home: React.FC<Props> = ({
-  themeMode,
-  setSelectedPlace,
-  setCurrentLocation,
-  currentDistrict,
-  setCurrentDistrict,
-}) => {
+const Home = () => {
   return (
     <Base>
-      <Banner
-        currentDistrict={currentDistrict}
-        setCurrentDistrict={setCurrentDistrict}
-      />
-      <HotContents
-        themeMode={themeMode}
-        setSelectedPlace={setSelectedPlace}
-        setCurrentLocation={setCurrentLocation}
-        currentDistrict={currentDistrict}
-        setCurrentDistrict={setCurrentDistrict}
-      />
-      <RecentContents currentDistrict={currentDistrict} themeMode={themeMode} />
-      <PlaceComments currentDistrict={currentDistrict} themeMode={themeMode} />
+      <Banner />
+      <HotContents />
+      <RecentContents />
+      <PlaceComments />
       <Footer />
     </Base>
   );

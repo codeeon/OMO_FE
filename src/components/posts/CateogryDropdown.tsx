@@ -3,14 +3,11 @@ import { motion } from 'framer-motion';
 import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { FaCaretDown } from 'react-icons/fa';
+import useCategoryStore from '../../store/category/categoryStore';
 
-interface Props {
-  category: string;
-  setCategory: React.Dispatch<SetStateAction<string>>;
-}
-
-const CategoryDropdown: React.FC<Props> = ({ category, setCategory }) => {
+const CategoryDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { category, setCategory } = useCategoryStore();
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdownHandler = (e: React.MouseEvent<HTMLButtonElement>) => {

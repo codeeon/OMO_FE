@@ -5,24 +5,22 @@ import useGetCommentPostsQuery from '../../../hooks/reactQuery/main/useGetCommen
 import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
+import useDistrictStore from '../../../store/location/districtStore';
+import useThemeStore from '../../../store/theme/themeStore';
 
-interface Props {
-  currentDistrict: string | undefined;
-  themeMode: string | null;
-}
-
-const PlaceComments: React.FC<Props> = ({ currentDistrict, themeMode }) => {
+const PlaceComments = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-
+  const { district } = useDistrictStore();
   const {
     data: comments,
     isLoading,
     refetch,
-  } = useGetCommentPostsQuery(currentDistrict);
+  } = useGetCommentPostsQuery(district);
+  const { themeMode } = useThemeStore();
 
   useEffect(() => {
     refetch();
-  }, [currentDistrict]);
+  }, [district]);
 
   return (
     <Carousel
@@ -34,18 +32,18 @@ const PlaceComments: React.FC<Props> = ({ currentDistrict, themeMode }) => {
     >
       {!isLoading
         ? comments?.map((comment) => (
-            <CarouselItem activeIndex={activeIndex} key={comment.PostId}>
+            <CarouselItem $activeIndex={activeIndex} key={comment.PostId}>
               <Card comment={comment} key={comment.PostId} />
             </CarouselItem>
           ))
         : themeMode === 'LightMode'
         ? Array.from({ length: 9 }).map((_, i) => (
-            <CarouselItem activeIndex={activeIndex} key={i}>
+            <CarouselItem $activeIndex={activeIndex} key={i}>
               <PlaceCommnetCardSkeleton key={i} />
             </CarouselItem>
           ))
         : Array.from({ length: 9 }).map((_, i) => (
-            <CarouselItem activeIndex={activeIndex} key={i}>
+            <CarouselItem $activeIndex={activeIndex} key={i}>
               <CardDarkSkeleton key={i} />
             </CarouselItem>
           ))}
@@ -61,10 +59,10 @@ const Title = styled.div`
   color: ${({ theme }) => theme.color.text};
 `;
 
-const CarouselItem = styled.li<{ activeIndex: number }>`
+const CarouselItem = styled.li<{ $activeIndex: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(-${({ activeIndex }) => activeIndex * 315}%);
+  transform: translateX(-${({ $activeIndex }) => $activeIndex * 315}%);
   transition: 500ms ease;
 `;

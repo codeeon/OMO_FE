@@ -51,7 +51,6 @@ const GooglePlace: React.FC<Props> = ({
     };
 
     const { places } = await Place.findPlaceFromQuery(request);
-    console.log(places[0].id);
   };
 
   const searchPlaceHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

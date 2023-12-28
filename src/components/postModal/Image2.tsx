@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { LuImagePlus } from 'react-icons/lu';
 import { GrFormClose } from 'react-icons/gr';
-import { useMutation, useQueryClient } from 'react-query';
-import { onImageChange } from '../../function/uploadImage.ts';
-import { MoonLoader } from 'react-spinners';
+import ImageIcon from '../../assets/icons/ImageIcon';
+import AlertModal from '../Modal/AlertModal';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import PostErrorAlert from '../share/alert/PostErrorAlert';
+import PostSuccessAlert from '../share/alert/PostSuccessAlert';
 
 interface Props {
   imageURL: string[];
   setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   files: File[];
+  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-const Image: React.FC<Props> = ({ imageURL, setImageUrl, setFiles, files }) => {
-  const [progressPercent, setProgressPercent] = useState<number | null>(100);
-
-  const { mutate } = useMutation(onImageChange);
-
+const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
+  const [isUploadError, setIsUploadError] = useState<boolean>(false);
+  const [isUploadSuccess, setIsUploadSuccess] = useState<boolean>(false);
   const deleteImageHandler = (image: string) => {
     setImageUrl(imageURL.filter((img) => img !== image));
   };
@@ -40,7 +40,6 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, setFiles, files }) => {
         reject(error);
       };
 
-      // Read the file as a data URL (base64)
       reader.readAsDataURL(file);
     });
   };
@@ -48,22 +47,25 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, setFiles, files }) => {
   const uploadImage = () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
-    // input.setAttribute('accept', 'image/*');
+    input.setAttribute('accept', 'image/*');
     input.click();
 
     const changeHandler = async () => {
       const file = input.files?.[0];
       if (!file) return null;
-      // if (!isValidImageFileType(file)) {
-      //   alert('jpg 혹은 png 파일만 업로드 가능합니다.');
-      //   return;
-      // }
+      if (!isValidImageFileType(file)) {
+        setIsUploadError(true);
+        handleModalOpen();
+        return;
+      }
 
       try {
         const imageUrl = await fileToUrl(file);
 
-        setFiles((prev) => [...prev, file]);
-        setImageUrl((prev) => [...prev, imageUrl]);
+        setFiles([...files, file]);
+        setImageUrl([...imageURL, imageUrl]);
+        setIsUploadSuccess(true);
+        handleModalOpen();
       } catch (error) {
         console.error('Error converting file to URL:', error);
       } finally {
@@ -76,32 +78,11 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, setFiles, files }) => {
 
   return (
     <>
-      {/* {progressPercent === 0 ? (
-        <LoadingBox>
-          <MoonLoader color="#44a5ff" size={50} />
-        </LoadingBox>
-      ) : imageURL.length > 0 ? (
-        <ImageBox imageURL={imageURL[imageURL.length - 1]} />
-      ) : (
-        <Base
-          onClick={() => mutate({ setImageUrl, imageURL, setProgressPercent })}
-        >
-          <ImageIcon fontsize="45px">
-            <LuImagePlus />
-          </ImageIcon>
-          <Description fontsize="18px">이미지 추가하기</Description>
-        </Base>
-      )} */}
       {imageURL.length > 0 ? (
         <ImageBox imageURL={imageURL[imageURL.length - 1]} />
       ) : (
         <Base onClick={uploadImage}>
-          {/* <Base
-          onClick={() => mutate({ setImageUrl, imageURL, setProgressPercent })}
-        > */}
-          <ImageIcon fontsize="45px">
-            <LuImagePlus />
-          </ImageIcon>
+          <ImageIcon width="53px" height="53px" />
           <Description fontsize="18px">이미지 추가하기</Description>
         </Base>
       )}
@@ -111,26 +92,32 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, setFiles, files }) => {
           {imageURL.map((image) => (
             <ImageCard key={image} imageURL={image}>
               <DeleteBtn onClick={() => deleteImageHandler(image)}>
-                {/* <DeleteBtn onClick={() => deleteImageHandler(image)}> */}
                 <GrFormClose />
               </DeleteBtn>
             </ImageCard>
           ))}
           {imageURL.length !== 5 ? (
             <AddImageCard onClick={uploadImage}>
-              {/* <AddImageCard
-              onClick={() =>
-                mutate({ setImageUrl, imageURL, setProgressPercent })
-              }
-            > */}
-              <ImageIcon fontsize="30px">
-                <LuImagePlus />
-              </ImageIcon>
+              <ImageIcon width="25px" height="25px" />
               <Description fontsize="14px">이미지 추가하기</Description>
             </AddImageCard>
           ) : null}
         </ImageContainer>
       )}
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+        setIsUploadError={setIsUploadError}
+        setIsUploadSuccess={setIsUploadSuccess}
+      >
+        {isUploadError && (
+          <PostErrorAlert errorMsg="jpg 혹은 png 파일만 업로드 가능합니다." />
+        )}
+        {isUploadSuccess && (
+          <PostSuccessAlert successMsg="이미지가 업로드 되었어요." />
+        )}
+      </AlertModal>
     </>
   );
 };
@@ -147,52 +134,32 @@ const Base = styled.div`
   gap: 12px;
 
   border-radius: 16px;
-  border: 1px solid #44a5ff;
-
-  background: ${({ theme }) => theme.color.bg};
+  border: 1px solid var(--link, #44a5ff);
+  background: rgba(68, 165, 255, 0.05);
 
   width: 100%;
-  height: 550px;
-  &:hover {
-    background: ${({ theme }) => theme.color.hover};
-  }
+  min-height: 600px;
+
   cursor: pointer;
-  transition: all 200ms ease-in;
-`;
+  transition: all 300ms ease-in;
 
-const LoadingBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: ${({ theme }) => theme.color.bg};
-  margin-top: 31px;
-  border-radius: 16px;
-  width: 100%;
-  height: 613px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  &:hover {
+    background: rgba(68, 165, 255, 0.2);
+  }
 `;
 
 const ImageBox = styled.div<{ imageURL: string }>`
   margin-top: 31px;
+
   border-radius: 16px;
+
   background-image: ${({ imageURL }) => `url("${imageURL}")`};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
   width: 100%;
-  min-height: 380px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-`;
-
-const ImageIcon = styled.div<{ fontsize: string }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: ${({ fontsize }) => fontsize};
-  color: #44a5ff;
+  min-height: 600px;
 `;
 
 const Description = styled.div<{ fontsize: string }>`
@@ -220,28 +187,26 @@ const ImageCard = styled.div<{ imageURL: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 `;
 
 const AddImageCard = styled.div`
   width: 114px;
   height: 114px;
-  border: 1px solid #44a5ff;
   border-radius: 16px;
-  background: ${({ theme }) => theme.color.bg};
-
+  border: 1px solid var(--link, #44a5ff);
+  background: rgba(68, 165, 255, 0.05);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 4px;
-  &:hover {
-    background: ${({ theme }) => theme.color.hover};
-  }
+
   cursor: pointer;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  transition: all 300ms ease-in;
+
+  &:hover {
+    background: rgba(68, 165, 255, 0.2);
+  }
 `;
 
 const DeleteBtn = styled.div`

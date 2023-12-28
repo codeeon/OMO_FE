@@ -15,7 +15,6 @@ interface MenuProps {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<string | undefined, unknown>>;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
   isLoading: boolean;
   setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
@@ -23,7 +22,6 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({
   isOpen,
   refetch,
-  setCurrentLocation,
   isLoading,
   setIsOpen,
 }) => {
@@ -60,11 +58,7 @@ const Menu: React.FC<MenuProps> = ({
         <CityDivider>서울</CityDivider>
         <DistrictList>
           {SeoulDistrict.map((dist) => (
-            <DistrictItem
-              key={dist}
-              setCurrentLocation={setCurrentLocation}
-              dist={dist}
-            />
+            <DistrictItem key={dist} dist={dist} />
           ))}
         </DistrictList>
       </BodyContainer>

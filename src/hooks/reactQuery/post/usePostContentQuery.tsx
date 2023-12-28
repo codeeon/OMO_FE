@@ -11,6 +11,7 @@ const postContent = async (newContent: PostContentType) => {
   formData.append('address', newContent.address);
   formData.append('latitude', newContent.latitude);
   formData.append('longitude', newContent.longitude);
+  formData.append('placeInfoId', newContent.placeInfoId);
 
   newContent.imgUrl?.forEach((file, index) => {
     formData.append('imgUrl', file);

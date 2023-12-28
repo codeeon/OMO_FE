@@ -73,6 +73,7 @@ const Base = styled.div`
   width: 100%;
 
   margin-top: 20px;
+  margin-bottom: 40px;
 `;
 
 const TextArea = styled.textarea`

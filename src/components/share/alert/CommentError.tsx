@@ -40,6 +40,6 @@ const Wrapper = styled.div`
   span {
     color: #fff;
   }
-  width: 241px;
+  width: auto;
   gap: 10px;
 `;
