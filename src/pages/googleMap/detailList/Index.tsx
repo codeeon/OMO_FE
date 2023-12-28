@@ -209,4 +209,5 @@ const BusinessContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  color: ${({ theme }) => theme.color.border};
 `;

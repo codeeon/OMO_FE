@@ -70,7 +70,8 @@ const Container = styled.div`
   align-items: start;
 
   width: 725px;
-  max-height: 550px;
+
+  max-height: 560px;
 
   border-radius: 16px;
   overflow-y: scroll;
