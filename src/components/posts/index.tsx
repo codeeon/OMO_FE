@@ -63,7 +63,7 @@ const Posts: React.FC<Props> = ({
   const openPostModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
 
     if (userId) {
       openMainModal(e);
