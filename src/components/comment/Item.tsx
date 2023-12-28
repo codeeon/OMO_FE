@@ -14,6 +14,7 @@ const CommentItem: React.FC<{
   const { Replies, commentId, content, createdAt, User } = comment;
   const [isShowReple, setIsShowReple] = useState(false);
   const [isShowRepleInput, setIsShowRepleInput] = useState(false);
+  const currentUserId = Number(window.localStorage.getItem('userId'));
 
   const repleLength = comment.Replies.length;
 
@@ -28,7 +29,7 @@ const CommentItem: React.FC<{
   const getRepleHandler = () => {
     toggleRepleHandler();
   };
-  
+
   return (
     <Base>
       <UserProfile profileImg={User.imgUrl} />
@@ -36,7 +37,9 @@ const CommentItem: React.FC<{
         <UserInfoContainer>
           <UserName>{User.nickname}</UserName>
           <CreateAt>{createdAt.split('T')[0]}</CreateAt>
-          <Dropdown commentId={commentId} contentId={contentId} />
+          {currentUserId === User.userId && (
+            <Dropdown commentId={commentId} contentId={contentId} />
+          )}
         </UserInfoContainer>
         <CommentText>{content}</CommentText>
         {repleLength !== 0 ? (
@@ -54,7 +57,11 @@ const CommentItem: React.FC<{
             {isShowReple && (
               <>
                 {Replies?.map((reple) => (
-                  <RepleItem comment={reple} />
+                  <RepleItem
+                    reple={reple}
+                    contentId={contentId}
+                    commentId={commentId}
+                  />
                 ))}
                 <RepleBtn marginLeft="60px" onClick={toggleRepleHandler}>
                   답글 숨기기

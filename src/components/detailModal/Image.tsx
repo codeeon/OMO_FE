@@ -1,35 +1,98 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { AnimatePresence, wrap, motion } from 'framer-motion';
+import LeftArrow from '../../assets/icons/LeftArrow';
+import { RightArrow } from '../../assets/icons/RightArrow';
+
+const variants = {
+  enter: (direction: number) => {
+    return {
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0,
+    };
+  },
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => {
+    return {
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0,
+    };
+  },
+};
+
+const swipeConfidenceThreshold = 10000;
+const swipePower = (offset: number, velocity: number) => {
+  return Math.abs(offset) * velocity;
+};
 
 const Image: React.FC<{ imgUrl: string[] }> = ({ imgUrl }) => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [[page, direction], setPage] = useState([0, 0]);
 
-  const nextPageHandler = () => {
-    setActiveIndex((activeIndex) => (activeIndex + 1) % imgUrl.length);
-  };
+  const imageIndex = wrap(0, imgUrl.length, page);
 
-  const prevPageHandler = () => {
-    setActiveIndex(
-      (activeIndex) => (activeIndex - 1 + imgUrl.length) % imgUrl.length,
-    );
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
   };
 
   return (
     <Base>
-      <ArrowBtn position="left" onClick={prevPageHandler}>
-        <IoIosArrowBack />
-      </ArrowBtn>
-      <ListContainer>
-        {imgUrl.map((image) => (
-          <Item key={image} image={image} activeIndex={activeIndex} />
-        ))}
-      </ListContainer>
-      <ArrowBtn position="right" onClick={nextPageHandler}>
-        <IoIosArrowForward />
-      </ArrowBtn>
+      <AnimatePresenceContainer initial={false} custom={direction}>
+        <MotionImg
+          key={page}
+          src={imgUrl[imageIndex]}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: 'spring', stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={1}
+          onDragEnd={(e, { offset, velocity }) => {
+            const swipe = swipePower(offset.x, velocity.x);
+
+            if (swipe < -swipeConfidenceThreshold) {
+              paginate(1);
+            } else if (swipe > swipeConfidenceThreshold) {
+              paginate(-1);
+            }
+          }}
+        />
+      </AnimatePresenceContainer>
+      {imgUrl.length > 1 && (
+        <>
+          <PageBtn
+            $position="next"
+            onClick={() => paginate(1)}
+            whileHover={{ scale: 1.3 }}
+            whileTap={{ scale: 0.8 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          >
+            <RightArrow color="border" width="20px" height="20px" />
+          </PageBtn>
+          <PageBtn
+            $position="prev"
+            onClick={() => paginate(-1)}
+            whileHover={{ scale: 1.3 }}
+            whileTap={{ scale: 0.8 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+          >
+            <LeftArrow color="border" width="20px" height="20px" />
+          </PageBtn>
+        </>
+      )}
+
       <Navigation>
-        {activeIndex + 1}&nbsp;/&nbsp;{imgUrl.length}
+        {(page % imgUrl.length) + 1} / {imgUrl.length}
       </Navigation>
     </Base>
   );
@@ -37,59 +100,37 @@ const Image: React.FC<{ imgUrl: string[] }> = ({ imgUrl }) => {
 
 export default Image;
 
-const Base = styled.div`
-  margin-top: 16px;
-  position: relative;
-`;
+const PageBtn = styled(motion.div)<{ $position: string }>`
+  opacity: 0;
+  top: calc(50% - 20px);
 
-const ArrowBtn = styled.div<{ position: string }>`
   position: absolute;
-  top: 50%;
-  z-index: 1;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 30px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px;
-  font-size: 24px;
+
   cursor: pointer;
-  border-radius: 100%;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.5);
-  &:hover {
-    background: rgba(0, 0, 0, 0.8);
-  }
-  ${({ position }) =>
-    position === 'left'
+  font-weight: bold;
+  font-size: 18px;
+  z-index: 2;
+  ${({ $position }) =>
+    $position === 'prev'
       ? css`
           left: 10px;
         `
       : css`
           right: 10px;
-        `};
-`;
-
-const ListContainer = styled.ul`
-  list-style: none;
-  display: flex;
-  justify-content: start;
-  overflow: hidden;
-  height: 600px;
-`;
-
-const Item = styled.li<{ image: string; activeIndex: number }>`
-  width: 50%;
-  flex: 1 0 100%;
-  transform: translateX(-${({ activeIndex }) => activeIndex * 100}%);
-  transition: 500ms ease;
-  background: ${({ theme }) => theme.color.bg};
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: ${({ image }) => `url(${image})`};
-  border-radius: 16px;
+        `}
+  transition : opacity 300ms ease;
 `;
 
 const Navigation = styled.div`
+  opacity: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -103,4 +144,34 @@ const Navigation = styled.div`
   padding: 5px 10px;
   left: 50%;
   transform: translatex(-50%);
+  z-index: 99;
+  transition: opacity 300ms ease;
+`;
+
+const Base = styled(motion.div)`
+  margin-top: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 600px;
+  overflow: hidden;
+  &:hover ${PageBtn} {
+    opacity: 1;
+  }
+  &:hover ${Navigation} {
+    opacity: 1;
+  }
+`;
+
+const AnimatePresenceContainer = styled(AnimatePresence)``;
+
+const MotionImg = styled(motion.img)`
+  position: relative;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  object-fit: cover;
 `;

@@ -59,13 +59,34 @@ const Dim = styled.div`
 
 const Container = styled.div`
   position: absolute;
-  width: 800px;
-  min-height: 670px;
-  height: 80%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  background-color: ${({ theme }) => theme.color.bg};
+
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
+
+  width: 725px;
+  min-height: 800px;
+  max-height: 1000px;
+  height: 80%;
+
+  border-radius: 16px;
+
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.border};
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;

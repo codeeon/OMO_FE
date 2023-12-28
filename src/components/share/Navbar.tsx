@@ -6,11 +6,9 @@ import NavDropdown from './NavDropdown';
 
 interface Props {
   maxWidth: string | null;
-  toggleTheme: () => void;
-  themeMode: string | null;
 }
 
-const Navbar: React.FC<Props> = ({ maxWidth, themeMode, toggleTheme }) => {
+const Navbar: React.FC<Props> = ({ maxWidth }) => {
   const [isSelected, setIsSelected] = useState<string>('');
 
   const navigate = useNavigate();
@@ -32,7 +30,7 @@ const Navbar: React.FC<Props> = ({ maxWidth, themeMode, toggleTheme }) => {
 
   return (
     <Base>
-      <Wrapper maxWidth={maxWidth}>
+      <Wrapper $maxWidth={maxWidth}>
         <Logo
           onClick={onClickLogoHander}
           whileHover={{ scale: 1.1 }}
@@ -44,17 +42,17 @@ const Navbar: React.FC<Props> = ({ maxWidth, themeMode, toggleTheme }) => {
         <RightContainer>
           <Item
             onClick={() => onSelectHandler('게시글')}
-            isSelected={isSelected === '게시글'}
+            $isSelected={isSelected === '게시글'}
           >
             게시글
           </Item>
           <Item
             onClick={() => onSelectHandler('지도')}
-            isSelected={isSelected === '지도'}
+            $isSelected={isSelected === '지도'}
           >
             지도
           </Item>
-          <NavDropdown themeMode={themeMode} toggleTheme={toggleTheme} />
+          <NavDropdown />
         </RightContainer>
       </Wrapper>
     </Base>
@@ -76,11 +74,11 @@ const Base = styled.div`
   z-index: 9;
 `;
 
-const Wrapper = styled.div<{ maxWidth: string | null }>`
+const Wrapper = styled.div<{ $maxWidth: string | null }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : '1200px')};
+  max-width: ${({ $maxWidth }) => ($maxWidth ? $maxWidth : '1200px')};
   width: 100%;
 `;
 
@@ -117,11 +115,11 @@ const RightContainer = styled.div`
   gap: 20px;
 `;
 
-const Item = styled.div<{ isSelected: boolean }>`
+const Item = styled.div<{ $isSelected: boolean }>`
   font-size: 16px;
   font-weight: 700;
-  color: ${({ isSelected, theme }) =>
-    isSelected ? '#F97393' : `${theme.color.sub2}`};
+  color: ${({ $isSelected, theme }) =>
+    $isSelected ? '#F97393' : `${theme.color.sub2}`};
   &:hover {
     color: #f97393;
   }

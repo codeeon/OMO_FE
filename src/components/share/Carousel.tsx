@@ -63,11 +63,11 @@ const Carousel: React.FC<Props> = ({
     <Base onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {title}
       <CarouselList>
-        <ArrowBtn position="left" onClick={handlePrev}>
+        <ArrowBtn $position="left" onClick={handlePrev}>
           <LeftArrow />
         </ArrowBtn>
         {children}
-        <ArrowBtn position="right" onClick={handleNext}>
+        <ArrowBtn $position="right" onClick={handleNext}>
           <RightArrow />
         </ArrowBtn>
       </CarouselList>
@@ -76,7 +76,7 @@ const Carousel: React.FC<Props> = ({
           {carouselCounts.map((i, idx) => (
             <NavItem key={idx}>
               <NavButton
-                isActive={activeIndex === i}
+                $isActive={activeIndex === i}
                 onClick={() => handleGoTo(i)}
               />
             </NavItem>
@@ -113,13 +113,13 @@ const CarouselList = styled.ul`
   margin-top: 20px;
 `;
 
-const NavButton = styled.div<{ isActive?: boolean }>`
+const NavButton = styled.div<{ $isActive?: boolean }>`
   width: 6px;
   height: 6px;
   border-radius: 100%;
   border: none;
 
-  background: ${({ isActive }) => (isActive ? '#ED6653' : '#C6C8CA')};
+  background: ${({ $isActive }) => ($isActive ? '#ED6653' : '#C6C8CA')};
 `;
 
 const NavItem = styled.li`
@@ -143,7 +143,7 @@ const Nav = styled.ul`
   height: 30px;
 `;
 
-const ArrowBtn = styled.div<{ position: string }>`
+const ArrowBtn = styled.div<{ $position: string }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -159,8 +159,8 @@ const ArrowBtn = styled.div<{ position: string }>`
   &:hover {
     background: ${({ theme }) => theme.color.border};
   }
-  ${({ position }) =>
-    position === 'left'
+  ${({ $position }) =>
+    $position === 'left'
       ? css`
           left: -60px;
         `

@@ -21,15 +21,15 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
 
   return (
     <Base>
-      <ArrowBtn position="left" onClick={prevPageHandler}>
+      <ArrowBtn $position="left" onClick={prevPageHandler}>
         <LeftArrow />
       </ArrowBtn>
       <ListContainer>
         {imageURL.map((image) => (
-          <Item key={image} image={image} activeIndex={activeIndex} />
+          <Item key={image} $image={image} $activeIndex={activeIndex} />
         ))}
       </ListContainer>
-      <ArrowBtn position="right" onClick={nextPageHandler}>
+      <ArrowBtn $position="right" onClick={nextPageHandler}>
         <RightArrow />
       </ArrowBtn>
       <Navigation>
@@ -41,7 +41,7 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl }) => {
 
 export default Image;
 
-const ArrowBtn = styled.div<{ position: string }>`
+const ArrowBtn = styled.div<{ $position: string }>`
   position: absolute;
   top: 50%;
   z-index: 1;
@@ -57,8 +57,8 @@ const ArrowBtn = styled.div<{ position: string }>`
   &:hover {
     background: rgba(0, 0, 0, 0.8);
   }
-  ${({ position }) =>
-    position === 'left'
+  ${({ $position }) =>
+    $position === 'left'
       ? css`
           left: 10px;
         `
@@ -82,16 +82,16 @@ const ListContainer = styled.ul`
   width: 100%;
 `;
 
-const Item = styled.li<{ image: string; activeIndex: number }>`
+const Item = styled.li<{ $image: string; $activeIndex: number }>`
   width: 50%;
   flex: 1 0 100%;
-  transform: translateX(-${({ activeIndex }) => activeIndex * 100}%);
+  transform: translateX(-${({ $activeIndex }) => $activeIndex * 100}%);
   transition: 500ms ease;
 
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: ${({ image }) => `url(${image})`};
+  background-image: ${({ $image }) => `url(${$image})`};
   border-radius: 16px;
 `;
 

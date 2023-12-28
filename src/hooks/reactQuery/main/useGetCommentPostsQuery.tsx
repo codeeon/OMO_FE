@@ -11,7 +11,6 @@ const getCommentPost = async (
       : { districtName, limit: 9 };
 
   const response = await instance.get(`/main/comments`, { params });
-  console.log(response);
   return response.data;
 };
 
