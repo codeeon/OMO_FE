@@ -45,14 +45,15 @@ const Mypage: React.FC = () => {
   });
 
   useEffect(() => {
-    refetchBookmark();
-    refetchMyPosts();
+    isSelect === 'Bookmark' ? refetchBookmark() : refetchMyPosts();
   }, [isSelect]);
 
   console.log('유저 데이터 -> ', userData);
   console.log('유저 데이터 에러 -> ', userError);
-  console.log('내 북마크 -> ', myBookmark);
-  console.log('내 게시글 -> ', myPosts);
+  console.log('내 북마크 요청 -> ', myBookmark);
+  console.log('내 북마크를 찾아서 -> ', myBookmark?.pages[0]?.data);
+  console.log('내 게시글 요청 -> ', myPosts);
+  console.log('내 게시글 데이터 조회 -> ', myPosts?.pages[0]?.data);
 
   useEffect(() => {
     userError
@@ -98,25 +99,22 @@ const Mypage: React.FC = () => {
         </Item>
       </Select>
       <Contents>
-        {isFetchingBookmark &&
-        !isFetchingNextBookmark &&
-        isSelect === 'Bookmark'
-          ? Array.from({ length: 12 }).map((_, idx) => (
-              <PlaceCardSkeleton key={idx} />
-            ))
-          : !isFetchingBookmark &&
-            isFetchingNextBookmark &&
-            isSelect === 'Bookmark' &&
-            myBookmark?.map((placeData) => <PlaceCard placeData={placeData} />)}
-        {isFetchingMyPosts && !isFetchingNextMyPosts && isSelect === 'Contents'
+        {isSelect === 'Bookmark'
+          ? (isFetchingBookmark && !isFetchingNextBookmark) ||
+            (!isFetchingBookmark && isFetchingNextBookmark)
+            ? Array.from({ length: 12 }).map((_, idx) => (
+                <PlaceCardSkeleton key={idx} />
+              ))
+            : myBookmark?.pages[0]?.data.map((placeData) => (
+                <PlaceCard key={placeData.locationId} placeData={placeData} />
+              ))
+          : (isFetchingMyPosts && !isFetchingNextMyPosts) ||
+            (!isFetchingMyPosts && isFetchingNextMyPosts)
           ? Array.from({ length: 12 }).map((_, idx) => (
               <ContentCardSkeleton key={idx} />
             ))
-          : !isFetchingMyPosts &&
-            isFetchingNextMyPosts &&
-            isSelect === 'Contents' &&
-            myPosts?.map((contentData) => (
-              <ContentCard contentData={contentData} />
+          : myPosts?.pages[0]?.data.map((contentData) => (
+              <ContentCard key={contentData.postId} contentData={contentData} />
             ))}
         {isSelect === 'Bookmark' ? (
           <ObserverContainer ref={setTargetBookmark}></ObserverContainer>
@@ -218,6 +216,7 @@ const Contents = styled.div`
 
   grid-area: main;
 `;
+
 const ObserverContainer = styled.div`
   height: 100px;
 `;
