@@ -1,12 +1,12 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import auth from './auth';
 
-const authApi: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_SERVER_URL,
+const authAuth: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_APP_SERVER_AUTH_URL,
   // withCredentials: true,
 });
 
-authApi.interceptors.request.use(
+authAuth.interceptors.request.use(
   (config) => {
     const accessToken = sessionStorage.getItem('accessToken');
 
@@ -22,7 +22,7 @@ authApi.interceptors.request.use(
   },
 );
 
-authApi.interceptors.response.use(
+authAuth.interceptors.response.use(
   (response: AxiosResponse) =>
     // response,
     {
@@ -59,7 +59,7 @@ authApi.interceptors.response.use(
           req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
 
           req._retry = false;
-          return authApi(req);
+          return authAuth(req);
         } else {
           console.log('리프레쉬 토큰이 없습니다');
         }
@@ -75,4 +75,4 @@ authApi.interceptors.response.use(
   },
 );
 
-export default authApi;
+export default authAuth;

@@ -48,18 +48,18 @@ const NavDropdown = () => {
 
   const navigate = useNavigate();
 
-  const userId = localStorage.getItem('userId');
+  const userId = sessionStorage.getItem('userId');
 
   const handleLogout = () => {
     // 여기에 auth.POST /logout req 넣을 예정
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userId');
-
     setErrorType('logout');
     handleModalOpen();
     setUserId(null);
     setIsOpen(false);
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('userId');
+    alert('로그아웃이 완료되었습니다.');
     navigate('/');
   };
 

@@ -6,6 +6,9 @@ import Contents from '../pages/Contents';
 import Map from '../pages/googleMap/Index';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
+import ProfileEdit from '../components/auth/mypage/edit/ProfileEdit';
+import Mypage from '../pages/Mypage';
+
 import useMapStore from '../store/location/googleMapStore';
 
 const Routers = () => {
@@ -28,7 +31,10 @@ const Routers = () => {
         <Route path="/map" element={<Map />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/mypage" element={<Mypage />} /> */}
+        <Route
+          path="/mypage"
+          // element={<Mypage currentLocation={currentLocation} />}
+        />
       </Routes>
     </>
   );

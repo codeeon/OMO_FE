@@ -27,15 +27,16 @@ const Login: React.FC = () => {
         const refreshToken = response.headers.refreshtoken;
         const userId = response.data.userId;
 
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('userId', userId);
+        sessionStorage.setItem('accessToken', accessToken);
+        sessionStorage.setItem('refreshToken', refreshToken);
+        sessionStorage.setItem('userId', userId);
         setUserId(userId);
 
         return response.data;
       } catch (error) {
         throw new Error(
-          error.response?.data.message || 'FE: 로그인에 실패했습니다.',
+          error.response?.data.message || '응답 없음: 로그인에 실패했습니다.',
+          alert('아이디와 비밀번호를 확인해주세요!'),
         );
       }
     },
@@ -45,6 +46,7 @@ const Login: React.FC = () => {
       },
       onError: (error: Error) => {
         console.error('로그인 실패 -> ', error.message);
+        // alert('onError: 아이디와 비밀번호를 확인해주세요!');
       },
     },
   );
@@ -100,7 +102,7 @@ export default Login;
 const Base = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 100vh;
+  height: 77vh;
   display: flex;
   justify-content: center;
   align-items: center;
