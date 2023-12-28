@@ -101,7 +101,7 @@ const MapGoogle: React.FC<Props> = ({
       mapContainerStyle={containerStyle}
       // @ts-ignore
       center={currentLocation}
-      // zoom={mapLevel}
+      zoom={mapLevel}
       onLoad={onLoad}
       onTilesLoaded={onTileLoaded}
       onUnmount={onUnmount}
@@ -111,7 +111,7 @@ const MapGoogle: React.FC<Props> = ({
         panControl: false,
         minZoom: 13,
         maxZoom: 19,
-        zoom: mapLevel,
+        // zoom: mapLevel,
         clickableIcons: false,
         styles: themeMode === 'LightMode' ? lightMapTheme : darkMapTheme,
 
