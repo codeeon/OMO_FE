@@ -92,11 +92,11 @@ const Register: React.FC = (props: string) => {
 
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      console.log(nickname);
+      // console.log(nickname);
       const checkNicknameResponse = await auth.post('/check-nickname', {
         nickname,
       });
-      console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
+      // console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
     },
     {
       onSuccess: () => {
@@ -111,9 +111,9 @@ const Register: React.FC = (props: string) => {
 
   const signupMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      console.log(data);
+      // console.log(data);
       const response = await auth.post(`/register`, data);
-      console.log(response);
+      // console.log(response);
     },
     {
       onSuccess: () => {

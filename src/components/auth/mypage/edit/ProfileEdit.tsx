@@ -123,7 +123,7 @@ const ProfileEdit = () => {
   // 회원가입 페이지와 동일, hook으로 만들기
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      console.log(nickname);
+      // console.log(nickname);
       const checkNicknameResponse = await auth.post('/check-nickname', {
         nickname,
       });
@@ -142,9 +142,9 @@ const ProfileEdit = () => {
 
   const updateProfileMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      console.log(data);
+      // console.log(data);
       const response = await authApi.patch(`/users/self/profile/edit`, data);
-      console.log(response);
+      // console.log(response);
     },
     {
       onSuccess: () => {
@@ -161,7 +161,7 @@ const ProfileEdit = () => {
   const deleteUserMutation = useMutation<void, Error>(
     async (): Promise<void> => {
       const response = await authAuth.delete(`/withdraw`);
-      console.log(response);
+      // console.log(response);
     },
     {
       onSuccess: () => {
@@ -172,7 +172,7 @@ const ProfileEdit = () => {
         navigate('/');
       },
       onError: (error) => {
-        console.log(error);
+        // console.log(error);
         alert('회원 탈퇴에 실패하였습니다.');
       },
     },

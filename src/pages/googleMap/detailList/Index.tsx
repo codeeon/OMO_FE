@@ -52,7 +52,6 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
       status: google.maps.places.PlacesServiceStatus,
     ) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        console.log(place);
         setGoogleSearchResult(place);
       } else {
         setGoogleSearchResult(null);
@@ -63,7 +62,13 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   return (
     <Base>
       <BodyContainer>
-        <ImageHeader imageURL={posts?.location.Posts[0].imgUrl} />
+        <ImageHeader
+          imageURL={
+            googleSearchResult?.photos?.[0]?.getUrl()
+              ? googleSearchResult?.photos?.[0]?.getUrl()
+              : posts?.location.Posts[0].imgUrl
+          }
+        />
         <PlaceName>{posts?.location.storeName}</PlaceName>
         <Address>
           <HiLocationMarker />

@@ -12,7 +12,7 @@ const RepleItem: React.FC<{
 }> = ({ reple, contentId, commentId }) => {
   const { replyId, content, createdAt, User } = reple;
   const currentUserId = Number(window.localStorage.getItem('userId'));
-  console.log(reple);
+  // console.log(reple);
   return (
     <Base>
       <UserProfile imgUrl={User.imgUrl} />

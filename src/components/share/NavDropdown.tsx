@@ -55,7 +55,6 @@ const NavDropdown = () => {
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('refreshToken');
     sessionStorage.removeItem('userId');
-    alert('로그아웃이 완료되었습니다.');
     navigate('/');
   };
 
