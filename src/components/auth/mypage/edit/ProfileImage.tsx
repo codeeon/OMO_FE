@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { LuImagePlus } from 'react-icons/lu';
-import { GrFormClose } from 'react-icons/gr';
+// import { LuImagePlus } from 'react-icons/lu';
+// import { GrFormClose } from 'react-icons/gr';
 import { useMutation, useQueryClient } from 'react-query';
 import { onImageChange } from '../../../../function/uploadImage';
-import { MoonLoader } from 'react-spinners';
+// import { MoonLoader } from 'react-spinners';
 
 interface Props {
   imageURL: string[];
