@@ -29,50 +29,56 @@ authApi.interceptors.response.use(
       console.log('인터셉터 응답 -> ', response);
       return response;
     },
-  async (error) => {
-    console.log('에러 발생 -> ', error);
-    const req = error.config;
 
-    // _retry는 axios interceptor의 커스텀 플래그, 재시도 된 요청에 인터셉터 로직이 실행되는 것을 방지함
-    if (error.response?.status === 401 && !req._retry) {
-      req._retry = true;
+  // 리프레쉬 토큰 발급 후 재요청 및 재요청 횟수 제한 코드 수정이 필요
+  // async (error) => {
+  //   console.log('에러 발생 -> ', error);
+  //   const req = error.config;
 
-      try {
-        const refreshToken = sessionStorage.getItem('refreshToken');
+  //   // _retry는 axios interceptor의 커스텀 플래그, 재시도 된 요청에 인터셉터 로직이 실행되는 것을 방지함
+  //   if (error.response?.status === 401 && !req._retry) {
+  //     req._retry = true;
 
-        if (refreshToken) {
-          console.log('try 진입');
+  //     try {
+  //       const refreshToken = sessionStorage.getItem('refreshToken');
 
-          const refreshResponse = await auth.post(
-            '/tokens/refresh',
-            null,
-            {
-              headers: {
-                refreshToken: `${refreshToken}`,
-              },
-            },
-            // { withCredentials: true },
-          );
+  //       if (refreshToken) {
+  //         console.log('try 진입');
 
-          console.log('리프레쉬 응답 데이터 -> ', refreshResponse);
+  //         const refreshResponse = await auth.post(
+  //           '/tokens/refresh',
+  //           null,
+  //           {
+  //             headers: {
+  //               refreshToken: `${refreshToken}`,
+  //             },
+  //           },
+  //           // { withCredentials: true },
+  //         );
 
-          req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
+  //         console.log('리프레쉬 응답 데이터 -> ', refreshResponse);
 
-          req._retry = false;
-          return authApi(req);
-        } else {
-          console.log('리프레쉬 토큰이 없습니다');
-        }
-      } catch (refreshError) {
-        console.error('토큰 새로 고침 실패:', refreshError);
-        throw refreshError;
-      }
-    } else {
-      console.log('에러: 인가 문제는 아닌 듯');
-    }
-    console.log('응답 인터셉터 에러 -> ', error);
-    return Promise.reject(error);
-  },
+  //         req.headers['Authorization'] = `${refreshResponse.data.accessToken}`;
+  //         sessionStorage.setItem(
+  //           'Authorization',
+  //           refreshResponse.data.accessToken,
+  //         );
+
+  //         req._retry = false;
+  //         return authApi(req);
+  //       } else {
+  //         console.log('리프레쉬 토큰이 없습니다');
+  //       }
+  //     } catch (refreshError) {
+  //       console.error('토큰 새로 고침 실패:', refreshError);
+  //       throw refreshError;
+  //     }
+  //   } else {
+  //     console.log('에러: 인가 문제는 아닌 듯');
+  //   }
+  //   console.log('응답 인터셉터 에러 -> ', error);
+  //   return Promise.reject(error);
+  // },
 );
 
 export default authApi;

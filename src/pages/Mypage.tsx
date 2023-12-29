@@ -99,6 +99,7 @@ const Mypage: React.FC = () => {
         </Item>
       </Select>
       <Contents>
+        {/* pages가 정해져 있기 때문에, 수정을 해야 할 듯. 다음 페이지가 있다면 그 숫자의 페이지도 나오게끔 */}
         {isSelect === 'Bookmark'
           ? (isFetchingBookmark && !isFetchingNextBookmark) ||
             (!isFetchingBookmark && isFetchingNextBookmark)
