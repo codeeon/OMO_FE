@@ -8,7 +8,7 @@ import { BookmarkLocationType } from '../../model/interface';
 import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 import AlertModal from '../Modal/AlertModal';
 import PostErrorAlert from './alert/PostErrorAlert';
-
+import _ from 'lodash';
 const randomNumberBetween = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -46,10 +46,12 @@ const BookMarkBtn: React.FC<Props> = ({
     }
   }, [data, isLoading, locationId]);
 
-  const { postBookmarkingMutate } = usePostBookmarkMutation(locationId);
-  const { deletebookmarkingMutate } = useDeleteBookmarkMutation(locationId);
+  const { postBookmarkingMutate, isPostBookmarkingLoading } =
+    usePostBookmarkMutation(locationId);
+  const { deletebookmarkingMutate, isDeleteBookmarkingLoading } =
+    useDeleteBookmarkMutation(locationId);
 
-  const onButtonClick = () => {
+  const onButtonClick = _.throttle(() => {
     const sparkles = Array.from({ length: 30 });
     const sparklesAnimation: AnimationSequence = sparkles.map((_, index) => [
       `.sparkle-${index}`,
@@ -88,6 +90,7 @@ const BookMarkBtn: React.FC<Props> = ({
       },
     ]);
     if (!userId) return handleModalOpen();
+    if (isPostBookmarkingLoading || isDeleteBookmarkingLoading) return;
     if (!isBookMarking) {
       animate([
         ...sparklesReset,
@@ -104,7 +107,7 @@ const BookMarkBtn: React.FC<Props> = ({
       setIsBookMarking(false);
       deletebookmarkingMutate({ locationId });
     }
-  };
+  }, 1000);
 
   return (
     <Container
