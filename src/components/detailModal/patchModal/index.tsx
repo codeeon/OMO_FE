@@ -138,6 +138,7 @@ const Base = styled.div`
   justify-content: start;
   align-items: center;
   transition: all 200ms ease-in;
+  margin-bottom: 40px;
 `;
 
 const Header = styled.div`
