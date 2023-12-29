@@ -26,6 +26,7 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
   const navigate = useNavigate();
 
   const moveMapHandler = () => {
+    document.body.style.overflow = 'auto';
     navigate('/map');
   };
   return (
