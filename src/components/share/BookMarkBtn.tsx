@@ -90,7 +90,6 @@ const BookMarkBtn: React.FC<Props> = ({
       },
     ]);
     if (!userId) return handleModalOpen();
-    if (isPostBookmarkingLoading || isDeleteBookmarkingLoading) return;
     if (!isBookMarking) {
       animate([
         ...sparklesReset,

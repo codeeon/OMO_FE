@@ -73,6 +73,8 @@ const Mypage: React.FC = () => {
     setIsSelect('Contents');
   };
 
+  console.log(myBookmark, myPosts);
+
   return (
     <Base>
       <Header>
@@ -107,17 +109,24 @@ const Mypage: React.FC = () => {
             ? Array.from({ length: 12 }).map((_, idx) => (
                 <PlaceCardSkeleton key={idx} />
               ))
-            : myBookmark?.pages[0]?.data.map((placeData) => (
-                <PlaceCard key={placeData.locationId} placeData={placeData} />
-              ))
+            : myBookmark?.pages.map((page) =>
+                page.data.map((placeData) => (
+                  <PlaceCard key={placeData.locationId} placeData={placeData} />
+                )),
+              )
           : (isFetchingMyPosts && !isFetchingNextMyPosts) ||
             (!isFetchingMyPosts && isFetchingNextMyPosts)
           ? Array.from({ length: 12 }).map((_, idx) => (
               <ContentCardSkeleton key={idx} />
             ))
-          : myPosts?.pages[0]?.data.map((contentData) => (
-              <ContentCard key={contentData.postId} contentData={contentData} />
-            ))}
+          : myPosts?.pages.map((page) =>
+              page.data.map((contentData) => (
+                <ContentCard
+                  key={contentData.postId}
+                  contentData={contentData}
+                />
+              )),
+            )}
         {isSelect === 'Bookmark' ? (
           <ObserverContainer ref={setTargetBookmark}></ObserverContainer>
         ) : (

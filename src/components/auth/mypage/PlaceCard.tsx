@@ -1,35 +1,52 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import useModalCtr from '../../../hooks/useModalCtr';
+import PlaceInfoModal from '../../main/hotContents/placeInfo/PlaceInfoModal';
+import LocationModal from '../../Modal/LocationModal';
+
 const PlaceCard = ({ placeData }) => {
+  const data = placeData.Location;
+  const image = placeData.Location.Posts[0].imgUrl[0];
+
+  const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
+  const post = {
+    imgUrl: image,
+    Location: data,
+    content: data.Posts,
+    Category: data.Category,
+  };
+
   return (
-    <Card>
-      <Img src="" alt=""></Img>
+    <Card onClick={(e) => handleModalOpen(e)}>
+      <Img src={image} alt=""></Img>
       <Title>
         <div>
-          <Name></Name>
-          <Category style={{ marginLeft: '4px' }}>활동</Category>
+          <Name>{data.storeName}</Name>
+          <Category style={{ marginLeft: '4px' }}>
+            {data.Category.categoryName}
+          </Category>
         </div>
         <Mark>{mark}</Mark>
       </Title>
       <Address>
         <Pin>{pin}</Pin>
-        <div>서울 용산구 이태원동 210-5</div>
+        <div>{data.address}</div>
       </Address>
       <Counts>
         <Star>{star}</Star>
         <Count>
           <Text>별점</Text>
-          <Bold>3.4</Bold>
-          <Bold>
-            {'('}14{')'}
-          </Bold>
+          <Bold>{data.starAvg}</Bold>
         </Count>
         <Count style={{ marginLeft: '10px' }}>
           <Text>게시글</Text>
-          <Bold>34</Bold>
+          <Bold>{data.postCount}</Bold>
         </Count>
       </Counts>
+      <LocationModal isOpen={isModalOpen} onClose={handleModalClose}>
+        <PlaceInfoModal handleModalClose={handleModalClose} post={post} />
+      </LocationModal>
     </Card>
   );
 };
@@ -40,6 +57,7 @@ const Card = styled.div`
   box-sizing: border-box;
   width: 285px;
   height: 262px;
+  cursor: pointer;
 `;
 
 const Img = styled.img`
@@ -47,6 +65,7 @@ const Img = styled.img`
   width: 285px;
   height: 168px;
   margin-bottom: 12px;
+  border-radius: 16px;
   border: none;
 `;
 

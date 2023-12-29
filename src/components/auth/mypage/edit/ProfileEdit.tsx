@@ -11,7 +11,7 @@ import useGetUserDataQuery from '../../../../hooks/reactQuery/mypage/useGetUserD
 import authApi from '../../../../axios/authApi';
 import authAuth from '../../../../axios/authAuth';
 // import { onImageChange } from '../../../../function/uploadImage';
-import ProfileImage from './profileImage';
+import ProfileImage from './ProfileImage';
 import useUpdateMyImageMutation from '../../../../hooks/reactQuery/mypage/useUpdateMyImageMutation';
 
 interface UserEmail {
