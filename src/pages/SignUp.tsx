@@ -50,9 +50,9 @@ const SignUp: React.FC = () => {
 
   const checkEmailMutation = useMutation(
     async (email: string): Promise<void> => {
-      console.log(email);
+      // console.log(email);
       const checkEmailResponse = await auth.post('/verify-email', { email });
-      console.log('이메일 체크 응답 -> ', checkEmailResponse);
+      // console.log('이메일 체크 응답 -> ', checkEmailResponse);
     },
     {
       onSuccess: () => {
@@ -66,12 +66,12 @@ const SignUp: React.FC = () => {
 
   const checkCodeMutation = useMutation(
     async (code: string): Promise<void> => {
-      console.log(code);
+      // console.log(code);
       const checkCodeResponse = await auth.post('/verify-authentication-code', {
         authenticationCode: code,
         email,
       });
-      console.log('코드 체크 응답 -> ', checkCodeResponse);
+      // console.log('코드 체크 응답 -> ', checkCodeResponse);
     },
     {
       onSuccess: () => {

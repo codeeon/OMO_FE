@@ -76,7 +76,7 @@ const getMyPosts = async (
 
   const response = await authApi.get('/users/self/profile/posts', { params });
 
-  console.log('내 게시글 조회 -> ', response);
+  // console.log('내 게시글 조회 -> ', response);
 
   return response.data;
 };

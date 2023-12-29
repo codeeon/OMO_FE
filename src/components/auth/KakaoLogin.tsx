@@ -31,7 +31,7 @@ const KakaoLogin: React.FC = () => {
         import.meta.env.VITE_APP_KAKAO_REDIRECT_URI
       }&code=${code}`,
     );
-    console.log(code);
+    // console.log(code);
     return response.data;
   };
 
@@ -39,7 +39,7 @@ const KakaoLogin: React.FC = () => {
     const code = new URLSearchParams(window.location.search).get('code');
     if (code) {
       const kakaoToken = await fetchKakaoToken(code);
-      console.log('Kakao Token:', kakaoToken);
+      // console.log('Kakao Token:', kakaoToken);
     }
   };
 
@@ -51,7 +51,7 @@ const KakaoLogin: React.FC = () => {
     <>
       <LargeBtn
         onClick={loginWithKakao}
-        bgColor="#FEE500"
+        $bgColor="#FEE500"
         style={{
           display: 'flex',
           justifyContent: 'center',
@@ -69,12 +69,12 @@ const KakaoLogin: React.FC = () => {
 
 export default KakaoLogin;
 
-const LargeBtn = styled.button`
+const LargeBtn = styled.button<{$bgColor:string}>`
   width: 400px;
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${(props) => props.bgColor || '#f97393'};
+  background: ${(props) => props.$bgColor || '#f97393'};
   border: none;
   margin: 0 0 12px 0;
   cursor: pointer;

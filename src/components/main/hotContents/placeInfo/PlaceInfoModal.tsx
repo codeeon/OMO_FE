@@ -35,7 +35,7 @@ const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
       status: google.maps.places.PlacesServiceStatus,
     ) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        console.log(place);
+        // console.log(place);
         setGoogleSearchResult(place);
       }
     }
