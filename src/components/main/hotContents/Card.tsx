@@ -26,7 +26,6 @@ const Card: React.FC<Props> = ({ post }) => {
           <Text dangerouslySetInnerHTML={{ __html: content }} />
           <FooterContainer>
             <Category>#{category.categoryName}</Category>
-            
           </FooterContainer>
         </BodyConatiner>
       </Wrapper>
