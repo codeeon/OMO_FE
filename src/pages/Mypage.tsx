@@ -48,12 +48,12 @@ const Mypage: React.FC = () => {
     isSelect === 'Bookmark' ? refetchBookmark() : refetchMyPosts();
   }, [isSelect]);
 
-  console.log('유저 데이터 -> ', userData);
-  console.log('유저 데이터 에러 -> ', userError);
-  console.log('내 북마크 요청 -> ', myBookmark);
-  console.log('내 북마크를 찾아서 -> ', myBookmark?.pages[0]?.data);
-  console.log('내 게시글 요청 -> ', myPosts);
-  console.log('내 게시글 데이터 조회 -> ', myPosts?.pages[0]?.data);
+  // console.log('유저 데이터 -> ', userData);
+  // console.log('유저 데이터 에러 -> ', userError);
+  // console.log('내 북마크 요청 -> ', myBookmark);
+  // console.log('내 북마크를 찾아서 -> ', myBookmark?.pages[0]?.data);
+  // console.log('내 게시글 요청 -> ', myPosts);
+  // console.log('내 게시글 데이터 조회 -> ', myPosts?.pages[0]?.data);
 
   useEffect(() => {
     userError
@@ -62,7 +62,8 @@ const Mypage: React.FC = () => {
         sessionStorage.removeItem('accessToken'),
         sessionStorage.removeItem('refreshToken'),
         navigate('/login'))
-      : console.log(sessionStorage.getItem('userId'));
+      : null;
+    // : console.log(sessionStorage.getItem('userId'));
   }, []);
 
   const onClickSelectBookmark = () => {

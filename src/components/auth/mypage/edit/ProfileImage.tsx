@@ -50,7 +50,7 @@ const ProfileImage: React.FC<Props> = ({
 
       // Read the file as a data URL (base64)
       reader.readAsDataURL(file);
-      console.log('fireToUrl -> ', file);
+    //   console.log('fireToUrl -> ', file);
     });
   };
 
@@ -71,13 +71,13 @@ const ProfileImage: React.FC<Props> = ({
 
       try {
         const imageUrl = await fileToUrl(file);
-        console.log('imageUrl -> ', imageUrl);
+        // console.log('imageUrl -> ', imageUrl);
         setFiles((prev) => [file]);
-        console.log('setFiles -> ', files);
+        // console.log('setFiles -> ', files);
         setImageUrl((prev) => [imageUrl]);
-        console.log('setImageURL -> ', imageURL);
+        // console.log('setImageURL -> ', imageURL);
       } catch (error) {
-        console.error('Error converting file to URL:', error);
+        // console.error('Error converting file to URL:', error);
       } finally {
         input.removeEventListener('change', changeHandler);
       }

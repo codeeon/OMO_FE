@@ -5,8 +5,8 @@ import { PostContentType } from '../../../model/interface';
 const myImage = async (profileImg: PostContentType) => {
   const myImageFormData = new FormData();
 
-  console.log('PATCH 프로필 이미지 -> ', profileImg);
-  
+  // console.log('PATCH 프로필 이미지 -> ', profileImg);
+
   profileImg.imgUrl?.forEach((file) => {
     myImageFormData.append('imgUrl', file);
   });
@@ -15,8 +15,8 @@ const myImage = async (profileImg: PostContentType) => {
     `/users/self/profile/edit`,
     myImageFormData,
   );
-  console.log('PATCH 프로필 폼 데이터 2 -> ', myImageFormData);
-  console.log(response);
+  // console.log('PATCH 프로필 폼 데이터 2 -> ', myImageFormData);
+  // console.log(response);
   return response.data;
 };
 
@@ -25,7 +25,7 @@ const useUpdateMyImageMutation = () => {
   const mutation = useMutation(myImage, {
     onSuccess: () => {
       queryClient.invalidateQueries('userData');
-      console.log();
+      // console.log();
     },
   });
   return {

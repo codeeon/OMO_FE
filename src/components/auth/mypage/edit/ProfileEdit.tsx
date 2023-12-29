@@ -94,7 +94,8 @@ const ProfileEdit = () => {
         sessionStorage.removeItem('accessToken'),
         sessionStorage.removeItem('refreshToken'),
         navigate('/login'))
-      : console.log(sessionStorage.getItem('userId'));
+      : null;
+    // : console.log(sessionStorage.getItem('userId'));
   }, []);
 
   // useEffect(() => {
@@ -225,7 +226,7 @@ const ProfileEdit = () => {
     if (files.length > 0) {
       const profileImg = { imgUrl: files };
       myImageMutate(profileImg);
-      console.log(profileImg);
+      // console.log(profileImg);
     }
     if (allValidated) {
       if (!nickname.length) {
