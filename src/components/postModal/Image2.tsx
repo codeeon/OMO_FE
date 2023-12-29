@@ -19,7 +19,13 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
   const [isUploadError, setIsUploadError] = useState<boolean>(false);
   const [isUploadSuccess, setIsUploadSuccess] = useState<boolean>(false);
   const deleteImageHandler = (image: string) => {
-    setImageUrl(imageURL.filter((img) => img !== image));
+    const imageIndex = imageURL.findIndex((img) => img === image);
+    if (imageIndex !== -1) {
+      const updatedFiles = [...files];
+      updatedFiles.splice(imageIndex, 1);
+      setImageUrl(imageURL.filter((img) => img !== image));
+      setFiles(updatedFiles);
+    }
   };
 
   const isValidImageFileType = (file: File): boolean => {

@@ -92,7 +92,7 @@ const Image: React.FC<{ imgUrl: string[] }> = ({ imgUrl }) => {
       )}
 
       <Navigation>
-        {(page % imgUrl.length) + 1} / {imgUrl.length}
+        {((page + imgUrl.length) % imgUrl.length) + 1} / {imgUrl.length}
       </Navigation>
     </Base>
   );
