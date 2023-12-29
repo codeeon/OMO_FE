@@ -147,6 +147,9 @@ const CreateAt = styled.div`
 `;
 
 const CommentText = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: start;
   color: ${({ theme }) => theme.color.text};
   font-size: 16px;
   font-weight: 500;
@@ -154,7 +157,7 @@ const CommentText = styled.div`
   letter-spacing: -0.16px;
   outline: none;
   border: none;
-  height: 18px;
+  height: auto;
 `;
 
 const RepleBtn = styled.div<{ marginLeft?: string }>`
