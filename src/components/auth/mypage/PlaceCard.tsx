@@ -67,6 +67,7 @@ const Img = styled.img`
   margin-bottom: 12px;
   border-radius: 16px;
   border: none;
+  object-fit: cover;
 `;
 
 const Title = styled.div`
