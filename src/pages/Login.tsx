@@ -14,6 +14,7 @@ interface LoginData {
 
 const Login: React.FC = () => {
   const { register, handleSubmit } = useForm<LoginData>();
+
   const navigate = useNavigate();
 
   const mutation = useMutation<LoginData, Error, LoginData>(
@@ -68,25 +69,24 @@ const Login: React.FC = () => {
               {...register('password')}
             />
           </InputBox>
-          <LargeBtn type="submit">
-            <Text>로그인</Text>
+          <LargeBtn>
+            <Text $color="text">로그인</Text>
           </LargeBtn>
         </form>
         {/* <KakaoLogin /> */}
         <OrLine>
-          <div>{line}</div>{' '}
-          <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-            <Text color="#AEAEAE">or</Text>
+          <div>{line}</div>
+          <div>
+            <Text $color="sub2">or</Text>
           </div>
           <div>{line}</div>
         </OrLine>
         <div>
-          <Text color="#666">아직 회원이 아니신가요?</Text>
-          <Link
-            style={{ textDecoration: 'none', marginLeft: '10px' }}
-            to="/signup"
-          >
-            <Text color="#44a5ff">회원가입</Text>
+          <Text $color="sub">아직 회원이 아니신가요?</Text>
+          <Link to="/signup">
+            <Text style={{ marginLeft: '11px' }} color="link">
+              회원가입
+            </Text>
           </Link>
         </div>
       </LoginBox>
@@ -99,31 +99,34 @@ export default Login;
 const Base = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 77vh;
+  height: calc(100vh - 60px);
   display: flex;
   justify-content: center;
   align-items: center;
+  background: ${({ theme }) => theme.color.bg};
+  position: relative;
 `;
 
 const LoginBox = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translatey(-50%);
   width: 620px;
-  height: 703px;
+  height: 700px;
   flex-shrink: 0;
   border-radius: 16px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid ${({ theme }) => theme.color.border};
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: ${({ theme }) => theme.color.cardBg};
 `;
 
 const Title = styled.div`
-  color: #000;
+  color: ${({ theme }) => theme.color.text};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 32px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   margin: 83px 0 26px 0;
 `;
 
@@ -139,17 +142,14 @@ const Input = styled.input`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  border: 1px solid #d9d9d9;
-  background: #fff;
+  border: 1px solid ${({ theme }) => theme.color.border};
+  background: ${({ theme }) => theme.color.bg};
   margin-top: 20px;
   padding: 0 15px;
   &::placeholder {
-    color: #a5a5a5;
-    font-family: Wanted Sans;
+    color: ${({ theme }) => theme.color.sub};
     font-size: 14px;
-    font-style: normal;
     font-weight: 700;
-    line-height: 100%;
   }
 `;
 
@@ -158,23 +158,27 @@ const LargeBtn = styled.button`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${(props) => props.bgColor || '#f97393'};
+  background: #f97393;
   border: none;
   margin: 0 0 12px 0;
   cursor: pointer;
 `;
 
-const Text = styled.div`
+const Text = styled.div<{ $color?: string }>`
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: ${(props) => props.color || '#fff'};
+  color: ${({ $color, theme }) =>
+    $color === 'sub2'
+      ? theme.color.sub2
+      : $color === 'sub'
+      ? theme.color.sub
+      : $color === 'text'
+      ? theme.color.text
+      : theme.color.link};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   height: 25px;
 `;
 
