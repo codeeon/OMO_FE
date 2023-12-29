@@ -38,12 +38,15 @@ const PatchModal: React.FC<Props> = ({
   const [searchValue, setSearchValue] =
     useState<kakao.maps.services.PlacesSearchResult>([]);
   const [selectedInfo, setSelectedInfo] = useState<SelectedInfoType>({
-    placeName: post.Location.storeName,
-    addressName: post.Location.address,
-    categoryName: post.Location.Category.categoryName,
-    latitude: post.Location.latitude,
-    longitude: post.Location.longitude,
+    placeName: Location.storeName,
+    addressName: Location.address,
+    categoryName: Location.Category.categoryName,
+    latitude: Location.latitude,
+    longitude: Location.longitude,
   });
+  const [googlePlaceInfoId, setGooglePlaceInfoId] = useState(
+    Location.placeInfoId,
+  );
   const [text, setText] = useState(content);
   const { patchMutate, isPatchLoading } = usePatchPostMutation();
   const clearPostHandler = (
@@ -74,13 +77,14 @@ const PatchModal: React.FC<Props> = ({
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
     const newPost = {
+      address: selectedInfo.addressName,
       content: text.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
       star: starNum,
-      categoryName: selectedInfo.categoryName,
       storeName: selectedInfo.placeName,
-      address: selectedInfo.addressName,
-      latitude: selectedInfo.latitude,
-      longitude: selectedInfo.longitude,
+      placeInfoId: googlePlaceInfoId,
+      // categoryName: selectedInfo.categoryName,
+      // latitude: selectedInfo.latitude,
+      // longitude: selectedInfo.longitude,
     };
     if (isValidate) {
       patchMutate({ postId, newPost });
@@ -99,7 +103,7 @@ const PatchModal: React.FC<Props> = ({
           작성완료
         </CompleteBtn>
       </Header>
-      <PostModalImage imageURL={imageURL} setImageUrl={setImageUrl} />
+      <PostModalImage imgUrl={imageURL} />
       <PostModalPlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}
@@ -171,7 +175,7 @@ const CompleteBtn = styled.div<{ $disable: boolean }>`
   color: #fff;
   cursor: pointer;
   ${({ $disable }) =>
-    disable
+    $disable
       ? css`
           background: #b1b1b1;
         `
