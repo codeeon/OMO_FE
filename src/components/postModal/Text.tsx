@@ -62,6 +62,8 @@ const TextArea = styled.textarea`
 `;
 
 const CharacterCount = styled.div`
+  margin-bottom: 30px;
+
   color: #a3a3a3;
 
   font-size: 16px;

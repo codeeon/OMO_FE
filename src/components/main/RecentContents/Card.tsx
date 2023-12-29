@@ -27,7 +27,7 @@ const Card: React.FC<{ post: RecentPostsType }> = ({ post }) => {
 
   return (
     <Base onClick={(e) => openModalHandler(e)}>
-      <ImgContainer imageURL={imgUrl} />
+      <ImgContainer $imageURL={imgUrl} />
       <HeaderContainer>
         <Title>{User.nickname}</Title>
         <VerticalLine />
@@ -56,14 +56,14 @@ const Card: React.FC<{ post: RecentPostsType }> = ({ post }) => {
 
 export default Card;
 
-const ImgContainer = styled.div<{ imageURL: string[] }>`
+const ImgContainer = styled.div<{ $imageURL: string[] }>`
   width: 285px;
   height: 181px;
   border-radius: 8px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
+  background-image: ${({ $imageURL }) => `url(${$imageURL[0]})`};
   transition: all 300ms ease-in-out;
 `;
 

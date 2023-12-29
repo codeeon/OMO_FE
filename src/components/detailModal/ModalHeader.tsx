@@ -5,32 +5,38 @@ import DetailModalDropdown from './ModalDropdown';
 import { PostDetailType } from '../../model/interface';
 
 const ModalHeader: React.FC<{
-  userId: string;
+  userName: string;
   userProfile: string;
   createdAt: string;
   contentId: number | undefined;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   post: PostDetailType;
+  userId: number;
 }> = ({
   userProfile,
-  userId,
+  userName,
   createdAt,
   contentId,
   closeModalHandler,
   post,
+  userId,
 }) => {
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
+
   return (
     <Base>
       <UserProfile userProfile={userProfile} />
       <UserInfoContainer>
-        <UserName>{userId}</UserName>
+        <UserName>{userName}</UserName>
         <CreationDate>{createdAt.split('T')[0]}</CreationDate>
       </UserInfoContainer>
-      <DetailModalDropdown
-        contentId={contentId}
-        closeModalHandler={closeModalHandler}
-        post={post}
-      />
+      {userId === currentUserId && (
+        <DetailModalDropdown
+          contentId={contentId}
+          closeModalHandler={closeModalHandler}
+          post={post}
+        />
+      )}
     </Base>
   );
 };

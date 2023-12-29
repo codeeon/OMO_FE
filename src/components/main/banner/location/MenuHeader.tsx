@@ -41,6 +41,7 @@ const MenuHeader: React.FC<Props> = ({ refetch, isLoading, setIsOpen }) => {
       <AlertModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
+        isLoading={isLoading}
         position="topRight"
       >
         <LocationAlert isLoading={isLoading} />

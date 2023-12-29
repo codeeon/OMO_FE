@@ -9,11 +9,11 @@ const Footer = () => {
           <LogoCircle />
           <LogoRectangle />
         </LogoContainer>
-        <Text marginTop="25px">(주)오늘 뭐할래 컴퍼니</Text>
-        <Text marginTop="9px">
+        <Text $marginTop="25px">(주)오늘 뭐할래 컴퍼니</Text>
+        <Text $marginTop="9px">
           서울 강남구 테헤란로44길 8 12층 (아이콘역삼빌딩)
         </Text>
-        <Text marginTop="20px">Copyright OM COMPANY All Rights Reserved.</Text>
+        <Text $marginTop="20px">Copyright OM COMPANY All Rights Reserved.</Text>
       </Wrapper>
     </Base>
   );
@@ -69,8 +69,8 @@ const LogoRectangle = styled.div`
   transition: border 200ms ease-in-out;
 `;
 
-const Text = styled.div<{ marginTop: string }>`
-  margin-top: ${({ marginTop }) => marginTop};
+const Text = styled.div<{ $marginTop: string }>`
+  margin-top: ${({ $marginTop }) => $marginTop};
   color: #8f8f8f;
   font-size: 14px;
   font-weight: 500;

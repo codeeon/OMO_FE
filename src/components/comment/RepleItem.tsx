@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { CommentType, RepleType } from '../../model/interface';
 import Dropdown from './Dropdown';
+import useDeleteRepleMutation from '../../hooks/reactQuery/replies/useDeleteRepleMutation';
 
 //TODO 유저 데이터
 const RepleItem: React.FC<{
-  comment: RepleType;
-}> = ({ comment }) => {
-  const { commentId, content, createdAt, User } = comment;
-
+  reple: RepleType;
+  contentId: number;
+  commentId: number;
+}> = ({ reple, contentId, commentId }) => {
+  const { replyId, content, createdAt, User } = reple;
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
+  // console.log(reple);
   return (
     <Base>
       <UserProfile imgUrl={User.imgUrl} />
@@ -16,7 +20,13 @@ const RepleItem: React.FC<{
         <UserInfoContainer>
           <UserName>{User.nickname}</UserName>
           <CreateAt>{createdAt.split('T')[0]}</CreateAt>
-          {/* <Dropdown commentId={commentId} /> */}
+          {User.userId === currentUserId && (
+            <Dropdown
+              commentId={commentId}
+              replyId={replyId}
+              contentId={contentId}
+            />
+          )}
         </UserInfoContainer>
         <CommentText>{content}</CommentText>
       </BodyContainer>

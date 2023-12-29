@@ -7,10 +7,8 @@ import ConfirmModal from './ConfirmModal';
 import { SelectedInfoType } from '../../model/interface';
 import Stars from './Stars';
 import SubModal from '../Modal/SubModal';
-
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
 import ImageFile from './Image2';
-import GooglePlace from './GooglePlace';
 import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 import AlertModal from '../Modal/AlertModal';
 import ContentAlert from '../share/alert/ContentAlert';
@@ -26,7 +24,6 @@ interface Props {
   closeSubModal: (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => void;
-  map: google.maps.Map | null;
 }
 
 const PostModal: React.FC<Props> = ({
@@ -34,7 +31,6 @@ const PostModal: React.FC<Props> = ({
   isSubModalOpen,
   openSubModal,
   closeSubModal,
-  map,
 }) => {
   const [isValidate, setIsValidate] = useState<boolean>(false);
   const { isModalOpen, handleModalOpen, handleModalClose } = useAlertModalCtr();
@@ -51,6 +47,9 @@ const PostModal: React.FC<Props> = ({
     longitude: '',
   });
   const [text, setText] = useState('');
+  const [googleSearchResult, setGoogleSearchResult] = useState<
+    google.maps.places.PlaceResult[] | null
+  >(null);
 
   const {
     postContentMutate,
@@ -73,8 +72,8 @@ const PostModal: React.FC<Props> = ({
       longitude: '',
     });
     setText('');
+    setGoogleSearchResult(null);
   };
-
   useEffect(() => {
     if (imageURL.length !== 0 && text && selectedInfo.placeName) {
       setIsValidate(true);
@@ -95,6 +94,7 @@ const PostModal: React.FC<Props> = ({
       address: selectedInfo.addressName,
       latitude: selectedInfo.latitude,
       longitude: selectedInfo.longitude,
+      placeInfoId: googleSearchResult && googleSearchResult[0].place_id,
     };
 
     if (isValidate) {
@@ -118,21 +118,16 @@ const PostModal: React.FC<Props> = ({
       <ImageFile
         imageURL={imageURL}
         setImageUrl={setImageUrl}
-        setFiles={setFiles}
         files={files}
+        setFiles={setFiles}
       />
-      {/* <GooglePlace
-        selectedInfo={selectedInfo}
-        setSelectedInfo={setSelectedInfo}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        map={map}
-      /> */}
       <PostModalPlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
+        googleSearchResult={googleSearchResult}
+        setGoogleSearchResult={setGoogleSearchResult}
       />
       <Stars starNum={starNum} setStarNum={setStarNum} />
       <PostModalText text={text} setText={setText} />
@@ -161,22 +156,15 @@ export default PostModal;
 
 const Base = styled.div`
   box-sizing: border-box;
-  width: 600px;
-
-  min-height: 700px;
-  max-height: 900px;
-  height: 80%;
-
-  border-radius: 16px;
-  background: ${({ theme }) => theme.color.bg};
-
-  padding: 27px 50px;
-
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  transition: all 200ms ease-in;
+  width: 720px;
+  min-height: 800px;
+  max-height: 1000px;
+  height: 80%;
+  padding: 45px;
 `;
 
 const Header = styled.div`

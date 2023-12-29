@@ -4,25 +4,27 @@ import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { IoEllipsisHorizontalSharp } from 'react-icons/io5';
 import useDeleteCommentMutation from '../../hooks/reactQuery/comment/useDeleteCommentMutation';
+import useDeleteRepleMutation from '../../hooks/reactQuery/replies/useDeleteRepleMutation';
 
 interface Props {
   commentId: number;
   contentId: number;
+  replyId: number;
 }
 
-const Dropdown: React.FC<Props> = ({ commentId, contentId }) => {
+const Dropdown: React.FC<Props> = ({ commentId, contentId, replyId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const { deleteMutate } = useDeleteRepleMutation({ contentId });
 
-  const { deleteMutate, isDeleteLoading } = useDeleteCommentMutation({contentId});
+  const deleteRepleHandler = () => {
+    deleteMutate({ contentId, commentId, replyId });
+    setIsOpen(false);
+  };
 
   const toggleDropdownHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsOpen(!isOpen);
-  };
-
-  const onClickDelete = () => {
-    deleteMutate({ commentId, contentId });
   };
 
   useEffect(() => {
@@ -84,7 +86,7 @@ const Dropdown: React.FC<Props> = ({ commentId, contentId }) => {
       >
         <DropdownItem
           variants={itemVariants}
-          onClick={onClickDelete}
+          onClick={deleteRepleHandler}
           style={{ color: 'red' }}
         >
           삭제하기

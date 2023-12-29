@@ -1,5 +1,4 @@
 import React from 'react';
-import { ScaleLoader } from 'react-spinners';
 import styled from 'styled-components';
 import { FaCheckCircle } from 'react-icons/fa';
 
@@ -42,6 +41,6 @@ const Wrapper = styled.div`
   span {
     color: #fff;
   }
-  width: 241px;
+  width: auto;
   gap: 10px;
 `;

@@ -1,4 +1,10 @@
-import React, { MouseEventHandler, ReactNode, useEffect } from 'react';
+import React, {
+  Dispatch,
+  MouseEventHandler,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+} from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled, { css } from 'styled-components';
 import Portal from '../../Portal';
@@ -12,6 +18,9 @@ interface Props {
   position?: string;
   isLoading?: boolean;
   isError?: boolean;
+  setIsUploadError?: Dispatch<SetStateAction<boolean>>;
+  setIsUploadSuccess?: Dispatch<SetStateAction<boolean>>;
+  setErrorType?: Dispatch<SetStateAction<string | null>>;
 }
 
 const AlertModal: React.FC<Props> = ({
@@ -20,7 +29,9 @@ const AlertModal: React.FC<Props> = ({
   onClose,
   position,
   isLoading,
-  isError,
+  setIsUploadError,
+  setIsUploadSuccess,
+  setErrorType,
 }) => {
   useEffect(() => {
     if (!isLoading) {
@@ -28,6 +39,9 @@ const AlertModal: React.FC<Props> = ({
         if (onClose) {
           onClose();
         }
+        setIsUploadError && setIsUploadError(false);
+        setIsUploadSuccess && setIsUploadSuccess(false);
+        setErrorType && setErrorType(null);
       }, 3000);
 
       return () => clearTimeout(timeoutId);

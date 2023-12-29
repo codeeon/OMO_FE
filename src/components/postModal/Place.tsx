@@ -1,9 +1,14 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { IoClose } from 'react-icons/io5';
 import { SelectedInfoType } from '../../model/interface';
 import { FaLocationDot } from 'react-icons/fa6';
+import useMapStore from '../../store/location/googleMapStore';
+import { placeInfoCallback } from '../../function/googleSearch.ts/textSearch';
+import AlertModal from '../Modal/AlertModal';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import PostErrorAlert from '../share/alert/PostErrorAlert';
 
 interface Props {
   selectedInfo: SelectedInfoType;
@@ -12,6 +17,10 @@ interface Props {
   setSearchValue: React.Dispatch<
     SetStateAction<kakao.maps.services.PlacesSearchResult>
   >;
+  googleSearchResult: google.maps.places.PlaceResult[] | null;
+  setGoogleSearchResult: Dispatch<
+    SetStateAction<google.maps.places.PlaceResult[] | null>
+  >;
 }
 
 const Place: React.FC<Props> = ({
@@ -19,8 +28,12 @@ const Place: React.FC<Props> = ({
   setSelectedInfo,
   searchValue,
   setSearchValue,
+  googleSearchResult,
+  setGoogleSearchResult,
 }) => {
+  const { map } = useMapStore();
   const [inputValue, setInputValue] = useState<string>('');
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
 
   const onChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -37,6 +50,7 @@ const Place: React.FC<Props> = ({
     });
     setSearchValue([]);
     setInputValue('');
+    setGoogleSearchResult(null);
   };
 
   const searchPlaceHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,18 +64,32 @@ const Place: React.FC<Props> = ({
 
   const selectInfoHandler = (
     placeName: string,
-    adressName: string,
+    addressName: string,
     categoryName: string,
     latitude: string,
     longitude: string,
   ) => {
+    const request = {
+      query: placeName,
+      fields: ['place_id', 'formatted_address', 'name'],
+    };
+    if (!addressName.includes('서울')) {
+      handleModalOpen();
+      setInputValue('');
+      return;
+    }
+    // @ts-ignore
+    const service = new google.maps.places.PlacesService(map);
+    service.findPlaceFromQuery(request, (result, status) => {
+      placeInfoCallback(result, status, setGoogleSearchResult);
+    });
     const filteredCategoryName =
       categoryName === '음식점' || categoryName === '카페'
         ? categoryName
         : '기타';
     setSelectedInfo({
       placeName: placeName,
-      addressName: adressName,
+      addressName: addressName,
       categoryName: filteredCategoryName,
       latitude: latitude,
       longitude: longitude,
@@ -128,6 +156,13 @@ const Place: React.FC<Props> = ({
           ))}
         </ResultList>
       )}
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <PostErrorAlert errorMsg={'서울특별시 내에서만 장소를 지정해주세요.'} />
+      </AlertModal>
     </Base>
   );
 };

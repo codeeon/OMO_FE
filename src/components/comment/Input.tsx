@@ -27,7 +27,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
     usePostCommentMutation({ contentId, handleSuccessAlertOpen });
 
   const postCommentHandler = () => {
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
 
     const newComment = {
       PostId: contentId,
@@ -73,6 +73,7 @@ const Base = styled.div`
   width: 100%;
 
   margin-top: 20px;
+  margin-bottom: 40px;
 `;
 
 const TextArea = styled.textarea`

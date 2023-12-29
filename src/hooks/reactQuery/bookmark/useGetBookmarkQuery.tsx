@@ -4,6 +4,7 @@ import authApi from '../../../axios/authApi';
 
 const getBookmark = async () => {
   const response = await authApi.get(`/posts/user/bookmark`);
+  response.data;
   return response.data;
 };
 

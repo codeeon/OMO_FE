@@ -31,7 +31,6 @@ const usePostCommentQuery = ({
       handleSuccessAlertOpen();
     },
     onError: (error) => {
-      console.log('에러메세지', error.response.data.errorMessage);
       handleSuccessAlertOpen();
     },
   });
