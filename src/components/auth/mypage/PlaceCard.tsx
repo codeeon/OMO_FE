@@ -31,7 +31,7 @@ const PlaceCard = ({ placeData }) => {
       </Title>
       <Address>
         <Pin>{pin}</Pin>
-        <div>{data.address}</div>
+        <AddressName>{data.address}</AddressName>
       </Address>
       <Counts>
         <Star>{star}</Star>
@@ -156,6 +156,7 @@ const Pin = styled.span`
   width: 18px;
   height: 18px;
   margin-right: 4px;
+  padding-bottom: 3px;
 `;
 const pin = (
   <svg
@@ -171,6 +172,14 @@ const pin = (
     />
   </svg>
 );
+
+const AddressName = styled.div`
+  height: 20px;
+  width: 270px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 
 const Counts = styled.div`
   display: flex;
