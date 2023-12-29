@@ -19,6 +19,7 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
   const [isHover, setIsHover] = useState(true);
   const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const [scope, animate] = useAnimate();
+  const userId = window.sessionStorage.getItem('userId');
 
   useEffect(() => {
     if (!isLoading) {
@@ -36,6 +37,7 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
   const handleLikeClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     animate([]);
+    if (!userId) return handleModalOpen();
     if (isLiked) {
       deleteMutate({ postId });
       setIsLiked(false);

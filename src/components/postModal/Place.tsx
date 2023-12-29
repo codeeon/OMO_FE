@@ -17,9 +17,9 @@ interface Props {
   setSearchValue: React.Dispatch<
     SetStateAction<kakao.maps.services.PlacesSearchResult>
   >;
-  googleSearchResult: google.maps.places.PlaceResult[] | string;
+  googleSearchResult: google.maps.places.PlaceResult[] | null;
   setGoogleSearchResult: Dispatch<
-    SetStateAction<google.maps.places.PlaceResult[] | string>
+    SetStateAction<google.maps.places.PlaceResult[] | null>
   >;
 }
 
@@ -50,6 +50,7 @@ const Place: React.FC<Props> = ({
     });
     setSearchValue([]);
     setInputValue('');
+    setGoogleSearchResult(null);
   };
 
   const searchPlaceHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

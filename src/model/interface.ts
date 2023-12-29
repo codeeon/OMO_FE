@@ -76,6 +76,7 @@ export interface PostDetailType {
     address: string;
     latitude: string;
     longitude: string;
+    placeInfoId: string;
   };
   Comments: CommentType[];
 }
@@ -158,6 +159,14 @@ export interface PostContentType {
   latitude: string;
   longitude: string;
   star: number;
+  placeInfoId: string | null | undefined;
+}
+
+export interface PostPatchType {
+  address: string;
+  content: string;
+  star: number;
+  storeName: string;
   placeInfoId: string;
 }
 
@@ -168,6 +177,7 @@ export interface PostCommentType {
 
 export interface CommentType {
   User: {
+    userId: number;
     imgUrl: string;
     nickname: string;
   };

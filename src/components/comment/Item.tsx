@@ -14,7 +14,7 @@ const CommentItem: React.FC<{
   const { Replies, commentId, content, createdAt, User } = comment;
   const [isShowReple, setIsShowReple] = useState(false);
   const [isShowRepleInput, setIsShowRepleInput] = useState(false);
-  const currentUserId = Number(window.localStorage.getItem('userId'));
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
 
   const repleLength = comment.Replies.length;
 

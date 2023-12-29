@@ -27,7 +27,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
     usePostCommentMutation({ contentId, handleSuccessAlertOpen });
 
   const postCommentHandler = () => {
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
 
     const newComment = {
       PostId: contentId,

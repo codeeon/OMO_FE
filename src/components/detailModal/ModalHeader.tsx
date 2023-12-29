@@ -21,7 +21,7 @@ const ModalHeader: React.FC<{
   post,
   userId,
 }) => {
-  const currentUserId = Number(window.localStorage.getItem('userId'));
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
 
   return (
     <Base>

@@ -48,8 +48,8 @@ const PostModal: React.FC<Props> = ({
   });
   const [text, setText] = useState('');
   const [googleSearchResult, setGoogleSearchResult] = useState<
-    google.maps.places.PlaceResult[] | string
-  >('null');
+    google.maps.places.PlaceResult[] | null
+  >(null);
 
   const {
     postContentMutate,
@@ -72,7 +72,7 @@ const PostModal: React.FC<Props> = ({
       longitude: '',
     });
     setText('');
-    setGoogleSearchResult('');
+    setGoogleSearchResult(null);
   };
   useEffect(() => {
     if (imageURL.length !== 0 && text && selectedInfo.placeName) {
@@ -94,7 +94,7 @@ const PostModal: React.FC<Props> = ({
       address: selectedInfo.addressName,
       latitude: selectedInfo.latitude,
       longitude: selectedInfo.longitude,
-      placeInfoId: googleSearchResult[0].place_id,
+      placeInfoId: googleSearchResult && googleSearchResult[0].place_id,
     };
 
     if (isValidate) {
@@ -165,7 +165,6 @@ const Base = styled.div`
   max-height: 1000px;
   height: 80%;
   padding: 45px;
-  
 `;
 
 const Header = styled.div`

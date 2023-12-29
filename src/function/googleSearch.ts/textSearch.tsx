@@ -22,16 +22,16 @@ export const placeInfoCallback = (
   results: google.maps.places.PlaceResult[] | null,
   status: google.maps.places.PlacesServiceStatus,
   setSearchResult: Dispatch<
-    SetStateAction<google.maps.places.PlaceResult[] | string>
+    SetStateAction<google.maps.places.PlaceResult[] | null>
   >,
 ) => {
   if (status === google.maps.places.PlacesServiceStatus.OK) {
-    setSearchResult(results ? results : 'null');
+    setSearchResult(results);
   } else if (
     status === google.maps.places.PlacesServiceStatus.INVALID_REQUEST ||
     status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS
   ) {
-    setSearchResult('null');
+    setSearchResult(null);
   } else {
     //
   }

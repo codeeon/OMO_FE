@@ -11,7 +11,7 @@ const RepleItem: React.FC<{
   commentId: number;
 }> = ({ reple, contentId, commentId }) => {
   const { replyId, content, createdAt, User } = reple;
-  const currentUserId = Number(window.localStorage.getItem('userId'));
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
   // console.log(reple);
   return (
     <Base>

@@ -109,9 +109,10 @@ const Place: React.FC<Props> = ({
         <PlaceContainer>
           <PlaceName>
             {selectedInfo.placeName}
-            <DeleteBtn onClick={deleteInfoHandler}>
+
+            {/* <DeleteBtn onClick={deleteInfoHandler}>
               <IoClose />
-            </DeleteBtn>
+            </DeleteBtn> */}
           </PlaceName>
           <AdressName>
             <LuMapPin />
