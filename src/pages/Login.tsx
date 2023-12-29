@@ -61,6 +61,8 @@ const Login: React.FC = () => {
           <InputBox>
             <Input
               placeholder="이메일을 입력해주세요."
+              type="email"
+              autoComplete="none"
               {...register('email')}
             />
             <Input
@@ -143,7 +145,7 @@ const Input = styled.input`
   flex-shrink: 0;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.color.border};
-  background: ${({ theme }) => theme.color.bg};
+  background: ${({ theme }) => theme.color.cardBg};
   margin-top: 20px;
   padding: 0 15px;
   &::placeholder {
@@ -151,6 +153,7 @@ const Input = styled.input`
     font-size: 14px;
     font-weight: 700;
   }
+  color: ${({ theme }) => theme.color.text};
 `;
 
 const LargeBtn = styled.button`

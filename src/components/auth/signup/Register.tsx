@@ -256,10 +256,11 @@ const SmallBtn = styled.button`
 
 const Input = styled.input`
   width: ${({ width }) => width || '400px'};
+  color: ${({ theme }) => theme.color.text};
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid ${({ theme }) => theme.color.border};
   border-color: ${({ check }) =>
     check === 'rejected'
       ? 'var(--error_accent, #FF3263)'
