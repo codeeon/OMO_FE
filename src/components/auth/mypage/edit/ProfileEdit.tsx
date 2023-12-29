@@ -3,13 +3,16 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Check from '../../signup/Check';
 import auth from '../../../../axios/auth';
 import useInput from '../../../../hooks/useInput';
 import useGetUserDataQuery from '../../../../hooks/reactQuery/mypage/useGetUserDataQuery';
 import authApi from '../../../../axios/authApi';
 import authAuth from '../../../../axios/authAuth';
+// import { onImageChange } from '../../../../function/uploadImage';
+import ProfileImage from './profileImage';
+import useUpdateMyImageMutation from '../../../../hooks/reactQuery/mypage/useUpdateMyImageMutation';
 
 interface UserEmail {
   email: string;
@@ -23,18 +26,35 @@ interface SignUpData {
 
 interface UserData extends UserEmail, SignUpData {}
 
+// interface File extends Blob {
+//   readonly lastModified: number;
+//   readonly name: string;
+//   readonly webkitRelativePath: string;
+// }
+
+// declare var File: {
+//   prototype: File;
+//   new (fileBits: BlobPart[], fileName: string, options?: FilePropertyBag): File;
+// };
+
 const ProfileEdit = () => {
   const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
     mode: 'onChange',
   });
 
+  // const { mutate: imgMutate } = useMutation(onImageChange);
+  const { myImageMutate } = useUpdateMyImageMutation();
+
   const navigate = useNavigate();
 
   const { data: userData, isError: userError } = useGetUserDataQuery();
 
-  const [nickname, setNickname, onChangeNickname] = useInput(
-    userData?.data.nickname,
-  );
+  const [imageURL, setImageUrl] = useState([userData?.data.imgUrl]);
+  const image = imageURL.slice(-1);
+  const [isImageChanged, setIsImageChanged] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+
+  const [nickname, _, onChangeNickname] = useInput(userData?.data.nickname);
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
 
@@ -74,8 +94,13 @@ const ProfileEdit = () => {
         sessionStorage.removeItem('accessToken'),
         sessionStorage.removeItem('refreshToken'),
         navigate('/login'))
-      : console.log(sessionStorage.getItem('userId'));
+      : null;
+    // : console.log(sessionStorage.getItem('userId'));
   }, []);
+
+  // useEffect(() => {
+  //   console.log(imageUrl);
+  // }, [imageUrl]);
 
   const onValid = async ({ password, confirmedPassword }: SignUpData) => {
     if (
@@ -104,9 +129,17 @@ const ProfileEdit = () => {
       setConfirmedPasswordCheck('');
     }
 
+    if (nickname === '') {
+      setNicknameCheck('');
+    }
+
+    // if (userData?.data.imageUrl !== image) {
+    //   setIsImageChanged(true);
+    // }
     await trigger(['password', 'confirmedPassword']);
   };
 
+  // rejected일 때, 모두가 변하지 않았을 때, 회색인 게 나은 듯 -> 수정 예정
   const allValidated =
     (nicknameCheck === 'confirmed' &&
       passwordCheck === 'confirmed' &&
@@ -118,7 +151,8 @@ const ProfileEdit = () => {
       nickname) ||
     (nickname === '' &&
       passwordCheck === 'confirmed' &&
-      confirmedPasswordCheck === 'confirmed');
+      confirmedPasswordCheck === 'confirmed') ||
+    files.length > 0;
 
   // 회원가입 페이지와 동일, hook으로 만들기
   const checkNicknameMutation = useMutation(
@@ -127,7 +161,7 @@ const ProfileEdit = () => {
       const checkNicknameResponse = await auth.post('/check-nickname', {
         nickname,
       });
-      console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
+      // console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
     },
     {
       onSuccess: () => {
@@ -152,7 +186,7 @@ const ProfileEdit = () => {
         navigate('/mypage');
       },
       onError: (error) => {
-        console.log(error);
+        // console.log(error);
         alert('프로필 변경에 실패하였습니다.');
       },
     },
@@ -183,6 +217,17 @@ const ProfileEdit = () => {
   const onClickSubmit = async (data: SignUpData): void => {
     await onValid(data);
     // 사진이 바뀌었을 때, 바뀐 사진을 data.imgUrl에 첨부한다. if()
+    // if (isImageChanged) {
+    // if (!isImageChanged) {
+    //   const profileImg = { imgUrl: files };
+    //   console.log('profileImg -> ', profileImg);
+    //   myImageMutate(profileImg);
+    // }
+    if (files.length > 0) {
+      const profileImg = { imgUrl: files };
+      myImageMutate(profileImg);
+      // console.log(profileImg);
+    }
     if (allValidated) {
       if (!nickname.length) {
         updateProfileMutation.mutate(data);
@@ -195,7 +240,7 @@ const ProfileEdit = () => {
         updateProfileMutation.mutate(data);
       }
     } else {
-      alert('변경할 부분을 다시 한 번 확인해주세요.');
+      alert('변경할 내용을 다시 확인해주세요!');
     }
   };
 
@@ -210,16 +255,34 @@ const ProfileEdit = () => {
         <Profile>
           <Text fontSize="24px">프로필 수정</Text>
           <ImgContatiner>
-            <Img
+            {/* <Img
+              onClick={() =>
+                Image({
+                  imageURL: imageUrl,
+                  setImageUrl,
+                  setFiles,
+                  files,
+                })
+              }
               style={{ marginBottom: '24px' }}
-              src={userData?.data.imgUrl}
+              src={image}
               alt=""
+            /> */}
+            <ProfileImage
+              // style={{ marginBottom: '24px' }}
+              imageURL={imageURL}
+              setImageUrl={setImageUrl}
+              setFiles={setFiles}
+              files={files}
             />
-            <Text fontSize="14px" color="var(--link, #44A5FF)">
+            <Text
+              style={{ marginTop: '24px' }}
+              fontSize="14px"
+              color="var(--link, #44A5FF)"
+            >
               프로필 사진
             </Text>
           </ImgContatiner>
-
           <InputContainer>
             <InputWrapper>
               <Text style={{ marginBottom: '6px' }}>닉네임</Text>
@@ -234,7 +297,11 @@ const ProfileEdit = () => {
                 />
                 {/* 나중에 버튼을 제거하고 onChange 디바운싱 POST로 교체 */}
                 <SmallBtn
-                  onClick={() => checkNicknameMutation.mutate(nickname)}
+                  onClick={() =>
+                    nickname === ''
+                      ? setNicknameCheck('')
+                      : checkNicknameMutation.mutate(nickname)
+                  }
                   type="button"
                 >
                   중복체크
@@ -383,13 +450,14 @@ const ImgContatiner = styled.div`
   gap: 24px;
 `;
 
-const Img = styled.img`
-  width: 88px;
-  height: 88px;
-  border-radius: 100%;
-  background: url(<path-to-image>), lightgray 50% / cover no-repeat;
-  flex-shrink: 0;
-`;
+// const Img = styled.img`
+//   width: 88px;
+//   height: 88px;
+//   border-radius: 100%;
+//   background: url(<path-to-image>), lightgray 50% / cover no-repeat;
+//   flex-shrink: 0;
+//   cursor: pointer;
+// `;
 
 const InputContainer = styled.div`
   width: 100%;
