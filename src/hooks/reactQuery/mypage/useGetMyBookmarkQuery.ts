@@ -28,6 +28,8 @@ const getMyBookmark = async (
     params,
   });
 
+  // console.log(response.data.data);
+
   return response.data;
 };
 
@@ -37,7 +39,7 @@ const useGetMyBookmarkQuery = (
 ) =>
   useInfiniteQuery(
     'myBookmark',
-    ({ pageParam = { lastBookmarkId: null, pageSize: 20 } }) =>
+    ({ pageParam = { lastBookmarkId, pageSize: 20 } }) =>
       getMyBookmark(pageParam.lastBookmarkId, pageParam.pageSize),
     {
       getNextPageParam: (lastPage) => {
