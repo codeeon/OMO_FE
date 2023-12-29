@@ -14,7 +14,6 @@ interface LoginData {
 
 const Login: React.FC = () => {
   const { register, handleSubmit } = useForm<LoginData>();
-  const { setUserId } = useUserStore();
   const navigate = useNavigate();
 
   const mutation = useMutation<LoginData, Error, LoginData>(

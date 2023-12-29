@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import DetailModalDropdown from './ModalDropdown';
 import { PostDetailType } from '../../model/interface';
-import useUserStore from '../../store/user/useUserStore';
 
 const ModalHeader: React.FC<{
   userName: string;

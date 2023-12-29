@@ -5,6 +5,9 @@ import usePostBookmarkMutation from '../../hooks/reactQuery/bookmark/usePostBook
 import useDeleteBookmarkMutation from '../../hooks/reactQuery/bookmark/useDeleteBookmarkMutation';
 import useGetBookmarkQuery from '../../hooks/reactQuery/bookmark/useGetBookmarkQuery';
 import { BookmarkLocationType } from '../../model/interface';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import AlertModal from '../Modal/AlertModal';
+import PostErrorAlert from './alert/PostErrorAlert';
 
 const randomNumberBetween = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -29,6 +32,8 @@ const BookMarkBtn: React.FC<Props> = ({
 }) => {
   const [scope, animate] = useAnimate();
   const [isBookMarking, setIsBookMarking] = useState(false);
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
+  const userId = sessionStorage.getItem('userId');
 
   const { data, isLoading } = useGetBookmarkQuery();
   useEffect(() => {
@@ -82,6 +87,7 @@ const BookMarkBtn: React.FC<Props> = ({
         duration: 0.000001,
       },
     ]);
+    if (!userId) return handleModalOpen();
     if (!isBookMarking) {
       animate([
         ...sparklesReset,
@@ -146,6 +152,13 @@ const BookMarkBtn: React.FC<Props> = ({
           </Svg>
         ))}
       </StyledDiv>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <PostErrorAlert errorMsg="로그인 후 이용해주세요" />
+      </AlertModal>
     </Container>
   );
 };
