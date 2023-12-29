@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 import authApi from '../../../axios/authApi';
 import { PostContentType } from '../../../model/interface';
@@ -22,10 +23,13 @@ const myImage = async (profileImg: PostContentType) => {
 
 const useUpdateMyImageMutation = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const mutation = useMutation(myImage, {
     onSuccess: () => {
       queryClient.invalidateQueries('userData');
       // console.log();
+      // alert('프로필 사진을 변경하였습니다.');
+      navigate('/mypage');
     },
   });
   return {

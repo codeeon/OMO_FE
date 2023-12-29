@@ -31,10 +31,8 @@ const Routers = () => {
         <Route path="/map" element={<Map />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/mypage"
-          // element={<Mypage currentLocation={currentLocation} />}
-        />
+        <Route path="/mypage" element={<Mypage />} />
+        <Route path="/mypage/edit" element={<ProfileEdit />} />
       </Routes>
     </>
   );

@@ -50,8 +50,8 @@ const ProfileEdit = () => {
   const { data: userData, isError: userError } = useGetUserDataQuery();
 
   const [imageURL, setImageUrl] = useState([userData?.data.imgUrl]);
-  const image = imageURL.slice(-1);
-  const [isImageChanged, setIsImageChanged] = useState(false);
+  // const image = imageURL.slice(-1);
+  // const [isImageChanged, setIsImageChanged] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
 
   const [nickname, _, onChangeNickname] = useInput(userData?.data.nickname);
@@ -182,12 +182,12 @@ const ProfileEdit = () => {
     },
     {
       onSuccess: () => {
-        alert('프로필 내용을 변경하였습니다.');
+        // alert('프로필을 변경하였습니다.');
         navigate('/mypage');
       },
       onError: (error) => {
         // console.log(error);
-        alert('프로필 변경에 실패하였습니다.');
+        // alert('프로필 변경에 실패하였습니다.');
       },
     },
   );
@@ -206,7 +206,6 @@ const ProfileEdit = () => {
         navigate('/');
       },
       onError: (error) => {
-        // console.log(error);
         alert('회원 탈퇴에 실패하였습니다.');
       },
     },
@@ -223,25 +222,53 @@ const ProfileEdit = () => {
     //   console.log('profileImg -> ', profileImg);
     //   myImageMutate(profileImg);
     // }
-    if (files.length > 0) {
-      const profileImg = { imgUrl: files };
-      myImageMutate(profileImg);
-      // console.log(profileImg);
-    }
+
     if (allValidated) {
-      if (!nickname.length) {
+      // if (
+      //   nickname.length === 0 &&
+      //   confirmedNickname !== nickname &&
+      //   data.password.length === 0
+      // ) {
+      //   alert('프로필을 변경하였습니다.');
+      //   navigate('/mypage');
+      // }
+      if (nickname === '') {
         updateProfileMutation.mutate(data);
       } else if (confirmedNickname !== nickname) {
-        alert('닉네임 중복 체크를 다시 확인해주세요.');
-      } else if (!data.password.length) {
+        files.length === 0 && alert('닉네임 중복 체크를 다시 확인해주세요.');
+      } else if (data.password === '') {
         updateProfileMutation.mutate({ nickname: confirmedNickname });
       } else {
         data.nickname = confirmedNickname;
         updateProfileMutation.mutate(data);
       }
+      if (files.length > 0) {
+        const profileImg = { imgUrl: files };
+        myImageMutate(profileImg);
+        // console.log(profileImg);
+      }
     } else {
       alert('변경할 내용을 다시 확인해주세요!');
     }
+    // if (files.length > 0) {
+    //   const profileImg = { imgUrl: files };
+    //   myImageMutate(profileImg);
+    //   // console.log(profileImg);
+    // }
+    // if (allValidated) {
+    //   if (nickname === '') {
+    //     updateProfileMutation.mutate(data);
+    //   } else if (confirmedNickname !== nickname) {
+    //     alert('닉네임 중복 체크를 다시 확인해주세요.');
+    //   } else if (data.password === '') {
+    //     updateProfileMutation.mutate({ nickname: confirmedNickname });
+    //   } else {
+    //     data.nickname = confirmedNickname;
+    //     updateProfileMutation.mutate(data);
+    //   }
+    // } else {
+    //   alert('변경할 내용을 다시 확인해주세요!');
+    // }
   };
 
   const onClickWithdraw = () => {
