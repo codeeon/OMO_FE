@@ -1,35 +1,51 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import useModalCtr from '../../../hooks/useModalCtr';
+import PlaceInfoModal from '../../main/hotContents/placeInfo/PlaceInfoModal';
+import LocationModal from '../../Modal/LocationModal';
+
 const PlaceCard = ({ placeData }) => {
+  const data = placeData.Location;
+  const image = placeData.Location.Posts[0].imgUrl[0];
+
+  const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
+  const post = {
+    imgUrl: image,
+    Location: data,
+    content: data.Posts,
+    Category: data.Category,
+  };
+
   return (
-    <Card>
-      <Img src="" alt=""></Img>
+    <Card onClick={(e) => handleModalOpen(e)}>
+      <Img src={image} alt=""></Img>
       <Title>
-        <div>
-          <Name></Name>
-          <Category style={{ marginLeft: '4px' }}>활동</Category>
-        </div>
+        <Name>{data.storeName}</Name>
+        <Category style={{ marginLeft: '4px' }}>
+          {data.Category.categoryName}
+        </Category>
+
         <Mark>{mark}</Mark>
       </Title>
       <Address>
         <Pin>{pin}</Pin>
-        <div>서울 용산구 이태원동 210-5</div>
+        <AddressName>{data.address}</AddressName>
       </Address>
       <Counts>
         <Star>{star}</Star>
         <Count>
           <Text>별점</Text>
-          <Bold>3.4</Bold>
-          <Bold>
-            {'('}14{')'}
-          </Bold>
+          <Bold>{data.starAvg}</Bold>
         </Count>
         <Count style={{ marginLeft: '10px' }}>
           <Text>게시글</Text>
-          <Bold>34</Bold>
+          <Bold>{data.postCount}</Bold>
         </Count>
       </Counts>
+      <LocationModal isOpen={isModalOpen} onClose={handleModalClose}>
+        <PlaceInfoModal handleModalClose={handleModalClose} post={post} />
+      </LocationModal>
     </Card>
   );
 };
@@ -40,6 +56,7 @@ const Card = styled.div`
   box-sizing: border-box;
   width: 285px;
   height: 262px;
+  cursor: pointer;
 `;
 
 const Img = styled.img`
@@ -47,35 +64,43 @@ const Img = styled.img`
   width: 285px;
   height: 168px;
   margin-bottom: 12px;
+  border-radius: 16px;
   border: none;
+  object-fit: cover;
 `;
 
 const Title = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-bottom: 8px;
 `;
 
-const Name = styled.span`
+const Name = styled.div`
   color: var(--light-1_txt, #111);
   font-family: Wanted Sans;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
-const Category = styled.span`
+const Category = styled.div`
   color: var(--light-2_sub, #595959);
   font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: 100%;
+  min-width: 30px;
 `;
 
 const Mark = styled.div`
+  margin-left: auto;
   width: 24px;
   height: 24px;
   flex-shrink: 0;
@@ -137,6 +162,7 @@ const Pin = styled.span`
   width: 18px;
   height: 18px;
   margin-right: 4px;
+  padding-bottom: 3px;
 `;
 const pin = (
   <svg
@@ -152,6 +178,14 @@ const pin = (
     />
   </svg>
 );
+
+const AddressName = styled.div`
+  height: 20px;
+  width: 270px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 
 const Counts = styled.div`
   display: flex;

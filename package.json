@@ -11,12 +11,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.2.1",
+    "@googlemaps/react-wrapper": "^1.1.35",
+    "@react-google-maps/api": "^2.19.2",
     "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.14.202",
     "@types/react-transition-group": "^4.4.9",
     "@types/uuid": "^9.0.7",
     "axios": "^1.6.2",
     "firebase": "^10.7.0",
     "framer-motion": "^10.16.16",
+    "install": "^0.13.0",
     "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -31,9 +36,11 @@
     "react-transition-group": "^4.4.5",
     "styled-components": "^6.1.1",
     "styled-reset": "^4.5.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.54.10",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",

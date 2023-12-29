@@ -18,11 +18,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
     handleModalOpen: handleSuccessAlertOpen,
     handleModalClose: handleSuccessAlertClose,
   } = useAlertModalCtr();
-  // const {
-  //   isModalOpen: ErrorAlertOpen,
-  //   handleModalOpen: handleErrorAlertOpen,
-  //   handleModalClose: handleErrorsAlertOpen,
-  // } = useAlertModalCtr();
+
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
@@ -30,11 +26,12 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   const { postMutate, isPostLoading, isPostError, isPostSuccess } =
     usePostCommentMutation({ contentId, handleSuccessAlertOpen });
 
-  // TODO 토큰 문제
   const postCommentHandler = () => {
+    const userId = sessionStorage.getItem('userId');
+
     const newComment = {
       PostId: contentId,
-      UserId: 3, // TODO 유저와 연결
+      UserId: userId,
       content: text,
       createdAt: getToday(),
     };
@@ -54,7 +51,11 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
           댓글등록
         </Button>
       </Base>
-      <AlertModal isOpen={successAlertOpen} onClose={handleSuccessAlertClose}>
+      <AlertModal
+        isOpen={successAlertOpen}
+        onClose={handleSuccessAlertClose}
+        position="topRight"
+      >
         {isPostSuccess ? <CommentSuccess /> : <CommentError />}
       </AlertModal>
     </>
@@ -72,11 +73,12 @@ const Base = styled.div`
   width: 100%;
 
   margin-top: 20px;
+  margin-bottom: 40px;
 `;
 
 const TextArea = styled.textarea`
   width: calc(100% - 40px);
-  height: 90px;
+  height: 60px;
   resize: none;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.color.border};
@@ -84,10 +86,14 @@ const TextArea = styled.textarea`
   color: ${({ theme }) => theme.color.text};
   margin-bottom: 10px;
   padding: 20px;
+  font-size: 16px;
+  font-weight: 500;
   &::placeholder {
     color: #a5a5a5;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Wanted Sans Variable';
   }
+  font-family: 'Wanted Sans Variable';
   outline: none;
 `;

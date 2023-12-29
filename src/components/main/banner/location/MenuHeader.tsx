@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
@@ -10,23 +10,26 @@ import {
 import { itemVariants } from '../../../../styles/Motion';
 
 import AlertModal from '../../../Modal/AlertModal';
-import Alert from '../../../share/alert/Alert';
+
 import useAlertModalCtr from '../../../../hooks/useAlertModalCtr';
+import LocationAlert from '../../../share/alert/LocationAlert';
 
 interface Props {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<string | undefined, unknown>>;
   isLoading: boolean;
+  setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const MenuHeader: React.FC<Props> = ({ refetch, isLoading }) => {
+const MenuHeader: React.FC<Props> = ({ refetch, isLoading, setIsOpen }) => {
   const { isModalOpen, setModalIsOpen, handleModalOpen, handleModalClose } =
     useAlertModalCtr();
 
   const onClickCurLocBtn = () => {
     refetch();
     handleModalOpen();
+    setIsOpen(false);
   };
 
   return (
@@ -35,8 +38,13 @@ const MenuHeader: React.FC<Props> = ({ refetch, isLoading }) => {
         <FaLocationCrosshairs />
         <span>현재 위치에서 보기</span>
       </Header>
-      <AlertModal isOpen={isModalOpen} onClose={handleModalClose}>
-        <Alert isLoading={isLoading} />
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        isLoading={isLoading}
+        position="topRight"
+      >
+        <LocationAlert isLoading={isLoading} />
       </AlertModal>
     </>
   );

@@ -1,5 +1,4 @@
 import React from 'react';
-import { ScaleLoader } from 'react-spinners';
 import styled from 'styled-components';
 import { FaCheckCircle } from 'react-icons/fa';
 
@@ -8,7 +7,7 @@ const CommentSuccess = () => {
     <Base>
       <Wrapper>
         <FaCheckCircle />
-        <span>댓글이 업로드 성공.</span>
+        <span>댓글 업로드에 성공하였습니다.</span>
       </Wrapper>
     </Base>
   );
@@ -42,6 +41,6 @@ const Wrapper = styled.div`
   span {
     color: #fff;
   }
-  width: 241px;
+  width: auto;
   gap: 10px;
 `;

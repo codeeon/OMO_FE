@@ -1,24 +1,23 @@
-import { SetStateAction, useEffect, useRef, useState } from 'react';
-import { motion, Variants } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import Menu from './Menu';
 import styled from 'styled-components';
 import { FaCaretDown } from 'react-icons/fa';
 import { SlLocationPin } from 'react-icons/sl';
 import { BounceLoader } from 'react-spinners';
 import useCurrentLocationQuery from '../../../hooks/reactQuery/location/useCurrentLocationQuery';
+import useDistrictStore from '../../../store/location/districtStore';
 
-interface Props {
-  currentLocation: string | undefined;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
-}
-
-const Location: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
+const Location = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoading, refetch } = useCurrentLocationQuery(setCurrentLocation);
+  const { district, setDistrict } = useDistrictStore();
+  const { isLoading, refetch } = useCurrentLocationQuery(setDistrict);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleDropdownHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleDropdownHandler = (
+    e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
+  ) => {
     e.stopPropagation();
     setIsOpen(!isOpen);
   };
@@ -52,7 +51,7 @@ const Location: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
         {isLoading ? (
           <BounceLoader color="#f97393" size={30} />
         ) : (
-          <span>{currentLocation}</span>
+          <span>{district}</span>
         )}
         <motion.div
           variants={{
@@ -68,7 +67,8 @@ const Location: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
       <Menu
         refetch={refetch}
         isOpen={isOpen}
-        setCurrentLocation={setCurrentLocation}
+        isLoading={isLoading}
+        toggleDropdownHandler={toggleDropdownHandler}
       />
     </NavContainer>
   );

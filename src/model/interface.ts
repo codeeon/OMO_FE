@@ -65,6 +65,7 @@ export interface PostDetailType {
   User: {
     nickname: string;
     imgUrl: string;
+    userId: number;
   };
   Location: {
     Category: {
@@ -75,23 +76,46 @@ export interface PostDetailType {
     address: string;
     latitude: string;
     longitude: string;
+    placeInfoId: string;
   };
   Comments: CommentType[];
 }
 
+export interface RepleType {
+  replyId: number;
+  content: string;
+  createdAt: string;
+  User: {
+    imgUrl: string;
+    nickname: string;
+    userId: number;
+  };
+}
+
 export interface CommentType {
+  Replies: RepleType[];
   commentId: number;
   content: string;
   createdAt: string;
   User: {
     imgUrl: string;
     nickname: string;
+    userId: number;
   };
 }
 
 export interface HotPostsType {
   Category: { categoryName: string };
-  Location: { storeName: string; latitude: number; longitude: number };
+  Location: {
+    address: string;
+    latitude: number;
+    locationId: number;
+    longitude: number;
+    placeInfoId: string;
+    postCount: 1;
+    starAvg: 0;
+    storeName: string;
+  };
   content: string;
   imgUrl: string[];
 }
@@ -135,6 +159,15 @@ export interface PostContentType {
   latitude: string;
   longitude: string;
   star: number;
+  placeInfoId: string | null | undefined;
+}
+
+export interface PostPatchType {
+  address: string;
+  content: string;
+  star: number;
+  storeName: string;
+  placeInfoId: string;
 }
 
 export interface PostCommentType {
@@ -144,6 +177,7 @@ export interface PostCommentType {
 
 export interface CommentType {
   User: {
+    userId: number;
     imgUrl: string;
     nickname: string;
   };
@@ -168,6 +202,7 @@ export interface LocationPostsType {
     Posts: [{ imgUrl: string | undefined }];
     address: string;
     locationId: number;
+    placeInfoId: string;
     postCount: number;
     starAvg: number;
     storeName: string;
@@ -187,4 +222,24 @@ export interface LikePostsType {
   PostId: number;
   userId: number;
   likeId: number;
+}
+
+// 여기부터 구글 맵
+
+// 현위치
+export interface CurrentLocationType {
+  lat: number | null;
+  lng: number | null;
+}
+
+export interface mapBoundsType {
+  initialLoad?: boolean | undefined;
+  northEast: { lat: number | undefined; lng: number | undefined };
+  southWest: { lat: number | undefined; lng: number | undefined };
+}
+
+export interface SelectedPlaceType {
+  locationId: number;
+  latitude: number;
+  longitude: number;
 }

@@ -1,18 +1,13 @@
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Location from './location';
 
 const BANNERIMG =
   'https://firebasestorage.googleapis.com/v0/b/photo-zone-b66e9.appspot.com/o/files%2Fseoul-cityscape-at-twilight-in-south-korea.jpg?alt=media&token=94ed1302-6aaf-42ee-8e54-5b991002fc88';
 
-interface Props {
-  currentLocation: string | undefined;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
-}
-
-const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
+const Banner = () => {
   return (
-    <Base bannerimg={BANNERIMG}>
+    <Base $bannerImg={BANNERIMG}>
       <Wrapper>
         <TitleContainer>
           <BannerTitle>
@@ -28,10 +23,7 @@ const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
               오늘은 <span>요기서!</span>
             </h2>
           </BannerTitle>
-          <Location
-            currentLocation={currentLocation}
-            setCurrentLocation={setCurrentLocation}
-          />
+          <Location />
         </TitleContainer>
       </Wrapper>
     </Base>
@@ -40,14 +32,14 @@ const Banner: React.FC<Props> = ({ currentLocation, setCurrentLocation }) => {
 
 export default Banner;
 
-const Base = styled.div<{ bannerimg: string }>`
+const Base = styled.div<{ $bannerImg: string }>`
   box-sizing: border-box;
   background-image: linear-gradient(
       180deg,
       rgba(0, 0, 0, 0.7) 0%,
       rgba(0, 0, 0, 0.3) 100%
     ),
-    url(${({ bannerimg }) => bannerimg});
+    url(${({ $bannerImg }) => $bannerImg});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

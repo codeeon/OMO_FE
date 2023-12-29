@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import auth from '..//..//..//axios/auth';
 import useInput from '../../../hooks/useInput';
 import Check from './Check';
@@ -73,11 +72,19 @@ const Register: React.FC = (props: string) => {
       setError('password');
     }
 
-    if (data.password === data.confirmedPassword) {
+    if (data.password.length > 0 && data.password === data.confirmedPassword) {
       setConfirmedPasswordCheck('confirmed');
     } else {
       setConfirmedPasswordCheck('rejected');
       setError('confirmedPassword');
+    }
+
+    if (!data.password.length) {
+      setPasswordCheck('');
+    }
+
+    if (!data.confirmedPassword.length) {
+      setConfirmedPasswordCheck('');
     }
 
     await trigger(['password', 'confirmedPassword']);
@@ -85,11 +92,11 @@ const Register: React.FC = (props: string) => {
 
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      console.log(nickname);
+      // console.log(nickname);
       const checkNicknameResponse = await auth.post('/check-nickname', {
         nickname,
       });
-      console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
+      // console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
     },
     {
       onSuccess: () => {
@@ -104,9 +111,9 @@ const Register: React.FC = (props: string) => {
 
   const signupMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      console.log(data);
+      // console.log(data);
       const response = await auth.post(`/register`, data);
-      console.log(response);
+      // console.log(response);
     },
     {
       onSuccess: () => {
@@ -131,7 +138,7 @@ const Register: React.FC = (props: string) => {
   };
 
   return (
-    <Form onChange={handleSubmit(onClickSubmit)}>
+    <>
       <InputBox>
         <div>
           <div>
@@ -152,35 +159,38 @@ const Register: React.FC = (props: string) => {
           </div>
           <Check verifyCheck={nicknameCheck}>{checkingNickname}</Check>
         </div>
-        <div>
+        <Form onChange={handleSubmit(onValid)}>
           <div>
-            <Input
-              check={passwordCheck}
-              placeholder="비밀번호를 입력해 주세요."
-              type="password"
-              {...register('password')}
-            />
+            <div>
+              <Input
+                check={passwordCheck}
+                placeholder="비밀번호를 입력해 주세요."
+                type="password"
+                {...register('password')}
+              />
+            </div>
+            <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
           </div>
-          <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
-        </div>
 
-        <div>
           <div>
-            <Input
-              check={confirmedPasswordCheck}
-              placeholder="비밀번호를 다시 입력해 주세요."
-              type="password"
-              {...register('confirmedPassword')}
-            />
+            <div>
+              <Input
+                check={confirmedPasswordCheck}
+                placeholder="비밀번호를 다시 입력해 주세요."
+                type="password"
+                {...register('confirmedPassword')}
+              />
+            </div>
+            <Check verifyCheck={confirmedPasswordCheck}>
+              {checkingConfirmedPassword}
+            </Check>
           </div>
-          <Check verifyCheck={confirmedPasswordCheck}>
-            {checkingConfirmedPassword}
-          </Check>
-        </div>
+        </Form>
       </InputBox>
       <div style={{ height: '214px' }}>
         <div>
           <LargeBtn
+            type="button"
             onClick={handleSubmit(onClickSubmit)}
             validation={allValidated}
           >
@@ -203,13 +213,11 @@ const Register: React.FC = (props: string) => {
           </Link>
         </div>
       </div>
-    </Form>
+    </>
   );
 };
 
 export default Register;
-
-const Form = styled.form``;
 
 const InputBox = styled.div`
   display: flex;
@@ -217,6 +225,14 @@ const InputBox = styled.div`
   box-sizing: border-box;
   height: 380px;
   padding-top: 58px;
+  gap: 30px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 380px;
   gap: 30px;
 `;
 
@@ -240,10 +256,11 @@ const SmallBtn = styled.button`
 
 const Input = styled.input`
   width: ${({ width }) => width || '400px'};
+  color: ${({ theme }) => theme.color.text};
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid ${({ theme }) => theme.color.border};
   border-color: ${({ check }) =>
     check === 'rejected'
       ? 'var(--error_accent, #FF3263)'

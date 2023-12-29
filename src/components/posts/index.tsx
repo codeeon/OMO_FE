@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
 import Modal from '../Modal/Modal';
@@ -11,20 +11,17 @@ import CategoryDropdown from './CateogryDropdown';
 import ContentCardSkeleton from '../share/ContentCardSkeleton';
 import CardDarkSkeleton from './CardDarkSkeleton';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import AlertModal from '../Modal/AlertModal';
+import CommentError from '../share/alert/CommentError';
+import useDistrictStore from '../../store/location/districtStore';
+import useThemeStore from '../../store/theme/themeStore';
+import useCategoryStore from '../../store/category/categoryStore';
 
-interface Props {
-  currentLocation: string | undefined;
-  setCurrentLocation: React.Dispatch<SetStateAction<string | undefined>>;
-  themeMode: string | null;
-}
-
-const Posts: React.FC<Props> = ({
-  currentLocation,
-  setCurrentLocation,
-  themeMode,
-}) => {
-  const [category, setCategory] = useState<string>('전체');
-
+const Posts = () => {
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
+  const { district } = useDistrictStore();
+  const { category } = useCategoryStore();
   const {
     isModalOpen: isSubModalOpen,
     handleModalOpen: opeSubModal,
@@ -35,6 +32,7 @@ const Posts: React.FC<Props> = ({
     handleModalOpen: openMainModal,
     handleModalClose: closeMainModal,
   } = useModalCtr();
+  const { themeMode } = useThemeStore();
 
   const {
     data: contents,
@@ -43,7 +41,7 @@ const Posts: React.FC<Props> = ({
     isFetching,
     isFetchingNextPage,
     refetch,
-  } = useGetAllContentsQuery(currentLocation, category);
+  } = useGetAllContentsQuery(district, category);
 
   const { setTarget } = useIntersectionObserver({
     hasNextPage,
@@ -52,25 +50,34 @@ const Posts: React.FC<Props> = ({
 
   useEffect(() => {
     refetch();
-  }, [currentLocation, category]);
+  }, [district, category]);
+
+  const openPostModalHandler = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const userId = sessionStorage.getItem('userId');
+
+    if (userId) {
+      openMainModal(e);
+    } else {
+      handleModalOpen();
+    }
+  };
 
   return (
     <Base>
       <Wrapper>
         <Header>
           <Title>게시글</Title>
-          <PostBtn onClick={(e) => openMainModal(e)}>
+          <PostBtn onClick={openPostModalHandler}>
             <FiEdit3 />
             <span>새 게시글</span>
           </PostBtn>
         </Header>
         <Navigator>{'홈 > 게시글'}</Navigator>
         <FilterContainer>
-          <Location
-            currentLocation={currentLocation}
-            setCurrentLocation={setCurrentLocation}
-          />
-          <CategoryDropdown category={category} setCategory={setCategory} />
+          <Location />
+          <CategoryDropdown />
         </FilterContainer>
         <Body>
           <RecentCardGrid>
@@ -90,19 +97,21 @@ const Posts: React.FC<Props> = ({
                 : Array.from({ length: 20 }).map((_, idx) => (
                     <CardDarkSkeleton key={idx} />
                   ))
-              : contents?.pages.map((group, i) => (
-                  <>
+              : contents?.pages.map((group, pageIndex) => (
+                  <React.Fragment key={pageIndex}>
                     {group.map((contentData) => (
                       <ContentCard
                         key={contentData.postId}
                         contentData={contentData}
                       />
                     ))}
-                  </>
+                  </React.Fragment>
                 ))}
             {isFetchingNextPage &&
               !isFetching &&
-              Array.from({ length: 20 }).map((_) => <ContentCardSkeleton />)}
+              Array.from({ length: 20 }).map((_, idx) => (
+                <ContentCardSkeleton key={idx} />
+              ))}
             <ObserverContainer ref={setTarget}></ObserverContainer>
           </RecentCardGrid>
         </Body>
@@ -115,6 +124,13 @@ const Posts: React.FC<Props> = ({
           closeSubModal={closeSubModal}
         />
       </Modal>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+      >
+        <CommentError />
+      </AlertModal>
     </Base>
   );
 };

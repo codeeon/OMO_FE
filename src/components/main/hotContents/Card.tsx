@@ -1,82 +1,72 @@
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {
-  HotPostsType,
-  LocationType,
-  MapLocationType,
-} from '../../../model/interface';
-import { HiArrowNarrowRight } from 'react-icons/hi';
-import { useNavigate } from 'react-router-dom';
+import { HotPostsType } from '../../../model/interface';
+
+import useModalCtr from '../../../hooks/useModalCtr';
+import PlaceInfoModal from './placeInfo/PlaceInfoModal';
+import LocationModal from '../../Modal/LocationModal';
 
 interface Props {
   post: HotPostsType;
-  mapCenterLocation: MapLocationType;
-  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
 }
 
-const Card: React.FC<Props> = ({
-  post,
-  mapCenterLocation,
-  setMapCenterLocation,
-}) => {
+const Card: React.FC<Props> = ({ post }) => {
+  const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
   const { imgUrl, Location, content, Category: category } = post;
-  const navigate = useNavigate();
-
-  const moveMapHandler = () => {
-    setMapCenterLocation({
-      ...mapCenterLocation,
-      center: {
-        lat: Location.latitude,
-        lng: Location.longitude,
-      },
-    });
-
-    navigate('/map');
-  };
 
   return (
-    <Base>
+    <Base onClick={(e) => handleModalOpen(e)}>
+      {/* // <Base> */}
       <Wrapper>
-        <ImageContainer imageURL={imgUrl}></ImageContainer>
+        <ImageContainer $imageURL={imgUrl}></ImageContainer>
         <Title>{Location.storeName}</Title>
         <BodyConatiner>
           <Text dangerouslySetInnerHTML={{ __html: content }} />
           <FooterContainer>
             <Category>#{category.categoryName}</Category>
-            <MapBtnContainer onClick={moveMapHandler}>
-              <span>지도로 보기</span>
-              <HiArrowNarrowRight />
-            </MapBtnContainer>
           </FooterContainer>
         </BodyConatiner>
       </Wrapper>
+      <LocationModal isOpen={isModalOpen} onClose={handleModalClose}>
+        <PlaceInfoModal handleModalClose={handleModalClose} post={post} />
+      </LocationModal>
     </Base>
   );
 };
 
 export default Card;
 
+const ImageContainer = styled.div<{ $imageURL: string[] }>`
+  width: 343px;
+  height: 155px;
+  border-radius: 8px;
+  background-image: ${({ $imageURL }) => `url(${$imageURL[0]})`};
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
+  transition: all 300ms ease;
+`;
+
 const Base = styled.div`
   box-sizing: border-box;
   border: 1px solid ${({ theme }) => theme.color.cardBorder};
   background: ${({ theme }) => theme.color.cardBg};
   border-radius: 16px;
+  &:hover ${ImageContainer} {
+    background-size: 120%;
+  }
+  &:hover {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  }
+  cursor: pointer;
+  transition: all 300ms ease;
 `;
 
 const Wrapper = styled.div`
   width: 343px;
   height: 280px;
   padding: 20px;
-`;
-
-const ImageContainer = styled.div<{ imageURL: string[] }>`
-  width: 343px;
-  height: 155px;
-  border-radius: 8px;
-  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
 `;
 
 const Title = styled.div`
@@ -121,30 +111,4 @@ const Category = styled.div`
   color: #f97393;
   font-size: 14px;
   font-weight: 700;
-`;
-
-const MapBtnContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2px;
-  span {
-    color: #44a5ff;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    &:hover {
-      color: #3765ff;
-    }
-  }
-  svg {
-    width: 18px;
-    height: 18px;
-    color: #44a5ff;
-    margin-bottom: 2px;
-    &:hover {
-      color: #3765ff;
-    }
-  }
-  cursor: pointer;
 `;

@@ -1,38 +1,21 @@
-import { useState, useEffect, SetStateAction, useId } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CardSkeleton from './CardSkeleton';
 import useGetHotPosts from '../../../hooks/reactQuery/main/useGetHotPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
-import { LocationType, MapLocationType } from '../../../model/interface';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
-
-interface Props {
-  currentLocation: string | undefined;
-  themeMode: string | null;
-  mapCenterLocation: MapLocationType;
-  setMapCenterLocation: React.Dispatch<SetStateAction<MapLocationType>>;
-}
-
-const HotContents: React.FC<Props> = ({
-  currentLocation,
-  themeMode,
-  mapCenterLocation,
-  setMapCenterLocation,
-}) => {
+import useDistrictStore from '../../../store/location/districtStore';
+import useThemeStore from '../../../store/theme/themeStore';
+const HotContents = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-
-  const uniqueId = useId();
-
-  const {
-    data: hotPosts,
-    isLoading,
-    refetch,
-  } = useGetHotPosts(currentLocation);
+  const { district } = useDistrictStore();
+  const { data: hotPosts, isLoading, refetch } = useGetHotPosts(district);
+  const { themeMode } = useThemeStore();
 
   useEffect(() => {
     refetch();
-  }, [currentLocation]);
+  }, [district]);
 
   return (
     <Carousel
@@ -44,22 +27,18 @@ const HotContents: React.FC<Props> = ({
     >
       {!isLoading
         ? hotPosts?.map((post) => (
-            <CarouselItem activeIndex={activeIndex} key={post.imgUrl[0]}>
-              <Card
-                post={post}
-                mapCenterLocation={mapCenterLocation}
-                setMapCenterLocation={setMapCenterLocation}
-              />
+            <CarouselItem $activeIndex={activeIndex} key={post.imgUrl[0]}>
+              <Card post={post} />
             </CarouselItem>
           ))
         : themeMode === 'LightMode'
         ? Array.from({ length: 9 }).map((_, idx) => (
-            <CarouselItem activeIndex={activeIndex} key={idx}>
+            <CarouselItem $activeIndex={activeIndex} key={idx}>
               <CardSkeleton key={idx} />
             </CarouselItem>
           ))
         : Array.from({ length: 9 }).map((_, idx) => (
-            <CarouselItem activeIndex={activeIndex} key={idx}>
+            <CarouselItem $activeIndex={activeIndex} key={idx}>
               <CardDarkSkeleton key={idx} />
             </CarouselItem>
           ))}
@@ -77,10 +56,10 @@ const Title = styled.div`
   color: ${({ theme }) => theme.color.text};
 `;
 
-const CarouselItem = styled.li<{ activeIndex: number }>`
+const CarouselItem = styled.li<{ $activeIndex: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(-${({ activeIndex }) => activeIndex * 315}%);
+  transform: translateX(-${({ $activeIndex }) => $activeIndex * 315}%);
   transition: 500ms ease;
 `;

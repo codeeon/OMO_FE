@@ -5,25 +5,38 @@ import DetailModalDropdown from './ModalDropdown';
 import { PostDetailType } from '../../model/interface';
 
 const ModalHeader: React.FC<{
-  userId: string;
+  userName: string;
+  userProfile: string;
   createdAt: string;
   contentId: number | undefined;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   post: PostDetailType;
-}> = ({ userId, createdAt, contentId, closeModalHandler, post }) => {
-  
+  userId: number;
+}> = ({
+  userProfile,
+  userName,
+  createdAt,
+  contentId,
+  closeModalHandler,
+  post,
+  userId,
+}) => {
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
+
   return (
     <Base>
-      <UserProfile />
+      <UserProfile userProfile={userProfile} />
       <UserInfoContainer>
-        <UserName>{userId}</UserName>
+        <UserName>{userName}</UserName>
         <CreationDate>{createdAt.split('T')[0]}</CreationDate>
       </UserInfoContainer>
-      <DetailModalDropdown
-        contentId={contentId}
-        closeModalHandler={closeModalHandler}
-        post={post}
-      />
+      {userId === currentUserId && (
+        <DetailModalDropdown
+          contentId={contentId}
+          closeModalHandler={closeModalHandler}
+          post={post}
+        />
+      )}
     </Base>
   );
 };
@@ -38,10 +51,14 @@ const Base = styled.div`
   width: 100%;
 `;
 
-const UserProfile = styled.div`
-  background: #d9d9d9;
+const UserProfile = styled.div<{ userProfile: string }>`
+  background-image: ${({ userProfile }) => `url(${userProfile})`};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 50px;
   height: 50px;
+  border: 2px solid ${({ theme }) => theme.color.border};
   border-radius: 100%;
 `;
 

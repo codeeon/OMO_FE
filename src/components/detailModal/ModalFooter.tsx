@@ -9,11 +9,7 @@ interface Props {
   commentLength: number;
 }
 
-const ModalFooter: React.FC<Props> = ({
-  likeCount,
-  postId,
-  commentLength,
-}) => {
+const ModalFooter: React.FC<Props> = ({ likeCount, postId, commentLength }) => {
   return (
     <Footer>
       <FooterItem color="red">
@@ -36,6 +32,7 @@ const Footer = styled.div`
   align-items: center;
   margin-top: 21px;
   gap: 10px;
+  width: 100%;
 `;
 
 const FooterItem = styled.div<{ color: string }>`

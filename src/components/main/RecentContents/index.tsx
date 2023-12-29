@@ -7,23 +7,21 @@ import ContentCardSkeleton from '../../share/ContentCardSkeleton';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
 import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
+import useDistrictStore from '../../../store/location/districtStore';
+import useThemeStore from '../../../store/theme/themeStore';
 
-interface Props {
-  currentLocation: string | undefined;
-  themeMode: string | null;
-}
 const categories = ['전체', '음식점', '카페', '기타'];
 
-const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
+const RecentContents = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [selectedCateogry, setSelectedCategory] = useState<string>('전체');
-
+  const { district } = useDistrictStore();
   const {
     data: recentPosts,
     isLoading,
     refetch,
-  } = useGetRecentPostsQuery(currentLocation, selectedCateogry);
-
+  } = useGetRecentPostsQuery(district, selectedCateogry);
+  const { themeMode } = useThemeStore();
   const navigate = useNavigate();
 
   const navigateToContentsPage = () => {
@@ -32,7 +30,7 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
 
   useEffect(() => {
     refetch();
-  }, [currentLocation, selectedCateogry]);
+  }, [district, selectedCateogry]);
 
   const changeCateogryHandler = (category: string) => {
     setSelectedCategory(category);
@@ -55,7 +53,7 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
           <CategroyContainer>
             {categories.map((category) => (
               <CategoryBtn
-                isSelected={selectedCateogry === category}
+                $isSelected={selectedCateogry === category}
                 onClick={() => changeCateogryHandler(category)}
                 key={category}
               >
@@ -71,18 +69,18 @@ const RecentContents: React.FC<Props> = ({ currentLocation, themeMode }) => {
     >
       {!isLoading
         ? recentPosts?.map((post) => (
-            <CarouselItem activeIndex={activeIndex} key={post.postId}>
+            <CarouselItem $activeIndex={activeIndex} key={post.postId}>
               <RecentCard key={post.postId} post={post} />
             </CarouselItem>
           ))
         : themeMode === 'LightMode'
         ? Array.from({ length: 4 }).map((_, idx) => (
-            <CarouselItem activeIndex={activeIndex} key={idx}>
+            <CarouselItem $activeIndex={activeIndex} key={idx}>
               <ContentCardSkeleton key={idx} />
             </CarouselItem>
           ))
         : Array.from({ length: 4 }).map((_, idx) => (
-            <CarouselItem activeIndex={activeIndex} key={idx}>
+            <CarouselItem $activeIndex={activeIndex} key={idx}>
               <CardDarkSkeleton key={idx} />
             </CarouselItem>
           ))}
@@ -139,11 +137,11 @@ const AllBtnWrapper = styled.div`
   right: 0;
 `;
 
-const CarouselItem = styled.li<{ activeIndex: number }>`
+const CarouselItem = styled.li<{ $activeIndex: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(-${({ activeIndex }) => activeIndex * 428.5}%);
+  transform: translateX(-${({ $activeIndex }) => $activeIndex * 428}%);
   transition: 500ms ease;
 `;
 
@@ -155,7 +153,7 @@ const CategroyContainer = styled.div`
   gap: 8px;
 `;
 
-const CategoryBtn = styled.div<{ isSelected: boolean }>`
+const CategoryBtn = styled.div<{ $isSelected: boolean }>`
   border: 1px solid ${({ theme }) => theme.color.border};
   color: ${({ theme }) => theme.color.text};
   text-align: center;
@@ -165,8 +163,8 @@ const CategoryBtn = styled.div<{ isSelected: boolean }>`
   border-radius: 41px;
 
   cursor: pointer;
-  ${({ isSelected }) =>
-    isSelected &&
+  ${({ $isSelected }) =>
+    $isSelected &&
     css`
       border: 1px solid ${({ theme }) => theme.color.primary};
       color: ${({ theme }) => theme.color.primary};

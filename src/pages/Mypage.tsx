@@ -45,24 +45,26 @@ const Mypage: React.FC = () => {
   });
 
   useEffect(() => {
-    refetchBookmark();
-    refetchMyPosts();
+    isSelect === 'Bookmark' ? refetchBookmark() : refetchMyPosts();
   }, [isSelect]);
 
-  console.log('유저 데이터 -> ', userData);
-  console.log('유저 데이터 에러 -> ', userError);
-  console.log('내 북마크 -> ', myBookmark);
-  console.log('내 게시글 -> ', myPosts);
+  // console.log('유저 데이터 -> ', userData);
+  // console.log('유저 데이터 에러 -> ', userError);
+  // console.log('내 북마크 요청 -> ', myBookmark);
+  // console.log('내 북마크를 찾아서 -> ', myBookmark?.pages[0]?.data);
+  // console.log('내 게시글 요청 -> ', myPosts);
+  // console.log('내 게시글 데이터 조회 -> ', myPosts?.pages[0]?.data);
 
   useEffect(() => {
     userError
       ? (alert('다시 로그인 후 이용해주세요.'),
-        localStorage.removeItem('userId'),
-        localStorage.removeItem('accessToken'),
-        localStorage.removeItem('refreshToken'),
-        navigate('/'))
-      : console.log(localStorage.getItem('userId'));
-  });
+        sessionStorage.removeItem('userId'),
+        sessionStorage.removeItem('accessToken'),
+        sessionStorage.removeItem('refreshToken'),
+        navigate('/login'))
+      : null;
+    // : console.log(sessionStorage.getItem('userId'));
+  }, []);
 
   const onClickSelectBookmark = () => {
     setIsSelect('Bookmark');
@@ -70,6 +72,8 @@ const Mypage: React.FC = () => {
   const onClickSelectContents = () => {
     setIsSelect('Contents');
   };
+
+  console.log(myBookmark, myPosts);
 
   return (
     <Base>
@@ -98,26 +102,31 @@ const Mypage: React.FC = () => {
         </Item>
       </Select>
       <Contents>
-        {isFetchingBookmark &&
-        !isFetchingNextBookmark &&
-        isSelect === 'Bookmark'
-          ? Array.from({ length: 12 }).map((_, idx) => (
-              <PlaceCardSkeleton key={idx} />
-            ))
-          : !isFetchingBookmark &&
-            isFetchingNextBookmark &&
-            isSelect === 'Bookmark' &&
-            myBookmark?.map((placeData) => <PlaceCard placeData={placeData} />)}
-        {isFetchingMyPosts && !isFetchingNextMyPosts && isSelect === 'Contents'
+        {/* pages가 정해져 있기 때문에, 수정을 해야 할 듯. 다음 페이지가 있다면 그 숫자의 페이지도 나오게끔 */}
+        {isSelect === 'Bookmark'
+          ? (isFetchingBookmark && !isFetchingNextBookmark) ||
+            (!isFetchingBookmark && isFetchingNextBookmark)
+            ? Array.from({ length: 12 }).map((_, idx) => (
+                <PlaceCardSkeleton key={idx} />
+              ))
+            : myBookmark?.pages.map((page) =>
+                page.data.map((placeData) => (
+                  <PlaceCard key={placeData.locationId} placeData={placeData} />
+                )),
+              )
+          : (isFetchingMyPosts && !isFetchingNextMyPosts) ||
+            (!isFetchingMyPosts && isFetchingNextMyPosts)
           ? Array.from({ length: 12 }).map((_, idx) => (
               <ContentCardSkeleton key={idx} />
             ))
-          : !isFetchingMyPosts &&
-            isFetchingNextMyPosts &&
-            isSelect === 'Contents' &&
-            myPosts?.map((contentData) => (
-              <ContentCard contentData={contentData} />
-            ))}
+          : myPosts?.pages.map((page) =>
+              page.data.map((contentData) => (
+                <ContentCard
+                  key={contentData.postId}
+                  contentData={contentData}
+                />
+              )),
+            )}
         {isSelect === 'Bookmark' ? (
           <ObserverContainer ref={setTargetBookmark}></ObserverContainer>
         ) : (
@@ -218,6 +227,7 @@ const Contents = styled.div`
 
   grid-area: main;
 `;
+
 const ObserverContainer = styled.div`
   height: 100px;
 `;

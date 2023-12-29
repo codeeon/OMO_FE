@@ -4,14 +4,19 @@ import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { MdOutlineDarkMode, MdOutlineWbSunny } from 'react-icons/md';
 import { FiUser } from 'react-icons/fi';
-import { ThemeType } from '../../model/interface';
 import { useNavigate } from 'react-router-dom';
-// import Cookies from 'js-cookie';
+import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import AlertModal from '../Modal/AlertModal';
+import useThemeStore from '../../store/theme/themeStore';
+import PostErrorAlert from './alert/PostErrorAlert';
+import PostSuccessAlert from './alert/PostSuccessAlert';
 
-const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
+const NavDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
+  const [errorType, setErrorType] = useState<string | null>(null);
+  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
+  const { themeMode, toggleTheme } = useThemeStore();
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
       if (
@@ -36,20 +41,36 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
   const clickToggleBtn = () => {
     toggleTheme();
     setIsOpen(false);
-    window.document.location.reload();
   };
 
   const navigate = useNavigate();
 
-  const userId = localStorage.getItem('userId');
+  const userId = sessionStorage.getItem('userId');
 
   const handleLogout = () => {
     // 여기에 auth.POST /logout req 넣을 예정
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userId');
-    alert('로그아웃이 완료되었습니다.');
+    setErrorType('logout');
+    handleModalOpen();
+    setIsOpen(false);
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('refreshToken');
+    sessionStorage.removeItem('userId');
     navigate('/');
+  };
+
+  const onClickMyPageBtn = () => {
+    if (userId) {
+      navigate('/mypage');
+    } else {
+      setErrorType('required');
+      handleModalOpen();
+      setIsOpen(false);
+    }
+  };
+
+  const handleLogin = () => {
+    setIsOpen(false);
+    navigate('/login');
   };
 
   return (
@@ -89,12 +110,7 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
         }}
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
-        <DropdownItem
-          onClick={() =>
-            userId ? navigate('/mypage') : alert('로그인 후 이용해주세요.')
-          }
-          variants={itemVariants}
-        >
+        <DropdownItem onClick={onClickMyPageBtn} variants={itemVariants}>
           내 정보
         </DropdownItem>
         <DropdownItem variants={itemVariants} onClick={clickToggleBtn}>
@@ -120,7 +136,7 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
           </DropdownItem>
         ) : (
           <DropdownItem
-            onClick={() => navigate('/login')}
+            onClick={handleLogin}
             variants={itemVariants}
             style={{ color: 'red' }}
           >
@@ -128,6 +144,19 @@ const NavDropdown: React.FC<ThemeType> = ({ themeMode, toggleTheme }) => {
           </DropdownItem>
         )}
       </DropdownList>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        position="topRight"
+        setErrorType={setErrorType}
+      >
+        {errorType === 'required' && (
+          <PostErrorAlert errorMsg={'로그인 후 이용해주세요.'} />
+        )}
+        {errorType === 'logout' && (
+          <PostSuccessAlert successMsg={'로그아웃이 완료되었습니다.'} />
+        )}
+      </AlertModal>
     </NavContainer>
   );
 };

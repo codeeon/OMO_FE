@@ -12,13 +12,13 @@ export const getCurrentAddr = async () => {
   }
 };
 
-const useCurrentLocationQuery = (
-  setState: React.Dispatch<React.SetStateAction<string | undefined>>,
-) =>
+const useCurrentLocationQuery = (setState: (dist: string) => void) =>
   useQuery('currentDistrict', getCurrentAddr, {
     enabled: false,
     onSuccess: (result) => {
-      setState(result);
+      if (result) {
+        setState(result);
+      }
     },
   });
 
