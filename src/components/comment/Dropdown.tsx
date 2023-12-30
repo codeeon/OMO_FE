@@ -3,13 +3,12 @@ import { motion } from 'framer-motion';
 import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { IoEllipsisHorizontalSharp } from 'react-icons/io5';
-import useDeleteCommentMutation from '../../hooks/reactQuery/comment/useDeleteCommentMutation';
 import useDeleteRepleMutation from '../../hooks/reactQuery/replies/useDeleteRepleMutation';
 
 interface Props {
   commentId: number;
   contentId: number;
-  replyId: number;
+  replyId?: number;
 }
 
 const Dropdown: React.FC<Props> = ({ commentId, contentId, replyId }) => {

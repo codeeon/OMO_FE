@@ -134,7 +134,7 @@ const CarouselItem = styled.li<{ $activeIndex: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(-${({ $activeIndex }) => $activeIndex * 428.5}%);
+  transform: translateX(-${({ $activeIndex }) => $activeIndex * 428}%);
   transition: 500ms ease;
 `;
 

@@ -8,19 +8,6 @@ import useInput from '../hooks/useInput';
 import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
 
-// interface UserData {
-//   nickname: string;
-//   email: string;
-//   password: string;
-// }
-
-// interface SignupData extends UserData {
-//   confirmedPassword: string;
-// }
-
-// interface UserEmail {
-// }
-
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
@@ -98,9 +85,9 @@ const SignUp: React.FC = () => {
       <RegisterBox>
         <Title>{title}</Title>
         <Step>
-          <Number validation={true}>1</Number>
-          <Bar validation={isValidated} />
-          <Number validation={registerPage}>2</Number>
+          <Number $validation={true}>1</Number>
+          <Bar $validation={isValidated} />
+          <Number $validation={registerPage}>2</Number>
         </Step>
         {registerPage ? (
           <Register confirmedEmail={confirmedEmail} />
@@ -111,7 +98,7 @@ const SignUp: React.FC = () => {
                 <div>
                   <div>
                     <Input
-                      check={emailCheck}
+                      $check={emailCheck}
                       placeholder="이메일을 입력해 주세요"
                       value={email}
                       onChange={onChangeEmail}
@@ -126,7 +113,7 @@ const SignUp: React.FC = () => {
                 <div>
                   <div>
                     <Input
-                      check={codeCheck}
+                      $check={codeCheck}
                       placeholder="인증번호를 입력해 주세요"
                       value={code}
                       onChange={onChangeCode}
@@ -140,12 +127,12 @@ const SignUp: React.FC = () => {
                 </div>
               </InputBox>
               <Retry>
-                <Text fontSize="14px">이메일이 오지 않았나요?</Text>
+                <Text $fontSize="14px">이메일이 오지 않았나요?</Text>
                 <Link
                   style={{ textDecoration: 'none' }}
                   onClick={() => checkEmailMutation.mutate(email)}
                 >
-                  <Text fontSize="14px" color="#44A5FF">
+                  <Text $fontSize="14px" color="#44A5FF">
                     인증메일 재전송
                   </Text>
                 </Link>
@@ -153,7 +140,7 @@ const SignUp: React.FC = () => {
             </EmailBox>
             <div style={{ height: '214px' }}>
               <div>
-                <LargeBtn onClick={onClickNextStep} validation={isValidated}>
+                <LargeBtn onClick={onClickNextStep} $validation={isValidated}>
                   다음
                 </LargeBtn>
               </div>
@@ -185,10 +172,11 @@ export default SignUp;
 const Base = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 77vh;
+  height: calc(100vh - 60px);
   display: flex;
   justify-content: center;
   align-items: center;
+  background: ${({ theme }) => theme.color.bg};
 `;
 
 const RegisterBox = styled.div`
@@ -197,20 +185,18 @@ const RegisterBox = styled.div`
   height: 754px;
   flex-shrink: 0;
   border-radius: 16px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid ${({ theme }) => theme.color.border};
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: ${({ theme }) => theme.color.cardBg};
 `;
 
 const Title = styled.div`
-  color: #000;
+  color: ${({ theme }) => theme.color.text};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 32px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   margin: 83px 0 25px 0;
 `;
 
@@ -221,32 +207,31 @@ const Step = styled.div`
   gap: 7px;
 `;
 
-const Number = styled.div`
-  width: 20px;
-  height: 17px;
-  border-radius: 100%;
-  flex-shrink: 0;
-  background-color: ${({ validation }) =>
-    validation ? 'var(--primary, #f97393)' : '#D9D9D9'};
-  color: ${({ validation }) =>
-    validation ? 'var(--dark-1_txt, #FFF)' : 'var(--light-4_sub2, #808080)'};
-  font-family: Wanted Sans;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
+const Number = styled.div<{ $validation: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 3px;
+
+  width: 20px;
+  height: 20px;
+
+  border-radius: 100%;
+
+  background-color: ${({ $validation, theme }) =>
+    $validation ? theme.color.primary : theme.color.border};
+  color: ${({ $validation, theme }) =>
+    $validation ? theme.color.bg : theme.color.bg};
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 100%;
 `;
 
-const Bar = styled.div`
+const Bar = styled.div<{ $validation: boolean }>`
   width: 26px;
   height: 2px;
   flex-shrink: 0;
-  background: ${({ validation }) =>
-    validation ? 'var(--primary, #f97393)' : '#D9D9D9'};
+  background: ${({ $validation, theme }) =>
+    $validation ? theme.color.primary : theme.color.border};
 `;
 
 const EmailBox = styled.div`
@@ -262,29 +247,27 @@ const InputBox = styled.div`
   box-sizing: border-box;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{ $check: string }>`
   box-sizing: border-box;
   width: 284px;
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  border: 1px solid #d9d9d9;
-  border-color: ${({ check }) =>
-    check === 'rejected'
-      ? 'var(--error_accent, #FF3263)'
-      : check === 'confirmed'
+  border: 1px solid ${({ theme }) => theme.color.border};
+  border-color: ${({ $check }) =>
+    $check === 'rejected'
+      ? '#FF3263'
+      : $check === 'confirmed'
       ? '#0BD961'
       : '#D9D9D9'};
   background: none;
   padding: 0 15px;
   &::placeholder {
-    color: #a5a5a5;
-    font-family: Wanted Sans;
+    color: ${({ theme }) => theme.color.sub2};
     font-size: 14px;
-    font-style: normal;
     font-weight: 700;
-    line-height: 100%;
   }
+  color: ${({ theme }) => theme.color.text};
 `;
 
 const SmallBtn = styled.button`
@@ -293,26 +276,28 @@ const SmallBtn = styled.button`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
+  background: ${({ theme }) => theme.color.cardBg};
   border: 1px solid #f97393;
   margin-left: 10px;
   color: #f97393;
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 14px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   cursor: pointer;
   box-sizing: border-box;
 `;
 
-const Text = styled.div`
+const Text = styled.div<{
+  $color?: string;
+  $fontSize?: string;
+  $fontWeight?: string;
+}>`
   color: ${({ color }) => color || '#666'};
   text-align: center;
   font-family: Wanted Sans;
-  font-size: ${({ fontSize }) => fontSize || '16px'};
+  font-size: ${({ $fontSize }) => $fontSize || '16px'};
   font-style: normal;
-  font-weight: ${({ fontWeight }) => fontWeight || '700'};
+  font-weight: ${({ $fontWeight }) => $fontWeight || '700'};
   line-height: 100%;
   box-sizing: border-box;
 `;
@@ -326,18 +311,17 @@ const Retry = styled.div`
   box-sizing: border-box;
 `;
 
-const LargeBtn = styled.button`
+const LargeBtn = styled.button<{ $validation: boolean }>`
   width: 400px;
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${({ validation }) =>
-    validation ? 'var(--primary, #f97393)' : 'var(--light-5_btn_bg, #B1B1B1)'};
+  background: ${({ $validation, theme }) =>
+    $validation ? '#f97393' : theme.color.btnBg};
   border: none;
   margin: 0 0 61px 0;
   color: #fff;
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;

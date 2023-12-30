@@ -21,12 +21,11 @@ const PlaceCard = ({ placeData }) => {
     <Card onClick={(e) => handleModalOpen(e)}>
       <Img src={image} alt=""></Img>
       <Title>
-        <div>
-          <Name>{data.storeName}</Name>
-          <Category style={{ marginLeft: '4px' }}>
-            {data.Category.categoryName}
-          </Category>
-        </div>
+        <Name>{data.storeName}</Name>
+        <Category style={{ marginLeft: '4px' }}>
+          {data.Category.categoryName}
+        </Category>
+
         <Mark>{mark}</Mark>
       </Title>
       <Address>
@@ -67,11 +66,12 @@ const Img = styled.img`
   margin-bottom: 12px;
   border-radius: 16px;
   border: none;
+  object-fit: cover;
 `;
 
 const Title = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-bottom: 8px;
   color: ${({ theme }) => theme.color.text};
@@ -84,18 +84,24 @@ const Name = styled.span`
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
-const Category = styled.span`
+const Category = styled.div`
   color: var(--light-2_sub, #595959);
   font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: 100%;
+  min-width: 30px;
 `;
 
 const Mark = styled.div`
+  margin-left: auto;
   width: 24px;
   height: 24px;
   flex-shrink: 0;

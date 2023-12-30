@@ -8,6 +8,7 @@ import { LikePostsType } from '../../model/interface';
 import AlertModal from '../Modal/AlertModal';
 import CommentError from '../share/alert/CommentError';
 import useAlertModalCtr from '../../hooks/useAlertModalCtr';
+import _ from 'lodash';
 
 interface Props {
   postId: number | undefined;
@@ -34,18 +35,29 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
   );
   const { deleteMutate, isDeleteLoading } = useDeleteLikeMutation(postId);
 
-  const handleLikeClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation();
-    animate([]);
-    if (!userId) return handleModalOpen();
-    if (isLiked) {
-      deleteMutate({ postId });
-      setIsLiked(false);
-    } else {
-      postMutate({ postId });
-      setIsLiked(true);
-    }
-  };
+  const handleLikeClick = _.throttle(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      e.stopPropagation();
+      animate([]);
+
+      if (isPostLoading || isDeleteLoading) {
+        return;
+      }
+
+      if (!userId) return handleModalOpen();
+
+      if (isLiked) {
+        deleteMutate({ postId });
+        setIsLiked(false);
+        return;
+      } else {
+        postMutate({ postId });
+        setIsLiked(true);
+        return;
+      }
+    },
+    400,
+  );
 
   return (
     <LikeBtnWrapper

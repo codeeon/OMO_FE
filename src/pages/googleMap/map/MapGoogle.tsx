@@ -48,6 +48,11 @@ const MapGoogle: React.FC<Props> = ({
     transition: 'all 200ms ease',
   };
 
+  const getPixelPositionOffset = (width: number, height: number) => ({
+    x: -(width / 2),
+    y: -(height / 2),
+  });
+
   const downMapLevelHandler = () => {
     const currentLevel = map?.getZoom();
     if (!currentLevel) return;
@@ -99,11 +104,11 @@ const MapGoogle: React.FC<Props> = ({
       onUnmount={onUnmount}
       onDragEnd={() => setIsShowReasearchBtn(true)}
       options={{
+        gestureHandling: 'greedy',
         disableDefaultUI: true,
         panControl: false,
         minZoom: 13,
-        maxZoom: 19,
-        // zoom: mapLevel,
+        maxZoom: 18,
         clickableIcons: false,
         styles: themeMode === 'LightMode' ? lightMapTheme : darkMapTheme,
 
@@ -114,6 +119,7 @@ const MapGoogle: React.FC<Props> = ({
         // @ts-ignore
         position={currentLocation}
         mapPaneName={OverlayView.OVERLAY_LAYER}
+        getPixelPositionOffset={getPixelPositionOffset}
       >
         <CurrentLocationMarker />
       </OverlayViewF>

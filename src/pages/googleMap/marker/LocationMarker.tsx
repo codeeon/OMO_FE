@@ -30,6 +30,11 @@ const LocationMarker: React.FC<Props> = ({
     });
   };
 
+  const getPixelPositionOffset = (width: number, height: number) => ({
+    x: -(width + 80 / 2),
+    y: -(height + 110 / 2),
+  });
+
   const clikcMarkerHandler = () => {
     !isListOpen && setIsListOpen(true);
     selectPlaceHandler();
@@ -39,6 +44,7 @@ const LocationMarker: React.FC<Props> = ({
     <OverlayViewF
       position={{ lat: latitude, lng: longitude }}
       mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+      getPixelPositionOffset={getPixelPositionOffset}
     >
       <CustomMarkerContainer
         onClick={clikcMarkerHandler}

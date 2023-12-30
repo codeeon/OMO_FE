@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { HotPostsType } from '../../../model/interface';
 
-
 import useModalCtr from '../../../hooks/useModalCtr';
 import PlaceInfoModal from './placeInfo/PlaceInfoModal';
 import LocationModal from '../../Modal/LocationModal';
@@ -15,7 +14,6 @@ const Card: React.FC<Props> = ({ post }) => {
   const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
   const { imgUrl, Location, content, Category: category } = post;
 
-
   return (
     <Base onClick={(e) => handleModalOpen(e)}>
       {/* // <Base> */}
@@ -26,7 +24,6 @@ const Card: React.FC<Props> = ({ post }) => {
           <Text dangerouslySetInnerHTML={{ __html: content }} />
           <FooterContainer>
             <Category>#{category.categoryName}</Category>
-            
           </FooterContainer>
         </BodyConatiner>
       </Wrapper>
@@ -115,4 +112,3 @@ const Category = styled.div`
   font-size: 14px;
   font-weight: 700;
 `;
-
