@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { GrFormClose } from 'react-icons/gr';
 import ImageIcon from '../../assets/icons/ImageIcon';
-import AlertModal from '../Modal/AlertModal';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import PostErrorAlert from '../share/alert/PostErrorAlert';
-import PostSuccessAlert from '../share/alert/PostSuccessAlert';
+
+import toast from 'react-hot-toast';
 
 interface Props {
   imageURL: string[];
@@ -15,19 +13,6 @@ interface Props {
 }
 
 const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
-  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
-  const [isUploadError, setIsUploadError] = useState<boolean>(false);
-  const [isUploadSuccess, setIsUploadSuccess] = useState<boolean>(false);
-  const deleteImageHandler = (image: string) => {
-    const imageIndex = imageURL.findIndex((img) => img === image);
-    if (imageIndex !== -1) {
-      const updatedFiles = [...files];
-      updatedFiles.splice(imageIndex, 1);
-      setImageUrl(imageURL.filter((img) => img !== image));
-      setFiles(updatedFiles);
-    }
-  };
-
   const isValidImageFileType = (file: File): boolean => {
     const allowedTypes = ['image/jpeg', 'image/png'];
     return allowedTypes.includes(file.type);
@@ -60,18 +45,32 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
       const file = input.files?.[0];
       if (!file) return null;
       if (!isValidImageFileType(file)) {
-        setIsUploadError(true);
-        handleModalOpen();
+        toast.error('jpg, png파일만 업로드 가능합니다.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        });
+        toast.success('이미지 업로드 성공!', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        });
+        return;
+      }
+
+      if (files.some((existingFile) => existingFile.name === file.name)) {
+        toast.error('중복된 파일입니다.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        });
         return;
       }
 
       try {
         const imageUrl = await fileToUrl(file);
-
         setFiles([...files, file]);
         setImageUrl([...imageURL, imageUrl]);
-        setIsUploadSuccess(true);
-        handleModalOpen();
       } catch (error) {
         console.error('Error converting file to URL:', error);
       } finally {
@@ -80,6 +79,18 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
     };
 
     input.addEventListener('change', changeHandler);
+  };
+
+  const deleteImageHandler = (image: string) => {
+    const imageIndex = imageURL.findIndex((img) => img === image);
+    if (imageIndex !== -1) {
+      const updatedFiles = [...files];
+      const updatedImages = [...imageURL];
+      updatedFiles.splice(imageIndex, 1);
+      updatedImages.splice(imageIndex, 1);
+      setImageUrl(updatedImages);
+      setFiles(updatedFiles);
+    }
   };
 
   return (
@@ -110,20 +121,6 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
           ) : null}
         </ImageContainer>
       )}
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-        setIsUploadError={setIsUploadError}
-        setIsUploadSuccess={setIsUploadSuccess}
-      >
-        {isUploadError && (
-          <PostErrorAlert errorMsg="jpg 혹은 png 파일만 업로드 가능합니다." />
-        )}
-        {isUploadSuccess && (
-          <PostSuccessAlert successMsg="이미지가 업로드 되었어요." />
-        )}
-      </AlertModal>
     </>
   );
 };

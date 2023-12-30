@@ -1,32 +1,38 @@
-import React, { useId, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../share/Button';
 import { getToday } from '../../function/getToday';
 import usePostCommentMutation from '../../hooks/reactQuery/comment/usePostCommentMutation';
-import axios from 'axios';
-import AlertModal from '../Modal/AlertModal';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import CommentSuccess from '../share/alert/CommentSuccess';
-import CommentError from '../share/alert/CommentError';
+import CommentTextArea from '../textarea/CommentTextArea';
+import useInput from '../../hooks/useInput';
+import toast from 'react-hot-toast';
 
 const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   contentId,
 }) => {
-  const [text, setText] = useState<string>('');
-  const {
-    isModalOpen: successAlertOpen,
-    handleModalOpen: handleSuccessAlertOpen,
-    handleModalClose: handleSuccessAlertClose,
-  } = useAlertModalCtr();
+  const { value: text, changeValueHandler, clearValueHandler } = useInput();
+  const [isTextareaFocus, setIsTextareaFoucs] = useState<boolean>(false);
 
-  const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
+  const onTextAreaFocus = () => {
+    setIsTextareaFoucs(true);
+  };
+  const offTextAreaFocus = () => {
+    setIsTextareaFoucs(false);
   };
 
-  const { postMutate, isPostLoading, isPostError, isPostSuccess } =
-    usePostCommentMutation({ contentId, handleSuccessAlertOpen });
+  const { postMutate, isPostLoading } = usePostCommentMutation({
+    contentId,
+  });
 
   const postCommentHandler = () => {
+    const trimmedText = text.trim();
+    if (!trimmedText) {
+      return toast.error('댓글 내용을 입력해주세요!', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
     const userId = sessionStorage.getItem('userId');
 
     const newComment = {
@@ -36,29 +42,31 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
       createdAt: getToday(),
     };
     postMutate({ contentId, newComment });
-    setText('');
+    clearValueHandler();
   };
 
   return (
-    <>
-      <Base>
-        <TextArea
-          placeholder="여기에 댓글을 입력해주세요."
-          value={text}
-          onChange={(e) => onChangeText(e)}
-        />
-        <Button theme="gray" padding="5px 10px" onClick={postCommentHandler}>
-          댓글등록
-        </Button>
-      </Base>
-      <AlertModal
-        isOpen={successAlertOpen}
-        onClose={handleSuccessAlertClose}
-        position="topRight"
+    <Base>
+      <CommentTextArea
+        placeholder="여기에 댓글을 입력해주세요."
+        value={text}
+        onChange={(e) => changeValueHandler(e)}
+        onFocus={onTextAreaFocus}
+        onBlur={offTextAreaFocus}
+        isTextareaFocus={isTextareaFocus}
+      />
+      <Button
+        theme="gray"
+        padding="9px 14px"
+        width="50px"
+        height="15px"
+        fontSize="14px"
+        onClick={postCommentHandler}
+        disabled={isPostLoading}
       >
-        {isPostSuccess ? <CommentSuccess /> : <CommentError />}
-      </AlertModal>
-    </>
+        댓글등록
+      </Button>
+    </Base>
   );
 };
 
@@ -74,26 +82,4 @@ const Base = styled.div`
 
   margin-top: 20px;
   margin-bottom: 40px;
-`;
-
-const TextArea = styled.textarea`
-  width: calc(100% - 40px);
-  height: 60px;
-  resize: none;
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  background: ${({ theme }) => theme.color.bg};
-  color: ${({ theme }) => theme.color.text};
-  margin-bottom: 10px;
-  padding: 20px;
-  font-size: 16px;
-  font-weight: 500;
-  &::placeholder {
-    color: #a5a5a5;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: 'Wanted Sans Variable';
-  }
-  font-family: 'Wanted Sans Variable';
-  outline: none;
 `;

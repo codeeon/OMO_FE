@@ -54,7 +54,9 @@ const ProfileEdit = () => {
   // const [isImageChanged, setIsImageChanged] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const [nickname, _, onChangeNickname] = useInput(userData?.data.nickname);
+  const { value: nickname, changeValueHandler: onChangeNickname } = useInput(
+    userData?.data.nickname,
+  );
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
 

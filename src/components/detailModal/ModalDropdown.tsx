@@ -75,7 +75,7 @@ const ModalDropdown: React.FC<Props> = ({
             open: { rotate: 180 },
             closed: { rotate: 0 },
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.1 }}
           style={{ originY: 0.55 }}
         >
           <IoEllipsisHorizontalSharp style={{ marginTop: '4px' }} />
@@ -88,8 +88,8 @@ const ModalDropdown: React.FC<Props> = ({
             transition: {
               type: 'spring',
               bounce: 0,
-              duration: 0.7,
-              delayChildren: 0.3,
+              duration: 0.4,
+              delayChildren: 0.2,
               staggerChildren: 0.05,
             },
           },
@@ -98,7 +98,7 @@ const ModalDropdown: React.FC<Props> = ({
             transition: {
               type: 'spring',
               bounce: 0,
-              duration: 0.3,
+              duration: 0.7,
             },
           },
         }}

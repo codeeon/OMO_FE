@@ -1,5 +1,6 @@
 import { MutationFunction, useMutation, useQueryClient } from 'react-query';
 import authApi from '../../../axios/authApi';
+import toast from 'react-hot-toast';
 
 const deleteReple: MutationFunction<
   void,
@@ -28,6 +29,11 @@ const useDeleteRepleMutation = ({ contentId }: { contentId: number }) => {
   >(deleteReple, {
     onSuccess: () => {
       queryClient.invalidateQueries(['posts', contentId]);
+      toast.success('대댓글이 성공적으로 삭제되었어요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     },
   });
   return {

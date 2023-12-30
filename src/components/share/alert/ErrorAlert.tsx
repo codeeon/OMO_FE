@@ -1,29 +1,29 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
-import { FaCheckCircle } from 'react-icons/fa';
+import { PiWarningCircleFill } from 'react-icons/pi';
 
 interface Props {
-  successMsg: string | null;
+  errorMsg: string | null;
 }
 
-const PostSuccessAlert: React.FC<Props> = ({ successMsg }) => {
+const ErrorAlert: React.FC<Props> = ({ errorMsg }) => {
   return (
     <Base>
       <Wrapper>
-        <FaCheckCircle />
-        {successMsg && <span>{successMsg}</span>}
+        <PiWarningCircleFill />
+        {errorMsg && <span>{errorMsg}</span>}
       </Wrapper>
     </Base>
   );
 };
 
-export default PostSuccessAlert;
+export default ErrorAlert;
 
 const Base = styled.div`
   box-sizing: border-box;
   width: auto;
   height: 50px;
-  background: #5be3a4;
+  background: ${({ theme }) => theme.color.primary};
   border-radius: 16px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   display: flex;
@@ -37,7 +37,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-  width: 100%;
   svg {
     font-size: 20px;
     color: #fff;

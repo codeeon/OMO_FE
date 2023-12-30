@@ -7,7 +7,7 @@ import useGetBookmarkQuery from '../../hooks/reactQuery/bookmark/useGetBookmarkQ
 import { BookmarkLocationType } from '../../model/interface';
 import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 import AlertModal from '../Modal/AlertModal';
-import PostErrorAlert from './alert/PostErrorAlert';
+import ErrorAlert from './alert/ErrorAlert';
 import _ from 'lodash';
 const randomNumberBetween = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -160,7 +160,7 @@ const BookMarkBtn: React.FC<Props> = ({
         onClose={handleModalClose}
         position="topRight"
       >
-        <PostErrorAlert errorMsg="로그인 후 이용해주세요" />
+        <ErrorAlert errorMsg="로그인 후 이용해주세요" />
       </AlertModal>
     </Container>
   );

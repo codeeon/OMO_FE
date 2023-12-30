@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 import AlertModal from '../Modal/AlertModal';
 import useThemeStore from '../../store/theme/themeStore';
-import PostErrorAlert from './alert/PostErrorAlert';
-import PostSuccessAlert from './alert/PostSuccessAlert';
+import ErrorAlert from './alert/ErrorAlert';
+import SuccessAlert from './alert/SuccessAlert';
 
 const NavDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -151,10 +151,10 @@ const NavDropdown = () => {
         setErrorType={setErrorType}
       >
         {errorType === 'required' && (
-          <PostErrorAlert errorMsg={'로그인 후 이용해주세요.'} />
+          <ErrorAlert errorMsg={'로그인 후 이용해주세요.'} />
         )}
         {errorType === 'logout' && (
-          <PostSuccessAlert successMsg={'로그아웃이 완료되었습니다.'} />
+          <SuccessAlert successMsg={'로그아웃이 완료되었습니다.'} />
         )}
       </AlertModal>
     </NavContainer>

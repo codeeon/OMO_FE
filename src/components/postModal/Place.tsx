@@ -6,9 +6,7 @@ import { SelectedInfoType } from '../../model/interface';
 import { FaLocationDot } from 'react-icons/fa6';
 import useMapStore from '../../store/location/googleMapStore';
 import { placeInfoCallback } from '../../function/googleSearch.ts/textSearch';
-import AlertModal from '../Modal/AlertModal';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import PostErrorAlert from '../share/alert/PostErrorAlert';
+import toast from 'react-hot-toast';
 
 interface Props {
   selectedInfo: SelectedInfoType;
@@ -28,12 +26,10 @@ const Place: React.FC<Props> = ({
   setSelectedInfo,
   searchValue,
   setSearchValue,
-  googleSearchResult,
   setGoogleSearchResult,
 }) => {
   const { map } = useMapStore();
   const [inputValue, setInputValue] = useState<string>('');
-  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
 
   const onChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -74,8 +70,12 @@ const Place: React.FC<Props> = ({
       fields: ['place_id', 'formatted_address', 'name'],
     };
     if (!addressName.includes('서울')) {
-      handleModalOpen();
       setInputValue('');
+      toast.error('지금은 서울시 내에서만 등록이 가능해요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
       return;
     }
     // @ts-ignore
@@ -108,7 +108,7 @@ const Place: React.FC<Props> = ({
           <FaLocationDot />
           <SearchInput
             value={inputValue}
-            placeholder="여기를 클릭해 위치를 추가해 보세요"
+            placeholder="위치를 입력해 장소를 추가해보세요."
             onChange={onChangeInputValue}
           />
         </SearchContainer>
@@ -156,13 +156,6 @@ const Place: React.FC<Props> = ({
           ))}
         </ResultList>
       )}
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-      >
-        <PostErrorAlert errorMsg={'서울특별시 내에서만 장소를 지정해주세요.'} />
-      </AlertModal>
     </Base>
   );
 };

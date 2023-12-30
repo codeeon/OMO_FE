@@ -66,7 +66,7 @@ const Text = styled.div`
   font-weight: 500;
   line-height: 155%;
   letter-spacing: -0.16px;
-  width: 515px;
+  width: 100%;
   color: ${({ theme }) => theme.color.text};
 `;
 

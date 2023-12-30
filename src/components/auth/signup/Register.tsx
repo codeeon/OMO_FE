@@ -27,7 +27,11 @@ const Register: React.FC = (props: string) => {
   });
   const navigate = useNavigate();
 
-  const [nickname, setNickname, onChangeNickname] = useInput();
+  const {
+    value: nickname,
+    setValue: setNickname,
+    changeValueHandler: onChangeNickname,
+  } = useInput();
 
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');

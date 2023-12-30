@@ -9,7 +9,11 @@ import {
 } from '../../../function/googleSearch.ts/textSearch';
 
 const Search = () => {
-  const [value, onClearHandler, onChangeHandler] = useInput();
+  const {
+    value,
+    clearValueHandler: onClearHandler,
+    changeValueHandler: onChangeHandler,
+  } = useInput();
   const [searchResult, setSearchResult] = useState<
     google.maps.places.PlaceResult[] | null
   >(null);

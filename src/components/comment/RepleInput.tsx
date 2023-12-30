@@ -7,6 +7,9 @@ import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 import CommentSuccess from '../share/alert/CommentSuccess';
 import CommentError from '../share/alert/CommentError';
 import usePostRepleMutation from '../../hooks/reactQuery/replies/usePostRepleMutation';
+import CommentTextArea from '../textarea/CommentTextArea';
+import useInput from '../../hooks/useInput';
+import toast from 'react-hot-toast';
 
 interface Props {
   postId: number | undefined;
@@ -19,18 +22,30 @@ const RepleInput: React.FC<Props> = ({
   commentId,
   toggleRepleInputHandler,
 }) => {
-  const [text, setText] = useState<string>('');
-  const { isModalOpen, handleModalOpen, handleModalClose } = useAlertModalCtr();
+  const { value: text, changeValueHandler, clearValueHandler } = useInput();
+  const [isTextareaFocus, setIsTextareaFoucs] = useState<boolean>(false);
 
-  const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
+  const onTextAreaFocus = () => {
+    setIsTextareaFoucs(true);
   };
-
-  const { postMutate, isPostLoading, isPostError, isPostSuccess } =
-    usePostRepleMutation({ postId, commentId, handleModalOpen });
+  const offTextAreaFocus = () => {
+    setIsTextareaFoucs(false);
+  };
+  const { postMutate, isPostLoading } = usePostRepleMutation({
+    postId,
+    commentId,
+  });
 
   // TODO 토큰 문제
   const postCommentHandler = () => {
+    const trimmedText = text.trim();
+    if (!trimmedText) {
+      return toast.error('댓글 내용을 입력해주세요!', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
     const newComment = {
       PostId: postId,
       UserId: 3, // TODO 유저와 연결
@@ -38,38 +53,45 @@ const RepleInput: React.FC<Props> = ({
       createdAt: getToday(),
     };
     postMutate({ postId, commentId, newComment });
-    setText('');
+    clearValueHandler();
   };
 
   return (
     <>
       <Base>
-        <TextArea
+        <CommentTextArea
           placeholder="여기에 댓글을 입력해주세요."
           value={text}
-          onChange={(e) => onChangeText(e)}
+          onChange={(e) => changeValueHandler(e)}
+          onFocus={onTextAreaFocus}
+          onBlur={offTextAreaFocus}
+          isTextareaFocus={isTextareaFocus}
         />
         <ButtonConatiner>
           <Button
             theme="gray"
-            padding="5px 10px"
+            padding="9px 14px"
+            width="50px"
+            height="15px"
+            fontSize="14px"
+            disabled={isPostLoading}
             onClick={toggleRepleInputHandler}
           >
             취소
           </Button>
-          <Button theme="gray" padding="5px 10px" onClick={postCommentHandler}>
+          <Button
+            theme="blue"
+            padding="9px 14px"
+            width="50px"
+            height="15px"
+            fontSize="14px"
+            onClick={postCommentHandler}
+            disabled={isPostLoading}
+          >
             댓글등록
           </Button>
         </ButtonConatiner>
       </Base>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-        isError={isPostError}
-      >
-        {isPostSuccess ? <CommentSuccess /> : <CommentError />}
-      </AlertModal>
     </>
   );
 };
@@ -93,26 +115,4 @@ const ButtonConatiner = styled.div`
   justify-content: center;
   align-items: center;
   gap: 5px;
-`;
-
-const TextArea = styled.textarea`
-  width: calc(100% - 40px);
-  height: 60px;
-  resize: none;
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  background: ${({ theme }) => theme.color.bg};
-  color: ${({ theme }) => theme.color.text};
-  margin-bottom: 10px;
-  padding: 20px;
-  font-size: 16px;
-  font-weight: 500;
-  &::placeholder {
-    color: #a5a5a5;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: 'Wanted Sans Variable';
-  }
-  font-family: 'Wanted Sans Variable';
-  outline: none;
 `;

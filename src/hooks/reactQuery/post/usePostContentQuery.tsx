@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query';
 import authApi from '../../../axios/authApi';
 import { PostContentType } from '../../../model/interface';
+import toast from 'react-hot-toast';
 
 const postContent = async (newContent: PostContentType) => {
   const formData = new FormData();
@@ -26,6 +27,11 @@ const usePostContentMutate = () => {
   const mutation = useMutation(postContent, {
     onSuccess: () => {
       queryClient.invalidateQueries('posts');
+      toast.success('게시물 업로드 성공!', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     },
   });
   return {
