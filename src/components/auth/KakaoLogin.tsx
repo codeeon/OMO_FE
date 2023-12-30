@@ -69,7 +69,7 @@ const KakaoLogin: React.FC = () => {
 
 export default KakaoLogin;
 
-const LargeBtn = styled.button<{$bgColor:string}>`
+const LargeBtn = styled.button<{ $bgColor: string }>`
   width: 400px;
   height: 50px;
   flex-shrink: 0;

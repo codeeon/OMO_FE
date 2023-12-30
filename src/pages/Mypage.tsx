@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../components/share/ContentCardSkeleton';
@@ -47,13 +47,6 @@ const Mypage: React.FC = () => {
   useEffect(() => {
     isSelect === 'Bookmark' ? refetchBookmark() : refetchMyPosts();
   }, [isSelect]);
-
-  // console.log('유저 데이터 -> ', userData);
-  // console.log('유저 데이터 에러 -> ', userError);
-  // console.log('내 북마크 요청 -> ', myBookmark);
-  // console.log('내 북마크를 찾아서 -> ', myBookmark?.pages[0]?.data);
-  // console.log('내 게시글 요청 -> ', myPosts);
-  // console.log('내 게시글 데이터 조회 -> ', myPosts?.pages[0]?.data);
 
   useEffect(() => {
     userError
@@ -169,16 +162,12 @@ const MyImg = styled.img`
   flex-shrink: 0;
   border-radius: 100%;
   border: none;
-  /* background: url(<path-to-image>), lightgray 50% / cover no-repeat; */
 `;
 
 const Nickname = styled.div`
-  color: var(--light-1_txt, #111);
-  font-family: Wanted Sans;
+  color: ${({ theme }) => theme.color.text};
   font-size: 24px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   margin-left: 22px;
 `;
 
@@ -186,13 +175,10 @@ const Btn = styled.button`
   display: inline-flex;
   padding: 10px 13px 8px 14px;
   border-radius: 8px;
-  background: var(--link, #44a5ff);
+  background: #44a5ff;
   color: #fff;
-  font-family: Wanted Sans;
   font-size: 14px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   border: none;
   cursor: pointer;
 `;
@@ -205,12 +191,9 @@ const Select = styled.div`
 `;
 
 const Item = styled.div<{ selected: boolean }>`
-  color: var(--light-1_txt, #111);
-  font-family: Wanted Sans;
+  color: ${({ theme }) => theme.color.text};
   font-size: 20px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 100%;
   padding: 5px;
   border: ${({ selected, theme }) =>
     selected ? `solid #f97393` : `solid ${theme.color.bg}`};
@@ -224,7 +207,6 @@ const Contents = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 40px 20px;
   margin: 20px 0px 40px 0;
-
   grid-area: main;
 `;
 

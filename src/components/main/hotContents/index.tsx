@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CardSkeleton from './CardSkeleton';
 import useGetHotPosts from '../../../hooks/reactQuery/main/useGetHotPostsQuery';
-import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
 import useDistrictStore from '../../../store/location/districtStore';
 import useThemeStore from '../../../store/theme/themeStore';
+
 const HotContents = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { district } = useDistrictStore();
@@ -31,15 +31,9 @@ const HotContents = () => {
               <Card post={post} />
             </CarouselItem>
           ))
-        : themeMode === 'LightMode'
-        ? Array.from({ length: 9 }).map((_, idx) => (
-            <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <CardSkeleton key={idx} />
-            </CarouselItem>
-          ))
         : Array.from({ length: 9 }).map((_, idx) => (
             <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <CardDarkSkeleton key={idx} />
+              <CardSkeleton key={idx} />
             </CarouselItem>
           ))}
     </Carousel>

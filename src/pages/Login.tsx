@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-// import KakaoLogin from '../components/auth/KakaoLogin';
+import KakaoLogin from '../components/auth/KakaoLogin';
 import auth from '..//axios/auth';
+import useGetKakaoQuery from '../components/auth/signup/useGetKakaoQuery';
 
 interface LoginData {
   email: string;
@@ -52,6 +53,10 @@ const Login: React.FC = () => {
     mutation.mutate(data);
   };
 
+  // const onClickKakao = () => {
+
+  // }
+
   return (
     <Base>
       <LoginBox>
@@ -73,6 +78,7 @@ const Login: React.FC = () => {
           </LargeBtn>
         </form>
         {/* <KakaoLogin /> */}
+        {/* <LargeBtn type="button" onClick={() => useGetKakaoQuery()}></LargeBtn> */}
         <OrLine>
           <div>{line}</div>{' '}
           <div style={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -158,7 +164,7 @@ const LargeBtn = styled.button`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${(props) => props.bgColor || '#f97393'};
+  background: #f97393;
   border: none;
   margin: 0 0 12px 0;
   cursor: pointer;

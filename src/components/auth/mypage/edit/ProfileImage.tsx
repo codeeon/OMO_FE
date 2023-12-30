@@ -50,7 +50,7 @@ const ProfileImage: React.FC<Props> = ({
 
       // Read the file as a data URL (base64)
       reader.readAsDataURL(file);
-    //   console.log('fireToUrl -> ', file);
+      //   console.log('fireToUrl -> ', file);
     });
   };
 
@@ -291,6 +291,7 @@ const DeleteBtn = styled.div`
 `;
 
 const MyImageBox = styled.div<{ imageURL: string }>`
+  background-color: ${({ theme }) => theme.color.border};
   background-image: ${({ imageURL }) => `url("${imageURL}")`};
   background-position: center;
   background-repeat: no-repeat;
