@@ -1,17 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FaQuoteLeft } from 'react-icons/fa';
-import Skeleton from 'react-loading-skeleton';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import useThemeStore from '../../../store/theme/themeStore';
 
 const PlaceCommnetCard = () => {
+  const { themeMode } = useThemeStore();
+
   return (
-    <Base>
-      <QuoteContainer>
-        <FaQuoteLeft />
-      </QuoteContainer>
-      <Text count={2} width="300px" height="20px" />
-      <PlaceName width="150px" height="15px" />
-    </Base>
+    <SkeletonTheme
+      baseColor={themeMode === 'DarkMode' ? '#29282E' : null}
+      highlightColor={themeMode === 'DarkMode' ? '#1B1B20' : null}
+    >
+      <Base>
+        <QuoteContainer>
+          <FaQuoteLeft />
+        </QuoteContainer>
+        <Text count={2} width="300px" height="20px" />
+        <PlaceName width="150px" height="15px" />
+      </Base>
+    </SkeletonTheme>
   );
 };
 
@@ -26,7 +35,7 @@ const Base = styled.div`
 
   width: calc(387px - 5px);
   height: 161px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid ${({ theme }) => theme.color.cardBorder};
   border-radius: 16px;
 
   padding: 24px 30px;
@@ -34,7 +43,7 @@ const Base = styled.div`
 
 const QuoteContainer = styled.div`
   font-size: 25px;
-  color: #d9d9d9;
+  color: ${({ theme }) => theme.color.cardBorder};
 `;
 
 const PlaceName = styled(Skeleton)`

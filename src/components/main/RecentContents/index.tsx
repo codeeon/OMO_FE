@@ -5,7 +5,6 @@ import RecentCard from './Card';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../../share/ContentCardSkeleton';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
-import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
 import useDistrictStore from '../../../store/location/districtStore';
 import useThemeStore from '../../../store/theme/themeStore';
@@ -73,15 +72,9 @@ const RecentContents = () => {
               <RecentCard key={post.postId} post={post} />
             </CarouselItem>
           ))
-        : themeMode === 'LightMode'
-        ? Array.from({ length: 4 }).map((_, idx) => (
-            <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <ContentCardSkeleton key={idx} />
-            </CarouselItem>
-          ))
         : Array.from({ length: 4 }).map((_, idx) => (
             <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <CardDarkSkeleton key={idx} />
+              <ContentCardSkeleton key={idx} />
             </CarouselItem>
           ))}
     </Carousel>

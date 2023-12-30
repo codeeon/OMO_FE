@@ -8,7 +8,7 @@ export const getCurrentAddr = async () => {
     const district = result[0].address.region_2depth_name;
     return district;
   } catch (error) {
-    console.error('현재 주소 에러:', error);
+    // console.error('현재 주소 에러:', error);
   }
 };
 

@@ -1,26 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-import Skeleton from 'react-loading-skeleton';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import useThemeStore from '../../store/theme/themeStore';
 
 const ContentCardSkeleton = () => {
+  const { themeMode } = useThemeStore();
+
   return (
-    <Base>
-      <ImgContainer width="285px" height="181px" />
-      <HeaderContainer>
-        <Title width="40px" height="15px"></Title>
-        <VerticalLine />
-        <Date width="50px" height="15px"></Date>
-      </HeaderContainer>
-      <Text></Text>
-      <Footer>
-        <FooterItem>
-          <Skeleton width="30px" height="15px" />
-        </FooterItem>
-        <FooterItem>
-          <Skeleton width="30px" height="15px" />
-        </FooterItem>
-      </Footer>
-    </Base>
+    <SkeletonTheme
+      baseColor={themeMode === 'DarkMode' ? '#29282E' : null}
+      highlightColor={themeMode === 'DarkMode' ? '#1B1B20' : null}
+    >
+      <Base>
+        <ImgContainer width="285px" height="181px" />
+        <HeaderContainer>
+          <Title width="40px" height="15px"></Title>
+          <VerticalLine />
+          <Date width="50px" height="15px"></Date>
+        </HeaderContainer>
+        <Text></Text>
+        <Footer>
+          <FooterItem>
+            <Skeleton width="30px" height="15px" />
+          </FooterItem>
+          <FooterItem>
+            <Skeleton width="30px" height="15px" />
+          </FooterItem>
+        </Footer>
+      </Base>
+    </SkeletonTheme>
   );
 };
 
@@ -50,7 +59,7 @@ const HeaderContainer = styled.div`
 const Title = styled(Skeleton)``;
 
 const VerticalLine = styled.div`
-  border-right: 1px solid #a9a9a9;
+  border-right: 1px solid ${({ theme }) => theme.color.cardBorder};
   width: 1px;
   height: 12px;
 `;

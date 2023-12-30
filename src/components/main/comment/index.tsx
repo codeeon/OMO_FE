@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PlaceCommnetCardSkeleton from './CardSkeleton';
 import useGetCommentPostsQuery from '../../../hooks/reactQuery/main/useGetCommentPostsQuery';
-import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
 import useDistrictStore from '../../../store/location/districtStore';
@@ -36,15 +35,9 @@ const PlaceComments = () => {
               <Card comment={comment} key={comment.PostId} />
             </CarouselItem>
           ))
-        : themeMode === 'LightMode'
-        ? Array.from({ length: 9 }).map((_, i) => (
-            <CarouselItem $activeIndex={activeIndex} key={i}>
-              <PlaceCommnetCardSkeleton key={i} />
-            </CarouselItem>
-          ))
         : Array.from({ length: 9 }).map((_, i) => (
             <CarouselItem $activeIndex={activeIndex} key={i}>
-              <CardDarkSkeleton key={i} />
+              <PlaceCommnetCardSkeleton key={i} />
             </CarouselItem>
           ))}
     </Carousel>
