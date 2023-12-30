@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-// import KakaoLogin from '../components/auth/KakaoLogin';
+import KakaoLogin from '../components/auth/KakaoLogin';
 import auth from '..//axios/auth';
+import useGetKakaoQuery from '../components/auth/signup/useGetKakaoQuery';
 
 interface LoginData {
   email: string;
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
         navigate(`/`);
       },
       onError: (error: Error) => {
-        console.error('로그인 실패 -> ', error.message);
+        // console.error('로그인 실패 -> ', error.message);
         // alert('onError: 아이디와 비밀번호를 확인해주세요!');
       },
     },
@@ -52,6 +53,10 @@ const Login: React.FC = () => {
   const onSubmit = (data: LoginData) => {
     mutation.mutate(data);
   };
+
+  // const onClickKakao = () => {
+
+  // }
 
   return (
     <Base>
@@ -72,10 +77,11 @@ const Login: React.FC = () => {
             />
           </InputBox>
           <LargeBtn>
-            <Text $color="text">로그인</Text>
+            <Text $color="btn">로그인</Text>
           </LargeBtn>
         </form>
         {/* <KakaoLogin /> */}
+        {/* <LargeBtn type="button" onClick={() => useGetKakaoQuery()}></LargeBtn> */}
         <OrLine>
           <div>{line}</div>
           <div>
@@ -178,6 +184,8 @@ const Text = styled.div<{ $color?: string }>`
       ? theme.color.sub
       : $color === 'text'
       ? theme.color.text
+      : $color === 'btn'
+      ? '#fff'
       : theme.color.link};
   text-align: center;
   font-size: 16px;

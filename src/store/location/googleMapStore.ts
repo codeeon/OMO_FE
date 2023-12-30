@@ -9,17 +9,27 @@ interface MapStoreState {
   currentLocation: CurrentLocationType;
   mapBounds: mapBoundsType | null;
   setMapBounds: (bounds: mapBoundsType | null) => void;
+
+  setSelectedLocation: (location: CurrentLocationType) => void;
+  selectedLocation: CurrentLocationType;
 }
 
 const useMapStore = create<MapStoreState>((set) => ({
   map: null,
   setMap: (map: google.maps.Map | null) => set({ map }),
+
+  selectedLocation: { lat: 37.574187, lng: 126.976882 },
+  setSelectedLocation: (location: CurrentLocationType) =>
+    set(() => ({ selectedLocation: location })),
+
   currentLocation: { lat: 37.574187, lng: 126.976882 },
   setCurrentLocation: (location: CurrentLocationType) =>
     set(() => ({ currentLocation: location })),
+
   mapBounds: null,
   setMapBounds: (bounds: mapBoundsType | null) =>
     set(() => ({ mapBounds: bounds })),
+
   initializeMap: (centerLocation: google.maps.LatLngBounds) => {
     const container = document.createElement('div');
 

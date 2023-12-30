@@ -5,20 +5,17 @@ import usePostLikeMutation from '../../hooks/reactQuery/like/usePostLikeMutation
 import useDeleteLikeMutation from '../../hooks/reactQuery/like/useDeleteLikeMutation';
 import useGetLikeQuery from '../../hooks/reactQuery/like/useGetLikeQuery';
 import { LikePostsType } from '../../model/interface';
-import AlertModal from '../Modal/AlertModal';
-import CommentError from '../share/alert/CommentError';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
 import _ from 'lodash';
+import toast from 'react-hot-toast';
 
 interface Props {
   postId: number | undefined;
 }
 
 const LikeBtn: React.FC<Props> = ({ postId }) => {
-  const { data, isLoading } = useGetLikeQuery();
+  const { data, refetch, isLoading } = useGetLikeQuery();
   const [isLiked, setIsLiked] = useState(false);
   const [isHover, setIsHover] = useState(true);
-  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const [scope, animate] = useAnimate();
   const userId = window.sessionStorage.getItem('userId');
 
@@ -28,11 +25,7 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
     }
   }, [data, isLoading, postId]);
 
-  const { postMutate, isPostLoading } = usePostLikeMutation(
-    postId,
-    handleModalOpen,
-    setIsLiked,
-  );
+  const { postMutate, isPostLoading } = usePostLikeMutation(postId, setIsLiked);
   const { deleteMutate, isDeleteLoading } = useDeleteLikeMutation(postId);
 
   const handleLikeClick = _.throttle(
@@ -44,7 +37,12 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
         return;
       }
 
-      if (!userId) return handleModalOpen();
+      if (!userId)
+        return toast.error('로그인 후 이용해주세요.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        });
 
       if (isLiked) {
         deleteMutate({ postId });
@@ -58,6 +56,10 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
     },
     400,
   );
+
+  useEffect(() => {
+    userId && refetch();
+  }, [userId]);
 
   return (
     <LikeBtnWrapper
@@ -96,13 +98,6 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
           )}
         </svg>
       </MotionDiv>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-      >
-        <CommentError />
-      </AlertModal>
     </LikeBtnWrapper>
   );
 };

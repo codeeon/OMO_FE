@@ -1,22 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
-import Skeleton from 'react-loading-skeleton';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import useThemeStore from '../../../store/theme/themeStore';
 
 const PlaceCardSkeleton = () => {
+  const { themeMode } = useThemeStore();
+
   return (
-    <Base>
-      <ImgContainer width="285px" height="168px" />
-      <HeaderContainer>
-        <Title width="190px" height="20px" />
-        <Skeleton width="24px" height="24px" />
-      </HeaderContainer>
-      <Text />
-      <Footer>
-        <FooterItem>
-          <Skeleton width="180px" height="16px" />
-        </FooterItem>
-      </Footer>
-    </Base>
+    <SkeletonTheme
+      baseColor={themeMode === 'DarkMode' ? '#29282E' : null}
+      highlightColor={themeMode === 'DarkMode' ? '#1B1B20' : null}
+    >
+      <Base>
+        <ImgContainer width="285px" height="168px" />
+        <HeaderContainer>
+          <Title width="190px" height="20px" />
+          <Skeleton width="24px" height="24px" />
+        </HeaderContainer>
+        <Text />
+        <Footer>
+          <FooterItem>
+            <Skeleton width="180px" height="16px" />
+          </FooterItem>
+        </Footer>
+      </Base>
+    </SkeletonTheme>
   );
 };
 
@@ -45,8 +54,6 @@ const HeaderContainer = styled.div`
 `;
 
 const Title = styled(Skeleton)``;
-
-const Date = styled(Skeleton)``;
 
 const Text = styled(Skeleton)`
   margin-top: 18px;

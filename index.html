@@ -9,11 +9,12 @@
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%VITE_APP_KAKAO_MAP_KEY%&libraries=services"
     ></script>
 
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=%VITE_APP_GOOGLE_MAP%&libraries=places&callback=initMap"
-      async
-      defer
-    ></script>
+    <script>
+      initMap = function () {};
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=%VITE_APP_GOOGLE_MAP%&libraries=places&callback=initMap"></script>
+
     <link
       rel="preconnect"
       href="https://cdn.jsdelivr.net"

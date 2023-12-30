@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import RecentContents from '../components/main/RecentContents';
 import PlaceComments from '../components/main/comment';
@@ -7,6 +7,9 @@ import Banner from '../components/main/banner';
 import Footer from '../components/share/Footer';
 
 const Home = () => {
+  useEffect(() => {
+    document.body.style.overflow = 'auto';
+  }, []);
   return (
     <Base>
       <Banner />

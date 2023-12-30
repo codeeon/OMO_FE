@@ -57,7 +57,7 @@ export const onImageChange: MutationFunction<
       // 이벤트 리스너 제거
       input.removeEventListener('change', changeHandler);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

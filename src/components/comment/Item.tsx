@@ -4,7 +4,6 @@ import { CommentType } from '../../model/interface';
 import Dropdown from './Dropdown';
 import RepleItem from './RepleItem';
 import RepleInput from './RepleInput';
-import useGetRepleQuery from '../../hooks/reactQuery/replies/useGetRepleQuery';
 
 //TODO 유저 데이터
 const CommentItem: React.FC<{
@@ -158,12 +157,15 @@ const CommentText = styled.div`
   outline: none;
   border: none;
   height: auto;
+  max-width: 550px;
+  width: 550px;
+  word-break: break-all;
 `;
 
 const RepleBtn = styled.div<{ marginLeft?: string }>`
   margin-top: 8px;
   margin-left: ${({ marginLeft }) => (marginLeft ? marginLeft : null)};
-  color: ${({ theme }) => theme.color.primary};
+  color: ${({ theme }) => theme.color.sub2};
   font-size: 14px;
   font-weight: 500;
   letter-spacing: -0.14px;

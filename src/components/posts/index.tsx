@@ -11,15 +11,12 @@ import CategoryDropdown from './CateogryDropdown';
 import ContentCardSkeleton from '../share/ContentCardSkeleton';
 import CardDarkSkeleton from './CardDarkSkeleton';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import AlertModal from '../Modal/AlertModal';
-import CommentError from '../share/alert/CommentError';
 import useDistrictStore from '../../store/location/districtStore';
 import useThemeStore from '../../store/theme/themeStore';
 import useCategoryStore from '../../store/category/categoryStore';
+import toast from 'react-hot-toast';
 
 const Posts = () => {
-  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const { district } = useDistrictStore();
   const { category } = useCategoryStore();
   const {
@@ -56,12 +53,14 @@ const Posts = () => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     const userId = sessionStorage.getItem('userId');
-
-    if (userId) {
-      openMainModal(e);
-    } else {
-      handleModalOpen();
+    if (!userId) {
+      return toast.error('로그인 후 작성 가능합니다.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     }
+    openMainModal(e);
   };
 
   return (
@@ -124,13 +123,6 @@ const Posts = () => {
           closeSubModal={closeSubModal}
         />
       </Modal>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-      >
-        <CommentError />
-      </AlertModal>
     </Base>
   );
 };

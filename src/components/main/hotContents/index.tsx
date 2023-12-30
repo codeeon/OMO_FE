@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CardSkeleton from './CardSkeleton';
 import useGetHotPosts from '../../../hooks/reactQuery/main/useGetHotPostsQuery';
-import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
 import useDistrictStore from '../../../store/location/districtStore';
 import useThemeStore from '../../../store/theme/themeStore';
+
 const HotContents = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { district } = useDistrictStore();
@@ -15,13 +15,24 @@ const HotContents = () => {
 
   useEffect(() => {
     refetch();
+    setActiveIndex(0);
   }, [district]);
+
+  if (!hotPosts) {
+    return;
+  }
 
   return (
     <Carousel
-      itemCount={9}
+      itemCount={hotPosts.length === 0 ? 1 : hotPosts.length}
       title={<Title>요즘 뜨는🔥</Title>}
-      carouselCount={3}
+      carouselCount={
+        hotPosts.length / 3 > 1
+          ? hotPosts.length / 3
+          : hotPosts.length / 3 === 1
+          ? 1
+          : 1
+      }
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
     >
@@ -31,15 +42,9 @@ const HotContents = () => {
               <Card post={post} />
             </CarouselItem>
           ))
-        : themeMode === 'LightMode'
-        ? Array.from({ length: 9 }).map((_, idx) => (
-            <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <CardSkeleton key={idx} />
-            </CarouselItem>
-          ))
         : Array.from({ length: 9 }).map((_, idx) => (
             <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <CardDarkSkeleton key={idx} />
+              <CardSkeleton key={idx} />
             </CarouselItem>
           ))}
     </Carousel>
@@ -62,4 +67,10 @@ const CarouselItem = styled.li<{ $activeIndex: number }>`
   align-items: center;
   transform: translateX(-${({ $activeIndex }) => $activeIndex * 315}%);
   transition: 500ms ease;
+`;
+
+const BlankCard = styled.div`
+  width: 1000px;
+  height: 300px;
+  background: red;
 `;

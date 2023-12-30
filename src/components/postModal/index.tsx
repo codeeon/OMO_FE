@@ -9,9 +9,8 @@ import Stars from './Stars';
 import SubModal from '../Modal/SubModal';
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
 import ImageFile from './Image2';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import AlertModal from '../Modal/AlertModal';
-import ContentAlert from '../share/alert/ContentAlert';
+import toast from 'react-hot-toast';
+import Button from '../share/Button';
 
 interface Props {
   closeMainModal: (
@@ -32,8 +31,6 @@ const PostModal: React.FC<Props> = ({
   openSubModal,
   closeSubModal,
 }) => {
-  const [isValidate, setIsValidate] = useState<boolean>(false);
-  const { isModalOpen, handleModalOpen, handleModalClose } = useAlertModalCtr();
   const [imageURL, setImageUrl] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [starNum, setStarNum] = useState(0);
@@ -51,12 +48,7 @@ const PostModal: React.FC<Props> = ({
     google.maps.places.PlaceResult[] | null
   >(null);
 
-  const {
-    postContentMutate,
-    isPostContentLoading,
-    isPostContentError,
-    isPostContentSuccess,
-  } = usePostContentMutate();
+  const { postContentMutate } = usePostContentMutate();
 
   const clearPostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
@@ -74,17 +66,46 @@ const PostModal: React.FC<Props> = ({
     setText('');
     setGoogleSearchResult(null);
   };
-  useEffect(() => {
-    if (imageURL.length !== 0 && text && selectedInfo.placeName) {
-      setIsValidate(true);
-    } else {
-      setIsValidate(false);
-    }
-  }, [imageURL, text, searchValue, selectedInfo.placeName]);
 
   const savePostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
+    if (files.length === 0) {
+      return toast.error('이미지를 추가해주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
+    if (!selectedInfo.placeName) {
+      return toast.error('장소에 대한 위치를 지정해주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
+    if (starNum < 1) {
+      return toast.error('별점을 지정해주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
+    if (!text) {
+      return toast.error('장소에 대한 내용을 적어주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
+    if (text.length <= 10) {
+      return toast.error('장소에 대한 내용은 10자 이상 적어주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
+
     const newContent = {
       content: text.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
       star: starNum,
@@ -97,11 +118,8 @@ const PostModal: React.FC<Props> = ({
       placeInfoId: googleSearchResult && googleSearchResult[0].place_id,
     };
 
-    if (isValidate) {
-      postContentMutate(newContent);
-      clearPostHandler(e);
-      handleModalOpen();
-    }
+    postContentMutate(newContent);
+    closeMainModal(e);
   };
 
   return (
@@ -111,9 +129,15 @@ const PostModal: React.FC<Props> = ({
           <IoIosArrowRoundBack />
         </BackBtn>
         <Title>새 게시글</Title>
-        <CompleteBtn onClick={(e) => savePostHandler(e)} disable={!isValidate}>
+        <Button
+          theme="gray"
+          padding="9px 14px"
+          width="49px"
+          height="14px"
+          onClick={(e) => savePostHandler(e)}
+        >
           작성완료
-        </CompleteBtn>
+        </Button>
       </Header>
       <ImageFile
         imageURL={imageURL}
@@ -137,17 +161,6 @@ const PostModal: React.FC<Props> = ({
           closeModalHandler={closeSubModal}
         />
       </SubModal>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-      >
-        <ContentAlert
-          isPostContentLoading={isPostContentLoading}
-          isPostContentError={isPostContentError}
-          isPostContentSuccess={isPostContentSuccess}
-        />
-      </AlertModal>
     </Base>
   );
 };
@@ -194,24 +207,13 @@ const Title = styled.div`
   letter-spacing: -0.2px;
 `;
 
-const CompleteBtn = styled.div<{ disable: boolean }>`
+const CompleteBtn = styled.div`
   padding: 10px 15px;
   font-size: 14px;
   font-weight: 700;
   border-radius: 8px;
   color: #fff;
   cursor: pointer;
-  ${({ disable }) =>
-    disable
-      ? css`
-          background: #b1b1b1;
-        `
-      : css`
-          background: #44a5ff;
-          &:hover {
-            background-color: #f97476;
-          }
-        `}
 
   transition: all 200ms ease-in;
 `;

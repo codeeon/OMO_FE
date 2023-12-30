@@ -1,6 +1,7 @@
 import { MutationFunction, useMutation, useQueryClient } from 'react-query';
 import authApi from '../../../axios/authApi';
 import { PostDetailType } from '../../../model/interface';
+import toast from 'react-hot-toast';
 
 const deleteBookmark = async (locationId: number | undefined) => {
   const response = await authApi.delete(`/posts/${locationId}/bookmark`);
@@ -23,8 +24,20 @@ const useDeleteBookmarkMutation = (locationId: number | undefined) => {
       }
       return { previousLocationData };
     },
+    onSuccess: () => {
+      toast.success('북마크가 삭제되었습니다.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    },
     onError: (err, brandId, context) => {
       queryClient.setQueryData('bookmarkPlaces', context?.previousLocationData);
+      toast.error('북마크 저장에 실패했습니다.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     },
 
     onSettled: () => {

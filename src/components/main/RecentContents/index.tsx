@@ -5,7 +5,6 @@ import RecentCard from './Card';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../../share/ContentCardSkeleton';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
-import CardDarkSkeleton from './CardDarkSkeleton';
 import Carousel from '../../share/Carousel';
 import useDistrictStore from '../../../store/location/districtStore';
 import useThemeStore from '../../../store/theme/themeStore';
@@ -30,15 +29,25 @@ const RecentContents = () => {
 
   useEffect(() => {
     refetch();
+    setActiveIndex(0);
   }, [district, selectedCateogry]);
 
   const changeCateogryHandler = (category: string) => {
     setSelectedCategory(category);
   };
 
+  if (!recentPosts) return;
+
   return (
     <Carousel
-      itemCount={12}
+      itemCount={recentPosts.length === 0 ? 1 : recentPosts.length}
+      carouselCount={
+        recentPosts.length / 4 > 1
+          ? recentPosts.length / 4
+          : recentPosts.length / 4 === 1
+          ? 1
+          : 1
+      }
       title={
         <>
           <Header>
@@ -63,7 +72,6 @@ const RecentContents = () => {
           </CategroyContainer>
         </>
       }
-      carouselCount={4}
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
     >
@@ -73,15 +81,9 @@ const RecentContents = () => {
               <RecentCard key={post.postId} post={post} />
             </CarouselItem>
           ))
-        : themeMode === 'LightMode'
-        ? Array.from({ length: 4 }).map((_, idx) => (
-            <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <ContentCardSkeleton key={idx} />
-            </CarouselItem>
-          ))
         : Array.from({ length: 4 }).map((_, idx) => (
             <CarouselItem $activeIndex={activeIndex} key={idx}>
-              <CardDarkSkeleton key={idx} />
+              <ContentCardSkeleton key={idx} />
             </CarouselItem>
           ))}
     </Carousel>

@@ -1,15 +1,8 @@
-import React, {
-  Dispatch,
-  MouseEventHandler,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-} from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled, { css } from 'styled-components';
 import Portal from '../../Portal';
 import './modal.css';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   children: ReactNode;

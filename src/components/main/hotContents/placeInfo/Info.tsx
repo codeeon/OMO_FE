@@ -10,6 +10,8 @@ import PhoneIcon from '../../../../assets/icons/PhoneIcon';
 import BookMarkBtn from '../../../share/BookMarkBtn';
 import { HiArrowNarrowRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+import useMapStore from '../../../../store/location/googleMapStore';
+import usePlaceStore from '../../../../store/location/placeStore';
 interface Props {
   googleSearchResult: google.maps.places.PlaceResult | null;
   post: HotPostsType;
@@ -18,6 +20,8 @@ interface Props {
 const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
   const { Category, Location } = post;
   const [isOpen, setIsOpen] = useState(false);
+  const { selectedLocation, setCurrentLocation } = useMapStore();
+  const { setPlace } = usePlaceStore();
 
   const detailToggleHandler = () => {
     setIsOpen(!isOpen);
@@ -27,6 +31,12 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
 
   const moveMapHandler = () => {
     document.body.style.overflow = 'auto';
+    setCurrentLocation(selectedLocation);
+    setPlace({
+      locationId: Location.locationId,
+      latitude: Location.latitude,
+      longitude: Location.longitude,
+    });
     navigate('/map');
   };
   return (
