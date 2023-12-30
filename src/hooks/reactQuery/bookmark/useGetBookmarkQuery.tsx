@@ -8,6 +8,7 @@ const getBookmark = async () => {
   return response.data;
 };
 
-const useGetBookmarkQuery = () => useQuery('bookmarkPlaces', getBookmark);
+const useGetBookmarkQuery = () =>
+  useQuery('bookmarkPlaces', getBookmark, { enabled: false });
 
 export default useGetBookmarkQuery;

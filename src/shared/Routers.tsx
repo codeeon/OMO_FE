@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from '../components/share/Navbar';
 import Home from '../pages/Home';
@@ -9,21 +9,16 @@ import SignUp from '../pages/SignUp';
 import ProfileEdit from '../components/auth/mypage/edit/ProfileEdit';
 import Mypage from '../pages/Mypage';
 
-import useMapStore from '../store/location/googleMapStore';
-
 const Routers = () => {
-  const { initializeMap } = useMapStore();
-  useEffect(() => {
-    //@ts-ignore
-    initializeMap({ lat: 37.514575, lng: 127.0495556 });
-  }, []);
   const excludedRoutes = ['/map'];
+  const mainRoutes = ['/'];
   const location = useLocation();
 
   return (
     <>
       <Navbar
         maxWidth={!excludedRoutes.includes(location.pathname) ? null : '98%'}
+        disableLogo={!mainRoutes.includes(location.pathname) ? null : true}
       />
       <Routes>
         <Route path="/" element={<Home />} />

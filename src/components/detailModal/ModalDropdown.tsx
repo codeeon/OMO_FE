@@ -21,17 +21,15 @@ const ModalDropdown: React.FC<Props> = ({
   post,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isModalOpen, setModalIsOpen, handleModalOpen, handleModalClose } =
-    useModalCtr();
+  const { isModalOpen, handleModalOpen, handleModalClose } = useModalCtr();
   const {
     isModalOpen: isSubModalOpen,
-    setModalIsOpen: setSubModalIsOpen,
     handleModalOpen: handleSubModalOpen,
     handleModalClose: handleSubModalClose,
   } = useModalCtr();
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { deleteMutate, isDeleteLoading } = useDeleteContentQuery();
+  const { deleteMutate } = useDeleteContentQuery();
 
   const toggleDropdownHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -75,7 +73,7 @@ const ModalDropdown: React.FC<Props> = ({
             open: { rotate: 180 },
             closed: { rotate: 0 },
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.1 }}
           style={{ originY: 0.55 }}
         >
           <IoEllipsisHorizontalSharp style={{ marginTop: '4px' }} />
@@ -88,8 +86,8 @@ const ModalDropdown: React.FC<Props> = ({
             transition: {
               type: 'spring',
               bounce: 0,
-              duration: 0.7,
-              delayChildren: 0.3,
+              duration: 0.4,
+              delayChildren: 0.2,
               staggerChildren: 0.05,
             },
           },
@@ -98,7 +96,7 @@ const ModalDropdown: React.FC<Props> = ({
             transition: {
               type: 'spring',
               bounce: 0,
-              duration: 0.3,
+              duration: 0.7,
             },
           },
         }}

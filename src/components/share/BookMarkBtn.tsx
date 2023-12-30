@@ -5,10 +5,8 @@ import usePostBookmarkMutation from '../../hooks/reactQuery/bookmark/usePostBook
 import useDeleteBookmarkMutation from '../../hooks/reactQuery/bookmark/useDeleteBookmarkMutation';
 import useGetBookmarkQuery from '../../hooks/reactQuery/bookmark/useGetBookmarkQuery';
 import { BookmarkLocationType } from '../../model/interface';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import AlertModal from '../Modal/AlertModal';
-import PostErrorAlert from './alert/PostErrorAlert';
 import _ from 'lodash';
+import toast from 'react-hot-toast';
 const randomNumberBetween = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -32,10 +30,9 @@ const BookMarkBtn: React.FC<Props> = ({
 }) => {
   const [scope, animate] = useAnimate();
   const [isBookMarking, setIsBookMarking] = useState(false);
-  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const userId = sessionStorage.getItem('userId');
 
-  const { data, isLoading } = useGetBookmarkQuery();
+  const { data, refetch, isLoading } = useGetBookmarkQuery();
   useEffect(() => {
     if (!isLoading) {
       setIsBookMarking(
@@ -46,10 +43,8 @@ const BookMarkBtn: React.FC<Props> = ({
     }
   }, [data, isLoading, locationId]);
 
-  const { postBookmarkingMutate, isPostBookmarkingLoading } =
-    usePostBookmarkMutation(locationId);
-  const { deletebookmarkingMutate, isDeleteBookmarkingLoading } =
-    useDeleteBookmarkMutation(locationId);
+  const { postBookmarkingMutate } = usePostBookmarkMutation(locationId);
+  const { deletebookmarkingMutate } = useDeleteBookmarkMutation(locationId);
 
   const onButtonClick = _.throttle(() => {
     const sparkles = Array.from({ length: 30 });
@@ -89,8 +84,12 @@ const BookMarkBtn: React.FC<Props> = ({
         duration: 0.000001,
       },
     ]);
-    if (!userId) return handleModalOpen();
-
+    if (!userId)
+      return toast.error('로그인 후 이용해주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     if (!isBookMarking) {
       animate([
         ...sparklesReset,
@@ -108,6 +107,10 @@ const BookMarkBtn: React.FC<Props> = ({
       deletebookmarkingMutate({ locationId });
     }
   }, 400);
+
+  useEffect(() => {
+    userId && refetch();
+  }, [userId]);
 
   return (
     <Container
@@ -155,13 +158,6 @@ const BookMarkBtn: React.FC<Props> = ({
           </Svg>
         ))}
       </StyledDiv>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-      >
-        <PostErrorAlert errorMsg="로그인 후 이용해주세요" />
-      </AlertModal>
     </Container>
   );
 };

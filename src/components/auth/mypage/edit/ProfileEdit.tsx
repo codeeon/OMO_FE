@@ -37,12 +37,14 @@ const ProfileEdit = () => {
 
   const { data: userData, isError: userError } = useGetUserDataQuery();
 
-  const [imageURL, setImageUrl] = useState([userData?.data.imgUrl]);
+  const [imageURL, setImageUrl] = useState(userData?.data.imgUrl);
   // const image = imageURL.slice(-1);
   // const [isImageChanged, setIsImageChanged] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
 
-  const [nickname, _, onChangeNickname] = useInput(userData?.data.nickname);
+  const { value: nickname, changeValueHandler: onChangeNickname } = useInput(
+    userData?.data.nickname,
+  );
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
 

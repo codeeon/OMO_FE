@@ -14,7 +14,7 @@ const DetailContentsModal: React.FC<{
   const { data: post, isLoading: isPostLoading } =
     useGetContentDetailQuery(postId);
 
-  if (!post) return;
+  if (!post) return null;
 
   const {
     content,
@@ -30,34 +30,37 @@ const DetailContentsModal: React.FC<{
   const commentLength = Comments.length;
 
   return (
-    <Base>
-      <DetailModalHeader
-        userProfile={User.imgUrl}
-        userName={User.nickname}
-        userId={User.userId}
-        createdAt={createdAt}
-        contentId={postId}
-        closeModalHandler={closeModalHandler}
-        post={post}
-      />
-      <Image imgUrl={imgUrl} />
-      <DetailModalBody
-        placeName={Location.storeName}
-        locationName={Location.address}
-        content={content}
-        star={star}
-      />
-      <DetailModalFooter
-        likeCount={likeCount}
-        postId={postId}
-        commentLength={commentLength}
-      />
-      <Comment contentId={postId} comments={Comments} />
-    </Base>
+
+      <Base>
+        <DetailModalHeader
+          userProfile={User.imgUrl}
+          userName={User.nickname}
+          userId={User.userId}
+          createdAt={createdAt}
+          contentId={postId}
+          closeModalHandler={closeModalHandler}
+          post={post}
+        />
+        <Image imgUrl={imgUrl} />
+        <DetailModalBody
+          placeName={Location.storeName}
+          locationName={Location.address}
+          content={content}
+          star={star}
+        />
+        <DetailModalFooter
+          likeCount={likeCount}
+          postId={postId}
+          commentLength={commentLength}
+        />
+        <Comment contentId={postId} comments={Comments} />
+      </Base>
+
   );
 };
 
 export default DetailContentsModal;
+
 
 const Base = styled.div`
   box-sizing: border-box;
