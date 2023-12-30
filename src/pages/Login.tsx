@@ -77,7 +77,7 @@ const Login: React.FC = () => {
             />
           </InputBox>
           <LargeBtn>
-            <Text $color="text">로그인</Text>
+            <Text $color="btn">로그인</Text>
           </LargeBtn>
         </form>
         {/* <KakaoLogin /> */}
@@ -184,6 +184,8 @@ const Text = styled.div<{ $color?: string }>`
       ? theme.color.sub
       : $color === 'text'
       ? theme.color.text
+      : $color === 'btn'
+      ? '#fff'
       : theme.color.link};
   text-align: center;
   font-size: 16px;
