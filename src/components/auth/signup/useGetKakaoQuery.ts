@@ -3,7 +3,7 @@ import auth from '../../../axios/auth';
 
 const getKakao = async () => {
   const response = await auth.get(`/kakao`);
-  console.log(response);
+  // console.log(response);
   return response.data;
 };
 const useGetKakaoQuery = () => useQuery('kakao', () => getKakao());

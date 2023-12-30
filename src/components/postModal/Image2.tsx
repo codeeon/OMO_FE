@@ -73,7 +73,7 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
         setIsUploadSuccess(true);
         handleModalOpen();
       } catch (error) {
-        console.error('Error converting file to URL:', error);
+        // console.error('Error converting file to URL:', error);
       } finally {
         input.removeEventListener('change', changeHandler);
       }

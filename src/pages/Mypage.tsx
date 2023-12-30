@@ -66,7 +66,7 @@ const Mypage: React.FC = () => {
     setIsSelect('Contents');
   };
 
-  console.log(myBookmark, myPosts);
+  // console.log(myBookmark, myPosts);
 
   return (
     <Base>

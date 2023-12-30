@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         navigate(`/`);
       },
       onError: (error: Error) => {
-        console.error('로그인 실패 -> ', error.message);
+        // console.error('로그인 실패 -> ', error.message);
         // alert('onError: 아이디와 비밀번호를 확인해주세요!');
       },
     },
