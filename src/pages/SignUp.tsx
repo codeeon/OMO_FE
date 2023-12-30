@@ -9,7 +9,7 @@ import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
 
 const SignUp: React.FC = () => {
-  const navigate = useNavigate(œ);
+  const navigate = useNavigate();
 
   const { value: email, changeValueHandler: onChangeEmail } = useInput();
   const { value: code, changeValueHandler: onChangeCode } = useInput();
