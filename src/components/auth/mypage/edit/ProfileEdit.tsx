@@ -393,7 +393,7 @@ const Base = styled.div`
   box-sizing: border-box;
   width: 100%;
   background-color: ${({ theme }) => theme.color.bg};
-  height: 100%;
+  height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
   justify-content: center;
