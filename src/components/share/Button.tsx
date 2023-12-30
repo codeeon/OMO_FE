@@ -5,7 +5,6 @@ interface Props {
   theme?: string;
   children: ReactNode;
   outlineColor?: string;
-
   padding?: string;
   width?: string;
   height?: string;
@@ -21,7 +20,6 @@ const Button: React.FC<Props> = ({
   children,
   outlineColor,
   padding,
-
   width,
   height,
   fontSize,

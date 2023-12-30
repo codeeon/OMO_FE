@@ -109,6 +109,7 @@ const CarouselList = styled.ul`
 
   padding: 10px 0;
   width: 1200px;
+  height: 320px;
   overflow: hidden;
   margin-top: 20px;
 `;

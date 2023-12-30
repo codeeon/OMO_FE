@@ -15,13 +15,24 @@ const HotContents = () => {
 
   useEffect(() => {
     refetch();
+    setActiveIndex(0);
   }, [district]);
+
+  if (!hotPosts) {
+    return;
+  }
 
   return (
     <Carousel
-      itemCount={9}
+      itemCount={hotPosts.length === 0 ? 1 : hotPosts.length}
       title={<Title>요즘 뜨는🔥</Title>}
-      carouselCount={3}
+      carouselCount={
+        hotPosts.length / 3 > 1
+          ? hotPosts.length / 3
+          : hotPosts.length / 3 === 1
+          ? 1
+          : 1
+      }
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
     >
@@ -62,4 +73,10 @@ const CarouselItem = styled.li<{ $activeIndex: number }>`
   align-items: center;
   transform: translateX(-${({ $activeIndex }) => $activeIndex * 315}%);
   transition: 500ms ease;
+`;
+
+const BlankCard = styled.div`
+  width: 1000px;
+  height: 300px;
+  background: red;
 `;

@@ -17,7 +17,7 @@ interface Props {
 const MiniMap: React.FC<Props> = ({ post }) => {
   const { Location } = post;
 
-  const { setMap, currentLocation, setCurrentLocation } = useMapStore();
+  const { setMap, selectedLocation, setSelectedLocation } = useMapStore();
   const { themeMode } = useThemeStore();
 
   const onLoad = useCallback(function callback(map: google.maps.Map) {
@@ -26,7 +26,7 @@ const MiniMap: React.FC<Props> = ({ post }) => {
       lat: Number(Location.latitude),
       lng: Number(Location.longitude),
     });
-    setCurrentLocation({
+    setSelectedLocation({
       lat: Number(Location.latitude),
       lng: Number(Location.longitude),
     });
@@ -44,8 +44,8 @@ const MiniMap: React.FC<Props> = ({ post }) => {
           borderRadius: '25px',
         }}
         center={{
-          lat: currentLocation.lat!,
-          lng: currentLocation.lng!,
+          lat: selectedLocation.lat!,
+          lng: selectedLocation.lng!,
         }}
         onLoad={onLoad}
         options={{

@@ -6,22 +6,25 @@ import NavDropdown from './NavDropdown';
 
 interface Props {
   maxWidth: string | null;
+  disableLogo: boolean | null;
 }
 
-const Navbar: React.FC<Props> = ({ maxWidth }) => {
+const Navbar: React.FC<Props> = ({ maxWidth, disableLogo }) => {
   const [isSelected, setIsSelected] = useState<string>('');
 
   const navigate = useNavigate();
 
   const onClickLogoHander = () => {
+    if (disableLogo) {
+      return setIsSelected('');
+    }
     navigate('/');
-    setIsSelected('');
   };
 
   const onSelectHandler = (item: string) => {
     if (item === '게시글') {
-      navigate('/contents');
       setIsSelected('게시글');
+      navigate('/contents');
     } else {
       navigate('/map');
       setIsSelected('지도');

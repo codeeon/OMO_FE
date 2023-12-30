@@ -43,6 +43,14 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
 
     const changeHandler = async () => {
       const file = input.files?.[0];
+      const fileSize = file?.size;
+      if (fileSize && fileSize > 3072000) {
+        return toast.error('이미지 크기는 3mb까지만 업로드 가능합니다.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        });
+      }
       if (!file) return null;
       if (!isValidImageFileType(file)) {
         toast.error('jpg, png파일만 업로드 가능합니다.', {

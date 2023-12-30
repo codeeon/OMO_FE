@@ -1,6 +1,8 @@
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { instance } from '../../../apis/apis';
-import { CommentPostsType, RecentPostsType } from '../../../model/interface';
+import { CommentPostsType } from '../../../model/interface';
+
+const queryClient = new QueryClient();
 
 const getCommentPost = async (
   districtName: string | undefined,
@@ -15,6 +17,10 @@ const getCommentPost = async (
 };
 
 const useGetCommentPostsQuery = (districtName: string | undefined) =>
-  useQuery('commentPosts', () => getCommentPost(districtName));
+  useQuery('commentPosts', () => getCommentPost(districtName), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('commentPosts');
+    },
+  });
 
 export default useGetCommentPostsQuery;

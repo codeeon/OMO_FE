@@ -33,6 +33,9 @@ const usePostContentMutate = () => {
         style: { fontSize: '14px' },
       });
     },
+    onError: (error) => {
+      console.log(error);
+    },
   });
   return {
     postContentMutate: mutation.mutate,

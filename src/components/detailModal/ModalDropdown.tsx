@@ -21,17 +21,15 @@ const ModalDropdown: React.FC<Props> = ({
   post,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { isModalOpen, setModalIsOpen, handleModalOpen, handleModalClose } =
-    useModalCtr();
+  const { isModalOpen, handleModalOpen, handleModalClose } = useModalCtr();
   const {
     isModalOpen: isSubModalOpen,
-    setModalIsOpen: setSubModalIsOpen,
     handleModalOpen: handleSubModalOpen,
     handleModalClose: handleSubModalClose,
   } = useModalCtr();
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { deleteMutate, isDeleteLoading } = useDeleteContentQuery();
+  const { deleteMutate } = useDeleteContentQuery();
 
   const toggleDropdownHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

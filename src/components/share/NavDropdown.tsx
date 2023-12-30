@@ -5,17 +5,13 @@ import styled from 'styled-components';
 import { MdOutlineDarkMode, MdOutlineWbSunny } from 'react-icons/md';
 import { FiUser } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import AlertModal from '../Modal/AlertModal';
 import useThemeStore from '../../store/theme/themeStore';
-import ErrorAlert from './alert/ErrorAlert';
-import SuccessAlert from './alert/SuccessAlert';
+import toast from 'react-hot-toast';
 
 const NavDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [errorType, setErrorType] = useState<string | null>(null);
-  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const { themeMode, toggleTheme } = useThemeStore();
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
@@ -50,7 +46,11 @@ const NavDropdown = () => {
   const handleLogout = () => {
     // 여기에 auth.POST /logout req 넣을 예정
     setErrorType('logout');
-    handleModalOpen();
+    toast.success('로그아웃이 완료되었습니다.', {
+      position: 'top-right',
+      duration: 4000,
+      style: { fontSize: '14px' },
+    });
     setIsOpen(false);
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('refreshToken');
@@ -61,9 +61,14 @@ const NavDropdown = () => {
   const onClickMyPageBtn = () => {
     if (userId) {
       navigate('/mypage');
+      setIsOpen(false);
     } else {
       setErrorType('required');
-      handleModalOpen();
+      toast.error('로그인 후 이용해주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
       setIsOpen(false);
     }
   };
@@ -144,19 +149,6 @@ const NavDropdown = () => {
           </DropdownItem>
         )}
       </DropdownList>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-        setErrorType={setErrorType}
-      >
-        {errorType === 'required' && (
-          <ErrorAlert errorMsg={'로그인 후 이용해주세요.'} />
-        )}
-        {errorType === 'logout' && (
-          <SuccessAlert successMsg={'로그아웃이 완료되었습니다.'} />
-        )}
-      </AlertModal>
     </NavContainer>
   );
 };

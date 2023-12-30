@@ -20,20 +20,29 @@ const PlaceComments = () => {
 
   useEffect(() => {
     refetch();
+    setActiveIndex(0);
   }, [district]);
+
+  if (!comments) return;
 
   return (
     <Carousel
       title={<Title>실시간 댓글 💬</Title>}
-      itemCount={9}
-      carouselCount={3}
+      itemCount={comments.length === 0 ? 1 : comments.length}
+      carouselCount={
+        comments.length / 3 > 1
+          ? comments.length / 3
+          : comments.length / 3 === 1
+          ? 1
+          : 1
+      }
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
     >
       {!isLoading
-        ? comments?.map((comment) => (
-            <CarouselItem $activeIndex={activeIndex} key={comment.PostId}>
-              <Card comment={comment} key={comment.PostId} />
+        ? comments?.map((comment, index) => (
+            <CarouselItem $activeIndex={activeIndex} key={index}>
+              <Card comment={comment} />
             </CarouselItem>
           ))
         : themeMode === 'LightMode'

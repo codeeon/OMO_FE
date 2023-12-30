@@ -49,7 +49,7 @@ const ProfileEdit = () => {
 
   const { data: userData, isError: userError } = useGetUserDataQuery();
 
-  const [imageURL, setImageUrl] = useState([userData?.data.imgUrl]);
+  const [imageURL, setImageUrl] = useState(userData?.data.imgUrl);
   // const image = imageURL.slice(-1);
   // const [isImageChanged, setIsImageChanged] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);

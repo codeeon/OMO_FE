@@ -33,6 +33,13 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
         style: { fontSize: '14px' },
       });
     }
+    if (trimmedText.length < 2 || trimmedText.length > 2000) {
+      return toast.error('댓글은 2글자 이상 2000글자 미만으로 작성해주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
     const userId = sessionStorage.getItem('userId');
 
     const newComment = {

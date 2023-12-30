@@ -7,7 +7,7 @@ import { onImageChange } from '../../../../function/uploadImage';
 // import { MoonLoader } from 'react-spinners';
 
 interface Props {
-  imageURL: string[];
+  imageURL: string;
   setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   files: File[];
@@ -23,16 +23,12 @@ const ProfileImage: React.FC<Props> = ({
 
   const { mutate } = useMutation(onImageChange);
 
-  // 삭제 핸들러
-  const deleteImageHandler = (image: string) => {
-    setImageUrl(imageURL.filter((img) => img !== image));
-  };
+  // // 삭제 핸들러
+  // const deleteImageHandler = (image: string) => {
+  //   setImageUrl(imageURL.filter((img) => img !== image));
+  // };
 
-  // 확장자 유효성 검사
-  const isValidImageFileType = (file: File): boolean => {
-    const allowedTypes = ['image/jpeg', 'image/png'];
-    return allowedTypes.includes(file.type);
-  };
+
 
   // 파일을 URL로
   const fileToUrl = (file: File): Promise<string> => {
@@ -50,7 +46,7 @@ const ProfileImage: React.FC<Props> = ({
 
       // Read the file as a data URL (base64)
       reader.readAsDataURL(file);
-    //   console.log('fireToUrl -> ', file);
+      //   console.log('fireToUrl -> ', file);
     });
   };
 
@@ -86,72 +82,7 @@ const ProfileImage: React.FC<Props> = ({
     input.addEventListener('change', changeHandler);
   };
 
-  return (
-    <>
-      {/* {progressPercent === 0 ? (
-        <LoadingBox>
-          <MoonLoader color="#44a5ff" size={50} />
-        </LoadingBox>
-      ) : imageURL.length > 0 ? (
-        <ImageBox imageURL={imageURL[imageURL.length - 1]} />
-      ) : (
-        <Base
-          onClick={() => mutate({ setImageUrl, imageURL, setProgressPercent })}
-        >
-          <ImageIcon fontsize="45px">
-            <LuImagePlus />
-          </ImageIcon>
-          <Description fontsize="18px">이미지 추가하기</Description>
-        </Base>
-      )} */}
-      {
-        imageURL.length > 0 && (
-          <MyImageBox
-            onClick={uploadImage}
-            imageURL={imageURL[imageURL.length - 1]}
-          />
-        )
-        //    : (
-        //     <Base onClick={uploadImage}>
-        //       {/* <Base
-        //       onClick={() => mutate({ setImageUrl, imageURL, setProgressPercent })}
-        //     > */}
-        //       {/* <ImageIcon fontsize="45px">
-        //         <LuImagePlus />
-        //       </ImageIcon>
-        //       <Description fontsize="18px">이미지 추가하기</Description> */}
-        //     </Base>
-        //   )
-      }
-
-      {/* 
-      {imageURL.length > 0 && (
-        <ImageContainer>
-          {imageURL.map((image) => (
-            <ImageCard key={image} imageURL={image}>
-              <DeleteBtn onClick={() => deleteImageHandler(image)}>
-                {/* <DeleteBtn onClick={() => deleteImageHandler(image)}> */}
-      {/*                 <GrFormClose />
-              </DeleteBtn>
-            </ImageCard>
-          ))}
-          {imageURL.length !== 5 ? (
-            <AddImageCard onClick={uploadImage}>
-              {/* <AddImageCard
-              onClick={() =>
-                mutate({ setImageUrl, imageURL, setProgressPercent })
-              }
-            > */}
-      {/*               <ImageIcon fontsize="30px">
-                <LuImagePlus />
-              </ImageIcon>
-              <Description fontsize="14px">이미지 추가하기</Description>
-            </AddImageCard>
-          ) : null}
-        </ImageContainer>
-      )}*/}
-    </>
-  );
+  return <MyImageBox onClick={uploadImage} imageURL={imageURL} />;
 };
 
 export default ProfileImage;

@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../share/Button';
 import { getToday } from '../../function/getToday';
-import AlertModal from '../Modal/AlertModal';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import CommentSuccess from '../share/alert/CommentSuccess';
-import CommentError from '../share/alert/CommentError';
 import usePostRepleMutation from '../../hooks/reactQuery/replies/usePostRepleMutation';
 import CommentTextArea from '../textarea/CommentTextArea';
 import useInput from '../../hooks/useInput';
@@ -40,7 +36,14 @@ const RepleInput: React.FC<Props> = ({
   const postCommentHandler = () => {
     const trimmedText = text.trim();
     if (!trimmedText) {
-      return toast.error('댓글 내용을 입력해주세요!', {
+      return toast.error('대댓글 내용을 입력해주세요!', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    }
+    if (trimmedText.length < 2 || trimmedText.length > 2000) {
+      return toast.error('대댓글은 2글자 이상 2000글자 미만으로 작성해주세요.', {
         position: 'top-right',
         duration: 4000,
         style: { fontSize: '14px' },

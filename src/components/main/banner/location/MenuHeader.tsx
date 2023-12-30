@@ -9,11 +9,6 @@ import {
 } from 'react-query';
 import { itemVariants } from '../../../../styles/Motion';
 
-import AlertModal from '../../../Modal/AlertModal';
-
-import useAlertModalCtr from '../../../../hooks/useAlertModalCtr';
-import LocationAlert from '../../../share/alert/LocationAlert';
-
 interface Props {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
@@ -22,13 +17,9 @@ interface Props {
   setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
-const MenuHeader: React.FC<Props> = ({ refetch, isLoading, setIsOpen }) => {
-  const { isModalOpen, setModalIsOpen, handleModalOpen, handleModalClose } =
-    useAlertModalCtr();
-
+const MenuHeader: React.FC<Props> = ({ refetch, setIsOpen }) => {
   const onClickCurLocBtn = () => {
     refetch();
-    handleModalOpen();
     setIsOpen(false);
   };
 
@@ -38,14 +29,6 @@ const MenuHeader: React.FC<Props> = ({ refetch, isLoading, setIsOpen }) => {
         <FaLocationCrosshairs />
         <span>현재 위치에서 보기</span>
       </Header>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        isLoading={isLoading}
-        position="topRight"
-      >
-        <LocationAlert isLoading={isLoading} />
-      </AlertModal>
     </>
   );
 };

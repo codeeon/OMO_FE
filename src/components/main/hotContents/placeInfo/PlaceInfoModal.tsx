@@ -38,11 +38,6 @@ const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
         setGoogleSearchResult(place);
       }
     }
-    setPlace({
-      locationId: Location.locationId,
-      latitude: Location.latitude,
-      longitude: Location.longitude,
-    });
   }, []);
   return (
     <Base>

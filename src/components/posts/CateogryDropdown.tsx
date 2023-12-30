@@ -120,10 +120,10 @@ const NavContainer = styled(motion.nav)`
 
 const DropdownBtn = styled(motion.button)`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   gap: 2px;
-  width: 95px;
+  width: 110px;
   height: 40px;
   padding: 10px 15px;
 

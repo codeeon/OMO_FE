@@ -26,7 +26,7 @@ const App = () => {
 
   useEffect(() => {
     console.log(`
-    OOOOOOOOO     MMMMMMMM               MMMMMMMM     OOOOOOOOO     
+      OOOOOOOOO     MMMMMMMM               MMMMMMMM     OOOOOOOOO     
     OO:::::::::OO   M:::::::M             M:::::::M   OO:::::::::OO   
   OO:::::::::::::OO M::::::::M           M::::::::M OO:::::::::::::OO 
  O:::::::OOO:::::::OM:::::::::M         M:::::::::MO:::::::OOO:::::::O

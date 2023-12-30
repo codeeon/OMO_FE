@@ -30,15 +30,25 @@ const RecentContents = () => {
 
   useEffect(() => {
     refetch();
+    setActiveIndex(0);
   }, [district, selectedCateogry]);
 
   const changeCateogryHandler = (category: string) => {
     setSelectedCategory(category);
   };
 
+  if (!recentPosts) return;
+
   return (
     <Carousel
-      itemCount={12}
+      itemCount={recentPosts.length === 0 ? 1 : recentPosts.length}
+      carouselCount={
+        recentPosts.length / 4 > 1
+          ? recentPosts.length / 4
+          : recentPosts.length / 4 === 1
+          ? 1
+          : 1
+      }
       title={
         <>
           <Header>
@@ -63,7 +73,6 @@ const RecentContents = () => {
           </CategroyContainer>
         </>
       }
-      carouselCount={4}
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
     >
