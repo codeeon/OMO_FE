@@ -222,6 +222,7 @@ const DeleteBtn = styled.div`
 `;
 
 const MyImageBox = styled.div<{ imageURL: string }>`
+  background-color: ${({ theme }) => theme.color.border};
   background-image: ${({ imageURL }) => `url("${imageURL}")`};
   background-position: center;
   background-repeat: no-repeat;

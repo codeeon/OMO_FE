@@ -74,10 +74,11 @@ const Title = styled.div`
   justify-content: start;
   align-items: center;
   margin-bottom: 8px;
+  color: ${({ theme }) => theme.color.text};
 `;
 
-const Name = styled.div`
-  color: var(--light-1_txt, #111);
+const Name = styled.span`
+  color: ${({ theme }) => theme.color.text};
   font-family: Wanted Sans;
   font-size: 20px;
   font-style: normal;
@@ -121,36 +122,36 @@ const mark = (
   </svg>
 );
 
-const unmark = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z"
-      stroke="#7B7B7B"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z"
-      stroke="#7B7B7B"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
-);
+// const unmark = (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     width="24"
+//     height="24"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//   >
+//     <path
+//       d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z"
+//       stroke="#7B7B7B"
+//       stroke-width="1.5"
+//       stroke-linecap="round"
+//       stroke-linejoin="round"
+//     />
+//     <path
+//       d="M16.8199 2H7.17995C5.04995 2 3.31995 3.74 3.31995 5.86V19.95C3.31995 21.75 4.60995 22.51 6.18995 21.64L11.0699 18.93C11.5899 18.64 12.4299 18.64 12.9399 18.93L17.8199 21.64C19.3999 22.52 20.6899 21.76 20.6899 19.95V5.86C20.6799 3.74 18.9499 2 16.8199 2Z"
+//       stroke="#7B7B7B"
+//       stroke-width="1.5"
+//       stroke-linecap="round"
+//       stroke-linejoin="round"
+//     />
+//   </svg>
+// );
 
 const Address = styled.div`
   display: flex;
   align-items: flex-end;
   margin-bottom: 20px;
-  color: var(--link, #44a5ff);
+  color: #44a5ff;
   font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
@@ -220,19 +221,19 @@ const Count = styled.div`
 `;
 
 const Text = styled.div`
-  color: var(--light-2_sub, #595959);
+  color: ${({ theme }) => theme.color.sub2};
   font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: 100%; /* 16px */
+  line-height: 100%;
 `;
 
 const Bold = styled.div`
-  color: var(--light-1_txt, #111);
+  color: ${({ theme }) => theme.color.text};
   font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
-  line-height: 100%; /* 16px */
+  line-height: 100%;
 `;

@@ -10,7 +10,6 @@ import useInput from '../../../../hooks/useInput';
 import useGetUserDataQuery from '../../../../hooks/reactQuery/mypage/useGetUserDataQuery';
 import authApi from '../../../../axios/authApi';
 import authAuth from '../../../../axios/authAuth';
-// import { onImageChange } from '../../../../function/uploadImage';
 import ProfileImage from './ProfileImage';
 import useUpdateMyImageMutation from '../../../../hooks/reactQuery/mypage/useUpdateMyImageMutation';
 
@@ -25,17 +24,6 @@ interface SignUpData {
 }
 
 interface UserData extends UserEmail, SignUpData {}
-
-// interface File extends Blob {
-//   readonly lastModified: number;
-//   readonly name: string;
-//   readonly webkitRelativePath: string;
-// }
-
-// declare var File: {
-//   prototype: File;
-//   new (fileBits: BlobPart[], fileName: string, options?: FilePropertyBag): File;
-// };
 
 const ProfileEdit = () => {
   const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
@@ -97,12 +85,7 @@ const ProfileEdit = () => {
         sessionStorage.removeItem('refreshToken'),
         navigate('/login'))
       : null;
-    // : console.log(sessionStorage.getItem('userId'));
   }, []);
-
-  // useEffect(() => {
-  //   console.log(imageUrl);
-  // }, [imageUrl]);
 
   const onValid = async ({ password, confirmedPassword }: SignUpData) => {
     if (
@@ -284,21 +267,7 @@ const ProfileEdit = () => {
         <Profile>
           <Text fontSize="24px">프로필 수정</Text>
           <ImgContatiner>
-            {/* <Img
-              onClick={() =>
-                Image({
-                  imageURL: imageUrl,
-                  setImageUrl,
-                  setFiles,
-                  files,
-                })
-              }
-              style={{ marginBottom: '24px' }}
-              src={image}
-              alt=""
-            /> */}
             <ProfileImage
-              // style={{ marginBottom: '24px' }}
               imageURL={imageURL}
               setImageUrl={setImageUrl}
               setFiles={setFiles}
@@ -393,27 +362,27 @@ const ProfileEdit = () => {
         </Profile>
       </ProfileBox>
       <Withdraw onClick={() => setIsWithdraw(!isWithdraw)}>
-        <Text color="var(--light-4_sub2, #808080)">회원탈퇴를 원하시나요?</Text>
+        <Text color="#808080">회원탈퇴를 원하시나요?</Text>
+        {isWithdraw && (
+          <SelectQuestion>
+            <Text color="tomato" fontSize="24px">
+              정말로 탈퇴하시겠습니까?
+            </Text>
+            <Selection>
+              <Btn onClick={() => setIsWithdraw(!isWithdraw)}>
+                <Text color="#FFF" fontSize="14px">
+                  취소
+                </Text>
+              </Btn>
+              <Btn onClick={onClickWithdraw} color="tomato">
+                <Text color="#FFF" fontSize="14px">
+                  탈퇴하기
+                </Text>
+              </Btn>
+            </Selection>
+          </SelectQuestion>
+        )}
       </Withdraw>
-      {isWithdraw && (
-        <SelectQuestion>
-          <Text color="tomato" fontSize="24px">
-            정말로 탈퇴하시겠습니까?
-          </Text>
-          <Selection>
-            <Btn onClick={() => setIsWithdraw(!isWithdraw)}>
-              <Text color="#FFF" fontSize="14px">
-                취소
-              </Text>
-            </Btn>
-            <Btn onClick={onClickWithdraw} color="tomato">
-              <Text color="#FFF" fontSize="14px">
-                탈퇴하기
-              </Text>
-            </Btn>
-          </Selection>
-        </SelectQuestion>
-      )}
     </Base>
   );
 };
@@ -423,9 +392,8 @@ export default ProfileEdit;
 const Base = styled.div`
   box-sizing: border-box;
   width: 100%;
-  /* height: 77vh; */
+  background-color: ${({ theme }) => theme.color.bg};
   height: 100%;
-  margin-top: 28px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -433,14 +401,14 @@ const Base = styled.div`
 `;
 
 const Title = styled.div`
-  color: var(--light-1_txt, #111);
+  color: ${({ theme }) => theme.color.text};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
-  margin: 46px 0 28px 0;
+  margin: 74px 0 28px 0;
+  background-color: ${({ theme }) => theme.color.bg};
 `;
 
 const ProfileBox = styled.div`
@@ -449,10 +417,11 @@ const ProfileBox = styled.div`
   height: 862px;
   flex-shrink: 0;
   border-radius: 16px;
-  border: 1px solid #d9d9d9;
+  border: ${({ theme }) => '1px solid ' + theme.color.border};
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: ${({ theme }) => theme.color.cardBg};
 `;
 
 const Profile = styled.div`
@@ -465,8 +434,7 @@ const Profile = styled.div`
 `;
 
 const Text = styled.div<{ fontSize: string }>`
-  color: ${({ color }) => color || 'var(--light-1_txt, #111)'};
-  font-family: Wanted Sans;
+  color: ${({ color, theme }) => color || theme.color.text};
   font-size: ${({ fontSize }) => fontSize || '16px'};
   font-style: normal;
   font-weight: 700;
@@ -479,15 +447,6 @@ const ImgContatiner = styled.div`
   gap: 24px;
 `;
 
-// const Img = styled.img`
-//   width: 88px;
-//   height: 88px;
-//   border-radius: 100%;
-//   background: url(<path-to-image>), lightgray 50% / cover no-repeat;
-//   flex-shrink: 0;
-//   cursor: pointer;
-// `;
-
 const InputContainer = styled.div`
   width: 100%;
 `;
@@ -498,7 +457,7 @@ const InputWrapper = styled.div`
   align-items: flex-start;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{ width: string; check: string }>`
   width: ${({ width }) => width || '400px'};
   height: 50px;
   flex-shrink: 0;
@@ -512,9 +471,11 @@ const Input = styled.input`
       : '#D9D9D9'};
   background: none;
   padding: 0 15px;
+  color: ${({ theme }) => theme.color.text};
+  font-weight: 700;
   &::placeholder {
     color: #a5a5a5;
-    font-family: Wanted Sans;
+
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -532,13 +493,13 @@ const SmallBtn = styled.button`
   margin-left: 10px;
   color: #f97393;
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
   cursor: pointer;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.color.locBg};
 `;
 
 const Submit = styled.div`
@@ -549,7 +510,7 @@ const Submit = styled.div`
   justify-content: flex-end;
 `;
 
-const Btn = styled.button`
+const Btn = styled.button<{ check: string; color: string }>`
   width: 77px;
   height: 32px;
   display: flex;
@@ -558,21 +519,22 @@ const Btn = styled.button`
   gap: 10px;
   border-radius: 8px;
   border: none;
-  background: ${({ check, color }) =>
-    color ? color : check ? '#44A5FF' : 'var(--light-5_btn_bg, #b1b1b1)'};
+  background: ${({ check, color, theme }) =>
+    color ? color : check ? '#44A5FF' : theme.color.btnBg};
   cursor: pointer;
 `;
 
 const Withdraw = styled.div`
-  margin: 50px 0 20px 0;
+  margin: 50px 0 100px 0;
   cursor: pointer;
 `;
 
 const SelectQuestion = styled.div`
-  margin: 10px 0 40px 0;
+  margin: 30px 0 40px 0;
   padding: 20px 30px;
   border: 2px solid tomato;
   border-radius: 8px;
+  background-color: ${({ theme }) => theme.color.cardBg};
 `;
 
 const Selection = styled.div`

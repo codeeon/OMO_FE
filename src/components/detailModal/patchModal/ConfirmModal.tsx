@@ -29,7 +29,10 @@ const ConfirmModal: React.FC<Props> = ({
 
   return (
     <Base>
-      <Title>게시글을 삭제하시겠습니까?</Title>
+      <Title>
+        <div>작업중인 게시물이 삭제됩니다.</div>
+        <div className="alert">삭제하시겠습니까?</div>
+      </Title>
       <BtnWrapper>
         <Button
           outlineColor="red"
@@ -74,12 +77,21 @@ const Base = styled.div`
 `;
 
 const Title = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   color: ${({ theme }) => theme.color.text};
 
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.2px;
+  .alert {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 700;
+  }
 `;
 
 const BtnWrapper = styled.div`

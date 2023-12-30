@@ -80,7 +80,7 @@ const Image: React.FC<Props> = ({ imageURL, setImageUrl, files, setFiles }) => {
         setFiles([...files, file]);
         setImageUrl([...imageURL, imageUrl]);
       } catch (error) {
-        console.error('Error converting file to URL:', error);
+        // console.error('Error converting file to URL:', error);
       } finally {
         input.removeEventListener('change', changeHandler);
       }

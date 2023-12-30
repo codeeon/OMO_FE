@@ -125,7 +125,7 @@ const Register: React.FC = (props: string) => {
         navigate('/login');
       },
       onError: (error) => {
-        console.log(error);
+        // console.log(error);
       },
     },
   );
