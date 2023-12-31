@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const CardDarkSkeleton = () => {
+  const { themeMode } = useTheme();
   return (
     <Base>
-      <SkeletonTheme baseColor="#29282E" highlightColor="#1B1B20">
+      <SkeletonTheme
+        baseColor={themeMode === 'DarkMode' ? '#29282E' : ''}
+        highlightColor={themeMode === 'DarkMode' ? '#1b1b20' : ''}
+      >
         <ImgContainer />
         <HeaderContainer>
           <Title>

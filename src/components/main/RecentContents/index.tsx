@@ -7,7 +7,6 @@ import ContentCardSkeleton from '../../share/ContentCardSkeleton';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
 import Carousel from '../../share/Carousel';
 import useDistrictStore from '../../../store/location/districtStore';
-import useThemeStore from '../../../store/theme/themeStore';
 
 const categories = ['전체', '음식점', '카페', '기타'];
 
@@ -20,7 +19,6 @@ const RecentContents = () => {
     isLoading,
     refetch,
   } = useGetRecentPostsQuery(district, selectedCateogry);
-  const { themeMode } = useThemeStore();
   const navigate = useNavigate();
 
   const navigateToContentsPage = () => {
@@ -42,11 +40,7 @@ const RecentContents = () => {
     <Carousel
       itemCount={recentPosts.length === 0 ? 1 : recentPosts.length}
       carouselCount={
-        recentPosts.length / 4 > 1
-          ? recentPosts.length / 4
-          : recentPosts.length / 4 === 1
-          ? 1
-          : 1
+        recentPosts.length / 4 === 0 ? 1 : Math.ceil(recentPosts.length / 4)
       }
       title={
         <>

@@ -5,13 +5,11 @@ import useGetHotPosts from '../../../hooks/reactQuery/main/useGetHotPostsQuery';
 import Carousel from '../../share/Carousel';
 import Card from './Card';
 import useDistrictStore from '../../../store/location/districtStore';
-import useThemeStore from '../../../store/theme/themeStore';
 
 const HotContents = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { district } = useDistrictStore();
   const { data: hotPosts, isLoading, refetch } = useGetHotPosts(district);
-  const { themeMode } = useThemeStore();
 
   useEffect(() => {
     refetch();

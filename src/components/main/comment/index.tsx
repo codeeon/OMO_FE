@@ -5,8 +5,6 @@ import useGetCommentPostsQuery from '../../../hooks/reactQuery/main/useGetCommen
 import Carousel from '../../share/Carousel';
 import Card from './Card';
 import useDistrictStore from '../../../store/location/districtStore';
-import useThemeStore from '../../../store/theme/themeStore';
-
 const PlaceComments = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { district } = useDistrictStore();
@@ -15,7 +13,6 @@ const PlaceComments = () => {
     isLoading,
     refetch,
   } = useGetCommentPostsQuery(district);
-  const { themeMode } = useThemeStore();
 
   useEffect(() => {
     refetch();
@@ -29,11 +26,7 @@ const PlaceComments = () => {
       title={<Title>실시간 댓글 💬</Title>}
       itemCount={comments.length === 0 ? 1 : comments.length}
       carouselCount={
-        comments.length / 3 > 1
-          ? comments.length / 3
-          : comments.length / 3 === 1
-          ? 1
-          : 1
+        comments.length / 3 === 0 ? 1 : Math.ceil(comments.length / 3)
       }
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}

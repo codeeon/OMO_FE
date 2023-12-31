@@ -59,7 +59,7 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
 
   useEffect(() => {
     userId && refetch();
-  }, [userId]);
+  }, [userId, refetch]);
 
   return (
     <LikeBtnWrapper

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
 import Modal from '../Modal/Modal';
@@ -9,12 +9,11 @@ import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContent
 import ContentCard from '../share/ContentCard';
 import CategoryDropdown from './CateogryDropdown';
 import ContentCardSkeleton from '../share/ContentCardSkeleton';
-import CardDarkSkeleton from './CardDarkSkeleton';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import useDistrictStore from '../../store/location/districtStore';
-import useThemeStore from '../../store/theme/themeStore';
 import useCategoryStore from '../../store/category/categoryStore';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 
 const Posts = () => {
   const { district } = useDistrictStore();
@@ -29,7 +28,6 @@ const Posts = () => {
     handleModalOpen: openMainModal,
     handleModalClose: closeMainModal,
   } = useModalCtr();
-  const { themeMode } = useThemeStore();
 
   const {
     data: contents,
@@ -47,7 +45,7 @@ const Posts = () => {
 
   useEffect(() => {
     refetch();
-  }, [district, category]);
+  }, [district, category, refetch]);
 
   const openPostModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -81,21 +79,9 @@ const Posts = () => {
         <Body>
           <RecentCardGrid>
             {isFetching && !isFetchingNextPage
-              ? themeMode === 'LightMode'
-                ? Array.from({ length: 20 }).map((_, idx) => (
-                    <ContentCardSkeleton key={idx} />
-                  ))
-                : Array.from({ length: 20 }).map((_, idx) => (
-                    <CardDarkSkeleton key={idx} />
-                  ))
-              : !isFetching && isFetchingNextPage
-              ? themeMode === 'LightMode'
-                ? Array.from({ length: 20 }).map((_, idx) => (
-                    <ContentCardSkeleton key={idx} />
-                  ))
-                : Array.from({ length: 20 }).map((_, idx) => (
-                    <CardDarkSkeleton key={idx} />
-                  ))
+              ? Array.from({ length: 20 }).map((_, idx) => (
+                  <ContentCardSkeleton key={idx} />
+                ))
               : contents?.pages.map((group, pageIndex) => (
                   <React.Fragment key={pageIndex}>
                     {group.map((contentData) => (
@@ -107,11 +93,12 @@ const Posts = () => {
                   </React.Fragment>
                 ))}
             {isFetchingNextPage &&
-              !isFetching &&
               Array.from({ length: 20 }).map((_, idx) => (
                 <ContentCardSkeleton key={idx} />
               ))}
-            <ObserverContainer ref={setTarget}></ObserverContainer>
+            {hasNextPage && (
+              <ObserverContainer ref={setTarget}></ObserverContainer>
+            )}
           </RecentCardGrid>
         </Body>
       </Wrapper>
@@ -203,12 +190,11 @@ const Body = styled.div`
   margin-top: 30px;
 `;
 
-const RecentCardGrid = styled.div`
+const RecentCardGrid = styled(motion.ul)`
   display: inline-grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 40px 20px;
   margin: 20px 0px 40px 0;
-
   grid-area: main;
 `;
 
@@ -221,5 +207,5 @@ const FilterContainer = styled.div`
 `;
 
 const ObserverContainer = styled.div`
-  height: 100px;
+  height: 300px;
 `;
