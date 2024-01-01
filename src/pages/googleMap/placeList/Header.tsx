@@ -11,13 +11,13 @@ const Header = () => {
   return (
     <Base>
       <Category
-        selected={isSelected === '둘러보기'}
+        $selected={isSelected === '둘러보기'}
         onClick={() => changeCategory('둘러보기')}
       >
         둘러보기
       </Category>
       <Category
-        selected={isSelected === '인기 장소'}
+        $selected={isSelected === '인기 장소'}
         onClick={() => changeCategory('인기 장소')}
       >
         인기 게시글
@@ -41,14 +41,14 @@ const Base = styled.div`
   gap: 25px;
 `;
 
-const Category = styled.div<{ selected: boolean }>`
+const Category = styled.div<{ $selected: boolean }>`
   color: ${({ theme }) => theme.color.text};
   text-align: center;
   font-size: 20px;
   font-weight: 700;
   padding-bottom: 10px;
-  border-bottom: ${({ selected }) =>
-    selected ? '3px solid #f97393' : '3px solid transparent'};
+  border-bottom: ${({ $selected }) =>
+    $selected ? '3px solid #f97393' : '3px solid transparent'};
   cursor: pointer;
   &:hover {
     color: ${({ theme }) => theme.color.sub2};

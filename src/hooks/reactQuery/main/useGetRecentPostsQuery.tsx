@@ -24,7 +24,7 @@ const useGetRecentPostsQuery = (
 ) =>
   useQuery('recentPosts', () => getRecentPosts(districtName, categoryName), {
     onSuccess: () => {
-      queryClient.invalidateQueries('commentPosts');
+      queryClient.invalidateQueries('recentPosts');
     },
   });
 

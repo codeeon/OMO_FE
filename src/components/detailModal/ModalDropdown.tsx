@@ -157,7 +157,7 @@ const DropdownBtn = styled(motion.button)`
 
 const BtnWrapper = styled(motion.div)``;
 
-const DropdownList = styled(motion.div)<{ width?: string; height?: string }>`
+const DropdownList = styled(motion.div)`
   box-sizing: border-box;
 
   position: absolute;

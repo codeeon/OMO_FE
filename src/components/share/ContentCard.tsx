@@ -7,6 +7,7 @@ import Modal from '../Modal/Modal';
 import { PostType } from '../../model/interface';
 import { MdLocationOn } from 'react-icons/md';
 import useModalCtr from '../../hooks/useModalCtr';
+import { motion } from 'framer-motion';
 interface Props {
   contentData: PostType;
 }
@@ -26,8 +27,12 @@ const Card: React.FC<Props> = ({ contentData }) => {
   } = contentData;
 
   return (
-    <Base onClick={(e) => handleModalOpen(e)}>
-      <ImgContainer imageURL={imgUrl} />
+    <Base
+      onClick={(e) => handleModalOpen(e)}
+      initial={{ scale: 0.7, opacity: 0, y: 200 }}
+      animate={{ scale: 1, opacity: 1, y: 0 }}
+    >
+      <ImgContainer $imageURL={imgUrl} />
       <HeaderContainer>
         <Title>{User.nickname}</Title>
         <VerticalLine />
@@ -60,18 +65,18 @@ const Card: React.FC<Props> = ({ contentData }) => {
 
 export default Card;
 
-const ImgContainer = styled.div<{ imageURL: string[] }>`
+const ImgContainer = styled.div<{ $imageURL: string[] }>`
   width: 285px;
   height: 181px;
   border-radius: 8px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: ${({ imageURL }) => `url(${imageURL[0]})`};
+  background-image: ${({ $imageURL }) => `url(${$imageURL[0]})`};
   transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
 `;
 
-const Base = styled.div`
+const Base = styled(motion.li)`
   display: flex;
   flex-direction: column;
   justify-content: start;

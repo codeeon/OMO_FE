@@ -78,7 +78,6 @@ const Text = styled.div`
       ? '#0BD961'
       : '#FFFFFF'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;

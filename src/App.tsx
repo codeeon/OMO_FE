@@ -7,7 +7,7 @@ import useThemeStore from './store/theme/themeStore.js';
 import useApiError from './hooks/reactQuery/useApiError.js';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
-
+import { ReactQueryDevtools } from 'react-query/devtools';
 const App = () => {
   const { themeMode, toggleTheme } = useThemeStore();
 
@@ -52,6 +52,7 @@ const App = () => {
           <Routers />
           <Toaster />
         </BrowserRouter>
+        <ReactQueryDevtools />
       </QueryClientProvider>
     </ThemeProvider>
   );

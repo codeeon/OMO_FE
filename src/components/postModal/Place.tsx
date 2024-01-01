@@ -1,12 +1,13 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { IoClose } from 'react-icons/io5';
 import { SelectedInfoType } from '../../model/interface';
 import { FaLocationDot } from 'react-icons/fa6';
 import useMapStore from '../../store/location/googleMapStore';
-import { placeInfoCallback } from '../../function/googleSearch.ts/textSearch';
+import { placeInfoCallback } from '../../utils/googleSearch.ts/textSearch';
 import toast from 'react-hot-toast';
+import _ from 'lodash';
 
 interface Props {
   selectedInfo: SelectedInfoType;
@@ -29,11 +30,19 @@ const Place: React.FC<Props> = ({
   setGoogleSearchResult,
 }) => {
   const { map } = useMapStore();
-  const [inputValue, setInputValue] = useState<string>('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const onChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    searchPlaceHandler(e);
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (inputRef.current) {
+      inputRef.current.value = e.target.value;
+      searchPlaceHandler(inputRef.current.value);
+    }
+  };
+
+  const clearValueHandler = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
   };
 
   const deleteInfoHandler = () => {
@@ -45,18 +54,18 @@ const Place: React.FC<Props> = ({
       longitude: '',
     });
     setSearchValue([]);
-    setInputValue('');
+    clearValueHandler();
     setGoogleSearchResult(null);
   };
 
-  const searchPlaceHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const searchPlaceHandler = _.debounce((query: string) => {
     const ps = new kakao.maps.services.Places();
-    ps.keywordSearch(event.target.value, (data, status, _pagination) => {
+    ps.keywordSearch(query, (data, status, _pagination) => {
       if (status === kakao.maps.services.Status.OK) {
         setSearchValue(data);
       }
     });
-  };
+  }, 500);
 
   const selectInfoHandler = (
     placeName: string,
@@ -70,7 +79,7 @@ const Place: React.FC<Props> = ({
       fields: ['place_id', 'formatted_address', 'name'],
     };
     if (!addressName.includes('서울')) {
-      setInputValue('');
+      clearValueHandler();
       toast.error('지금은 서울시 내에서만 등록이 가능해요.', {
         position: 'top-right',
         duration: 4000,
@@ -94,12 +103,12 @@ const Place: React.FC<Props> = ({
       latitude: latitude,
       longitude: longitude,
     });
-    setInputValue('');
+    clearValueHandler();
   };
 
   useEffect(() => {
-    inputValue === '' && setSearchValue([]);
-  }, [inputValue]);
+    inputRef.current?.value === '' && setSearchValue([]);
+  }, [inputRef]);
 
   return (
     <Base>
@@ -107,9 +116,9 @@ const Place: React.FC<Props> = ({
         <SearchContainer>
           <FaLocationDot />
           <SearchInput
-            value={inputValue}
+            ref={inputRef}
             placeholder="위치를 입력해 장소를 추가해보세요."
-            onChange={onChangeInputValue}
+            onChange={(e) => onChangeHandler(e)}
           />
         </SearchContainer>
       )}
@@ -128,7 +137,7 @@ const Place: React.FC<Props> = ({
           </AdressName>
         </PlaceContainer>
       )}
-      {inputValue && (
+      {inputRef.current?.value && (
         <ResultList>
           {searchValue.map((result) => (
             <ResultItemContainer
@@ -171,7 +180,6 @@ const Base = styled.div`
   width: 100%;
   gap: 5px;
   position: relative;
-  font-family: 'Wanted Sans Variable';
 `;
 
 const SearchContainer = styled.div`
@@ -197,9 +205,7 @@ const SearchInput = styled.input`
     font-size: 16px;
     font-weight: 700;
     color: ${({ theme }) => theme.color.sub};
-    font-family: 'Wanted Sans Variable';
   }
-  font-family: 'Wanted Sans Variable';
 `;
 
 const ResultList = styled.div`
@@ -264,7 +270,6 @@ const PlaceContainer = styled.div`
 const PlaceName = styled.div`
   color: ${({ theme }) => theme.color.text};
 
-  font-family: Wanted Sans;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;

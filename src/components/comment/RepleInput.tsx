@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Button from '../share/Button';
-import { getToday } from '../../function/getToday';
+import Button from '../button/Button';
+import { getToday } from '../../utils/getToday';
 import usePostRepleMutation from '../../hooks/reactQuery/replies/usePostRepleMutation';
 import CommentTextArea from '../textarea/CommentTextArea';
 import useInput from '../../hooks/useInput';
@@ -43,11 +43,14 @@ const RepleInput: React.FC<Props> = ({
       });
     }
     if (trimmedText.length < 2 || trimmedText.length > 2000) {
-      return toast.error('대댓글은 2글자 이상 2000글자 미만으로 작성해주세요.', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
+      return toast.error(
+        '대댓글은 2글자 이상 2000글자 미만으로 작성해주세요.',
+        {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        },
+      );
     }
     const newComment = {
       PostId: postId,
