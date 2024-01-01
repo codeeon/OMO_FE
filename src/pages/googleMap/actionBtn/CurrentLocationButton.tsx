@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { MdMyLocation } from 'react-icons/md';
 import styled from 'styled-components';
-import { getCurrentCoords } from '../../../function/kakao';
+import { getCurrentCoords } from '../../../utils/kakao';
 import useMapStore from '../../../store/location/googleMapStore';
 import toast from 'react-hot-toast';
 

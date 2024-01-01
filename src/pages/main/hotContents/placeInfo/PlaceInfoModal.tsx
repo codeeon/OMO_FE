@@ -4,8 +4,7 @@ import { HotPostsType } from '../../../../model/interface';
 import MiniMap from './MiniMap';
 import Info from './Info';
 import useMapStore from '../../../../store/location/googleMapStore';
-import { detailSearchFields } from '../../../../function/googleSearch.ts/detailSearch';
-import usePlaceStore from '../../../../store/location/placeStore';
+import { detailSearchFields } from '../../../../utils/googleSearch.ts/detailSearch';
 
 interface Props {
   handleModalClose: (
@@ -17,7 +16,6 @@ interface Props {
 const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
   const { Location } = post;
   const { map } = useMapStore();
-  const { setPlace } = usePlaceStore();
   const [googleSearchResult, setGoogleSearchResult] =
     useState<google.maps.places.PlaceResult | null>(null);
 

@@ -1,5 +1,5 @@
-import React, { ReactNode, SetStateAction } from 'react';
-import { motion, Variants } from 'framer-motion';
+import React, { useCallback } from 'react';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { itemVariants } from '../../../../styles/Motion';
 import useDistrictStore from '../../../../store/location/districtStore';
@@ -10,9 +10,10 @@ interface Props {
 
 const DistrictItem: React.FC<Props> = ({ dist }) => {
   const { setDistrict } = useDistrictStore();
-  const saveCurLocHandler = () => {
+
+  const saveCurLocHandler = useCallback(() => {
     setDistrict(dist);
-  };
+  }, [dist, setDistrict]);
 
   return (
     <Item variants={itemVariants} onClick={saveCurLocHandler}>

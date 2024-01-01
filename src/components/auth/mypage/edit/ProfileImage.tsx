@@ -3,7 +3,7 @@ import styled from 'styled-components';
 // import { LuImagePlus } from 'react-icons/lu';
 // import { GrFormClose } from 'react-icons/gr';
 import { useMutation, useQueryClient } from 'react-query';
-import { onImageChange } from '../../../../function/uploadImage';
+import { onImageChange } from '../../../../utils/uploadImage';
 // import { MoonLoader } from 'react-spinners';
 
 interface Props {
@@ -27,8 +27,6 @@ const ProfileImage: React.FC<Props> = ({
   // const deleteImageHandler = (image: string) => {
   //   setImageUrl(imageURL.filter((img) => img !== image));
   // };
-
-
 
   // 파일을 URL로
   const fileToUrl = (file: File): Promise<string> => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import ContentCardSkeleton from '../components/share/ContentCardSkeleton';
+import ContentCardSkeleton from '../components/skeleton/RecentPostCardSkeleton';
 import ContentCard from '../components/share/ContentCard';
 import PlaceCardSkeleton from '../components/auth/mypage/PlaceCardSkeleton';
 import PlaceCard from '../components/auth/mypage/PlaceCard';

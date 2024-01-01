@@ -97,6 +97,7 @@ const Base = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  height: 440px;
 `;
 
 const CarouselList = styled.ul`

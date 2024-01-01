@@ -8,7 +8,7 @@ import Location from './location';
 import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContentsQuery';
 import ContentCard from '../share/ContentCard';
 import CategoryDropdown from './CateogryDropdown';
-import ContentCardSkeleton from '../share/ContentCardSkeleton';
+import ContentCardSkeleton from '../skeleton/RecentPostCardSkeleton';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import useDistrictStore from '../../store/location/districtStore';
 import useCategoryStore from '../../store/category/categoryStore';

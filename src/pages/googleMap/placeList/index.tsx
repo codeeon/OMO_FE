@@ -4,7 +4,7 @@ import Search from './Search';
 import Header from './Header';
 import { LocationType } from '../../../model/interface';
 import Card from './Card';
-
+import { Virtuoso } from 'react-virtuoso';
 const categories = ['전체', '음식점', '카페', '기타'];
 
 interface Props {
@@ -37,9 +37,14 @@ const PlaceList: React.FC<Props> = ({
         ))}
       </PlaceCategoryContainer>
       <ContentsContainer>
-        {placeDatas?.map((placeDb) => (
-          <Card key={placeDb.latitude} placeDb={placeDb} />
-        ))}
+        <Virtuoso
+          style={{ width: '100%', height: '100%' }}
+          increaseViewportBy={0}
+          itemContent={(index, placeDb) => {
+            return <Card key={placeDb.latitude} placeDb={placeDb} />;
+          }}
+          data={placeDatas}
+        />
       </ContentsContainer>
     </Base>
   );

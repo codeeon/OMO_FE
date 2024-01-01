@@ -9,7 +9,19 @@ const jpgImgUrl =
 
 const Banner = () => {
   return (
-    <Base $bannerImg={webPImgUrl} $fallbackImg={jpgImgUrl}>
+    <Base>
+      <BackgroundImg>
+        <source
+          srcSet={webPImgUrl}
+          style={{ width: '100%', height: '572px' }}
+        />
+        <img
+          src={jpgImgUrl}
+          alt="남산 배너 이미지"
+          style={{ width: '100%', height: '572px' }}
+        />
+      </BackgroundImg>
+      <BackgroundImgBlur />
       <Wrapper>
         <TitleContainer>
           <BannerTitle>
@@ -34,17 +46,9 @@ const Banner = () => {
 
 export default Banner;
 
-const Base = styled.div<{ $bannerImg: string; $fallbackImg: string }>`
+const Base = styled.div`
   box-sizing: border-box;
-  background-image: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0.3) 100%
-    ),
-    url(${({ $bannerImg }) => $bannerImg});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+
   width: 100%;
   height: 572px;
 
@@ -52,14 +56,25 @@ const Base = styled.div<{ $bannerImg: string; $fallbackImg: string }>`
   justify-content: center;
   align-items: center;
 
-  @supports (background-image: url(${''})) {
-    background-image: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.7) 0%,
-        rgba(0, 0, 0, 0.3) 100%
-      ),
-      url(${({ $fallbackImg }) => $fallbackImg});
-  }
+  position: relative;
+`;
+
+const BackgroundImg = styled.picture`
+  position: absolute;
+  width: 100%;
+  height: 572px;
+  object-fit: cover;
+`;
+
+const BackgroundImgBlur = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 572px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
 `;
 
 const Wrapper = styled.div`
@@ -67,6 +82,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 11;
 `;
 
 const TitleContainer = styled.div`

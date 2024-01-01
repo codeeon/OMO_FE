@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Navbar from '../components/share/Navbar';
-import Home from '../pages/Home';
-import Contents from '../pages/Contents';
-import Map from '../pages/googleMap/Index';
-import Login from '../pages/Login';
-import SignUp from '../pages/SignUp';
-import ProfileEdit from '../components/auth/mypage/edit/ProfileEdit';
-import Mypage from '../pages/Mypage';
+const Navbar = lazy(() => import('../components/navbar/Navbar'));
+const Home = lazy(() => import('../pages/Home'));
+const Contents = lazy(() => import('../pages/Contents'));
+const Map = lazy(() => import('../pages/googleMap/Index'));
+const Login = lazy(() => import('../pages/Login'));
+const SignUp = lazy(() => import('../pages/SignUp'));
+const ProfileEdit = lazy(
+  () => import('../components/auth/mypage/edit/ProfileEdit'),
+);
+const Mypage = lazy(() => import('../pages/Mypage'));
 
 const Routers = () => {
   const excludedRoutes = ['/map'];
@@ -15,7 +17,7 @@ const Routers = () => {
   const location = useLocation();
 
   return (
-    <>
+    <Suspense fallback={<></>}>
       <Navbar
         maxWidth={!excludedRoutes.includes(location.pathname) ? null : '98%'}
         disableLogo={!mainRoutes.includes(location.pathname) ? null : true}
@@ -29,7 +31,7 @@ const Routers = () => {
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/edit" element={<ProfileEdit />} />
       </Routes>
-    </>
+    </Suspense>
   );
 };
 

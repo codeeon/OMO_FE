@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MapGoogle from './map/MapGoogle';
 import ListBtn from './placeList/ListBtn';
@@ -27,13 +27,13 @@ const Map = () => {
     lookAroundRefetch();
   }, [mapBounds, selectedCategory, currentLocation, lookAroundRefetch]);
 
-  const onClickListBtn = () => {
+  const onClickListBtn = useCallback(() => {
     if (place !== null) {
       setPlace(null);
     } else {
       setIsListOpen(!isListOpen);
     }
-  };
+  }, [isListOpen, place, setPlace]);
 
   return (
     <Base $isListOpen={isListOpen}>

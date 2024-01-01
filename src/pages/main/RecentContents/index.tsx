@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
-import RecentCard from './Card';
+import RecentCard from '../../../components/card/RecentPostCard.tsx';
 import { useNavigate } from 'react-router-dom';
-import ContentCardSkeleton from '../../share/ContentCardSkeleton';
+import ContentCardSkeleton from '../../../components/skeleton/RecentPostCardSkeleton.tsx';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';
-import Carousel from '../../share/Carousel';
+import Carousel from '../../../components/share/Carousel';
 import useDistrictStore from '../../../store/location/districtStore';
+import RecentPostCard from '../../../components/card/RecentPostCard.tsx';
 
 const categories = ['전체', '음식점', '카페', '기타'];
 
@@ -16,7 +17,7 @@ const RecentContents = () => {
   const { district } = useDistrictStore();
   const {
     data: recentPosts,
-    isLoading,
+    isFetching,
     refetch,
   } = useGetRecentPostsQuery(district, selectedCateogry);
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const RecentContents = () => {
   useEffect(() => {
     refetch();
     setActiveIndex(0);
-  }, [district, selectedCateogry]);
+  }, [district, selectedCateogry, refetch]);
 
   const changeCateogryHandler = (category: string) => {
     setSelectedCategory(category);
@@ -69,14 +70,14 @@ const RecentContents = () => {
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
     >
-      {!isLoading
+      {!isFetching
         ? recentPosts?.map((post) => (
             <CarouselItem $activeIndex={activeIndex} key={post.postId}>
-              <RecentCard key={post.postId} post={post} />
+              <RecentPostCard key={post.postId} post={post} />
             </CarouselItem>
           ))
         : Array.from({ length: 4 }).map((_, idx) => (
-            <CarouselItem $activeIndex={activeIndex} key={idx}>
+            <CarouselItem $activeIndex={0} key={idx}>
               <ContentCardSkeleton key={idx} />
             </CarouselItem>
           ))}

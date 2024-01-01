@@ -4,13 +4,13 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import useThemeStore from '../../store/theme/themeStore';
 
-const ContentCardSkeleton = () => {
+const RecentPostCardSkeleton = () => {
   const { themeMode } = useThemeStore();
 
   return (
     <SkeletonTheme
-      baseColor={themeMode === 'DarkMode' ? '#29282E' : null}
-      highlightColor={themeMode === 'DarkMode' ? '#1B1B20' : null}
+      baseColor={themeMode === 'DarkMode' ? '#29282E' : undefined}
+      highlightColor={themeMode === 'DarkMode' ? '#1B1B20' : undefined}
     >
       <Base>
         <ImgContainer width="285px" height="181px" />
@@ -33,7 +33,7 @@ const ContentCardSkeleton = () => {
   );
 };
 
-export default ContentCardSkeleton;
+export default RecentPostCardSkeleton;
 const Base = styled.div`
   display: flex;
   flex-direction: column;

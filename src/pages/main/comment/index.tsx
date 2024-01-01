@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import PlaceCommnetCardSkeleton from './CardSkeleton';
+import PlaceCommnetCardSkeleton from '../../../components/skeleton/CommentCardSkeleton';
 import useGetCommentPostsQuery from '../../../hooks/reactQuery/main/useGetCommentPostsQuery';
-import Carousel from '../../share/Carousel';
-import Card from './Card';
+import Carousel from '../../../components/share/Carousel';
+import Card from '../../../components/card/CommentCard';
 import useDistrictStore from '../../../store/location/districtStore';
 const PlaceComments = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { district } = useDistrictStore();
   const {
     data: comments,
-    isLoading,
+    isFetching,
     refetch,
   } = useGetCommentPostsQuery(district);
 
@@ -31,13 +31,13 @@ const PlaceComments = () => {
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
     >
-      {!isLoading
+      {!isFetching
         ? comments?.map((comment, index) => (
             <CarouselItem $activeIndex={activeIndex} key={index}>
               <Card comment={comment} />
             </CarouselItem>
           ))
-        : Array.from({ length: 9 }).map((_, i) => (
+        : Array.from({ length: 3 }).map((_, i) => (
             <CarouselItem $activeIndex={activeIndex} key={i}>
               <PlaceCommnetCardSkeleton key={i} />
             </CarouselItem>

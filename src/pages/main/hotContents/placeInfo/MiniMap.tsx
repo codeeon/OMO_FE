@@ -4,11 +4,8 @@ import styled from 'styled-components';
 import { HotPostsType } from '../../../../model/interface';
 import useMapStore from '../../../../store/location/googleMapStore';
 import useThemeStore from '../../../../store/theme/themeStore';
-import {
-  darkMapTheme,
-  lightMapTheme,
-} from '../../../../pages/googleMap/map/maptheme';
-import MiniLocationMarker from '../../../../pages/googleMap/marker/MiniLocationMarker';
+import { darkMapTheme, lightMapTheme } from '../../../googleMap/map/maptheme';
+import MiniLocationMarker from '../../../../components/marker/MiniLocationMarker';
 
 interface Props {
   post: HotPostsType;

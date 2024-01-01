@@ -1,24 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HotPostsType } from '../../../model/interface';
+import { HotPostsType } from '../../model/interface';
 
-import useModalCtr from '../../../hooks/useModalCtr';
-import PlaceInfoModal from './placeInfo/PlaceInfoModal';
-import LocationModal from '../../Modal/LocationModal';
+import useModalCtr from '../../hooks/useModalCtr';
+import PlaceInfoModal from '../../pages/main/hotContents/placeInfo/PlaceInfoModal';
+import LocationModal from '../Modal/LocationModal';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 interface Props {
   post: HotPostsType;
 }
 
-const Card: React.FC<Props> = ({ post }) => {
+const HotPostsCard: React.FC<Props> = ({ post }) => {
   const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
   const { imgUrl, Location, content, Category: category } = post;
 
   return (
     <Base onClick={(e) => handleModalOpen(e)}>
-      {/* // <Base> */}
       <Wrapper>
-        <ImageContainer $imageURL={imgUrl}></ImageContainer>
+        <ImageContainer src={imgUrl[0]} />
         <Title>{Location.storeName}</Title>
         <BodyConatiner>
           <Text dangerouslySetInnerHTML={{ __html: content }} />
@@ -34,16 +34,15 @@ const Card: React.FC<Props> = ({ post }) => {
   );
 };
 
-export default Card;
+export default HotPostsCard;
 
-const ImageContainer = styled.div<{ $imageURL: string[] }>`
+const ImageContainer = styled(LazyLoadImage)`
   width: 343px;
   height: 155px;
   border-radius: 8px;
-  background-image: ${({ $imageURL }) => `url(${$imageURL[0]})`};
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-position: center;
+
+  object-fit: cover;
+  object-position: center;
   transition: all 300ms ease;
 `;
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { InfiniteQueryObserverResult } from '@tanstack/react-query';
+import { InfiniteQueryObserverResult } from 'react-query';
 
 //hook props interface
 interface IuseIntersectionObserverProps {

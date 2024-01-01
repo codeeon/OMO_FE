@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import Button from '../share/Button';
-import { getToday } from '../../function/getToday';
+import Button from '../button/Button';
+import { getToday } from '../../utils/getToday';
 import usePostCommentMutation from '../../hooks/reactQuery/comment/usePostCommentMutation';
 import CommentTextArea from '../textarea/CommentTextArea';
 import useInput from '../../hooks/useInput';

@@ -10,7 +10,7 @@ import SubModal from '../Modal/SubModal';
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
 import ImageFile from './Image2';
 import toast from 'react-hot-toast';
-import Button from '../share/Button';
+import Button from '../button/Button';
 
 interface Props {
   closeMainModal: (

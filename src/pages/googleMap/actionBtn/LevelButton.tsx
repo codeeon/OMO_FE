@@ -2,7 +2,7 @@ import React from 'react';
 import { LuPlus } from 'react-icons/lu';
 import { LuMinus } from 'react-icons/lu';
 import styled from 'styled-components';
-import { handleLevel } from '../../../function/kakao.ts';
+import { handleLevel } from '../../../utils/kakao.ts';
 
 interface Props {
   downMapLevelHandler: () => void;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import useModalCtr from '../../../hooks/useModalCtr';
-import PlaceInfoModal from '../../main/hotContents/placeInfo/PlaceInfoModal';
+import PlaceInfoModal from '../../../pages/main/hotContents/placeInfo/PlaceInfoModal';
 import LocationModal from '../../Modal/LocationModal';
 
 const PlaceCard = ({ placeData }) => {

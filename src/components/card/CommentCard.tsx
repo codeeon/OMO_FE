@@ -2,13 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { FaQuoteLeft } from 'react-icons/fa';
-import { CommentPostsType } from '../../../model/interface';
-import useModalCtr from '../../../hooks/useModalCtr';
-import Modal from '../../Modal/Modal';
-import DetailContentsModal from '../../detailModal/ContentsModal';
+import { CommentPostsType } from '../../model/interface';
+import useModalCtr from '../../hooks/useModalCtr';
+import Modal from '../Modal/Modal';
+import DetailContentsModal from '../detailModal/ContentsModal';
 import { motion } from 'framer-motion';
 
-const Card: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
+const CommentCard: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
   const { PostId, content, Post } = comment;
   const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
   return (
@@ -31,7 +31,7 @@ const Card: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
   );
 };
 
-export default Card;
+export default CommentCard;
 
 const Base = styled(motion.div)`
   box-sizing: border-box;

@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { FaQuoteLeft } from 'react-icons/fa';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import useThemeStore from '../../../store/theme/themeStore';
+import useThemeStore from '../../store/theme/themeStore';
 
-const PlaceCommnetCard = () => {
+const CommentCardSkeleton = () => {
   const { themeMode } = useThemeStore();
 
   return (
     <SkeletonTheme
-      baseColor={themeMode === 'DarkMode' ? '#29282E' : null}
-      highlightColor={themeMode === 'DarkMode' ? '#1B1B20' : null}
+      baseColor={themeMode === 'DarkMode' ? '#29282E' : undefined}
+      highlightColor={themeMode === 'DarkMode' ? '#1B1B20' : undefined}
     >
       <Base>
         <QuoteContainer>
@@ -24,7 +24,7 @@ const PlaceCommnetCard = () => {
   );
 };
 
-export default PlaceCommnetCard;
+export default CommentCardSkeleton;
 
 const Base = styled.div`
   box-sizing: border-box;

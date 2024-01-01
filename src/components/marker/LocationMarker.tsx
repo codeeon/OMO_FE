@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { LocationType } from '../../../model/interface';
+import { LocationType } from '../../model/interface';
 import { OverlayView, OverlayViewF } from '@react-google-maps/api';
 import { IoMdCafe } from 'react-icons/io';
 import { IoRestaurant } from 'react-icons/io5';
 import { FaLocationDot } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
-import usePlaceStore from '../../../store/location/placeStore';
+import usePlaceStore from '../../store/location/placeStore';
 
 interface Props {
   placeDb: LocationType;
@@ -22,23 +22,26 @@ const LocationMarker: React.FC<Props> = ({
   const { locationId, latitude, longitude, Category, storeName } = placeDb;
   const { place, setPlace } = usePlaceStore();
 
-  const selectPlaceHandler = () => {
+  const selectPlaceHandler = useCallback(() => {
     setPlace({
       locationId: locationId,
       latitude: latitude,
       longitude: longitude,
     });
-  };
+  }, []);
 
-  const getPixelPositionOffset = (width: number, height: number) => ({
-    x: -(width + 80 / 2),
-    y: -(height + 110 / 2),
-  });
+  const getPixelPositionOffset = useCallback(
+    (width: number, height: number) => ({
+      x: -(width + 80 / 2),
+      y: -(height + 110 / 2),
+    }),
+    [],
+  );
 
-  const clikcMarkerHandler = () => {
+  const clikcMarkerHandler = useCallback(() => {
     !isListOpen && setIsListOpen(true);
     selectPlaceHandler();
-  };
+  }, []);
 
   return (
     <OverlayViewF

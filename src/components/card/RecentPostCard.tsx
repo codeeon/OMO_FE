@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
-import DetailContentsModal from '../../detailModal/ContentsModal';
-import Modal from '../../Modal/Modal';
-import { RecentPostsType } from '../../../model/interface';
+import DetailContentsModal from '../detailModal/ContentsModal';
+import Modal from '../Modal/Modal';
+import { RecentPostsType } from '../../model/interface';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-const Card: React.FC<{ post: RecentPostsType }> = ({ post }) => {
+const RecentPostCard: React.FC<{ post: RecentPostsType }> = ({ post }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { User, createdAt, content, likeCount, commentCount, imgUrl } = post;
@@ -27,7 +28,7 @@ const Card: React.FC<{ post: RecentPostsType }> = ({ post }) => {
 
   return (
     <Base onClick={(e) => openModalHandler(e)}>
-      <ImgContainer $imageURL={imgUrl} />
+      <ImgContainer src={imgUrl[0]} />
       <HeaderContainer>
         <Title>{User.nickname}</Title>
         <VerticalLine />
@@ -54,16 +55,14 @@ const Card: React.FC<{ post: RecentPostsType }> = ({ post }) => {
   );
 };
 
-export default Card;
+export default RecentPostCard;
 
-const ImgContainer = styled.div<{ $imageURL: string[] }>`
+const ImgContainer = styled(LazyLoadImage)`
   width: 285px;
   height: 181px;
   border-radius: 8px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: ${({ $imageURL }) => `url(${$imageURL[0]})`};
+  object-fit: cover;
+  object-position: center;
   transition: all 300ms ease-in-out;
 `;
 

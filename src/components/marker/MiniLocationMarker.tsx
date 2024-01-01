@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
-import { HotPostsType } from '../../../model/interface';
+import { HotPostsType } from '../../model/interface';
 import { OverlayView, OverlayViewF } from '@react-google-maps/api';
 import { IoMdCafe } from 'react-icons/io';
 import { IoRestaurant } from 'react-icons/io5';
@@ -13,10 +13,15 @@ interface Props {
 
 const MiniLocationMarker: React.FC<Props> = ({ placeDb }) => {
   const { Category, Location } = placeDb;
-  const getPixelPositionOffset = (width: number, height: number) => ({
-    x: -50,
-    y: -10,
-  });
+
+  const getPixelPositionOffset = useCallback(
+    () => ({
+      x: -50,
+      y: -10,
+    }),
+    [],
+  );
+
   return (
     <OverlayViewF
       position={{ lat: Location.latitude, lng: Location.longitude }}

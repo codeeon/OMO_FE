@@ -5,7 +5,7 @@ import { GrFormClose } from 'react-icons/gr';
 import { useMutation } from 'react-query';
 
 import { MoonLoader } from 'react-spinners';
-import { onImageChange } from '../../function/uploadImage';
+import { onImageChange } from '../../utils/uploadImage';
 
 interface Props {
   imageURL: string[];
