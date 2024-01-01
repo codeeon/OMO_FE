@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import auth from '../axios/auth';
 import useInput from '../hooks/useInput';
 import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
 
 const SignUp: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const [email, setEmail, onChangeEmail] = useInput();
-  const [code, setCode, onChangeCode] = useInput();
+  const [email, setEmail, onChangeEmail] = useInput('');
+  const [code, setCode, onChangeCode] = useInput('');
 
   const [emailCheck, setEmailCheck] = useState<string>('');
   const [codeCheck, setCodeCheck] = useState<string>('');
@@ -42,6 +42,13 @@ const SignUp: React.FC = () => {
       // console.log('이메일 체크 응답 -> ', checkEmailResponse);
     },
     {
+      onMutate: () => {
+        if (email.includes('@') && email.split('@')[1].includes('.')) {
+          setEmailCheck('confirmed');
+        } else {
+          setEmailCheck('rejected');
+        }
+      },
       onSuccess: () => {
         setEmailCheck('confirmed');
       },
@@ -62,8 +69,8 @@ const SignUp: React.FC = () => {
     },
     {
       onSuccess: () => {
-        setCodeCheck('confirmed');
         setConfirmedEmail(email);
+        setCodeCheck('confirmed');
         setIsValidated(true);
       },
       onError: () => {
@@ -101,7 +108,9 @@ const SignUp: React.FC = () => {
                       $check={emailCheck}
                       placeholder="이메일을 입력해 주세요"
                       value={email}
-                      onChange={onChangeEmail}
+                      onChange={
+                        emailCheck === 'confirmed' ? null : onChangeEmail
+                      }
                       type="text"
                     />
                     <SmallBtn onClick={() => checkEmailMutation.mutate(email)}>
@@ -267,7 +276,7 @@ const Input = styled.input<{ $check: string }>`
     font-size: 14px;
     font-weight: 700;
   }
-  color: ${({ theme }) => theme.color.text};
+  color: ${({ theme, $check }) => theme.color.text};
 `;
 
 const SmallBtn = styled.button`
@@ -276,7 +285,7 @@ const SmallBtn = styled.button`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${({ theme }) => theme.color.cardBg};
+  background-color: ${({ theme }) => theme.color.locBg};
   border: 1px solid #f97393;
   margin-left: 10px;
   color: #f97393;

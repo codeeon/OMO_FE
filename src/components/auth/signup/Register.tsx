@@ -27,7 +27,7 @@ const Register: React.FC = (props: string) => {
   });
   const navigate = useNavigate();
 
-  const [nickname, setNickname, onChangeNickname] = useInput();
+  const [nickname, setNickname, onChangeNickname] = useInput('');
 
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
@@ -111,17 +111,12 @@ const Register: React.FC = (props: string) => {
 
   const signupMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      // console.log(data);
       const response = await auth.post(`/register`, data);
-      // console.log(response);
     },
     {
       onSuccess: () => {
         alert('회원가입을 완료하였습니다.');
         navigate('/login');
-      },
-      onError: (error) => {
-        // console.log(error);
       },
     },
   );
@@ -252,6 +247,7 @@ const SmallBtn = styled.button`
   line-height: 100%;
   cursor: pointer;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.color.locBg};
 `;
 
 const Input = styled.input`

@@ -27,6 +27,7 @@ const DetailContentsModal: React.FC<{
     Comments,
   } = post;
 
+  console.log(Comments);
   const commentLength = Comments.length;
 
   return (

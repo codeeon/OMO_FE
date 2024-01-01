@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { StyledComponentProps } from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
@@ -38,8 +38,7 @@ const ProfileEdit = () => {
   const { data: userData, isError: userError } = useGetUserDataQuery();
 
   const [imageURL, setImageUrl] = useState([userData?.data.imgUrl]);
-  // const image = imageURL.slice(-1);
-  // const [isImageChanged, setIsImageChanged] = useState<boolean>(false);
+  const image = userData?.data.imgUrl;
   const [files, setFiles] = useState<File[]>([]);
 
   const [nickname, _, onChangeNickname] = useInput(userData?.data.nickname);
@@ -135,7 +134,7 @@ const ProfileEdit = () => {
     (nickname === '' &&
       passwordCheck === 'confirmed' &&
       confirmedPasswordCheck === 'confirmed') ||
-    files.length > 0;
+    files.length !== 0;
 
   // 회원가입 페이지와 동일, hook으로 만들기
   const checkNicknameMutation = useMutation(
@@ -263,7 +262,7 @@ const ProfileEdit = () => {
       <Title>내 정보 수정</Title>
       <ProfileBox>
         <Profile>
-          <Text fontSize="24px">프로필 수정</Text>
+          <Text $fontSize="24px">프로필 수정</Text>
           <ImgContatiner>
             <ProfileImage
               imageURL={imageURL}
@@ -273,8 +272,8 @@ const ProfileEdit = () => {
             />
             <Text
               style={{ marginTop: '24px' }}
-              fontSize="14px"
-              color="var(--link, #44A5FF)"
+              $fontSize="14px"
+              $color="#44A5FF"
             >
               프로필 사진
             </Text>
@@ -284,8 +283,8 @@ const ProfileEdit = () => {
               <Text style={{ marginBottom: '6px' }}>닉네임</Text>
               <div>
                 <Input
-                  check={nicknameCheck}
-                  width="284px"
+                  $check={nicknameCheck}
+                  $width="284px"
                   placeholder={userData?.data.nickname}
                   type="text"
                   value={nickname}
@@ -316,7 +315,7 @@ const ProfileEdit = () => {
               />
             </InputWrapper>
           </InputContainer>
-          <Text style={{ margin: '60px 0 20px 0' }} fontSize="24px">
+          <Text style={{ margin: '60px 0 20px 0' }} $fontSize="24px">
             비밀번호 재설정
           </Text>
           <form onChange={handleSubmit(onValid)}>
@@ -324,7 +323,7 @@ const ProfileEdit = () => {
               <InputWrapper>
                 <Text style={{ marginBottom: '6px' }}>비밀번호</Text>
                 <Input
-                  check={passwordCheck}
+                  $check={passwordCheck}
                   placeholder="비밀번호를 입력해 주세요."
                   type="password"
                   {...register('password')}
@@ -334,7 +333,7 @@ const ProfileEdit = () => {
               <InputWrapper style={{ marginTop: '30px' }}>
                 <Text style={{ marginBottom: '6px' }}>비밀번호 확인</Text>
                 <Input
-                  check={confirmedPasswordCheck}
+                  $check={confirmedPasswordCheck}
                   placeholder="비밀번호를 다시 입력해 주세요."
                   type="password"
                   {...register('confirmedPassword')}
@@ -347,12 +346,12 @@ const ProfileEdit = () => {
           </form>
           <Submit>
             <Btn onClick={() => navigate('/mypage')}>
-              <Text color="#FFF" fontSize="14px">
+              <Text $color="#FFF" $fontSize="14px">
                 취소
               </Text>
             </Btn>
-            <Btn check={allValidated} onClick={handleSubmit(onClickSubmit)}>
-              <Text color="#FFF" fontSize="14px">
+            <Btn $check={allValidated} onClick={handleSubmit(onClickSubmit)}>
+              <Text $color="#FFF" $fontSize="14px">
                 수정하기
               </Text>
             </Btn>
@@ -360,20 +359,20 @@ const ProfileEdit = () => {
         </Profile>
       </ProfileBox>
       <Withdraw onClick={() => setIsWithdraw(!isWithdraw)}>
-        <Text color="#808080">회원탈퇴를 원하시나요?</Text>
+        <Text $color="#808080">회원탈퇴를 원하시나요?</Text>
         {isWithdraw && (
           <SelectQuestion>
-            <Text color="tomato" fontSize="24px">
+            <Text $color="tomato" $fontSize="24px">
               정말로 탈퇴하시겠습니까?
             </Text>
             <Selection>
               <Btn onClick={() => setIsWithdraw(!isWithdraw)}>
-                <Text color="#FFF" fontSize="14px">
+                <Text $color="#FFF" $fontSize="14px">
                   취소
                 </Text>
               </Btn>
-              <Btn onClick={onClickWithdraw} color="tomato">
-                <Text color="#FFF" fontSize="14px">
+              <Btn onClick={onClickWithdraw} $color="tomato">
+                <Text $color="#FFF" $fontSize="14px">
                   탈퇴하기
                 </Text>
               </Btn>
@@ -431,9 +430,9 @@ const Profile = styled.div`
   height: 762px;
 `;
 
-const Text = styled.div<{ fontSize: string }>`
-  color: ${({ color, theme }) => color || theme.color.text};
-  font-size: ${({ fontSize }) => fontSize || '16px'};
+const Text = styled.div<{ $color: string; $fontSize: string }>`
+  color: ${({ $color, theme }) => $color || theme.color.text};
+  font-size: ${({ $fontSize }) => $fontSize || '16px'};
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
@@ -455,16 +454,16 @@ const InputWrapper = styled.div`
   align-items: flex-start;
 `;
 
-const Input = styled.input<{ width: string; check: string }>`
-  width: ${({ width }) => width || '400px'};
+const Input = styled.input<{ $width: string; check: string }>`
+  width: ${({ $width }) => $width || '400px'};
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
   border: 1px solid #d9d9d9;
-  border-color: ${({ check }) =>
-    check === 'rejected'
+  border-color: ${({ $check }) =>
+    $check === 'rejected'
       ? 'var(--error_accent, #FF3263)'
-      : check === 'confirmed'
+      : $check === 'confirmed'
       ? '#0BD961'
       : '#D9D9D9'};
   background: none;
@@ -508,7 +507,7 @@ const Submit = styled.div`
   justify-content: flex-end;
 `;
 
-const Btn = styled.button<{ check: string; color: string }>`
+const Btn = styled.button<{ $check: string; color: string }>`
   width: 77px;
   height: 32px;
   display: flex;
@@ -517,8 +516,8 @@ const Btn = styled.button<{ check: string; color: string }>`
   gap: 10px;
   border-radius: 8px;
   border: none;
-  background: ${({ check, color, theme }) =>
-    color ? color : check ? '#44A5FF' : theme.color.btnBg};
+  background: ${({ $check, $color, theme }) =>
+    $color ? $color : $check ? '#44A5FF' : theme.color.btnBg};
   cursor: pointer;
 `;
 
