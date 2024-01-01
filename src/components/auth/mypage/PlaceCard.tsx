@@ -79,12 +79,11 @@ const Title = styled.div`
 
 const Name = styled.span`
   color: ${({ theme }) => theme.color.text};
-  font-family: Wanted Sans;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
-  
+
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -92,7 +91,6 @@ const Name = styled.span`
 
 const Category = styled.div`
   color: var(--light-2_sub, #595959);
-  font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -152,7 +150,6 @@ const Address = styled.div`
   align-items: flex-end;
   margin-bottom: 20px;
   color: #44a5ff;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -222,7 +219,6 @@ const Count = styled.div`
 
 const Text = styled.div`
   color: ${({ theme }) => theme.color.sub2};
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -231,7 +227,6 @@ const Text = styled.div`
 
 const Bold = styled.div`
   color: ${({ theme }) => theme.color.text};
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;

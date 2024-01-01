@@ -184,12 +184,10 @@ const SearchInput = styled.input`
   font-size: 16px;
   font-weight: 700;
   background-color: ${({ theme }) => theme.color.bg};
-  font-family: 'Wanted Sans';
   &::placeholder {
     font-size: 16px;
     font-weight: 700;
     color: ${({ theme }) => theme.color.sub};
-    font-family: 'Wanted Sans';
   }
 `;
 
@@ -254,8 +252,6 @@ const PlaceContainer = styled.div`
 
 const PlaceName = styled.div`
   color: ${({ theme }) => theme.color.text};
-
-  font-family: Wanted Sans;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;

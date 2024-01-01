@@ -65,7 +65,6 @@ const Base = styled.button<BtnProps>`
 
   font-size: ${({ $fontSize }) => $fontSize};
   font-weight: ${({ $fontWeight }) => $fontWeight};
-  font-family: 'Wanted Sans';
 
   border-radius: 8px;
 

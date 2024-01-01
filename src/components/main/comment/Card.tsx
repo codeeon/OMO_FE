@@ -3,11 +3,16 @@ import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { FaQuoteLeft } from 'react-icons/fa';
 import { CommentPostsType } from '../../../model/interface';
+import useModalCtr from '../../../hooks/useModalCtr';
+import Modal from '../../Modal/Modal';
+import DetailContentsModal from '../../detailModal/ContentsModal';
+import { motion } from 'framer-motion';
 
 const Card: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
   const { PostId, content, Post } = comment;
+  const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
   return (
-    <Base>
+    <Base onClick={handleModalOpen}>
       <QuoteContainer>
         <FaQuoteLeft />
       </QuoteContainer>
@@ -16,13 +21,19 @@ const Card: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
         <LuMapPin />
         <span>{Post.Location.address}</span>
       </PlaceName>
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+        <DetailContentsModal
+          postId={PostId}
+          closeModalHandler={handleModalClose}
+        />
+      </Modal>
     </Base>
   );
 };
 
 export default Card;
 
-const Base = styled.div`
+const Base = styled(motion.div)`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -36,6 +47,10 @@ const Base = styled.div`
   border-radius: 16px;
 
   padding: 24px 30px;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid ${({ theme }) => theme.color.link};
+  }
 `;
 
 const QuoteContainer = styled.div`

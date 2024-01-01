@@ -294,7 +294,6 @@ const Text = styled.div<{
 }>`
   color: ${({ color }) => color || '#666'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: ${({ $fontSize }) => $fontSize || '16px'};
   font-style: normal;
   font-weight: ${({ $fontWeight }) => $fontWeight || '700'};

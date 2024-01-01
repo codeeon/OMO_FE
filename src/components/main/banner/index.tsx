@@ -2,12 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import Location from './location';
 
-const BANNERIMG =
-  'https://firebasestorage.googleapis.com/v0/b/photo-zone-b66e9.appspot.com/o/files%2Fseoul-cityscape-at-twilight-in-south-korea.jpg?alt=media&token=94ed1302-6aaf-42ee-8e54-5b991002fc88';
+const webPImgUrl =
+  'https://firebasestorage.googleapis.com/v0/b/photo-zone-b66e9.appspot.com/o/Banner.webp?alt=media&token=b4eaf3e2-da7d-4758-ad21-152d6d770446';
+const jpgImgUrl =
+  'https://firebasestorage.googleapis.com/v0/b/photo-zone-b66e9.appspot.com/o/Banner.jpg?alt=media&token=f0fb2382-1112-418c-91d8-7c887f9cd485';
 
 const Banner = () => {
   return (
-    <Base $bannerImg={BANNERIMG}>
+    <Base $bannerImg={webPImgUrl} $fallbackImg={jpgImgUrl}>
       <Wrapper>
         <TitleContainer>
           <BannerTitle>
@@ -32,7 +34,7 @@ const Banner = () => {
 
 export default Banner;
 
-const Base = styled.div<{ $bannerImg: string }>`
+const Base = styled.div<{ $bannerImg: string; $fallbackImg: string }>`
   box-sizing: border-box;
   background-image: linear-gradient(
       180deg,
@@ -49,6 +51,15 @@ const Base = styled.div<{ $bannerImg: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @supports (background-image: url(${''})) {
+    background-image: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.3) 100%
+      ),
+      url(${({ $fallbackImg }) => $fallbackImg});
+  }
 `;
 
 const Wrapper = styled.div`

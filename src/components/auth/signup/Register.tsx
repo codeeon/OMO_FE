@@ -249,7 +249,6 @@ const SmallBtn = styled.button`
   margin-left: 10px;
   color: #f97393;
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -275,7 +274,6 @@ const Input = styled.input`
   padding: 0 15px;
   &::placeholder {
     color: #a5a5a5;
-    font-family: Wanted Sans;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -295,7 +293,6 @@ const LargeBtn = styled.button`
   margin: 0 0 61px 0;
   color: #fff;
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -307,7 +304,6 @@ const LargeBtn = styled.button`
 const Text = styled.span`
   color: ${(props) => props.color || '#666'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;

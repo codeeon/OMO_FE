@@ -86,7 +86,6 @@ const Text = styled.div`
   gap: 4px;
   color: ${(props) => props.color || '#fff'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
