@@ -41,7 +41,7 @@ const PlaceList: React.FC<Props> = ({
           style={{ width: '100%', height: '100%' }}
           increaseViewportBy={0}
           itemContent={(index, placeDb) => {
-            return <Card key={placeDb.latitude} placeDb={placeDb} />;
+            return <Card key={index} placeDb={placeDb} />;
           }}
           data={placeDatas}
         />
