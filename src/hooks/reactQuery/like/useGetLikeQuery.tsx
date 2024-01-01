@@ -6,6 +6,7 @@ const getLikes = async () => {
   return response.data;
 };
 
-const useGetLikeQuery = () => useQuery('userLikes', getLikes);
+const useGetLikeQuery = () =>
+  useQuery('userLikes', getLikes, { enabled: false });
 
 export default useGetLikeQuery;

@@ -1,6 +1,7 @@
 import { PostCommentType } from '../../../model/interface';
 import { MutationFunction, useMutation, useQueryClient } from 'react-query';
 import authApi from '../../../axios/authApi';
+import toast from 'react-hot-toast';
 
 const postComment: MutationFunction<
   void,
@@ -15,10 +16,8 @@ const postComment: MutationFunction<
 
 const usePostCommentQuery = ({
   contentId,
-  handleSuccessAlertOpen,
 }: {
   contentId: number | undefined;
-  handleSuccessAlertOpen: () => void;
 }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation<
@@ -28,10 +27,11 @@ const usePostCommentQuery = ({
   >(postComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(['posts', contentId]);
-      handleSuccessAlertOpen();
-    },
-    onError: (error) => {
-      handleSuccessAlertOpen();
+      toast.success('댓글이 성공적으로 등록되었습니다.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     },
   });
   return {
@@ -39,6 +39,7 @@ const usePostCommentQuery = ({
     isPostLoading: mutation.isLoading,
     isPostError: mutation.isError,
     isPostSuccess: mutation.isSuccess,
+    sdf: mutation.error,
   };
 };
 

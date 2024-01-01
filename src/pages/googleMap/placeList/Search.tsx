@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SearchIcon } from '../../../assets/icons/SearchIcon';
-import useInput from '../../../hooks/useInput';
 import useMapStore from '../../../store/location/googleMapStore';
 import {
   placeSearchCallback,
   textSearchFields,
-} from '../../../function/googleSearch.ts/textSearch';
+} from '../../../utils/googleSearch.ts/textSearch';
+import _ from 'lodash';
 
 const Search = () => {
-  const [value, onClearHandler, onChangeHandler] = useInput();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchResult, setSearchResult] = useState<
     google.maps.places.PlaceResult[] | null
   >(null);
@@ -18,27 +18,40 @@ const Search = () => {
   const { setCurrentLocation } = useMapStore();
   const { map } = useMapStore();
 
+  const clearValueHandler = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (inputRef.current) {
+      inputRef.current.value = e.target.value;
+    }
+    debouncedSearch(e.target.value);
+  };
+
   // @ts-ignore
   const searchRef = useRef<HTMLDivElement | null>(null);
-  const service = new google.maps.places.PlacesService(map);
 
-  useEffect(() => {
+  const debouncedSearch = _.debounce((query: string) => {
     const request = {
-      query: value,
+      query,
       fields: textSearchFields,
     };
 
+    const service = new google.maps.places.PlacesService(map!);
     service.textSearch(request, (results, status) => {
       placeSearchCallback(results, status, setSearchResult);
     });
 
-    if (!value) {
+    if (!query) {
       setSearchResult(null);
       setIsFocus(false);
     } else {
       setIsFocus(true);
     }
-  }, [value]);
+  }, 500);
 
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
@@ -60,14 +73,14 @@ const Search = () => {
     const lat = res.geometry?.location?.lat();
     const lng = res.geometry?.location?.lng();
     setCurrentLocation({ lat: lat, lng: lng });
-    onClearHandler();
+    clearValueHandler();
   };
 
   return (
-    <Base onFocus={isFocus} ref={searchRef}>
+    <Base $onFocus={isFocus} ref={searchRef}>
       <Input
         placeholder="장소를 검색해 이동해 보세요!"
-        value={value}
+        ref={inputRef}
         onChange={(e) => onChangeHandler(e)}
         onFocus={() => setIsFocus(true)}
       />
@@ -76,18 +89,13 @@ const Search = () => {
       </SearchBtnWrapper>
       {isFocus && (
         <ResultContainer>
-          {value &&
-            searchResult?.map((res) => (
-              <ResultItem onClick={() => moveSearchPlaceHandler(res)}>
+          {inputRef.current?.value &&
+            searchResult?.map((res, idx) => (
+              <ResultItem key={idx} onClick={() => moveSearchPlaceHandler(res)}>
                 {res.name}
                 <span>{res.formatted_address}</span>
               </ResultItem>
             ))}
-          {!value && (
-            <GuideContainer>
-              <>장소명을 검색해 보세요 🔍</>
-            </GuideContainer>
-          )}
         </ResultContainer>
       )}
     </Base>
@@ -96,12 +104,12 @@ const Search = () => {
 
 export default Search;
 
-const Base = styled.div<{ onFocus: boolean }>`
+const Base = styled.div<{ $onFocus: boolean }>`
   width: 90%;
   min-height: 50px;
 
   border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: ${({ onFocus }) => (onFocus ? '20px 20px 0 0 ' : '20px')};
+  border-radius: ${({ $onFocus }) => ($onFocus ? '20px 20px 0 0 ' : '20px')};
   box-sizing: border-box;
   margin: 20px 20px 0 20px;
 
@@ -139,7 +147,8 @@ const ResultContainer = styled.div`
   gap: 5px;
 
   position: absolute;
-  top: 49px;
+  top: 47px;
+  left: -1px;
 
   background-color: ${({ theme }) => theme.color.bg};
   border: 1px solid ${({ theme }) => theme.color.border};
@@ -148,15 +157,14 @@ const ResultContainer = styled.div`
   max-height: 260px;
   overflow-y: scroll;
 
-  width: 100%;
+  width: 100.5%;
   z-index: 2;
 `;
 
 const ResultItem = styled.div`
   box-sizing: border-box;
   width: 100%;
-  min-height: 70px; // Adjusted the min-height for better spacing
-
+  min-height: 70px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -176,24 +184,12 @@ const ResultItem = styled.div`
     font-weight: 500;
     width: 100%;
     text-overflow: ellipsis;
-    white-space: nowrap; // Prevents wrapping to the next line
-    overflow: hidden; // Hides the content that overflows
+    white-space: nowrap;
+    overflow: hidden;
   }
   text-overflow: ellipsis;
-  white-space: nowrap; // Prevents wrapping to the next line
-  overflow: hidden; // Hides the content that overflows
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 16px;
   font-weight: 700;
-`;
-
-const GuideContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 260px;
-  color: ${({ theme }) => theme.color.text};
-  font-size: 16px;
-  font-weight: 700;
-  z-index: 2;
 `;

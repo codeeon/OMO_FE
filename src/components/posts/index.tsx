@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { FiEdit3 } from 'react-icons/fi';
 import Modal from '../Modal/Modal';
@@ -8,18 +8,14 @@ import Location from './location';
 import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContentsQuery';
 import ContentCard from '../share/ContentCard';
 import CategoryDropdown from './CateogryDropdown';
-import ContentCardSkeleton from '../share/ContentCardSkeleton';
-import CardDarkSkeleton from './CardDarkSkeleton';
+import ContentCardSkeleton from '../skeleton/RecentPostCardSkeleton';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import useAlertModalCtr from '../../hooks/useAlertModalCtr';
-import AlertModal from '../Modal/AlertModal';
-import CommentError from '../share/alert/CommentError';
 import useDistrictStore from '../../store/location/districtStore';
-import useThemeStore from '../../store/theme/themeStore';
 import useCategoryStore from '../../store/category/categoryStore';
+import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 
 const Posts = () => {
-  const { isModalOpen, handleModalClose, handleModalOpen } = useAlertModalCtr();
   const { district } = useDistrictStore();
   const { category } = useCategoryStore();
   const {
@@ -32,7 +28,6 @@ const Posts = () => {
     handleModalOpen: openMainModal,
     handleModalClose: closeMainModal,
   } = useModalCtr();
-  const { themeMode } = useThemeStore();
 
   const {
     data: contents,
@@ -50,18 +45,20 @@ const Posts = () => {
 
   useEffect(() => {
     refetch();
-  }, [district, category]);
+  }, [district, category, refetch]);
 
   const openPostModalHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     const userId = sessionStorage.getItem('userId');
-
-    if (userId) {
-      openMainModal(e);
-    } else {
-      handleModalOpen();
+    if (!userId) {
+      return toast.error('로그인 후 작성 가능합니다.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     }
+    openMainModal(e);
   };
 
   return (
@@ -82,21 +79,9 @@ const Posts = () => {
         <Body>
           <RecentCardGrid>
             {isFetching && !isFetchingNextPage
-              ? themeMode === 'LightMode'
-                ? Array.from({ length: 20 }).map((_, idx) => (
-                    <ContentCardSkeleton key={idx} />
-                  ))
-                : Array.from({ length: 20 }).map((_, idx) => (
-                    <CardDarkSkeleton key={idx} />
-                  ))
-              : !isFetching && isFetchingNextPage
-              ? themeMode === 'LightMode'
-                ? Array.from({ length: 20 }).map((_, idx) => (
-                    <ContentCardSkeleton key={idx} />
-                  ))
-                : Array.from({ length: 20 }).map((_, idx) => (
-                    <CardDarkSkeleton key={idx} />
-                  ))
+              ? Array.from({ length: 20 }).map((_, idx) => (
+                  <ContentCardSkeleton key={idx} />
+                ))
               : contents?.pages.map((group, pageIndex) => (
                   <React.Fragment key={pageIndex}>
                     {group.map((contentData) => (
@@ -108,11 +93,12 @@ const Posts = () => {
                   </React.Fragment>
                 ))}
             {isFetchingNextPage &&
-              !isFetching &&
               Array.from({ length: 20 }).map((_, idx) => (
                 <ContentCardSkeleton key={idx} />
               ))}
-            <ObserverContainer ref={setTarget}></ObserverContainer>
+            {hasNextPage && (
+              <ObserverContainer ref={setTarget}></ObserverContainer>
+            )}
           </RecentCardGrid>
         </Body>
       </Wrapper>
@@ -124,13 +110,6 @@ const Posts = () => {
           closeSubModal={closeSubModal}
         />
       </Modal>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-      >
-        <CommentError />
-      </AlertModal>
     </Base>
   );
 };
@@ -211,12 +190,11 @@ const Body = styled.div`
   margin-top: 30px;
 `;
 
-const RecentCardGrid = styled.div`
+const RecentCardGrid = styled(motion.ul)`
   display: inline-grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 40px 20px;
   margin: 20px 0px 40px 0;
-
   grid-area: main;
 `;
 
@@ -229,5 +207,5 @@ const FilterContainer = styled.div`
 `;
 
 const ObserverContainer = styled.div`
-  height: 100px;
+  height: 300px;
 `;

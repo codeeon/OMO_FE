@@ -25,7 +25,7 @@ const ModalHeader: React.FC<{
 
   return (
     <Base>
-      <UserProfile userProfile={userProfile} />
+      <UserProfile $userProfile={userProfile} />
       <UserInfoContainer>
         <UserName>{userName}</UserName>
         <CreationDate>{createdAt.split('T')[0]}</CreationDate>
@@ -51,8 +51,8 @@ const Base = styled.div`
   width: 100%;
 `;
 
-const UserProfile = styled.div<{ userProfile: string }>`
-  background-image: ${({ userProfile }) => `url(${userProfile})`};
+const UserProfile = styled.div<{ $userProfile: string }>`
+  background-image: ${({ $userProfile }) => `url(${$userProfile})`};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -1,9 +1,9 @@
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { instance } from '../../../apis/apis';
 import { RecentPostsType } from '../../../model/interface';
 import axios from 'axios';
 
-// categoryName,
+const queryClient = new QueryClient();
 
 export const getRecentPosts = async (
   districtName: string | undefined,
@@ -21,6 +21,11 @@ export const getRecentPosts = async (
 const useGetRecentPostsQuery = (
   districtName: string | undefined,
   categoryName: string,
-) => useQuery('recentPosts', () => getRecentPosts(districtName, categoryName));
+) =>
+  useQuery('recentPosts', () => getRecentPosts(districtName, categoryName), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('recentPosts');
+    },
+  });
 
 export default useGetRecentPostsQuery;

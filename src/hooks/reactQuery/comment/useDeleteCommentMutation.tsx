@@ -1,6 +1,7 @@
 import { MutationFunction, useMutation, useQueryClient } from 'react-query';
 import { instance } from '../../../apis/apis';
 import authApi from '../../../axios/authApi';
+import toast from 'react-hot-toast';
 
 const deleteComment: MutationFunction<
   void,
@@ -24,6 +25,11 @@ const useDeleteCommentMutation = ({ contentId }: { contentId: number }) => {
   >(deleteComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(['posts', contentId]);
+      toast.success('댓글이 성공적으로 삭제되었어요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
     },
   });
   return {

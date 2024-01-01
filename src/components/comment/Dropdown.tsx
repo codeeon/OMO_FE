@@ -4,6 +4,7 @@ import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { IoEllipsisHorizontalSharp } from 'react-icons/io5';
 import useDeleteRepleMutation from '../../hooks/reactQuery/replies/useDeleteRepleMutation';
+import useDeleteCommentMutation from '../../hooks/reactQuery/comment/useDeleteCommentMutation';
 
 interface Props {
   commentId: number;
@@ -14,10 +15,17 @@ interface Props {
 const Dropdown: React.FC<Props> = ({ commentId, contentId, replyId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const { deleteMutate } = useDeleteRepleMutation({ contentId });
+  const { deleteMutate: repleDeleteMutate } = useDeleteRepleMutation({
+    contentId,
+  });
+  const { deleteMutate: commentDeleteMutate } = useDeleteCommentMutation({
+    contentId,
+  });
 
   const deleteRepleHandler = () => {
-    deleteMutate({ contentId, commentId, replyId });
+    replyId && repleDeleteMutate({ contentId, commentId, replyId });
+    !replyId && commentDeleteMutate({ contentId, commentId });
+
     setIsOpen(false);
   };
 
@@ -54,7 +62,7 @@ const Dropdown: React.FC<Props> = ({ commentId, contentId, replyId }) => {
             open: { rotate: 180 },
             closed: { rotate: 0 },
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.1 }}
           style={{ originY: 0.55 }}
         >
           <IoEllipsisHorizontalSharp style={{ marginTop: '4px' }} />
@@ -67,7 +75,7 @@ const Dropdown: React.FC<Props> = ({ commentId, contentId, replyId }) => {
             transition: {
               type: 'spring',
               bounce: 0,
-              duration: 0.7,
+              duration: 0.4,
               delayChildren: 0.3,
               staggerChildren: 0.05,
             },
@@ -126,7 +134,7 @@ const DropdownBtn = styled(motion.button)`
 
 const BtnWrapper = styled(motion.div)``;
 
-const DropdownList = styled(motion.div)<{ width?: string; height?: string }>`
+const DropdownList = styled(motion.div)`
   box-sizing: border-box;
 
   position: absolute;

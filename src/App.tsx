@@ -4,9 +4,26 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { LightTheme, DarkTheme } from './styles/theme.js';
 import useThemeStore from './store/theme/themeStore.js';
-
+import useApiError from './hooks/reactQuery/useApiError.js';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Toaster } from 'react-hot-toast';
+import { ReactQueryDevtools } from 'react-query/devtools';
 const App = () => {
   const { themeMode, toggleTheme } = useThemeStore();
+
+  const { handleError } = useApiError();
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+      mutations: {
+        onError: handleError,
+      },
+    },
+  });
+
   useEffect(() => {
     console.log(`
       OOOOOOOOO     MMMMMMMM               MMMMMMMM     OOOOOOOOO     
@@ -30,9 +47,13 @@ const App = () => {
 
   return (
     <ThemeProvider theme={themeMode === 'LightMode' ? LightTheme : DarkTheme}>
-      <BrowserRouter>
-        <Routers />
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routers />
+          <Toaster />
+        </BrowserRouter>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
     </ThemeProvider>
   );
 };

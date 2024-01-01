@@ -11,7 +11,11 @@ const Comment: React.FC<{
   return (
     <Base>
       {comments.map((comment) => (
-        <CommentItem comment={comment} contentId={contentId} />
+        <CommentItem
+          key={comment.commentId}
+          comment={comment}
+          contentId={contentId}
+        />
       ))}
       <CommentInput contentId={contentId} />
     </Base>

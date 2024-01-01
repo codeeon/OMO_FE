@@ -11,10 +11,9 @@ const DetailContentsModal: React.FC<{
   postId: number;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }> = ({ closeModalHandler, postId }) => {
-  const { data: post, isLoading: isPostLoading } =
-    useGetContentDetailQuery(postId);
+  const { data: post } = useGetContentDetailQuery(postId);
 
-  if (!post) return;
+  if (!post) return null;
 
   const {
     content,
@@ -27,7 +26,7 @@ const DetailContentsModal: React.FC<{
     Comments,
   } = post;
 
-  console.log(Comments);
+  // console.log(Comments);
   const commentLength = Comments.length;
 
   return (

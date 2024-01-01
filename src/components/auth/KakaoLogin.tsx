@@ -46,7 +46,6 @@ const Text = styled.div<{ $color: string }>`
   gap: 4px;
   color: ${({ $color }) => $color || '#fff'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;

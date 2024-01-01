@@ -7,6 +7,7 @@ import { SlLocationPin } from 'react-icons/sl';
 import { BounceLoader } from 'react-spinners';
 import useCurrentLocationQuery from '../../../hooks/reactQuery/location/useCurrentLocationQuery';
 import useDistrictStore from '../../../store/location/districtStore';
+import toast from 'react-hot-toast';
 
 const Location = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +38,16 @@ const Location = () => {
       document.removeEventListener('mousedown', onClickOutside);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    isLoading &&
+      toast.loading('현재 위치를 업데이트 중입니다...', {
+        position: 'top-right',
+        style: { fontSize: '14px' },
+        id: '1',
+      });
+    !isLoading && toast.remove('1');
+  }, [isLoading]);
 
   return (
     <NavContainer

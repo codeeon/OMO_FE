@@ -1,6 +1,8 @@
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { instance } from '../../../apis/apis';
 import { HotPostsType } from '../../../model/interface';
+
+const queryClient = new QueryClient();
 
 const getHotPosts = async (
   districtName: string | undefined,
@@ -15,6 +17,10 @@ const getHotPosts = async (
 };
 
 const useGetHotPostsQuery = (districtName: string | undefined) =>
-  useQuery('hotPosts', () => getHotPosts(districtName));
+  useQuery('hotPosts', () => getHotPosts(districtName), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('hotPosts');
+    },
+  });
 
 export default useGetHotPostsQuery;

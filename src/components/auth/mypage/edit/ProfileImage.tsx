@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { onImageChange } from '../../../../function/uploadImage';
 
 interface Props {
-  imageURL: string[];
+  imageURL: string;
   setImageUrl: React.Dispatch<React.SetStateAction<string[]>>;
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
   files: File[];

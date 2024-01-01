@@ -1,43 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MdMyLocation } from 'react-icons/md';
 import styled from 'styled-components';
-import { getCurrentCoords } from '../../../function/kakao';
-import AlertModal from '../../../components/Modal/AlertModal';
-import LocationAlert from '../../../components/share/alert/LocationAlert';
-import useAlertModalCtr from '../../../hooks/useAlertModalCtr';
+import { getCurrentCoords } from '../../../utils/kakao';
 import useMapStore from '../../../store/location/googleMapStore';
+import toast from 'react-hot-toast';
 
 const CurrentLocationButton = () => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const { isModalOpen, handleModalOpen, handleModalClose } = useAlertModalCtr();
   const { setCurrentLocation } = useMapStore();
 
   const moveMyLocation = async () => {
     try {
-      setIsLoading(true);
-      handleModalOpen();
-
+      toast.loading('현재 위치를 업데이트 중입니다...', {
+        position: 'top-right',
+        style: { marginTop: '50px', fontSize: '14px' },
+        id: '1',
+      });
       const { latitude, longitude } = await getCurrentCoords();
       setCurrentLocation({ lat: latitude, lng: longitude });
     } finally {
+      toast.remove('1');
+      toast.success('현재 위치를 업데이트하였습니다.', {
+        position: 'top-right',
+        style: { marginTop: '50px', fontSize: '14px' },
+      });
+
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <BtnWrapper onClick={moveMyLocation}>
-        <MdMyLocation />
-      </BtnWrapper>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-        isLoading={isLoading}
-      >
-        <LocationAlert isLoading={isLoading} />
-      </AlertModal>
-    </>
+    <BtnWrapper onClick={moveMyLocation}>
+      <MdMyLocation />
+    </BtnWrapper>
   );
 };
 

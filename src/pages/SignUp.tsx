@@ -11,8 +11,8 @@ import Register from '../components/auth/signup/Register';
 const SignUp: React.FC = () => {
   // const navigate = useNavigate();
 
-  const [email, setEmail, onChangeEmail] = useInput('');
-  const [code, setCode, onChangeCode] = useInput('');
+  const { value: email, changeValueHandler: onChangeEmail } = useInput();
+  const { value: code, changeValueHandler: onChangeCode } = useInput();
 
   const [emailCheck, setEmailCheck] = useState<string>('');
   const [codeCheck, setCodeCheck] = useState<string>('');
@@ -303,7 +303,6 @@ const Text = styled.div<{
 }>`
   color: ${({ color }) => color || '#666'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: ${({ $fontSize }) => $fontSize || '16px'};
   font-style: normal;
   font-weight: ${({ $fontWeight }) => $fontWeight || '700'};

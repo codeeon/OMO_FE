@@ -8,9 +8,6 @@ import {
   RefetchQueryFilters,
 } from 'react-query';
 import { itemVariants } from '../../../styles/Motion';
-import useAlertModalCtr from '../../../hooks/useAlertModalCtr';
-import AlertModal from '../../Modal/AlertModal';
-import LocationAlert from '../../share/alert/LocationAlert';
 
 interface Props {
   refetch: <TPageData>(
@@ -27,14 +24,10 @@ const MenuHeader: React.FC<Props> = ({
   isLoading,
   toggleDropdownHandler,
 }) => {
-  const { isModalOpen, setModalIsOpen, handleModalOpen, handleModalClose } =
-    useAlertModalCtr();
-
   const onClickCurrentLocationHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     refetch();
-    handleModalOpen();
     toggleDropdownHandler(e);
   };
   return (
@@ -46,13 +39,6 @@ const MenuHeader: React.FC<Props> = ({
         <FaLocationCrosshairs />
         <span>현재 위치에서 보기</span>
       </Header>
-      <AlertModal
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-        position="topRight"
-      >
-        <LocationAlert isLoading={isLoading} />
-      </AlertModal>
     </>
   );
 };

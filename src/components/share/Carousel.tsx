@@ -97,6 +97,7 @@ const Base = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  height: 440px;
 `;
 
 const CarouselList = styled.ul`
@@ -109,6 +110,7 @@ const CarouselList = styled.ul`
 
   padding: 10px 0;
   width: 1200px;
+
   overflow: hidden;
   margin-top: 20px;
 `;

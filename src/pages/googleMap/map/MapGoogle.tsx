@@ -8,8 +8,8 @@ import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { LocationType } from '../../../model/interface';
 import { darkMapTheme, lightMapTheme } from './maptheme';
-import CurrentLocationMarker from '../marker/CurrentLocationMarker';
-import LocationMarker from '../marker/LocationMarker';
+import CurrentLocationMarker from '../../../components/marker/CurrentLocationMarker';
+import LocationMarker from '../../../components/marker/LocationMarker';
 import ReSearchButton from '../actionBtn/ReSearchButton';
 import CurrentLocationButton from '../actionBtn/CurrentLocationButton';
 import LevelButton from '../actionBtn/LevelButton';
@@ -125,6 +125,7 @@ const MapGoogle: React.FC<Props> = ({
       </OverlayViewF>
       {placeDatas?.map((db) => (
         <LocationMarker
+          key={db.storeName}
           placeDb={db}
           isListOpen={isListOpen}
           setIsListOpen={setIsListOpen}
