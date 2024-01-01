@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import auth from './auth';
 
@@ -28,7 +29,7 @@ authApi.interceptors.response.use(
 
   async (error) => {
     // console.log('에러 발생 -> ', error);
-    const req = error.config;
+    // const req = error.config;
 
     if (error.response?.status === 401) {
       try {
