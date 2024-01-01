@@ -11,12 +11,12 @@ import useGetMyBookmarkQuery from '../hooks/reactQuery/mypage/useGetMyBookmarkQu
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 const Mypage: React.FC = () => {
-  // 무한 스크롤 추가하기, 데이터 잘 처리하기
   const navigate = useNavigate();
 
   const [isSelect, setIsSelect] = useState('Bookmark');
 
   const { data: userData, isError: userError } = useGetUserDataQuery();
+
   const {
     data: myBookmark,
     fetchNextPage: fetchNextBookmark,
@@ -162,6 +162,10 @@ const MyImg = styled.img`
   flex-shrink: 0;
   border-radius: 100%;
   border: none;
+  /* background-color: ${({ theme }) => theme.color.border}; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const Nickname = styled.div`
