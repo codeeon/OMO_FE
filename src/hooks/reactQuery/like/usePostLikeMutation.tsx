@@ -36,12 +36,9 @@ const usePostLikeMutation = (
         queryClient.setQueryData(['post', postId], context?.previousPostData);
         setIsLiked(false);
       },
-      onSuccess: () => {
-        queryClient.invalidateQueries('posts');
-      },
 
       onSettled: () => {
-        queryClient.invalidateQueries(['posts']);
+        queryClient.invalidateQueries(['posts', postId]);
       },
     },
   );

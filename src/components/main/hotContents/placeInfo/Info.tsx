@@ -62,13 +62,18 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
         <span>영업시간</span>
         <DownArrow />
       </InfoContainer>
-      {isOpen && (
+      {isOpen && googleSearchResult && (
         <WeekDayContainer>
           {googleSearchResult?.opening_hours?.weekday_text?.map((dayText) => (
             <BusinessContainer>
               <div>{dayText}</div>
             </BusinessContainer>
           ))}
+        </WeekDayContainer>
+      )}
+      {isOpen && !googleSearchResult && (
+        <WeekDayContainer>
+          <BusinessContainer>영업 정보 없음</BusinessContainer>
         </WeekDayContainer>
       )}
       <InfoContainer>

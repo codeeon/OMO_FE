@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
   input {
     font-family: 'Wanted Sans';
   }
+  input::placeholder {
+    font-family: 'Wanted Sans';
+  }
+
   * {
     transition : color 200ms ease-in-out;
     transition : background-color 200ms ease-in-out;

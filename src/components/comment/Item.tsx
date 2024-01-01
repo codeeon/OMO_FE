@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { CommentType } from '../../model/interface';
 import Dropdown from './Dropdown';
@@ -17,13 +17,13 @@ const CommentItem: React.FC<{
 
   const repleLength = comment.Replies.length;
 
-  const toggleRepleHandler = () => {
+  const toggleRepleHandler = useCallback(() => {
     setIsShowReple(!isShowReple);
-  };
+  }, [isShowReple]);
 
-  const toggleRepleInputHandler = () => {
+  const toggleRepleInputHandler = useCallback(() => {
     setIsShowRepleInput(!isShowRepleInput);
-  };
+  }, [isShowRepleInput]);
 
   const getRepleHandler = () => {
     toggleRepleHandler();
@@ -31,7 +31,7 @@ const CommentItem: React.FC<{
 
   return (
     <Base>
-      <UserProfile profileImg={User.imgUrl} />
+      <UserProfile $profileImg={User.imgUrl} />
       <BodyContainer>
         <UserInfoContainer>
           <UserName>{User.nickname}</UserName>
@@ -57,12 +57,13 @@ const CommentItem: React.FC<{
               <>
                 {Replies?.map((reple) => (
                   <RepleItem
+                    key={reple.replyId}
                     reple={reple}
                     contentId={contentId}
                     commentId={commentId}
                   />
                 ))}
-                <RepleBtn marginLeft="60px" onClick={toggleRepleHandler}>
+                <RepleBtn $marginLeft="60px" onClick={toggleRepleHandler}>
                   답글 숨기기
                 </RepleBtn>
                 {isShowRepleInput && (
@@ -105,8 +106,8 @@ const Base = styled.div`
   }
 `;
 
-const UserProfile = styled.div<{ profileImg: string }>`
-  background-image: ${({ profileImg }) => `url(${profileImg})`};
+const UserProfile = styled.div<{ $profileImg: string }>`
+  background-image: ${({ $profileImg }) => `url(${$profileImg})`};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -162,9 +163,9 @@ const CommentText = styled.div`
   word-break: break-all;
 `;
 
-const RepleBtn = styled.div<{ marginLeft?: string }>`
+const RepleBtn = styled.div<{ $marginLeft?: string }>`
   margin-top: 8px;
-  margin-left: ${({ marginLeft }) => (marginLeft ? marginLeft : null)};
+  margin-left: ${({ $marginLeft }) => ($marginLeft ? $marginLeft : null)};
   color: ${({ theme }) => theme.color.sub2};
   font-size: 14px;
   font-weight: 500;

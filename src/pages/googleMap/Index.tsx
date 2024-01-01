@@ -23,8 +23,9 @@ const Map = () => {
   );
 
   useEffect(() => {
+    if (mapBounds?.northEast.lat === undefined) return;
     lookAroundRefetch();
-  }, [mapBounds, selectedCategory, currentLocation]);
+  }, [mapBounds, selectedCategory, currentLocation, lookAroundRefetch]);
 
   const onClickListBtn = () => {
     if (place !== null) {
@@ -35,8 +36,8 @@ const Map = () => {
   };
 
   return (
-    <Base isListOpen={isListOpen}>
-      <PlaceListContainer isListOpen={isListOpen}>
+    <Base $isListOpen={isListOpen}>
+      <PlaceListContainer $isListOpen={isListOpen}>
         <PlaceList
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
@@ -44,14 +45,14 @@ const Map = () => {
         />
       </PlaceListContainer>
       <DetailListContainer
-        isListOpen={isListOpen}
-        isDetailListOpen={place !== null}
+        $isListOpen={isListOpen}
+        $isDetailListOpen={place !== null}
       >
         <DetailList selectedPlace={place} />
       </DetailListContainer>
       <ListBtnContainer
-        isListOpen={isListOpen}
-        isDetailListOpen={place !== null}
+        $isListOpen={isListOpen}
+        $isDetailListOpen={place !== null}
       >
         <ListBtn isListOpen={isListOpen} onClickListBtn={onClickListBtn} />
       </ListBtnContainer>
@@ -66,16 +67,16 @@ const Map = () => {
 
 export default Map;
 
-const Base = styled.div<{ isListOpen: boolean }>`
+const Base = styled.div<{ $isListOpen: boolean }>`
   width: 100%;
   height: calc(100vh - 60px);
   position: relative;
 `;
 
-const PlaceListContainer = styled.div<{ isListOpen: boolean }>`
+const PlaceListContainer = styled.div<{ $isListOpen: boolean }>`
   box-sizing: border-box;
   position: absolute;
-  left: ${({ isListOpen }) => (isListOpen ? '0' : '-420px')};
+  left: ${({ $isListOpen }) => ($isListOpen ? '0' : '-420px')};
   width: 420px;
   height: 100%;
   background: ${({ theme }) => theme.color.cardBg};
@@ -85,15 +86,15 @@ const PlaceListContainer = styled.div<{ isListOpen: boolean }>`
 `;
 
 const DetailListContainer = styled.div<{
-  isListOpen: boolean;
-  isDetailListOpen: boolean;
+  $isListOpen: boolean;
+  $isDetailListOpen: boolean;
 }>`
   box-sizing: border-box;
   position: absolute;
-  left: ${({ isListOpen, isDetailListOpen }) =>
-    isListOpen && isDetailListOpen
+  left: ${({ $isListOpen, $isDetailListOpen }) =>
+    $isListOpen && $isDetailListOpen
       ? '420px'
-      : isListOpen && !isDetailListOpen
+      : $isListOpen && !$isDetailListOpen
       ? '0px'
       : '-420px'};
   width: 420px;
@@ -105,14 +106,14 @@ const DetailListContainer = styled.div<{
 `;
 
 const ListBtnContainer = styled.div<{
-  isListOpen: boolean;
-  isDetailListOpen: boolean;
+  $isListOpen: boolean;
+  $isDetailListOpen: boolean;
 }>`
   position: absolute;
-  left: ${({ isListOpen, isDetailListOpen }) =>
-    isListOpen && isDetailListOpen
+  left: ${({ $isListOpen, $isDetailListOpen }) =>
+    $isListOpen && $isDetailListOpen
       ? '840px'
-      : isListOpen && !isDetailListOpen
+      : $isListOpen && !$isDetailListOpen
       ? '420px'
       : '0px'};
   top: 50%;

@@ -125,6 +125,7 @@ const MapGoogle: React.FC<Props> = ({
       </OverlayViewF>
       {placeDatas?.map((db) => (
         <LocationMarker
+          key={db.storeName}
           placeDb={db}
           isListOpen={isListOpen}
           setIsListOpen={setIsListOpen}

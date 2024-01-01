@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { CommentType, RepleType } from '../../model/interface';
+import { RepleType } from '../../model/interface';
 import Dropdown from './Dropdown';
-import useDeleteRepleMutation from '../../hooks/reactQuery/replies/useDeleteRepleMutation';
 
 //TODO 유저 데이터
 const RepleItem: React.FC<{
@@ -12,10 +11,10 @@ const RepleItem: React.FC<{
 }> = ({ reple, contentId, commentId }) => {
   const { replyId, content, createdAt, User } = reple;
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
-  // console.log(reple);
+
   return (
     <Base>
-      <UserProfile imgUrl={User.imgUrl} />
+      <UserProfile $imgUrl={User.imgUrl} />
       <BodyContainer>
         <UserInfoContainer>
           <UserName>{User.nickname}</UserName>
@@ -47,8 +46,8 @@ const Base = styled.div`
   }
 `;
 
-const UserProfile = styled.div<{ imgUrl: string }>`
-  background-image: ${({ imgUrl }) => `url('${imgUrl}')`};
+const UserProfile = styled.div<{ $imgUrl: string }>`
+  background-image: ${({ $imgUrl }) => `url('${$imgUrl}')`};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -96,18 +95,4 @@ const CommentText = styled.div`
   outline: none;
   border: none;
   height: 18px;
-`;
-
-const RepleBtn = styled.div`
-  margin-top: 8px;
-  color: ${({ theme }) => theme.color.sub2};
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.14px;
-  &:hover {
-    color: ${({ theme }) => theme.color.text};
-    font-weight: 700;
-  }
-  cursor: pointer;
-  transition: all 300ms ease;
 `;

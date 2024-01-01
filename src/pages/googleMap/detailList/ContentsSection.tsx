@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import ContentCard from './ContentCard';
 import { useNavigate } from 'react-router-dom';
-import ContentCardSk from './ContentCardSk';
 import { LocationPostsType } from '../../../model/interface';
 
 interface Props {

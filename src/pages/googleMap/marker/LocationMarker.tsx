@@ -48,11 +48,11 @@ const LocationMarker: React.FC<Props> = ({
     >
       <CustomMarkerContainer
         onClick={clikcMarkerHandler}
-        isSelected={place?.locationId === locationId}
+        $isSelected={place?.locationId === locationId}
         whileTap={{ scale: 1.2 }}
         transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       >
-        <MarkerIcon isSelected={place?.locationId === locationId}>
+        <MarkerIcon $isSelected={place?.locationId === locationId}>
           {placeDb.Category.categoryName === '카페' ? (
             <IoMdCafe />
           ) : placeDb.Category.categoryName === '음식점' ? (
@@ -61,11 +61,11 @@ const LocationMarker: React.FC<Props> = ({
             <FaLocationDot />
           )}
         </MarkerIcon>
-        <PlaceInfoContainer isSelected={place?.locationId === locationId}>
-          <PlaceName isSelected={place?.locationId === locationId}>
+        <PlaceInfoContainer $isSelected={place?.locationId === locationId}>
+          <PlaceName $isSelected={place?.locationId === locationId}>
             {storeName}
           </PlaceName>
-          <CategoryName isSelected={place?.locationId === locationId}>
+          <CategoryName $isSelected={place?.locationId === locationId}>
             {Category.categoryName}
           </CategoryName>
         </PlaceInfoContainer>
@@ -76,16 +76,16 @@ const LocationMarker: React.FC<Props> = ({
 
 export default LocationMarker;
 
-const CustomMarkerContainer = styled(motion.div)<{ isSelected: boolean }>`
+const CustomMarkerContainer = styled(motion.div)<{ $isSelected: boolean }>`
   box-sizing: border-box;
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 6px;
   width: auto;
-  height: ${({ isSelected }) => (isSelected ? '55px' : '50px')};
-  background: ${({ isSelected, theme }) =>
-    isSelected ? `${theme.color.marker}` : `${theme.color.bg}`};
+  height: ${({ $isSelected }) => ($isSelected ? '55px' : '50px')};
+  background: ${({ $isSelected, theme }) =>
+    $isSelected ? `${theme.color.marker}` : `${theme.color.bg}`};
   border-radius: 25px;
   padding: 13px 8px;
 
@@ -93,15 +93,15 @@ const CustomMarkerContainer = styled(motion.div)<{ isSelected: boolean }>`
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   position: absolute;
-  z-index: ${({ isSelected }) => (isSelected ? '99' : '1')};
+  z-index: ${({ $isSelected }) => ($isSelected ? '99' : '1')};
 
   ::after {
     content: '';
     position: absolute;
     border-style: solid;
     border-width: 6px 6px 0;
-    border-color: ${({ isSelected, theme }) =>
-      isSelected
+    border-color: ${({ $isSelected, theme }) =>
+      $isSelected
         ? `${theme.color.marker} transparent`
         : `${theme.color.bg} transparent`};
     display: block;
@@ -127,34 +127,34 @@ const CustomMarkerContainer = styled(motion.div)<{ isSelected: boolean }>`
   }
 `;
 
-const MarkerIcon = styled.div<{ isSelected: boolean }>`
+const MarkerIcon = styled.div<{ $isSelected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${({ isSelected }) => (isSelected ? '35px' : '30px')};
-  height: ${({ isSelected }) => (isSelected ? '35px' : '30px')};
+  width: ${({ $isSelected }) => ($isSelected ? '35px' : '30px')};
+  height: ${({ $isSelected }) => ($isSelected ? '35px' : '30px')};
   border-radius: 100%;
-  background-color: ${({ isSelected, theme }) =>
-    isSelected ? '#fff' : `${theme.color.marker}`};
-  color: ${({ isSelected, theme }) =>
-    isSelected ? `${theme.color.marker}` : '#fff'};
+  background-color: ${({ $isSelected, theme }) =>
+    $isSelected ? '#fff' : `${theme.color.marker}`};
+  color: ${({ $isSelected, theme }) =>
+    $isSelected ? `${theme.color.marker}` : '#fff'};
   transition: all 300ms ease-in-out;
 `;
 
-const PlaceInfoContainer = styled.div<{ isSelected: boolean }>`
+const PlaceInfoContainer = styled.div<{ $isSelected: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  gap: ${({ isSelected }) => (isSelected ? '3px' : '1px')};
+  gap: ${({ $isSelected }) => ($isSelected ? '3px' : '1px')};
   width: auto;
   transition: all 300ms ease-in-out;
   margin-right: 8px;
 `;
 
-const PlaceName = styled.div<{ isSelected: boolean }>`
-  color: ${({ isSelected, theme }) =>
-    isSelected ? '#fff' : `${theme.color.text}`};
+const PlaceName = styled.div<{ $isSelected: boolean }>`
+  color: ${({ $isSelected, theme }) =>
+    $isSelected ? '#fff' : `${theme.color.text}`};
   font-size: 14px;
   font-weight: 500;
   width: auto;
@@ -164,8 +164,8 @@ const PlaceName = styled.div<{ isSelected: boolean }>`
   transition: all 300ms ease-in-out;
 `;
 
-const CategoryName = styled.div<{ isSelected: boolean }>`
-  color: ${({ isSelected }) => (isSelected ? '#c4c4c4' : '#a5a5a5')};
+const CategoryName = styled.div<{ $isSelected: boolean }>`
+  color: ${({ $isSelected }) => ($isSelected ? '#c4c4c4' : '#a5a5a5')};
   min-width: 40px;
   font-size: 12px;
   font-weight: 500;

@@ -33,16 +33,20 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   );
 
   useEffect(() => {
+    if (!locationId) return;
     refetch();
-  }, [selectedPlace]);
+  }, [selectedPlace, refetch, locationId]);
 
   useEffect(() => {
     if (!posts) return;
-    if (!posts.location.placeInfoId) return setGoogleSearchResult(null);
+    if (posts.location.placeInfoId === 'null')
+      return setGoogleSearchResult(null);
+
     const request = {
       placeId: posts?.location.placeInfoId,
       fields: detailSearchFields,
     };
+
     // @ts-ignore
     const service = new google.maps.places.PlacesService(map);
     service.getDetails(request, callback);
@@ -63,7 +67,7 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
     <Base>
       <BodyContainer>
         <ImageHeader
-          imageURL={
+          $imageURL={
             googleSearchResult?.photos?.[0]?.getUrl()
               ? googleSearchResult?.photos?.[0]?.getUrl()
               : posts?.location.Posts[0].imgUrl
@@ -84,7 +88,7 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
           <span>영업시간</span>
           <DownArrow />
         </InfoContainer>
-        {isOpen && googleSearchResult ? (
+        {isOpen && googleSearchResult && (
           <WeekDayContainer>
             {googleSearchResult?.opening_hours?.weekday_text?.map((dayText) => (
               <BusinessContainer>
@@ -92,7 +96,12 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
               </BusinessContainer>
             ))}
           </WeekDayContainer>
-        ) : null}
+        )}
+        {isOpen && !googleSearchResult && (
+          <WeekDayContainer>
+            <BusinessContainer>영업 정보 없음</BusinessContainer>
+          </WeekDayContainer>
+        )}
         <InfoContainer>
           <PhoneIcon />
           <span>
@@ -143,11 +152,11 @@ const Base = styled.div`
   }
 `;
 
-const ImageHeader = styled.div<{ imageURL: string | undefined }>`
+const ImageHeader = styled.div<{ $imageURL: string | undefined }>`
   width: 100%;
   height: 186px;
   background: gray;
-  background-image: ${({ imageURL }) => `url(${imageURL})`};
+  background-image: ${({ $imageURL }) => `url(${$imageURL})`};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

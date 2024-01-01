@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SearchIcon } from '../../../assets/icons/SearchIcon';
 import useInput from '../../../hooks/useInput';
@@ -21,17 +21,17 @@ const Search = () => {
 
   const { setCurrentLocation } = useMapStore();
   const { map } = useMapStore();
-
+  const uniqueId = useId();
   // @ts-ignore
   const searchRef = useRef<HTMLDivElement | null>(null);
-  const service = new google.maps.places.PlacesService(map);
 
   useEffect(() => {
+    if (!value) return;
     const request = {
       query: value,
       fields: textSearchFields,
     };
-
+    const service = new google.maps.places.PlacesService(map!);
     service.textSearch(request, (results, status) => {
       placeSearchCallback(results, status, setSearchResult);
     });
@@ -42,7 +42,7 @@ const Search = () => {
     } else {
       setIsFocus(true);
     }
-  }, [value]);
+  }, [value, map]);
 
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
@@ -68,7 +68,7 @@ const Search = () => {
   };
 
   return (
-    <Base onFocus={isFocus} ref={searchRef}>
+    <Base $onFocus={isFocus} ref={searchRef}>
       <Input
         placeholder="장소를 검색해 이동해 보세요!"
         value={value}
@@ -81,17 +81,12 @@ const Search = () => {
       {isFocus && (
         <ResultContainer>
           {value &&
-            searchResult?.map((res) => (
-              <ResultItem onClick={() => moveSearchPlaceHandler(res)}>
+            searchResult?.map((res, idx) => (
+              <ResultItem key={idx} onClick={() => moveSearchPlaceHandler(res)}>
                 {res.name}
                 <span>{res.formatted_address}</span>
               </ResultItem>
             ))}
-          {!value && (
-            <GuideContainer>
-              <>장소명을 검색해 보세요 🔍</>
-            </GuideContainer>
-          )}
         </ResultContainer>
       )}
     </Base>
@@ -100,12 +95,12 @@ const Search = () => {
 
 export default Search;
 
-const Base = styled.div<{ onFocus: boolean }>`
+const Base = styled.div<{ $onFocus: boolean }>`
   width: 90%;
   min-height: 50px;
 
   border: 1px solid ${({ theme }) => theme.color.border};
-  border-radius: ${({ onFocus }) => (onFocus ? '20px 20px 0 0 ' : '20px')};
+  border-radius: ${({ $onFocus }) => ($onFocus ? '20px 20px 0 0 ' : '20px')};
   box-sizing: border-box;
   margin: 20px 20px 0 20px;
 
@@ -159,8 +154,7 @@ const ResultContainer = styled.div`
 const ResultItem = styled.div`
   box-sizing: border-box;
   width: 100%;
-  min-height: 70px; // Adjusted the min-height for better spacing
-
+  min-height: 70px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -180,24 +174,12 @@ const ResultItem = styled.div`
     font-weight: 500;
     width: 100%;
     text-overflow: ellipsis;
-    white-space: nowrap; // Prevents wrapping to the next line
-    overflow: hidden; // Hides the content that overflows
+    white-space: nowrap;
+    overflow: hidden;
   }
   text-overflow: ellipsis;
-  white-space: nowrap; // Prevents wrapping to the next line
-  overflow: hidden; // Hides the content that overflows
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 16px;
   font-weight: 700;
-`;
-
-const GuideContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 260px;
-  color: ${({ theme }) => theme.color.text};
-  font-size: 16px;
-  font-weight: 700;
-  z-index: 2;
 `;

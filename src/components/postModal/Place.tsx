@@ -171,7 +171,6 @@ const Base = styled.div`
   width: 100%;
   gap: 5px;
   position: relative;
-  font-family: 'Wanted Sans Variable';
 `;
 
 const SearchContainer = styled.div`
@@ -197,9 +196,7 @@ const SearchInput = styled.input`
     font-size: 16px;
     font-weight: 700;
     color: ${({ theme }) => theme.color.sub};
-    font-family: 'Wanted Sans Variable';
   }
-  font-family: 'Wanted Sans Variable';
 `;
 
 const ResultList = styled.div`
@@ -264,7 +261,6 @@ const PlaceContainer = styled.div`
 const PlaceName = styled.div`
   color: ${({ theme }) => theme.color.text};
 
-  font-family: Wanted Sans;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;

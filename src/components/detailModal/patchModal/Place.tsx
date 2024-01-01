@@ -184,10 +184,12 @@ const SearchInput = styled.input`
   font-size: 16px;
   font-weight: 700;
   background-color: ${({ theme }) => theme.color.bg};
+  font-family: 'Wanted Sans';
   &::placeholder {
     font-size: 16px;
     font-weight: 700;
     color: ${({ theme }) => theme.color.sub};
+    font-family: 'Wanted Sans';
   }
 `;
 

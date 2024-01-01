@@ -8,7 +8,7 @@ interface Props {
 
 const ListBtn: React.FC<Props> = ({ isListOpen, onClickListBtn }) => {
   return (
-    <IconWrapper isListOpen={isListOpen} onClick={onClickListBtn}>
+    <IconWrapper $isListOpen={isListOpen} onClick={onClickListBtn}>
       <IoIosArrowForward />
     </IconWrapper>
   );
@@ -16,11 +16,11 @@ const ListBtn: React.FC<Props> = ({ isListOpen, onClickListBtn }) => {
 
 export default ListBtn;
 
-const IconWrapper = styled.div<{ isListOpen: boolean }>`
+const IconWrapper = styled.div<{ $isListOpen: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: ${({ isListOpen }) => (isListOpen ? 'rotate(180deg)' : null)};
+  transform: ${({ $isListOpen }) => ($isListOpen ? 'rotate(180deg)' : null)};
   transition: all 200ms ease-in-out;
   color: ${({ theme }) => theme.color.border};
   width: 100%;

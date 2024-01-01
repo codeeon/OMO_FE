@@ -1,8 +1,8 @@
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Search from './Search';
 import Header from './Header';
-import { CurrentLocationType, LocationType } from '../../../model/interface';
+import { LocationType } from '../../../model/interface';
 import Card from './Card';
 
 const categories = ['전체', '음식점', '카페', '기타'];
@@ -28,7 +28,8 @@ const PlaceList: React.FC<Props> = ({
       <PlaceCategoryContainer>
         {categories.map((cat) => (
           <PlaceCategoryBtn
-            selected={selectedCategory === cat}
+            key={cat}
+            $selected={selectedCategory === cat}
             onClick={() => changeCategory(cat)}
           >
             {cat}
@@ -37,7 +38,7 @@ const PlaceList: React.FC<Props> = ({
       </PlaceCategoryContainer>
       <ContentsContainer>
         {placeDatas?.map((placeDb) => (
-          <Card placeDb={placeDb} />
+          <Card key={placeDb.latitude} placeDb={placeDb} />
         ))}
       </ContentsContainer>
     </Base>
@@ -82,10 +83,10 @@ const PlaceCategoryContainer = styled.div`
   gap: 8px;
 `;
 
-const PlaceCategoryBtn = styled.div<{ selected: boolean }>`
+const PlaceCategoryBtn = styled.div<{ $selected: boolean }>`
   border-radius: 40px;
-  border: ${({ selected, theme }) =>
-    selected ? '1px solid #f97393;' : `1px solid ${theme.color.border2}`};
+  border: ${({ $selected, theme }) =>
+    $selected ? '1px solid #f97393;' : `1px solid ${theme.color.border2}`};
   color: #323232;
   text-align: center;
   font-size: 16px;

@@ -7,6 +7,7 @@ import useGetBookmarkQuery from '../../hooks/reactQuery/bookmark/useGetBookmarkQ
 import { BookmarkLocationType } from '../../model/interface';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
+import BookMarkIcon from '../../assets/icons/BookMarkIcon';
 const randomNumberBetween = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -127,28 +128,7 @@ const BookMarkBtn: React.FC<Props> = ({
         transition={{ type: 'spring', stiffness: 400, damping: 17 }}
         $isBookMarking={isBookMarking}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-        >
-          <path
-            d="M14.0166 1.66602H5.98327C4.20827 1.66602 2.7666 3.11602 2.7666 4.88268V16.6243C2.7666 18.1243 3.8416 18.7577 5.15827 18.0327L9.22494 15.7743C9.65827 15.5327 10.3583 15.5327 10.7833 15.7743L14.8499 18.0327C16.1666 18.766 17.2416 18.1327 17.2416 16.6243V4.88268C17.2333 3.11602 15.7916 1.66602 14.0166 1.66602Z"
-            stroke="#7B7B7B"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M14.0166 1.66602H5.98327C4.20827 1.66602 2.7666 3.11602 2.7666 4.88268V16.6243C2.7666 18.1243 3.8416 18.7577 5.15827 18.0327L9.22494 15.7743C9.65827 15.5327 10.3583 15.5327 10.7833 15.7743L14.8499 18.0327C16.1666 18.766 17.2416 18.1327 17.2416 16.6243V4.88268C17.2333 3.11602 15.7916 1.66602 14.0166 1.66602Z"
-            stroke="#7B7B7B"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <BookMarkIcon />
         <span>{isBookMarking ? '취소' : '북마크'}</span>
       </Button>
       <StyledDiv aria-hidden>
