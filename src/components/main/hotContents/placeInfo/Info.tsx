@@ -65,7 +65,7 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
       {isOpen && googleSearchResult && (
         <WeekDayContainer>
           {googleSearchResult?.opening_hours?.weekday_text?.map((dayText) => (
-            <BusinessContainer>
+            <BusinessContainer key={dayText}>
               <div>{dayText}</div>
             </BusinessContainer>
           ))}

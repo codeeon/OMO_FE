@@ -22,6 +22,9 @@ const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
     useState<google.maps.places.PlaceResult | null>(null);
 
   useEffect(() => {
+    if (!Location) return;
+    if (Location.placeInfoId === 'null') return setGoogleSearchResult(null);
+    if (!map) return;
     const request = {
       placeId: Location.placeInfoId,
       fields: detailSearchFields,
@@ -38,7 +41,7 @@ const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
         setGoogleSearchResult(place);
       }
     }
-  }, []);
+  }, [Location, map]);
   return (
     <Base>
       <MiniMap post={post} />
