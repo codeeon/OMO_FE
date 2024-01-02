@@ -5,8 +5,6 @@ import { useMutation, useQuery } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import KakaoLogin from '../components/auth/KakaoLogin';
 import auth from '..//axios/auth';
-import useGetKakaoQuery from '../components/auth/signup/useGetKakaoQuery';
-import { getKakao } from '../components/auth/signup/useGetKakaoQuery';
 
 interface LoginData {
   email: string;
@@ -54,38 +52,6 @@ const Login: React.FC = () => {
     mutation.mutate(data);
   };
 
-  const { data: kakaoData, isError: kakaoError } = useGetKakaoQuery();
-
-  // const handleSocialLogin = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/kakao`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       },
-  //     );
-  //     if (response.ok) {
-  //       const data = await response.json(); // 엑세스 토큰과 리프레시 토큰을 포함한 응답 데이터
-  //       const accessToken = data.accessToken; // 엑세스 토큰 추출
-  //       const refreshToken = data.refreshToken; // 리프레시 토큰 추출
-  //       // const userId = data.userId; //
-  //       // 받은 토큰들을 로컬 스토리지 등에 저장하여 활용
-  //       localStorage.setItem('accessToken', accessToken);
-  //       localStorage.setItem('refreshToken', refreshToken);
-  //       // sessionStorage.setItem('userId', userId);
-  //       // 받은 토큰들을 활용하여 로그인 상태 관리 또는 인증 등의 작업 수행
-  //       // ...
-  //     } else {
-  //       console.error('소셜 로그인 실패:', response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error('소셜 로그인 요청 중 오류 발생:', error);
-  //   }
-  // };
-
   return (
     <Base>
       <LoginBox>
@@ -109,11 +75,6 @@ const Login: React.FC = () => {
           </LargeBtn>
         </form>
         <KakaoLogin />
-
-        {/* <Link > */}
-        {/* <LargeBtn onClick={navigate('/')} type="button"></LargeBtn> */}
-        {/* </Link> */}
-        {/* <LargeBtn onClick={handleSocialLogin} /> */}
         <OrLine>
           <div>{line}</div>
           <div>
@@ -205,6 +166,7 @@ const LargeBtn = styled.button`
   cursor: pointer;
 `;
 
+// 스타일드 컴포넌트 프롭스 타입에 옵셔널 붙여야겠지...? ㅠㅠ
 const Text = styled.div<{ $color?: string }>`
   display: inline-flex;
   align-items: center;

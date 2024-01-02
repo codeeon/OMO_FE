@@ -22,7 +22,7 @@ authAuth.interceptors.request.use(
   },
 );
 
-authApi.interceptors.response.use(
+authAuth.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
