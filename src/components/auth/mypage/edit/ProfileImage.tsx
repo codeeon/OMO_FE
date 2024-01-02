@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useMutation } from 'react-query';
-import { onImageChange } from '../../../../function/uploadImage';
+// import { useMutation } from 'react-query';
+// import { onImageChange } from '../../../../utils/uploadImage';
 
 interface Props {
   imageURL: string;
@@ -16,7 +16,7 @@ const ProfileImage: React.FC<Props> = ({
   setFiles,
   files,
 }) => {
-  const { mutate } = useMutation(onImageChange);
+  // const { mutate } = useMutation(onImageChange);
 
   const isValidImageFileType = (file: File): boolean => {
     const allowedTypes = ['image/jpeg', 'image/png'];

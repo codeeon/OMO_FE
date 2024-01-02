@@ -96,30 +96,39 @@ const Mypage: React.FC = () => {
       </Select>
       <Contents>
         {/* pages가 정해져 있기 때문에, 수정을 해야 할 듯. 다음 페이지가 있다면 그 숫자의 페이지도 나오게끔 */}
-        {isSelect === 'Bookmark'
-          ? (isFetchingBookmark && !isFetchingNextBookmark) ||
-            (!isFetchingBookmark && isFetchingNextBookmark)
-            ? Array.from({ length: 12 }).map((_, idx) => (
-                <PlaceCardSkeleton key={idx} />
-              ))
-            : myBookmark?.pages.map((page) =>
-                page.data.map((placeData) => (
-                  <PlaceCard key={placeData.locationId} placeData={placeData} />
-                )),
-              )
-          : (isFetchingMyPosts && !isFetchingNextMyPosts) ||
-            (!isFetchingMyPosts && isFetchingNextMyPosts)
-          ? Array.from({ length: 12 }).map((_, idx) => (
-              <ContentCardSkeleton key={idx} />
+        {isSelect === 'Bookmark' ? (
+          (isFetchingBookmark && !isFetchingNextBookmark) ||
+          (!isFetchingBookmark && isFetchingNextBookmark) ? (
+            Array.from({ length: 12 }).map((_, idx) => (
+              <PlaceCardSkeleton key={idx} />
             ))
-          : myPosts?.pages.map((page) =>
-              page.data.map((contentData) => (
-                <ContentCard
-                  key={contentData.postId}
-                  contentData={contentData}
-                />
+          ) : myBookmark?.pages[0].data.length === 0 ? (
+            <Text $color="sub" style={{ marginTop: '50px' }}>
+              북마크에 저장한 장소가 없습니다.
+            </Text>
+          ) : (
+            myBookmark?.pages.map((page) =>
+              page.data.map((placeData) => (
+                <PlaceCard key={placeData.locationId} placeData={placeData} />
               )),
-            )}
+            )
+          )
+        ) : (isFetchingMyPosts && !isFetchingNextMyPosts) ||
+          (!isFetchingMyPosts && isFetchingNextMyPosts) ? (
+          Array.from({ length: 12 }).map((_, idx) => (
+            <ContentCardSkeleton key={idx} />
+          ))
+        ) : myPosts?.pages[0].data.length === 0 ? (
+          <Text $color="sub" style={{ marginTop: '50px' }}>
+            아직 작성한 게시글이 없습니다.
+          </Text>
+        ) : (
+          myPosts?.pages.map((page) =>
+            page.data.map((contentData) => (
+              <ContentCard key={contentData.postId} contentData={contentData} />
+            )),
+          )
+        )}
         {isSelect === 'Bookmark' ? (
           <ObserverContainer ref={setTargetBookmark}></ObserverContainer>
         ) : (
@@ -204,6 +213,26 @@ const Item = styled.div<{ selected: boolean }>`
   border-width: 0 0 3px 0;
   margin-bottom: 16px;
   cursor: pointer;
+`;
+
+const Text = styled.div<{ $color?: string }>`
+  /* display: inline-flex;
+  justify-content: flex-end; */
+  gap: 4px;
+  color: ${({ $color, theme }) =>
+    $color === 'sub2'
+      ? theme.color.sub2
+      : $color === 'sub'
+      ? theme.color.sub
+      : $color === 'text'
+      ? theme.color.text
+      : $color === 'btn'
+      ? '#fff'
+      : theme.color.link};
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  height: 25px;
 `;
 
 const Contents = styled.div`
