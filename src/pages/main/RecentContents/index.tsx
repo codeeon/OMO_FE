@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
-import RecentCard from '../../../components/card/RecentPostCard.tsx';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../../../components/skeleton/RecentPostCardSkeleton.tsx';
 import useGetRecentPostsQuery from '../../../hooks/reactQuery/main/useGetRecentPostsQuery';

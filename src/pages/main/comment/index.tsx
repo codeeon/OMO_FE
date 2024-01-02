@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PlaceCommnetCardSkeleton from '../../../components/skeleton/CommentCardSkeleton';
 import useGetCommentPostsQuery from '../../../hooks/reactQuery/main/useGetCommentPostsQuery';
