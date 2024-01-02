@@ -93,7 +93,8 @@ const Posts = () => {
                   </React.Fragment>
                 ))}
             {isFetchingNextPage &&
-              Array.from({ length: 20 }).map((_, idx) => (
+              hasNextPage &&
+              Array.from({ length: 4 }).map((_, idx) => (
                 <ContentCardSkeleton key={idx} />
               ))}
             {hasNextPage && (
@@ -207,5 +208,5 @@ const FilterContainer = styled.div`
 `;
 
 const ObserverContainer = styled.div`
-  height: 300px;
+  height: 200px;
 `;

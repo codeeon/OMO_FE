@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import NavDropdown from './NavDropdown';
+import Search from './search/Search';
 
 interface Props {
   maxWidth: string | null;
@@ -19,6 +20,7 @@ const Navbar: React.FC<Props> = ({ maxWidth, disableLogo }) => {
       return setIsSelected('');
     }
     navigate('/');
+    setIsSelected('');
   };
 
   const onSelectHandler = (item: string) => {
@@ -34,14 +36,17 @@ const Navbar: React.FC<Props> = ({ maxWidth, disableLogo }) => {
   return (
     <Base>
       <Wrapper $maxWidth={maxWidth}>
-        <Logo
-          onClick={onClickLogoHander}
-          whileHover={{ scale: 1.1 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-        >
-          <LogoCircle />
-          <LogoRectangle />
-        </Logo>
+        <LeftContainer>
+          <Logo
+            onClick={onClickLogoHander}
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+          >
+            <LogoCircle />
+            <LogoRectangle />
+          </Logo>
+          <Search />
+        </LeftContainer>
         <RightContainer>
           <Item
             onClick={() => onSelectHandler('게시글')}
@@ -74,7 +79,7 @@ const Base = styled.div`
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
   background: ${({ theme }) => theme.color.bg};
-  z-index: 12;
+  z-index: 10;
 `;
 
 const Wrapper = styled.div<{ $maxWidth: string | null }>`
@@ -83,6 +88,12 @@ const Wrapper = styled.div<{ $maxWidth: string | null }>`
   justify-content: space-between;
   max-width: ${({ $maxWidth }) => ($maxWidth ? $maxWidth : '1200px')};
   width: 100%;
+`;
+
+const LeftContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const LogoCircle = styled.div`

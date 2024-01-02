@@ -32,7 +32,7 @@ const ContentCard: React.FC<Props> = ({ post }) => {
         <ImageBox $imageURL={post.imgUrl[0]} />
         <StarCount count={post.star} margin="17px 20px" />
         <Text dangerouslySetInnerHTML={{ __html: post.content }} />
-        <Footer>
+        {/* <Footer>
           <FooterItem>
             <LikeBtn postId={post.postId} />
             <span>{post.likeCount}</span>
@@ -41,7 +41,7 @@ const ContentCard: React.FC<Props> = ({ post }) => {
             <TbMessage />
             <span>{post.commentCount}</span>
           </FooterItem>
-        </Footer>
+        </Footer> */}
       </Base>
       <Modal isOpen={isModalOpen} onClose={toggleModalHandler}>
         <DetailContentsModal

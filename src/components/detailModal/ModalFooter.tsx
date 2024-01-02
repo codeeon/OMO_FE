@@ -50,5 +50,6 @@ const FooterItem = styled.div<{ $color: string }>`
     margin-top: 4px;
     font-size: 20px;
     font-weight: 700;
+    color: ${({ theme }) => theme.color.sub2};
   }
 `;

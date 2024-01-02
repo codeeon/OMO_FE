@@ -1,5 +1,6 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import usePlaceStore from '../store/location/placeStore';
 const Navbar = lazy(() => import('../components/navbar/Navbar'));
 const Home = lazy(() => import('../pages/Home'));
 const Contents = lazy(() => import('../pages/Contents'));
@@ -15,6 +16,13 @@ const Routers = () => {
   const excludedRoutes = ['/map'];
   const mainRoutes = ['/'];
   const location = useLocation();
+  const { setPlace } = usePlaceStore();
+
+  useEffect(() => {
+    if (!excludedRoutes.includes(location.pathname)) {
+      setPlace(null);
+    }
+  }, [location.pathname]);
 
   return (
     <Suspense fallback={<></>}>

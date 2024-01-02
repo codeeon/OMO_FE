@@ -23,7 +23,6 @@ export default Footer;
 
 const Base = styled.div`
   position: relative;
-  transform: translateY(100%);
 
   width: 100%;
   height: 210px;

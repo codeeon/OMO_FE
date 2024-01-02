@@ -13,12 +13,12 @@ const Banner = () => {
       <BackgroundImg>
         <source
           srcSet={webPImgUrl}
-          style={{ width: '100%', height: '572px' }}
+          style={{ width: '100%', height: '572px', objectFit: 'cover' }}
         />
         <img
           src={jpgImgUrl}
           alt="남산 배너 이미지"
-          style={{ width: '100%', height: '572px' }}
+          style={{ width: '100%', height: '572px', objectFit: 'cover' }}
         />
       </BackgroundImg>
       <BackgroundImgBlur />

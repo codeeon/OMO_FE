@@ -18,7 +18,9 @@ const HotPostsCard: React.FC<Props> = ({ post }) => {
   return (
     <Base onClick={(e) => handleModalOpen(e)}>
       <Wrapper>
-        <ImageContainer src={imgUrl[0]} />
+        <ImgContainer>
+          <LazyLoadImg src={imgUrl[0]} />
+        </ImgContainer>
         <Title>{Location.storeName}</Title>
         <BodyConatiner>
           <Text dangerouslySetInnerHTML={{ __html: content }} />
@@ -35,14 +37,20 @@ const HotPostsCard: React.FC<Props> = ({ post }) => {
 };
 
 export default HotPostsCard;
-
-const ImageContainer = styled(LazyLoadImage)`
+const ImgContainer = styled.div`
   width: 343px;
   height: 155px;
   border-radius: 8px;
+  overflow: hidden;
+`;
+
+const LazyLoadImg = styled(LazyLoadImage)`
+  width: 100%;
+  height: 100%;
 
   object-fit: cover;
   object-position: center;
+
   transition: all 300ms ease;
 `;
 
@@ -51,8 +59,8 @@ const Base = styled.div`
   border: 1px solid ${({ theme }) => theme.color.cardBorder};
   background: ${({ theme }) => theme.color.cardBg};
   border-radius: 16px;
-  &:hover ${ImageContainer} {
-    background-size: 120%;
+  &:hover ${LazyLoadImg} {
+    transform: scale(1.1);
   }
   &:hover {
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,

@@ -21,6 +21,7 @@ const useGetHotPostsQuery = (districtName: string | undefined) =>
     onSuccess: () => {
       queryClient.invalidateQueries('hotPosts');
     },
+    enabled: false,
   });
 
 export default useGetHotPostsQuery;
