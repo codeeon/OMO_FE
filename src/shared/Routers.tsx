@@ -1,14 +1,13 @@
 import React, { Suspense, lazy } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import UserPage from '../pages/UserPage';
 const Navbar = lazy(() => import('../components/navbar/Navbar'));
 const Home = lazy(() => import('../pages/Home'));
 const Contents = lazy(() => import('../pages/Contents'));
 const Map = lazy(() => import('../pages/googleMap/Index'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));
-const ProfileEdit = lazy(
-  () => import('../components/auth/mypage/edit/ProfileEdit'),
-);
+const ProfileEdit = lazy(() => import('../pages/ProfileEdit'));
 const Mypage = lazy(() => import('../pages/Mypage'));
 
 const Routers = () => {
@@ -30,6 +29,7 @@ const Routers = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/edit" element={<ProfileEdit />} />
+        <Route path="/userpage" element={<UserPage />} />
       </Routes>
     </Suspense>
   );

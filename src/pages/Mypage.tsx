@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../components/skeleton/RecentPostCardSkeleton';
 import ContentCard from '../components/share/ContentCard';
-import PlaceCardSkeleton from '../components/auth/mypage/PlaceCardSkeleton';
+import PlaceCardSkeleton from '../components/skeleton/PlaceCardSkeleton';
 import PlaceCard from '../components/auth/mypage/PlaceCard';
-import useGetUserDataQuery from '../hooks/reactQuery/mypage/useGetUserDataQuery';
+import useGetMyDataQuery from '../hooks/reactQuery/mypage/useGetMyDataQuery';
 import useGetMyPostsQuery from '../hooks/reactQuery/mypage/useGetMyPostsQuery';
 import useGetMyBookmarkQuery from '../hooks/reactQuery/mypage/useGetMyBookmarkQuery';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
@@ -15,7 +15,7 @@ const Mypage: React.FC = () => {
 
   const [isSelect, setIsSelect] = useState('Bookmark');
 
-  const { data: userData, isError: userError } = useGetUserDataQuery();
+  const { data: myData, isError: userError } = useGetMyDataQuery();
 
   const {
     data: myBookmark,
@@ -72,9 +72,9 @@ const Mypage: React.FC = () => {
     <Base>
       <Header>
         <Profile>
-          <MyImg src={userData?.data.imgUrl} alt=""></MyImg>
+          <MyImg src={myData?.data.imgUrl} alt=""></MyImg>
           <Nickname style={{ marginLeft: '22px' }}>
-            {userData?.data.nickname}
+            {myData?.data.nickname}
           </Nickname>
         </Profile>
         <Btn onClick={() => navigate('/mypage/edit')}>내 정보 수정</Btn>

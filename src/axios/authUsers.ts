@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import auth from './auth';
 
-const authApi: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_SERVER_API_URL,
+const authUsers: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_APP_SERVER_URL,
 });
 
-authApi.interceptors.request.use(
+authUsers.interceptors.request.use(
   (config) => {
     const accessToken = sessionStorage.getItem('accessToken');
 
@@ -22,7 +22,7 @@ authApi.interceptors.request.use(
   },
 );
 
-authApi.interceptors.response.use(
+authUsers.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;
   },
@@ -66,4 +66,4 @@ authApi.interceptors.response.use(
   },
 );
 
-export default authApi;
+export default authUsers;

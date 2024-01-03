@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import useThemeStore from '../../../store/theme/themeStore';
+import useThemeStore from '../../store/theme/themeStore';
 
 const PlaceCardSkeleton = () => {
   const { themeMode } = useThemeStore();

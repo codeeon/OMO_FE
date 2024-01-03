@@ -8,15 +8,19 @@ interface Props {
   children: ReactNode;
   isOpen: boolean;
   selector?: string;
+  width?: number;
+  height?: number;
 }
 
-const SubModal: React.FC<Props> = ({ children, isOpen }) => {
+const SubModal: React.FC<Props> = ({ children, isOpen, width, height }) => {
   return (
     <CSSTransition in={isOpen} timeout={300} classNames="modal" unmountOnExit>
       <Portal>
         <Overlay>
           <Dim />
-          <Container>{children}</Container>
+          <Container $width={width} $height={height}>
+            {children}
+          </Container>
         </Overlay>
       </Portal>
     </CSSTransition>
@@ -51,9 +55,9 @@ const Dim = styled.div`
   backdrop-filter: blur(5px);
 `;
 
-const Container = styled.div`
-  width: 700px;
-  height: 900px;
+const Container = styled.div<{ $width: number; $height: number }>`
+  width: ${({ $width }) => $width || '700px'};
+  height: ${({ $height }) => $height || '800px'};
 
   position: relative;
 

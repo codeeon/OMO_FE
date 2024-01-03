@@ -69,14 +69,14 @@ const confirm = (
   </svg>
 );
 
-const Text = styled.div`
+const Text = styled.div<{ check: string }>`
   display: ${({ check }) => (check === '' ? 'none' : 'block')};
-  color: ${({ check }) =>
+  color: ${({ check, theme }) =>
     check === 'rejected'
       ? 'var(--error_accent, #FF3263)'
       : check === 'confirmed'
       ? '#0BD961'
-      : '#FFFFFF'};
+      : theme.color.text};
   text-align: center;
   font-size: 14px;
   font-style: normal;
