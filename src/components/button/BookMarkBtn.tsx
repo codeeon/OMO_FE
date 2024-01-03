@@ -34,7 +34,7 @@ const BookMarkBtn: React.FC<Props> = ({
   const userId = sessionStorage.getItem('userId');
 
   const { data, refetch, isLoading, isFetching } = useGetBookmarkQuery();
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     if (!isFetching && !isLoading) {
