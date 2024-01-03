@@ -7,7 +7,7 @@ import ClockIcon from '../../../../assets/icons/ClockIcon';
 import DividingPointIcon from '../../../../assets/icons/DividingPointIcon';
 import DownArrow from '../../../../assets/icons/DownArrow';
 import PhoneIcon from '../../../../assets/icons/PhoneIcon';
-import BookMarkBtn from '../../../../components/button/BookMarkBtn';
+import BookMarkButton from '../../../../components/button/BookMarkButton';
 import { HiArrowNarrowRight } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import useMapStore from '../../../../store/location/googleMapStore';
@@ -44,7 +44,11 @@ const Info: React.FC<Props> = ({ googleSearchResult, post }) => {
       <Header>
         <PlaceNameContainer>{Location.storeName}</PlaceNameContainer>
         <CategoryName>{Category.categoryName}</CategoryName>
-        <BookMarkBtn locationId={Location.locationId} right="0" top="-10px" />
+        <BookMarkButton
+          locationId={Location.locationId}
+          right="0"
+          top="-10px"
+        />
       </Header>
       <AddressNameContainer>
         <LocationIcon />

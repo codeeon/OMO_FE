@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import CommentItem from './Item';
-import CommentInput from './Input';
+import CommentItem from '../../components/comment/Item';
+import CommentInput from '../../components/comment/Input';
 import { CommentType } from '../../model/interface';
 
 const Comment: React.FC<{

@@ -1,4 +1,4 @@
-import { motion, useAnimate } from 'framer-motion';
+import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import usePostLikeMutation from '../../hooks/reactQuery/like/usePostLikeMutation';

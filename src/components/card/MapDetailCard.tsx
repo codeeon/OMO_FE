@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { LocationPostType } from '../../../model/interface';
+import { LocationPostType } from '../../model/interface';
 import styled from 'styled-components';
-import { TbMessage } from 'react-icons/tb';
-import LikeBtn from '../../../components/detailModal/LikeBtn';
-import Modal from '../../../components/Modal/Modal';
-import DetailContentsModal from '../../../components/detailModal/ContentsModal';
-import StarCount from '../../../components/share/StarCount';
+import Modal from '../Modal/Modal';
+
+import StarCount from '../share/StarCount';
+import PostDetailModal from '../../pages/postDetail/PostDetailModal';
 interface Props {
   post: LocationPostType;
 }
 
-const ContentCard: React.FC<Props> = ({ post }) => {
+const MapDetailCard: React.FC<Props> = ({ post }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleModalHandler = (
@@ -32,19 +31,9 @@ const ContentCard: React.FC<Props> = ({ post }) => {
         <ImageBox $imageURL={post.imgUrl[0]} />
         <StarCount count={post.star} margin="17px 20px" />
         <Text dangerouslySetInnerHTML={{ __html: post.content }} />
-        {/* <Footer>
-          <FooterItem>
-            <LikeBtn postId={post.postId} />
-            <span>{post.likeCount}</span>
-          </FooterItem>
-          <FooterItem>
-            <TbMessage />
-            <span>{post.commentCount}</span>
-          </FooterItem>
-        </Footer> */}
       </Base>
       <Modal isOpen={isModalOpen} onClose={toggleModalHandler}>
-        <DetailContentsModal
+        <PostDetailModal
           postId={post.postId}
           closeModalHandler={toggleModalHandler}
         />
@@ -53,7 +42,7 @@ const ContentCard: React.FC<Props> = ({ post }) => {
   );
 };
 
-export default ContentCard;
+export default MapDetailCard;
 
 const Base = styled.div`
   padding: 15px 0;

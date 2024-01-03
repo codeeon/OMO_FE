@@ -30,7 +30,7 @@ const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
-const Image: React.FC<{ imgUrl: string[] }> = ({ imgUrl }) => {
+const DetailImage: React.FC<{ imgUrl: string[] }> = ({ imgUrl }) => {
   const [[page, direction], setPage] = useState([0, 0]);
 
   const imageIndex = wrap(0, imgUrl.length, page);
@@ -98,7 +98,7 @@ const Image: React.FC<{ imgUrl: string[] }> = ({ imgUrl }) => {
   );
 };
 
-export default Image;
+export default DetailImage;
 
 const PageBtn = styled(motion.div)<{ $position: string }>`
   opacity: 0;

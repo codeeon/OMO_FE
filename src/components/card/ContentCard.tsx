@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
-import DetailContentsModal from '../detailModal/ContentsModal';
+import PostDetailModal from '../../pages/postDetail/PostDetailModal';
 import Modal from '../Modal/Modal';
 import { PostType } from '../../model/interface';
 import { MdLocationOn } from 'react-icons/md';
@@ -54,10 +54,7 @@ const ContentCard: React.FC<Props> = ({ contentData }) => {
         </FooterItem>
       </Footer>
       <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-        <DetailContentsModal
-          postId={postId}
-          closeModalHandler={handleModalClose}
-        />
+        <PostDetailModal postId={postId} closeModalHandler={handleModalClose} />
       </Modal>
     </Base>
   );

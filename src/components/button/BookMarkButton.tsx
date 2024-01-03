@@ -22,7 +22,7 @@ interface Props {
   right?: string;
 }
 
-const BookMarkBtn: React.FC<Props> = ({
+const BookMarkButton: React.FC<Props> = ({
   locationId,
   top,
   left,
@@ -34,7 +34,6 @@ const BookMarkBtn: React.FC<Props> = ({
   const userId = sessionStorage.getItem('userId');
 
   const { data, refetch, isLoading, isFetching } = useGetBookmarkQuery();
-  console.log(data);
 
   useEffect(() => {
     if (!isFetching && !isLoading) {
@@ -144,7 +143,7 @@ const BookMarkBtn: React.FC<Props> = ({
   );
 };
 
-export default BookMarkBtn;
+export default BookMarkButton;
 
 const Container = styled.div<{
   $top?: string;

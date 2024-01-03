@@ -11,7 +11,7 @@ interface Props {
   star: number;
 }
 
-const ModalBody: React.FC<Props> = ({
+const DetailModalBody: React.FC<Props> = ({
   placeName,
   locationName,
   content,
@@ -37,7 +37,7 @@ const ModalBody: React.FC<Props> = ({
   );
 };
 
-export default ModalBody;
+export default DetailModalBody;
 
 const Base = styled.div`
   margin-top: 20px;
