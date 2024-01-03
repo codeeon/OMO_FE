@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import DetailModalHeader from './ModalHeader';
-import DetailModalBody from './ModalBody';
-import DetailModalFooter from './ModalFooter';
-import Comment from '../comment';
 import useGetContentDetailQuery from '../../hooks/reactQuery/post/useGetContentDetailQuery';
-import Image from './Image';
-import SEO from '../share/SEO';
-
-const DetailContentsModal: React.FC<{
+import SEO from '../../components/share/SEO';
+import DetailModalHeader from './DetailModalHeader';
+import DetailModalBody from './DetailModalBody';
+import DetailImage from './DetailImage';
+import DetailModalFooter from './DetailModalFooter';
+import Comment from './Comment';
+const PostDetailModal: React.FC<{
   postId: number;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }> = ({ closeModalHandler, postId }) => {
@@ -26,8 +25,7 @@ const DetailContentsModal: React.FC<{
     Location,
     Comments,
   } = post;
-
-  // console.log(Comments);
+  
   const commentLength = Comments.length;
 
   return (
@@ -42,12 +40,13 @@ const DetailContentsModal: React.FC<{
         closeModalHandler={closeModalHandler}
         post={post}
       />
-      <Image imgUrl={imgUrl} />
+      <DetailImage imgUrl={imgUrl} />
       <DetailModalBody
         placeName={Location.storeName}
-        locationName={Location.address}
+        
         content={content}
         star={star}
+        Location={Location}
       />
       <DetailModalFooter
         likeCount={likeCount}
@@ -59,7 +58,7 @@ const DetailContentsModal: React.FC<{
   );
 };
 
-export default DetailContentsModal;
+export default PostDetailModal;
 
 const Base = styled.div`
   box-sizing: border-box;

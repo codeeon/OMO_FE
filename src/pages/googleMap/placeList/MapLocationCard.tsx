@@ -9,7 +9,7 @@ interface Props {
   placeDb: LocationType;
 }
 
-const Card: React.FC<Props> = ({ placeDb }) => {
+const MapLocationCard: React.FC<Props> = ({ placeDb }) => {
   const { setPlace } = usePlaceStore();
 
   const selectPlaceHandler = (place: LocationType) => {
@@ -46,7 +46,7 @@ const Card: React.FC<Props> = ({ placeDb }) => {
   );
 };
 
-export default Card;
+export default MapLocationCard;
 
 const Base = styled.div`
   box-sizing: border-box;

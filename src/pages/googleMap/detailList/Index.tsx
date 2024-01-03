@@ -4,7 +4,7 @@ import { SelectedPlaceType } from '../../../model/interface';
 import { HiLocationMarker } from 'react-icons/hi';
 import ContentsSection from './ContentsSection';
 import useGetLocationPostsQuery from '../../../hooks/reactQuery/map/useGetLocationPostsQuery';
-import BookMarkBtn from '../../../components/button/BookMarkBtn';
+import BookMarkButton from '../../../components/button/BookMarkButton';
 import { detailSearchFields } from '../../../utils/googleSearch.ts/detailSearch';
 import useMapStore from '../../../store/location/googleMapStore';
 import ClockIcon from '../../../assets/icons/ClockIcon';
@@ -123,7 +123,7 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
           </span>
         </InfoContainer>
         <BookMarContainer>
-          <BookMarkBtn locationId={locationId} top="50px" left="160px" />
+          <BookMarkButton locationId={locationId} top="50px" left="160px" />
         </BookMarContainer>
         <ContentsSection posts={posts} />
       </BodyContainer>

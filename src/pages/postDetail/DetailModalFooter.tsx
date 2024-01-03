@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TbMessage } from 'react-icons/tb';
-import LikeBtn from './LikeBtn';
+import LikeBtn from '../../components/button/LikeButton';
 import MessageIcon from '../../assets/icons/MessageIcon';
 
 interface Props {
@@ -10,7 +9,11 @@ interface Props {
   commentLength: number;
 }
 
-const ModalFooter: React.FC<Props> = ({ likeCount, postId, commentLength }) => {
+const DetailModalFooter: React.FC<Props> = ({
+  likeCount,
+  postId,
+  commentLength,
+}) => {
   return (
     <Footer>
       <FooterItem $color="red">
@@ -25,7 +28,7 @@ const ModalFooter: React.FC<Props> = ({ likeCount, postId, commentLength }) => {
   );
 };
 
-export default ModalFooter;
+export default DetailModalFooter;
 
 const Footer = styled.div`
   display: flex;

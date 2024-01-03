@@ -16,6 +16,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   const onTextAreaFocus = useCallback(() => {
     setIsTextareaFoucs(true);
   }, []);
+  
   const offTextAreaFocus = useCallback(() => {
     setIsTextareaFoucs(false);
   }, []);

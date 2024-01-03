@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Skeleton from 'react-loading-skeleton';
-const ContentCardSk = () => {
+
+const MapDetailCardSkeleton = () => {
   return (
     <Base>
       <UserContainer>
@@ -30,7 +31,7 @@ const ContentCardSk = () => {
   );
 };
 
-export default ContentCardSk;
+export default MapDetailCardSkeleton;
 
 const Base = styled.div`
   margin-top: 20px;

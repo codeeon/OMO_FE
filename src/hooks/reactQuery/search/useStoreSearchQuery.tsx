@@ -7,7 +7,6 @@ const queryClient = new QueryClient();
 const serachStore = async (searchValue: string): Promise<StoreSearchType[]> => {
   const params = { storeName: searchValue };
   const response = await instance.get(`/posts/main/searching`, { params });
-  console.log(response.data);
   return response.data;
 };
 

@@ -7,13 +7,10 @@ import useMapStore from '../../../../store/location/googleMapStore';
 import { detailSearchFields } from '../../../../utils/googleSearch.ts/detailSearch';
 
 interface Props {
-  handleModalClose: (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>,
-  ) => void;
   post: HotPostsType;
 }
 
-const PlaceInfoModal: React.FC<Props> = ({ handleModalClose, post }) => {
+const PlaceInfoModal: React.FC<Props> = ({ post }) => {
   const { Location } = post;
   const { map } = useMapStore();
   const [googleSearchResult, setGoogleSearchResult] =

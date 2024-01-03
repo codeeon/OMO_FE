@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import DetailModalDropdown from './ModalDropdown';
+import DetailModalDropdown from '../../components/detailModal/ModalDropdown';
 import { PostDetailType } from '../../model/interface';
 
-const ModalHeader: React.FC<{
+const DetailModalHeader: React.FC<{
   userName: string;
   userProfile: string;
   createdAt: string;
@@ -41,7 +41,7 @@ const ModalHeader: React.FC<{
   );
 };
 
-export default ModalHeader;
+export default DetailModalHeader;
 
 const Base = styled.div`
   display: flex;

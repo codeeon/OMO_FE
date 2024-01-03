@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
-import ContentCard from './ContentCard';
+import MapDetailCard from '../../../components/card/MapDetailCard';
 import { useNavigate } from 'react-router-dom';
 import { LocationPostsType } from '../../../model/interface';
 
@@ -30,7 +30,7 @@ const ContentsSection: React.FC<Props> = ({ posts }) => {
       </Header>
       <ListContainer>
         {posts?.posts.map((post) => (
-          <ContentCard key={post.postId} post={post} />
+          <MapDetailCard key={post.postId} post={post} />
         ))}
       </ListContainer>
     </Base>

@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { IoIosArrowRoundBack } from 'react-icons/io';
-import PostModalPlace from './Place';
-import PostModalText from './Text';
 import ConfirmModal from './ConfirmModal';
 import { SelectedInfoType } from '../../model/interface';
-import Stars from './Stars';
-import SubModal from '../Modal/SubModal';
+import Stars from '../../components/button/StarButton';
+import SubModal from '../../components/Modal/SubModal';
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
-import ImageFile from './Image2';
 import toast from 'react-hot-toast';
-import Button from '../button/Button';
+import Button from '../../components/button/Button';
+import { validatePublishing } from '../../utils/validationPublishing';
+import { postLoading } from '../../components/alert/postAlert';
+import ImageUpload from './ImageUpload';
+import SearchPlace from './SearchPlace';
+import PostTextArea from '../../components/textarea/PostTextArea';
+import StarButton from '../../components/button/StarButton';
 
 interface Props {
   closeMainModal: (
@@ -25,7 +28,7 @@ interface Props {
   ) => void;
 }
 
-const PostModal: React.FC<Props> = ({
+const PublicModal: React.FC<Props> = ({
   closeMainModal,
   isSubModalOpen,
   openSubModal,
@@ -70,41 +73,10 @@ const PostModal: React.FC<Props> = ({
   const savePostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
-    if (files.length === 0) {
-      return toast.error('이미지를 추가해주세요.', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
-    }
-    if (!selectedInfo.placeName) {
-      return toast.error('장소에 대한 위치를 지정해주세요.', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
-    }
-    if (starNum < 1) {
-      return toast.error('별점을 지정해주세요.', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
-    }
-    if (!text) {
-      return toast.error('장소에 대한 내용을 적어주세요.', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
-    }
-    if (text.length <= 10) {
-      return toast.error('장소에 대한 내용은 10자 이상 적어주세요.', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
-    }
+    if (
+      !validatePublishing(files.length, selectedInfo.placeName, starNum, text)
+    )
+      return;
 
     const newContent = {
       content: text.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
@@ -123,14 +95,7 @@ const PostModal: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    isPostContentLoading
-      ? toast.loading('게시물을 업로드 중입니다...', {
-          position: 'top-right',
-          duration: 4000,
-          style: { fontSize: '14px' },
-          id: '1',
-        })
-      : toast.remove('1');
+    isPostContentLoading ? postLoading() : toast.remove('10');
   }, [isPostContentLoading]);
 
   return (
@@ -150,13 +115,13 @@ const PostModal: React.FC<Props> = ({
           작성완료
         </Button>
       </Header>
-      <ImageFile
+      <ImageUpload
         imageURL={imageURL}
         setImageUrl={setImageUrl}
         files={files}
         setFiles={setFiles}
       />
-      <PostModalPlace
+      <SearchPlace
         selectedInfo={selectedInfo}
         setSelectedInfo={setSelectedInfo}
         searchValue={searchValue}
@@ -164,8 +129,8 @@ const PostModal: React.FC<Props> = ({
         googleSearchResult={googleSearchResult}
         setGoogleSearchResult={setGoogleSearchResult}
       />
-      <Stars starNum={starNum} setStarNum={setStarNum} />
-      <PostModalText text={text} setText={setText} />
+      <StarButton starNum={starNum} setStarNum={setStarNum} />
+      <PostTextArea text={text} setText={setText} />
       <SubModal isOpen={isSubModalOpen}>
         <ConfirmModal
           clearPostHandler={clearPostHandler}
@@ -176,7 +141,7 @@ const PostModal: React.FC<Props> = ({
   );
 };
 
-export default PostModal;
+export default PublicModal;
 
 const Base = styled.div`
   box-sizing: border-box;
@@ -216,15 +181,4 @@ const Title = styled.div`
   font-weight: 700;
   color: ${({ theme }) => theme.color.text};
   letter-spacing: -0.2px;
-`;
-
-const CompleteBtn = styled.div`
-  padding: 10px 15px;
-  font-size: 14px;
-  font-weight: 700;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
-
-  transition: all 200ms ease-in;
 `;

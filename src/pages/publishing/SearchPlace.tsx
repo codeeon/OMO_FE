@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { LuMapPin } from 'react-icons/lu';
 import { IoClose } from 'react-icons/io5';
@@ -6,8 +6,9 @@ import { SelectedInfoType } from '../../model/interface';
 import { FaLocationDot } from 'react-icons/fa6';
 import useMapStore from '../../store/location/googleMapStore';
 import { placeInfoCallback } from '../../utils/googleSearch.ts/textSearch';
-import toast from 'react-hot-toast';
-import _ from 'lodash';
+import useInput from '../../hooks/useInput';
+import { kakaoPlaceSearch } from '../../utils/kakoSearch';
+import { scopeAreaToast } from '../../components/alert/placeAlert';
 
 interface Props {
   selectedInfo: SelectedInfoType;
@@ -22,7 +23,7 @@ interface Props {
   >;
 }
 
-const Place: React.FC<Props> = ({
+const SearchPlace: React.FC<Props> = ({
   selectedInfo,
   setSelectedInfo,
   searchValue,
@@ -30,19 +31,11 @@ const Place: React.FC<Props> = ({
   setGoogleSearchResult,
 }) => {
   const { map } = useMapStore();
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { value, clearValueHandler, changeValueHandler } = useInput();
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (inputRef.current) {
-      inputRef.current.value = e.target.value;
-      searchPlaceHandler(inputRef.current.value);
-    }
-  };
-
-  const clearValueHandler = () => {
-    if (inputRef.current) {
-      inputRef.current.value = '';
-    }
+    changeValueHandler(e);
+    kakaoPlaceSearch(e.target.value, setSearchValue);
   };
 
   const deleteInfoHandler = () => {
@@ -58,15 +51,6 @@ const Place: React.FC<Props> = ({
     setGoogleSearchResult(null);
   };
 
-  const searchPlaceHandler = _.debounce((query: string) => {
-    const ps = new kakao.maps.services.Places();
-    ps.keywordSearch(query, (data, status, _pagination) => {
-      if (status === kakao.maps.services.Status.OK) {
-        setSearchValue(data);
-      }
-    });
-  }, 500);
-
   const selectInfoHandler = (
     placeName: string,
     addressName: string,
@@ -74,19 +58,14 @@ const Place: React.FC<Props> = ({
     latitude: string,
     longitude: string,
   ) => {
+    if (!addressName.includes('서울')) {
+      clearValueHandler();
+      return scopeAreaToast();
+    }
     const request = {
       query: placeName,
       fields: ['place_id', 'formatted_address', 'name'],
     };
-    if (!addressName.includes('서울')) {
-      clearValueHandler();
-      toast.error('지금은 서울시 내에서만 등록이 가능해요.', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
-      return;
-    }
     // @ts-ignore
     const service = new google.maps.places.PlacesService(map);
     service.findPlaceFromQuery(request, (result, status) => {
@@ -107,8 +86,8 @@ const Place: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    inputRef.current?.value === '' && setSearchValue([]);
-  }, [inputRef]);
+    value === '' && setSearchValue([]);
+  }, [value]);
 
   return (
     <Base>
@@ -116,7 +95,7 @@ const Place: React.FC<Props> = ({
         <SearchContainer>
           <FaLocationDot />
           <SearchInput
-            ref={inputRef}
+            value={value}
             placeholder="위치를 입력해 장소를 추가해보세요."
             onChange={(e) => onChangeHandler(e)}
           />
@@ -137,7 +116,7 @@ const Place: React.FC<Props> = ({
           </AdressName>
         </PlaceContainer>
       )}
-      {inputRef.current?.value && (
+      {value && (
         <ResultList>
           {searchValue.map((result) => (
             <ResultItemContainer
@@ -169,7 +148,7 @@ const Place: React.FC<Props> = ({
   );
 };
 
-export default Place;
+export default SearchPlace;
 
 const Base = styled.div`
   display: flex;

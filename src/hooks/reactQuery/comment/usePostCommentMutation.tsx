@@ -11,6 +11,7 @@ const postComment: MutationFunction<
     `/posts/${contentId}/comments`,
     newComment,
   );
+  console.log(response.data);
   return response.data;
 };
 
@@ -28,6 +29,13 @@ const usePostCommentQuery = ({
     onSuccess: () => {
       queryClient.invalidateQueries(['posts', contentId]);
       toast.success('댓글이 성공적으로 등록되었습니다.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    },
+    onError: () => {
+      toast.error('로그인 후 이용해주세요.', {
         position: 'top-right',
         duration: 4000,
         style: { fontSize: '14px' },
