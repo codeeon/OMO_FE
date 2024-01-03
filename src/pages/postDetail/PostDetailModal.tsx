@@ -25,8 +25,7 @@ const PostDetailModal: React.FC<{
     Location,
     Comments,
   } = post;
-
-  // console.log(Comments);
+  
   const commentLength = Comments.length;
 
   return (
@@ -44,9 +43,10 @@ const PostDetailModal: React.FC<{
       <DetailImage imgUrl={imgUrl} />
       <DetailModalBody
         placeName={Location.storeName}
-        locationName={Location.address}
+        
         content={content}
         star={star}
+        Location={Location}
       />
       <DetailModalFooter
         likeCount={likeCount}

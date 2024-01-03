@@ -3,26 +3,48 @@ import styled from 'styled-components';
 import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa';
 import LocationIcon from '../../assets/icons/LocationIcon';
+import { LocationType } from '../../model/interface';
+import useMapStore from '../../store/location/googleMapStore';
+import usePlaceStore from '../../store/location/placeStore';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   placeName: string;
-  locationName: string;
   content: string;
   star: number;
+  Location: LocationType;
 }
 
 const DetailModalBody: React.FC<Props> = ({
   placeName,
-  locationName,
   content,
   star,
+  Location,
 }) => {
+  const { setCurrentLocation } = useMapStore();
+  const { setPlace } = usePlaceStore();
+
+  const navigate = useNavigate();
+
+  const moveMapHandler = () => {
+    document.body.style.overflow = 'auto';
+    setCurrentLocation({
+      lat: Number(Location.latitude),
+      lng: Number(Location.longitude),
+    });
+    setPlace({
+      locationId: Location.locationId,
+      latitude: Location.latitude,
+      longitude: Location.longitude,
+    });
+    navigate('/map');
+  };
   return (
     <Base>
       <Title>{placeName}</Title>
-      <PlaceInfo>
+      <PlaceInfo onClick={moveMapHandler}>
         <LocationIcon />
-        <span>{locationName}</span>
+        <span>{Location.storeName}</span>
       </PlaceInfo>
       <StarContainer>
         {Array.from({ length: 5 }, (_, idx) => (
@@ -55,10 +77,21 @@ const Title = styled.div`
 `;
 
 const PlaceInfo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+
   margin-top: 10px;
   color: #44a5ff;
   font-size: 16px;
   font-weight: 500;
+  cursor: pointer;
+  &:hover {
+    color: #2086e4;
+    font-size: 20px;
+  }
+  transition: all 300ms ease;
 `;
 
 const Text = styled.div`
