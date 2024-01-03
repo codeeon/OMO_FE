@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import auth from '../axios/auth';
 import useInput from '../hooks/useInput';
 import Check from '../components/auth/signup/Check';
