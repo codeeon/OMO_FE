@@ -14,6 +14,7 @@ interface Props {
   isLoading: boolean;
   userSearchError: any;
   storeSearchError: any;
+  setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Result: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const Result: React.FC<Props> = ({
   isLoading,
   userSearchError,
   storeSearchError,
+  setIsSearching,
 }) => {
   return (
     <Base $isSearching={isSearching}>
@@ -50,6 +52,7 @@ const Result: React.FC<Props> = ({
             key={idx}
             searchResult={res}
             isSearching={isSearching}
+            setIsSearching={setIsSearching}
           />
         ))
       ) : (

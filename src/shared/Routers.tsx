@@ -4,7 +4,7 @@ import usePlaceStore from '../store/location/placeStore';
 import UserPage from '../pages/UserPage';
 const Navbar = lazy(() => import('../components/navbar/Navbar'));
 const Home = lazy(() => import('../pages/Home'));
-const Contents = lazy(() => import('../pages/post/Posts'));
+const Contents = lazy(() => import('../pages/posts/Posts'));
 const Map = lazy(() => import('../pages/googleMap/Index'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));

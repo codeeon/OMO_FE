@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
-import auth from '..//..//..//axios/auth';
+import auth from '../../../axios/auth';
 import useInput from '../../../hooks/useInput';
 import Check from './Check';
 

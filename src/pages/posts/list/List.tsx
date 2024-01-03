@@ -20,7 +20,7 @@ const List = () => {
   const { category } = useCategoryStore();
   const {
     isModalOpen: isSubModalOpen,
-    handleModalOpen: opeSubModal,
+    handleModalOpen: openSubModal,
     handleModalClose: closeSubModal,
   } = useModalCtr();
   const {
@@ -61,6 +61,20 @@ const List = () => {
     openMainModal(e);
   };
 
+  const renderSkeletons = (count: number) =>
+    Array.from({ length: count }).map((_, idx) => (
+      <RecentPostCardSkeleton key={idx} />
+    ));
+
+  const renderContentCards = () =>
+    contents?.pages.map((group, pageIndex) => (
+      <React.Fragment key={pageIndex}>
+        {group.map((contentData) => (
+          <ContentCard key={contentData.postId} contentData={contentData} />
+        ))}
+      </React.Fragment>
+    ));
+
   return (
     <Base>
       <Wrapper>
@@ -73,35 +87,20 @@ const List = () => {
         <Body>
           <RecentCardGrid>
             {isFetching && !isFetchingNextPage
-              ? Array.from({ length: 20 }).map((_, idx) => (
-                  <RecentPostCardSkeleton key={idx} />
-                ))
-              : contents?.pages.map((group, pageIndex) => (
-                  <React.Fragment key={pageIndex}>
-                    {group.map((contentData) => (
-                      <ContentCard
-                        key={contentData.postId}
-                        contentData={contentData}
-                      />
-                    ))}
-                  </React.Fragment>
-                ))}
-            {isFetchingNextPage &&
-              hasNextPage &&
-              Array.from({ length: 4 }).map((_, idx) => (
-                <RecentPostCardSkeleton key={idx} />
-              ))}
+              ? renderSkeletons(20)
+              : renderContentCards()}
+            {isFetchingNextPage && hasNextPage && renderSkeletons(4)}
             {hasNextPage && (
               <ObserverContainer ref={setTarget}></ObserverContainer>
             )}
           </RecentCardGrid>
         </Body>
       </Wrapper>
-      <Modal isOpen={isMainModalOpen} onClose={opeSubModal}>
+      <Modal isOpen={isMainModalOpen} onClose={openSubModal}>
         <PostModal
           closeMainModal={closeMainModal}
           isSubModalOpen={isSubModalOpen}
-          openSubModal={opeSubModal}
+          openSubModal={openSubModal}
           closeSubModal={closeSubModal}
         />
       </Modal>

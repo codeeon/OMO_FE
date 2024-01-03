@@ -6,10 +6,20 @@ import { useNavigate } from 'react-router-dom';
 interface Props {
   searchResult: UserSearchType;
   isSearching: boolean;
+  setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UserResultItem: React.FC<Props> = ({ searchResult, isSearching }) => {
+const UserResultItem: React.FC<Props> = ({
+  searchResult,
+  isSearching,
+  setIsSearching,
+}) => {
   const { userId, imgUrl, nickname } = searchResult;
+
+  const moveUserProfileHandler = () => {
+    setIsSearching(false);
+  };
+
 
   const navigate = useNavigate();
 
