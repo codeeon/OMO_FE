@@ -8,13 +8,12 @@ import useGetUserPostsQuery from '../hooks/reactQuery/userPage/useGetUserContent
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 const UserPage: React.FC = () => {
-  const { nickname } = useParams();
-  // console.log(nickname);
+  const { nickname: username } = useParams();
 
   const [isSelect, setIsSelect] = useState('Contents');
 
-  const { data: userData, isError: userError } = useGetUserDataQuery(nickname);
-  // console.log(userError);
+  const { data: userData, refetch: refetchUserData } =
+    useGetUserDataQuery(username);
 
   const {
     data: userPosts,
@@ -23,7 +22,7 @@ const UserPage: React.FC = () => {
     isFetching: isFetchingUserPosts,
     isFetchingNextPage: isFetchingNextUserPosts,
     refetch: refetchUserPosts,
-  } = useGetUserPostsQuery(nickname);
+  } = useGetUserPostsQuery(username);
 
   const { setTarget: setTargetMyPosts } = useIntersectionObserver({
     hasNextUserPosts,
@@ -33,6 +32,11 @@ const UserPage: React.FC = () => {
   useEffect(() => {
     refetchUserPosts();
   }, [isSelect]);
+
+  useEffect(() => {
+    refetchUserData();
+    refetchUserPosts();
+  }, [username]);
 
   const onClickSelectContents = () => {
     setIsSelect('Contents');
