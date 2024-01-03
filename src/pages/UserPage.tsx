@@ -12,8 +12,11 @@ const UserPage: React.FC = () => {
 
   const [isSelect, setIsSelect] = useState('Contents');
 
-  const { data: userData, refetch: refetchUserData } =
-    useGetUserDataQuery(username);
+  const {
+    data: userData,
+    refetch: refetchUserData,
+    isError: userDataError,
+  } = useGetUserDataQuery(username);
 
   const {
     data: userPosts,
@@ -37,9 +40,10 @@ const UserPage: React.FC = () => {
 
     // 로그인 중이 아닐 때,
     const userId = sessionStorage.getItem('userId');
-    !userId && alert('로그인 후 이용해 주세요.'),
+    (userDataError || !userId) &&
+      (alert('로그인 후 이용해 주세요.'),
       navigate(-1),
-      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('userId'));
   }, []);
 
   useEffect(() => {

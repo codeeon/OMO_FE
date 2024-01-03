@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
@@ -10,9 +10,13 @@ import Register from '../components/auth/signup/Register';
 import Done from '../components/auth/signup/Done';
 
 const SignUp: React.FC = () => {
-  // const navigate = useNavigate();
-  // const { themeMode } = useTheme();
-  // const { value: email, changeValueHandler: onChangeEmail } = useInput();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem('userId');
+    userId && (alert('회원가입은 로그아웃 후 이용해 주세요.'), navigate('/'));
+  }, []);
+
   const [email, setEmail] = useState<string>();
 
   const { value: code, changeValueHandler: onChangeCode } = useInput();
