@@ -32,7 +32,6 @@ const RepleInput: React.FC<Props> = ({
     commentId,
   });
 
-  // TODO 토큰 문제
   const postCommentHandler = () => {
     const trimmedText = text.trim();
     if (!trimmedText) {
@@ -88,7 +87,7 @@ const RepleInput: React.FC<Props> = ({
           <Button
             theme="blue"
             padding="9px 14px"
-            width="50px"
+            width="60px"
             height="15px"
             fontSize="14px"
             onClick={postCommentHandler}
