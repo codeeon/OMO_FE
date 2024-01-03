@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import instance from '../../../axios/api';
+import instance from '../../../axios/apis';
 import authApi from '../../../axios/authApi';
 
 const getBookmark = async () => {

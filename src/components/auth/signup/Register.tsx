@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
@@ -20,7 +20,7 @@ interface SignUpData {
 interface UserData extends UserEmail, SignUpData {}
 
 const Register: React.FC = (props: string) => {
-  const { confirmedEmail } = props;
+  const { confirmedEmail, setRegisterPage } = props;
 
   const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
     mode: 'onChange',
@@ -113,8 +113,7 @@ const Register: React.FC = (props: string) => {
     },
     {
       onSuccess: () => {
-        alert('회원가입을 완료하였습니다.');
-        navigate('/login');
+        setRegisterPage(3);
       },
     },
   );
@@ -164,7 +163,6 @@ const Register: React.FC = (props: string) => {
             </div>
             <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
           </div>
-
           <div>
             <div>
               <Input

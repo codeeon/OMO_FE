@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
@@ -15,6 +15,11 @@ const Login: React.FC = () => {
   const { register, handleSubmit } = useForm<LoginData>();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem('userId');
+    userId ? navigate('/') : null;
+  }, []);
 
   const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
