@@ -23,7 +23,7 @@ const Item = styled(motion.div)<{ $width?: string }>`
   justify-content: center;
   align-items: center;
   padding: 15px 20px;
-  color: #000;
+  color: ${({ theme }) => theme.color.text};
   font-size: 14px;
   font-weight: 700;
   width: ${({ $width }) => ($width ? $width : '50%')};

@@ -33,16 +33,18 @@ const BookMarkBtn: React.FC<Props> = ({
   const [isBookMarking, setIsBookMarking] = useState(false);
   const userId = sessionStorage.getItem('userId');
 
-  const { data, refetch, isLoading } = useGetBookmarkQuery();
+  const { data, refetch, isLoading, isFetching } = useGetBookmarkQuery();
+  console.log(data);
+
   useEffect(() => {
-    if (!isLoading) {
+    if (!isFetching && !isLoading) {
       setIsBookMarking(
         data?.some(
           (db: BookmarkLocationType) => db.Location.locationId === locationId,
         ),
       );
     }
-  }, [data, isLoading, locationId]);
+  }, [data, isLoading, isFetching, locationId]);
 
   const { postBookmarkingMutate } = usePostBookmarkMutation(locationId);
   const { deletebookmarkingMutate } = useDeleteBookmarkMutation(locationId);

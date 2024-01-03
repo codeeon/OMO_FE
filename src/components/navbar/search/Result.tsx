@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { StoreSearchType, UserSearchType } from '../../../model/interface';
 import UserResultItem from './UserResultItem';
 import StoreResultItem from './StoreResultItem';
-import { GridLoader } from 'react-spinners';
+import { PropagateLoader } from 'react-spinners';
 
 interface Props {
   value: string;
@@ -30,7 +30,7 @@ const Result: React.FC<Props> = ({
     <Base $isSearching={isSearching}>
       {isLoading ? (
         <BlankContainer>
-          <Loader size={5} />
+          <PropagateLoader size={5} color="#44A5FF" />
         </BlankContainer>
       ) : !value ? (
         <BlankContainer>
@@ -45,12 +45,20 @@ const Result: React.FC<Props> = ({
           {storeSearchError?.response?.data?.errorMessage as string}
         </BlankContainer>
       ) : searchType === '닉네임' ? (
-        userSearchResults?.map((res) => (
-          <UserResultItem searchResult={res} isSearching={isSearching} />
+        userSearchResults?.map((res, idx) => (
+          <UserResultItem
+            key={idx}
+            searchResult={res}
+            isSearching={isSearching}
+          />
         ))
       ) : (
         storeSearchResults?.map((res) => (
-          <StoreResultItem searchResult={res} isSearching={isSearching} />
+          <StoreResultItem
+            key={res.postId}
+            searchResult={res}
+            isSearching={isSearching}
+          />
         ))
       )}
     </Base>
@@ -94,8 +102,5 @@ const BlankContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const Loader = styled(GridLoader)`
-  color: ${({ theme }) => theme.color.sub};
+  color: ${({ theme }) => theme.color.text};
 `;

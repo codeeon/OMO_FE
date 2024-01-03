@@ -8,9 +8,10 @@ import Search from './search/Search';
 interface Props {
   maxWidth: string | null;
   disableLogo: boolean | null;
+  disableSearch: boolean | null;
 }
 
-const Navbar: React.FC<Props> = ({ maxWidth, disableLogo }) => {
+const Navbar: React.FC<Props> = ({ maxWidth, disableLogo, disableSearch }) => {
   const [isSelected, setIsSelected] = useState<string>('');
 
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Navbar: React.FC<Props> = ({ maxWidth, disableLogo }) => {
             <LogoCircle />
             <LogoRectangle />
           </Logo>
-          <Search />
+          {!disableSearch && <Search />}
         </LeftContainer>
         <RightContainer>
           <Item

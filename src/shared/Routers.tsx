@@ -29,6 +29,9 @@ const Routers = () => {
       <Navbar
         maxWidth={!excludedRoutes.includes(location.pathname) ? null : '98%'}
         disableLogo={!mainRoutes.includes(location.pathname) ? null : true}
+        disableSearch={
+          !excludedRoutes.includes(location.pathname) ? null : true
+        }
       />
       <Routes>
         <Route path="/" element={<Home />} />

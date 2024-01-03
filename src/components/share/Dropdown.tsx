@@ -13,6 +13,7 @@ interface Props {
   isDropdownOpen: boolean;
   setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSearching?: React.Dispatch<React.SetStateAction<boolean>>;
+  top?: string;
 }
 
 const Dropdown: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const Dropdown: React.FC<Props> = ({
   isDropdownOpen,
   setIsDropdownOpen,
   setIsSearching,
+  top,
 }) => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -81,6 +83,7 @@ const Dropdown: React.FC<Props> = ({
         style={{ pointerEvents: isDropdownOpen ? 'auto' : 'none' }}
         $width={width}
         $height={height}
+        $top={top}
       >
         {children}
       </DropdownList>
@@ -112,9 +115,9 @@ const DropdownBtn = styled(motion.button)<{
   padding: 5px 0px 5px 10px;
   border: none;
 
-  background: ${({ theme }) => theme.color.bg};
+  background: ${({ theme }) => theme.color.cardBg};
   color: ${({ theme }) => theme.color.text};
-  border-radius: 30px;
+  border-radius: 30px 0 0 30px;
 
   cursor: pointer;
   &:hover {
@@ -129,11 +132,15 @@ const TitleWrapper = styled.div`
 
 const BtnWrapper = styled(motion.div)``;
 
-const DropdownList = styled(motion.div)<{ $width?: string; $height?: string }>`
+const DropdownList = styled(motion.div)<{
+  $width?: string;
+  $height?: string;
+  $top?: string;
+}>`
   box-sizing: border-box;
 
   position: absolute;
-  top: 30px;
+  top: ${({ $top }) => ($top ? $top : '30px')};
 
   background: ${({ theme }) => theme.color.cardBg};
 

@@ -68,6 +68,7 @@ const Search = () => {
         titleHeight="35px"
         width="85px"
         height="95px"
+        top="37px"
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
         setIsSearching={setIsSearching}
@@ -113,7 +114,7 @@ const Base = styled.div<{ $isFocused: boolean }>`
 
   background-color: ${({ theme }) => theme.color.cardBg};
 
-  border: 2px solid
+  border: 1px solid
     ${({ $isFocused, theme }) =>
       $isFocused ? theme.color.link : theme.color.border};
   border-radius: 20px;
