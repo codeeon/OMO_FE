@@ -19,7 +19,6 @@ const injectFontsToHead: HtmlTagDescriptor[] = fontFiles.map((fontFile) => ({
     href: `/assets/fonts/${fontFile}`,
     as: 'font',
     type: 'font/woff2',
-    crossOrigin: 'anonymous',
   },
 }));
 
