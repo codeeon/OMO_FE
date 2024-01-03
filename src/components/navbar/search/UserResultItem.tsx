@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { UserSearchType } from '../../../model/interface';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   searchResult: UserSearchType;
@@ -9,8 +10,14 @@ interface Props {
 
 const UserResultItem: React.FC<Props> = ({ searchResult, isSearching }) => {
   const { userId, imgUrl, nickname } = searchResult;
+
+  const navigate = useNavigate();
+
   return (
-    <Base $isSearching={isSearching}>
+    <Base
+      onClick={() => navigate(`/userpage/${nickname}`)}
+      $isSearching={isSearching}
+    >
       <UserProfile src={imgUrl} />
       <UserName>{nickname}</UserName>
     </Base>

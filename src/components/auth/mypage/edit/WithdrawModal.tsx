@@ -94,4 +94,9 @@ const Btn = styled.button<{ $agree: boolean }>`
   text-align: center;
   font-size: 14px;
   font-weight: 700;
+  cursor: pointer;
+  &:hover {
+    border: 2px solid
+      ${({ $agree, theme }) => ($agree ? theme.color.link : '#FF3263')};
+  }
 `;

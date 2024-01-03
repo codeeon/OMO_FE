@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../components/skeleton/RecentPostCardSkeleton';
-
-import ContentCard from '../components/share/ContentCard';
+import ContentCard from '../components/card/ContentCard';
 import PlaceCardSkeleton from '../components/skeleton/PlaceCardSkeleton';
 import PlaceCard from '../components/auth/mypage/PlaceCard';
 import useGetMyDataQuery from '../hooks/reactQuery/mypage/useGetMyDataQuery';

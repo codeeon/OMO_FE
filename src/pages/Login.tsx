@@ -37,7 +37,7 @@ const Login: React.FC = () => {
         return response.data;
       } catch (error) {
         throw new Error(
-          error.response?.data.message || '응답 없음: 로그인에 실패했습니다.',
+          // error.response?.data.message || '응답 없음: 로그인에 실패했습니다.',
           alert('아이디와 비밀번호를 확인해주세요!'),
         );
       }

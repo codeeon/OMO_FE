@@ -40,7 +40,7 @@ const Routers = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/mypage/edit" element={<ProfileEdit />} />
-        <Route path="/userpage" element={<UserPage />} />
+        <Route path="/userpage/:nickname" element={<UserPage />} />
       </Routes>
     </Suspense>
   );

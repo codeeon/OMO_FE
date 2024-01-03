@@ -16,7 +16,7 @@ const getUserPosts = async (
     params,
   });
 
-  console.log('유저 게시글 조회 -> ', response);
+  // console.log('유저 게시글 조회 -> ', response);
 
   return response.data;
 };

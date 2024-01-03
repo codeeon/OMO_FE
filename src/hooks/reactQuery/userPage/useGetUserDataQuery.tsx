@@ -4,7 +4,7 @@ import authUsers from '../../../axios/authUsers';
 
 const getUserData = async (nickname: string) => {
   const response = await authUsers.get(`/api/users/profile/${nickname}`);
-  console.log('유저 데이터 조회 -> ', response);
+  // console.log('유저 데이터 조회 -> ', response);
   return response.data;
 };
 

@@ -10,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     document.body.style.overflow = 'auto';
   }, []);
-  
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
