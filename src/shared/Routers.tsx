@@ -3,7 +3,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import usePlaceStore from '../store/location/placeStore';
 const Navbar = lazy(() => import('../components/navbar/Navbar'));
 const Home = lazy(() => import('../pages/Home'));
-const Contents = lazy(() => import('../pages/Contents'));
+const Contents = lazy(() => import('../pages/post/Posts'));
 const Map = lazy(() => import('../pages/googleMap/Index'));
 const Login = lazy(() => import('../pages/Login'));
 const SignUp = lazy(() => import('../pages/SignUp'));

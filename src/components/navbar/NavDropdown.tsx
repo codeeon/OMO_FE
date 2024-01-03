@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { MdOutlineDarkMode, MdOutlineWbSunny } from 'react-icons/md';
 import { FiUser } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import useThemeStore from '../../store/theme/themeStore';
 import toast from 'react-hot-toast';
+import { itemVariants } from '../../styles/Motion';
 
 const NavDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { FiEdit3 } from 'react-icons/fi';
-import Modal from '../Modal/Modal';
-import PostModal from '../postModal';
-import useModalCtr from '../../hooks/useModalCtr';
-import Location from './location';
-import useGetAllContentsQuery from '../../hooks/reactQuery/post/useGetAllContentsQuery';
-import ContentCard from '../share/ContentCard';
-import CategoryDropdown from './CateogryDropdown';
-import ContentCardSkeleton from '../skeleton/RecentPostCardSkeleton';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import useDistrictStore from '../../store/location/districtStore';
-import useCategoryStore from '../../store/category/categoryStore';
+import Modal from '../../../components/Modal/Modal';
+import PostModal from '../../../components/postModal';
+import useModalCtr from '../../../hooks/useModalCtr';
+import useGetAllContentsQuery from '../../../hooks/reactQuery/post/useGetAllContentsQuery';
+import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
+import useDistrictStore from '../../../store/location/districtStore';
+import useCategoryStore from '../../../store/category/categoryStore';
 import toast from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import Header from './Header';
+import RecentPostCardSkeleton from '../../../components/skeleton/RecentPostCardSkeleton';
+import LocationDrodown from '../../../components/share/dropdown/locationDropdown/LocationDrodown';
+import CategoryDropdown from '../../../components/share/dropdown/CateogryDropdown';
+import ContentCard from '../../../components/card/ContentCard';
 
-const Posts = () => {
+const List = () => {
   const { district } = useDistrictStore();
   const { category } = useCategoryStore();
   const {
@@ -64,23 +64,17 @@ const Posts = () => {
   return (
     <Base>
       <Wrapper>
-        <Header>
-          <Title>게시글</Title>
-          <PostBtn onClick={openPostModalHandler}>
-            <FiEdit3 />
-            <span>새 게시글</span>
-          </PostBtn>
-        </Header>
         <Navigator>{'홈 > 게시글'}</Navigator>
+        <Header openPostModalHandler={openPostModalHandler} />
         <FilterContainer>
-          <Location />
+          <LocationDrodown />
           <CategoryDropdown />
         </FilterContainer>
         <Body>
           <RecentCardGrid>
             {isFetching && !isFetchingNextPage
               ? Array.from({ length: 20 }).map((_, idx) => (
-                  <ContentCardSkeleton key={idx} />
+                  <RecentPostCardSkeleton key={idx} />
                 ))
               : contents?.pages.map((group, pageIndex) => (
                   <React.Fragment key={pageIndex}>
@@ -95,7 +89,7 @@ const Posts = () => {
             {isFetchingNextPage &&
               hasNextPage &&
               Array.from({ length: 4 }).map((_, idx) => (
-                <ContentCardSkeleton key={idx} />
+                <RecentPostCardSkeleton key={idx} />
               ))}
             {hasNextPage && (
               <ObserverContainer ref={setTarget}></ObserverContainer>
@@ -115,7 +109,7 @@ const Posts = () => {
   );
 };
 
-export default Posts;
+export default List;
 
 const Base = styled.div`
   box-sizing: border-box;
@@ -138,53 +132,11 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-`;
-
-const Title = styled.div`
-  font-size: 24px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.color.text};
-`;
-
 const Navigator = styled.div`
   margin-bottom: 24px;
   color: ${({ theme }) => theme.color.sub};
   font-size: 14px;
   font-weight: 500;
-`;
-
-const PostBtn = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-
-  padding: 10px;
-
-  width: 95px;
-  height: 37px;
-
-  color: #fff;
-  background-color: #44a5ff;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-  span {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 700;
-  }
-  &:hover {
-    background: #44b8ff;
-  }
 `;
 
 const Body = styled.div`

@@ -8,7 +8,6 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from 'react-query';
-import { itemVariants } from '../../../styles/Motion';
 
 interface MenuProps {
   isOpen: boolean;
@@ -24,36 +23,15 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({
   isOpen,
   refetch,
-  isLoading,
   toggleDropdownHandler,
 }) => {
   return (
     <Base
-      variants={{
-        open: {
-          clipPath: 'inset(0% 0% 0% 0% round 10px)',
-          transition: {
-            type: 'spring',
-            bounce: 0,
-            duration: 0.7,
-            delayChildren: 0.3,
-            staggerChildren: 0.05,
-          },
-        },
-        closed: {
-          clipPath: 'inset(0% 100% 100% 0% round 10px)',
-          transition: {
-            type: 'spring',
-            bounce: 0,
-            duration: 0.3,
-          },
-        },
-      }}
+      variants={motionVariants}
       style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
     >
       <MenuHeader
         refetch={refetch}
-        isLoading={isLoading}
         toggleDropdownHandler={toggleDropdownHandler}
       />
       <BodyContainer variants={itemVariants}>
@@ -111,6 +89,36 @@ const DistrictList = styled(motion.ul)`
   padding: 20px;
   border-left: 1px solid ${({ theme }) => theme.color.border};
 `;
+
+const motionVariants = {
+  open: {
+    clipPath: 'inset(0% 0% 0% 0% round 10px)',
+    transition: {
+      type: 'spring',
+      bounce: 0,
+      duration: 0.7,
+      delayChildren: 0.3,
+      staggerChildren: 0.05,
+    },
+  },
+  closed: {
+    clipPath: 'inset(0% 100% 100% 0% round 10px)',
+    transition: {
+      type: 'spring',
+      bounce: 0,
+      duration: 0.3,
+    },
+  },
+};
+
+const itemVariants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 300, damping: 24 },
+  },
+  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};
 
 const SeoulDistrict = [
   '전체',

@@ -8,3 +8,24 @@ export const itemVariants: Variants = {
   },
   closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
 };
+
+export const listVariants: Variants = {
+  open: {
+    clipPath: 'inset(0% 0% 0% 0% round 10px)',
+    transition: {
+      type: 'spring',
+      bounce: 0,
+      duration: 0.7,
+      delayChildren: 0.3,
+      staggerChildren: 0.05,
+    },
+  },
+  closed: {
+    clipPath: 'inset(10% 70% 90% 30% round 10px)',
+    transition: {
+      type: 'spring',
+      bounce: 0,
+      duration: 0.3,
+    },
+  },
+};
