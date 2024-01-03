@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ContentCardSkeleton from '../components/skeleton/RecentPostCardSkeleton';
-import ContentCard from '../components/share/ContentCard';
+import ContentCard from '../components/card/ContentCard';
 import useGetUserDataQuery from '../hooks/reactQuery/userPage/useGetUserDataQuery';
 import useGetUserPostsQuery from '../hooks/reactQuery/userPage/useGetUserContentsQuery';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';

@@ -9,17 +9,9 @@ interface Props {
   onClose?: MouseEventHandler<HTMLDivElement>;
   isOpen: boolean;
   selector?: string;
-  width?: number;
-  height?: number;
 }
 
-const Modal: React.FC<Props> = ({
-  children,
-  onClose,
-  isOpen,
-  width,
-  height,
-}) => {
+const Modal: React.FC<Props> = ({ children, onClose, isOpen }) => {
   const handleDimClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation(); // 이벤트 버블링 중지
     if (onClose) {
@@ -31,9 +23,7 @@ const Modal: React.FC<Props> = ({
       <Portal>
         <Overlay>
           <Dim onClick={(e) => handleDimClick(e)} />
-          <Container $width={width} $height={height}>
-            {children}
-          </Container>
+          <Container>{children}</Container>
         </Overlay>
       </Portal>
     </CSSTransition>
@@ -67,7 +57,7 @@ const Dim = styled.div`
   backdrop-filter: blur(5px);
 `;
 
-const Container = styled.div<{ $width: number; $height: number }>`
+const Container = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -79,9 +69,9 @@ const Container = styled.div<{ $width: number; $height: number }>`
   justify-content: center;
   align-items: start;
 
-  width: ${({ $width }) => $width || '725px'};
-  min-height: ${({ $height }) => $height || '800px'};
-  max-height: ${({ $height }) => $height || '1000px'};
+  width: 725px;
+  min-height: 800px;
+  max-height: 1000px;
   height: 80%;
 
   border-radius: 16px;

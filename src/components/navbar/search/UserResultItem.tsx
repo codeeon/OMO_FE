@@ -5,10 +5,21 @@ import { UserSearchType } from '../../../model/interface';
 interface Props {
   searchResult: UserSearchType;
   isSearching: boolean;
+  setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UserResultItem: React.FC<Props> = ({ searchResult, isSearching }) => {
+const UserResultItem: React.FC<Props> = ({
+  searchResult,
+  isSearching,
+  setIsSearching,
+}) => {
   const { userId, imgUrl, nickname } = searchResult;
+
+  const moveUserProfileHandler = () => {
+    // navigate
+    setIsSearching(false);
+  };
+
   return (
     <Base $isSearching={isSearching}>
       <UserProfile src={imgUrl} />
