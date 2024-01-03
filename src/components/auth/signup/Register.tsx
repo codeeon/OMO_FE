@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
-import auth from '..//..//..//axios/auth';
+import auth from '../../../axios/auth';
 import useInput from '../../../hooks/useInput';
 import Check from './Check';
 
@@ -20,18 +20,14 @@ interface SignUpData {
 interface UserData extends UserEmail, SignUpData {}
 
 const Register: React.FC = (props: string) => {
-  const { confirmedEmail } = props;
+  const { confirmedEmail, setRegisterPage } = props;
 
   const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
     mode: 'onChange',
   });
   const navigate = useNavigate();
 
-  const {
-    value: nickname,
-    setValue: setNickname,
-    changeValueHandler: onChangeNickname,
-  } = useInput();
+  const { value: nickname, changeValueHandler: onChangeNickname } = useInput();
 
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
@@ -96,11 +92,9 @@ const Register: React.FC = (props: string) => {
 
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      // console.log(nickname);
       const checkNicknameResponse = await auth.post('/check-nickname', {
         nickname,
       });
-      // console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
     },
     {
       onSuccess: () => {
@@ -115,17 +109,11 @@ const Register: React.FC = (props: string) => {
 
   const signupMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      // console.log(data);
       const response = await auth.post(`/register`, data);
-      // console.log(response);
     },
     {
       onSuccess: () => {
-        alert('회원가입을 완료하였습니다.');
-        navigate('/login');
-      },
-      onError: (error) => {
-        // console.log(error);
+        setRegisterPage(3);
       },
     },
   );
@@ -175,7 +163,6 @@ const Register: React.FC = (props: string) => {
             </div>
             <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
           </div>
-
           <div>
             <div>
               <Input
@@ -249,13 +236,13 @@ const SmallBtn = styled.button`
   margin-left: 10px;
   color: #f97393;
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
   line-height: 100%;
   cursor: pointer;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.color.locBg};
 `;
 
 const Input = styled.input`
@@ -275,7 +262,6 @@ const Input = styled.input`
   padding: 0 15px;
   &::placeholder {
     color: #a5a5a5;
-    font-family: Wanted Sans;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -295,7 +281,6 @@ const LargeBtn = styled.button`
   margin: 0 0 61px 0;
   color: #fff;
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -307,7 +292,6 @@ const LargeBtn = styled.button`
 const Text = styled.span`
   color: ${(props) => props.color || '#666'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;

@@ -19,8 +19,9 @@ const getHotPosts = async (
 const useGetHotPostsQuery = (districtName: string | undefined) =>
   useQuery('hotPosts', () => getHotPosts(districtName), {
     onSuccess: () => {
-      queryClient.invalidateQueries('commentPosts');
+      queryClient.invalidateQueries('hotPosts');
     },
+    enabled: false,
   });
 
 export default useGetHotPostsQuery;

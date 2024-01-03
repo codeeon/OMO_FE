@@ -1,7 +1,6 @@
 import React from 'react';
 import { LocationType } from '../../../model/interface';
 import styled from 'styled-components';
-import { LuBookmark } from 'react-icons/lu';
 import { PiStarFill } from 'react-icons/pi';
 import { MdLocationOn } from 'react-icons/md';
 import usePlaceStore from '../../../store/location/placeStore';
@@ -11,43 +10,39 @@ interface Props {
 }
 
 const Card: React.FC<Props> = ({ placeDb }) => {
-  const { Posts, address, storeName, Category, starAvg, postCount } = placeDb;
-
   const { setPlace } = usePlaceStore();
+
   const selectPlaceHandler = (place: LocationType) => {
     setPlace(place);
   };
 
+  if (!placeDb) return;
+  const { Posts, address, storeName, Category, starAvg, postCount } = placeDb;
   return (
-    <>
-      <Base onClick={() => selectPlaceHandler(placeDb)}>
-        <ImageContainer imageURL={Posts[0].imgUrl} />
-        <HeaderContainer>
-          <PlaceName>{storeName}</PlaceName>
-          <CategoryName>{Category.categoryName}</CategoryName>
-          <BookMarkBtn>
-            <LuBookmark />
-          </BookMarkBtn>
-        </HeaderContainer>
-        <LocationName>
-          <MdLocationOn />
-          <span>{address}</span>
-        </LocationName>
-        <FoonterContainer>
-          <RatingConatiner>
-            <RatingBtnWrapper>
-              <PiStarFill />
-            </RatingBtnWrapper>
-            <Title>별점</Title>
-            <Count>{starAvg}</Count>
-          </RatingConatiner>
-          <ContentCountContainer>
-            <Title>게시글</Title>
-            <Count>{postCount}</Count>
-          </ContentCountContainer>
-        </FoonterContainer>
-      </Base>
-    </>
+    <Base onClick={() => selectPlaceHandler(placeDb)}>
+      <ImageContainer $imageURL={Posts[0].imgUrl} />
+      <HeaderContainer>
+        <PlaceName>{storeName}</PlaceName>
+        <CategoryName>{Category.categoryName}</CategoryName>
+      </HeaderContainer>
+      <LocationName>
+        <MdLocationOn />
+        <span>{address}</span>
+      </LocationName>
+      <FoonterContainer>
+        <RatingConatiner>
+          <RatingBtnWrapper>
+            <PiStarFill />
+          </RatingBtnWrapper>
+          <Title>별점</Title>
+          <Count>{starAvg}</Count>
+        </RatingConatiner>
+        <ContentCountContainer>
+          <Title>게시글</Title>
+          <Count>{postCount}</Count>
+        </ContentCountContainer>
+      </FoonterContainer>
+    </Base>
   );
 };
 
@@ -69,12 +64,12 @@ const Base = styled.div`
   cursor: pointer;
 `;
 
-const ImageContainer = styled.div<{ imageURL?: string }>`
+const ImageContainer = styled.div<{ $imageURL?: string }>`
   background: gray;
   width: 100%;
   height: 180px;
   border-radius: 8px;
-  background-image: ${({ imageURL }) => `url(${imageURL})`};
+  background-image: ${({ $imageURL }) => `url(${$imageURL})`};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

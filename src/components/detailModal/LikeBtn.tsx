@@ -15,8 +15,6 @@ interface Props {
 const LikeBtn: React.FC<Props> = ({ postId }) => {
   const { data, refetch, isLoading } = useGetLikeQuery();
   const [isLiked, setIsLiked] = useState(false);
-  const [isHover, setIsHover] = useState(true);
-  const [scope, animate] = useAnimate();
   const userId = window.sessionStorage.getItem('userId');
 
   useEffect(() => {
@@ -31,7 +29,6 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
   const handleLikeClick = _.throttle(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       e.stopPropagation();
-      animate([]);
 
       if (isPostLoading || isDeleteLoading) {
         return;
@@ -59,14 +56,10 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
 
   useEffect(() => {
     userId && refetch();
-  }, [userId]);
+  }, [userId, refetch]);
 
   return (
-    <LikeBtnWrapper
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      ref={scope}
-    >
+    <LikeBtnWrapper>
       <MotionDiv
         onClick={(e) => handleLikeClick(e)}
         whileTap={{ scale: 3 }}

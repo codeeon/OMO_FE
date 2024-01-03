@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { TbMessage } from 'react-icons/tb';
 import LikeBtn from './LikeBtn';
+import MessageIcon from '../../assets/icons/MessageIcon';
 
 interface Props {
   likeCount: number;
@@ -12,12 +13,12 @@ interface Props {
 const ModalFooter: React.FC<Props> = ({ likeCount, postId, commentLength }) => {
   return (
     <Footer>
-      <FooterItem color="red">
+      <FooterItem $color="red">
         <LikeBtn postId={postId} />
         <span>{likeCount}</span>
       </FooterItem>
-      <FooterItem color="blue">
-        <TbMessage />
+      <FooterItem $color="blue">
+        <MessageIcon />
         <span>{commentLength}</span>
       </FooterItem>
     </Footer>
@@ -35,19 +36,20 @@ const Footer = styled.div`
   width: 100%;
 `;
 
-const FooterItem = styled.div<{ color: string }>`
+const FooterItem = styled.div<{ $color: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 3px;
-  color: #a9a9a9;
+  $color: #a9a9a9;
   svg {
     font-size: 24px;
-    color: ${({ color }) => (color === 'red' ? '#F97393' : '#44A5FF')};
+    $color: ${({ $color }) => ($color === 'red' ? '#F97393' : '#44A5FF')};
   }
   span {
     margin-top: 4px;
     font-size: 20px;
     font-weight: 700;
+    color: ${({ theme }) => theme.color.sub2};
   }
 `;

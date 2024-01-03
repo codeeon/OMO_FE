@@ -49,13 +49,6 @@ const UserContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-const UserProfile = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 100%;
-  background: gray;
-`;
-
 const UserInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,16 +72,6 @@ const RatingContainer = styled.div`
     font-weight: 700;
   }
   margin-bottom: 15px;
-`;
-
-const StarWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-
-  font-size: 16px;
-  color: #f97393;
 `;
 
 const Text = styled.div`

@@ -4,13 +4,14 @@ import { SelectedPlaceType } from '../../../model/interface';
 import { HiLocationMarker } from 'react-icons/hi';
 import ContentsSection from './ContentsSection';
 import useGetLocationPostsQuery from '../../../hooks/reactQuery/map/useGetLocationPostsQuery';
-import BookMarkBtn from '../../../components/share/BookMarkBtn';
-import { detailSearchFields } from '../../../function/googleSearch.ts/detailSearch';
+import BookMarkBtn from '../../../components/button/BookMarkBtn';
+import { detailSearchFields } from '../../../utils/googleSearch.ts/detailSearch';
 import useMapStore from '../../../store/location/googleMapStore';
 import ClockIcon from '../../../assets/icons/ClockIcon';
 import DividingPointIcon from '../../../assets/icons/DividingPointIcon';
 import DownArrow from '../../../assets/icons/DownArrow';
 import PhoneIcon from '../../../assets/icons/PhoneIcon';
+import { MoonLoader } from 'react-spinners';
 
 interface Props {
   selectedPlace: SelectedPlaceType | null;
@@ -22,6 +23,7 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   const [googleSearchResult, setGoogleSearchResult] =
     useState<google.maps.places.PlaceResult | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const detailToggleHandler = () => {
     setIsOpen(!isOpen);
@@ -33,16 +35,21 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   );
 
   useEffect(() => {
+    if (!locationId) return;
     refetch();
-  }, [selectedPlace]);
+  }, [selectedPlace, refetch, locationId]);
 
   useEffect(() => {
+    setIsLoading(true);
     if (!posts) return;
-    if (!posts.location.placeInfoId) return setGoogleSearchResult(null);
+    if (posts.location.placeInfoId === 'null')
+      return setGoogleSearchResult(null);
+
     const request = {
       placeId: posts?.location.placeInfoId,
       fields: detailSearchFields,
     };
+
     // @ts-ignore
     const service = new google.maps.places.PlacesService(map);
     service.getDetails(request, callback);
@@ -53,8 +60,10 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
     ) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         setGoogleSearchResult(place);
+        setIsLoading(false);
       } else {
         setGoogleSearchResult(null);
+        setIsLoading(false);
       }
     }
   }, [posts]);
@@ -62,13 +71,20 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   return (
     <Base>
       <BodyContainer>
-        <ImageHeader
-          imageURL={
-            googleSearchResult?.photos?.[0]?.getUrl()
-              ? googleSearchResult?.photos?.[0]?.getUrl()
-              : posts?.location.Posts[0].imgUrl
-          }
-        />
+        {isLoading ? (
+          <LoadingContainer>
+            <MoonLoader color="#F97393" size={30} />
+          </LoadingContainer>
+        ) : (
+          <ImageHeader
+            $imageURL={
+              googleSearchResult?.photos?.[0]?.getUrl()
+                ? googleSearchResult?.photos?.[0]?.getUrl()
+                : posts?.location.Posts[0].imgUrl
+            }
+          />
+        )}
+
         <PlaceName>{posts?.location.storeName}</PlaceName>
         <Address>
           <HiLocationMarker />
@@ -84,7 +100,7 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
           <span>영업시간</span>
           <DownArrow />
         </InfoContainer>
-        {isOpen && googleSearchResult ? (
+        {isOpen && googleSearchResult && (
           <WeekDayContainer>
             {googleSearchResult?.opening_hours?.weekday_text?.map((dayText) => (
               <BusinessContainer>
@@ -92,7 +108,12 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
               </BusinessContainer>
             ))}
           </WeekDayContainer>
-        ) : null}
+        )}
+        {isOpen && !googleSearchResult && (
+          <WeekDayContainer>
+            <BusinessContainer>영업 정보 없음</BusinessContainer>
+          </WeekDayContainer>
+        )}
         <InfoContainer>
           <PhoneIcon />
           <span>
@@ -143,15 +164,24 @@ const Base = styled.div`
   }
 `;
 
-const ImageHeader = styled.div<{ imageURL: string | undefined }>`
+const ImageHeader = styled.div<{ $imageURL: string | undefined }>`
   width: 100%;
   height: 186px;
-  background: gray;
-  background-image: ${({ imageURL }) => `url(${imageURL})`};
+
+  background-image: ${({ $imageURL }) => `url(${$imageURL})`};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 `;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 186px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const BodyContainer = styled.div`
   box-sizing: border-box;
   width: 100%;

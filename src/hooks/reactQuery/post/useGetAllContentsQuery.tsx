@@ -51,7 +51,7 @@ const useGetAllContentsQuery = (
     ({ pageParam }) => getContents(districtName, categoryName, pageParam, 20),
     {
       getNextPageParam: (lastPage) => {
-        return lastPage.length
+        return lastPage.length > 0
           ? lastPage[lastPage.length - 1].postId
           : undefined;
       },

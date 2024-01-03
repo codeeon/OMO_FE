@@ -29,19 +29,19 @@ const ContentCard: React.FC<Props> = ({ post }) => {
             <Date>{post.createdAt.split('T')[0]}</Date>
           </UserInfoContainer>
         </UserContainer>
-        <ImageBox imageURL={post.imgUrl[0]} />
+        <ImageBox $imageURL={post.imgUrl[0]} />
         <StarCount count={post.star} margin="17px 20px" />
         <Text dangerouslySetInnerHTML={{ __html: post.content }} />
-        <Footer>
-          <FooterItem color="red">
+        {/* <Footer>
+          <FooterItem>
             <LikeBtn postId={post.postId} />
             <span>{post.likeCount}</span>
           </FooterItem>
-          <FooterItem color="blue">
+          <FooterItem>
             <TbMessage />
             <span>{post.commentCount}</span>
           </FooterItem>
-        </Footer>
+        </Footer> */}
       </Base>
       <Modal isOpen={isModalOpen} onClose={toggleModalHandler}>
         <DetailContentsModal
@@ -107,7 +107,7 @@ const Date = styled.div`
   font-weight: 500;
 `;
 
-const ImageBox = styled.div<{ imageURL: string }>`
+const ImageBox = styled.div<{ $imageURL: string }>`
   margin: 0 20px;
   margin-top: 10px;
   background-color: gray;
@@ -117,36 +117,7 @@ const ImageBox = styled.div<{ imageURL: string }>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: ${({ imageURL }) => `url(${imageURL})`};
-`;
-
-const RatingContainer = styled.div`
-  margin: 17px 20px;
-
-  width: 100%;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 2px;
-  span {
-    margin-top: 2px;
-    margin-left: 2px;
-    text-align: center;
-    color: ${({ theme }) => theme.color.text};
-    font-size: 16px;
-    font-weight: 700;
-  }
-  margin-bottom: 15px;
-`;
-
-const StarWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-
-  font-size: 16px;
-  color: #f97393;
+  background-image: ${({ $imageURL }) => `url(${$imageURL})`};
 `;
 
 const Text = styled.div`

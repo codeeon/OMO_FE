@@ -7,7 +7,8 @@ import useThemeStore from './store/theme/themeStore.js';
 import useApiError from './hooks/reactQuery/useApiError.js';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
-
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { HelmetProvider } from 'react-helmet-async';
 const App = () => {
   const { themeMode, toggleTheme } = useThemeStore();
 
@@ -46,14 +47,17 @@ const App = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={themeMode === 'LightMode' ? LightTheme : DarkTheme}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routers />
-          <Toaster />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <HelmetProvider>
+      <ThemeProvider theme={themeMode === 'LightMode' ? LightTheme : DarkTheme}>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <Routers />
+            <Toaster />
+          </BrowserRouter>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </HelmetProvider>
   );
 };
 

@@ -252,8 +252,6 @@ const PlaceContainer = styled.div`
 
 const PlaceName = styled.div`
   color: ${({ theme }) => theme.color.text};
-
-  font-family: Wanted Sans;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;

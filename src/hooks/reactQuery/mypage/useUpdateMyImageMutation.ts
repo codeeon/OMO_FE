@@ -26,7 +26,7 @@ const useUpdateMyImageMutation = () => {
   const navigate = useNavigate();
   const mutation = useMutation(myImage, {
     onSuccess: () => {
-      queryClient.invalidateQueries('userData');
+      queryClient.invalidateQueries('myData');
       // console.log();
       // alert('프로필 사진을 변경하였습니다.');
       navigate('/mypage');

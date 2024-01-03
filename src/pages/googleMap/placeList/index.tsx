@@ -1,10 +1,10 @@
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Search from './Search';
 import Header from './Header';
-import { CurrentLocationType, LocationType } from '../../../model/interface';
+import { LocationType } from '../../../model/interface';
 import Card from './Card';
-
+import { Virtuoso } from 'react-virtuoso';
 const categories = ['전체', '음식점', '카페', '기타'];
 
 interface Props {
@@ -28,7 +28,8 @@ const PlaceList: React.FC<Props> = ({
       <PlaceCategoryContainer>
         {categories.map((cat) => (
           <PlaceCategoryBtn
-            selected={selectedCategory === cat}
+            key={cat}
+            $selected={selectedCategory === cat}
             onClick={() => changeCategory(cat)}
           >
             {cat}
@@ -36,9 +37,14 @@ const PlaceList: React.FC<Props> = ({
         ))}
       </PlaceCategoryContainer>
       <ContentsContainer>
-        {placeDatas?.map((placeDb) => (
-          <Card placeDb={placeDb} />
-        ))}
+        <Virtuoso
+          style={{ width: '100%', height: '100%' }}
+          increaseViewportBy={0}
+          itemContent={(index, placeDb) => {
+            return <Card key={index} placeDb={placeDb} />;
+          }}
+          data={placeDatas}
+        />
       </ContentsContainer>
     </Base>
   );
@@ -82,10 +88,10 @@ const PlaceCategoryContainer = styled.div`
   gap: 8px;
 `;
 
-const PlaceCategoryBtn = styled.div<{ selected: boolean }>`
+const PlaceCategoryBtn = styled.div<{ $selected: boolean }>`
   border-radius: 40px;
-  border: ${({ selected, theme }) =>
-    selected ? '1px solid #f97393;' : `1px solid ${theme.color.border2}`};
+  border: ${({ $selected, theme }) =>
+    $selected ? '1px solid #f97393;' : `1px solid ${theme.color.border2}`};
   color: #323232;
   text-align: center;
   font-size: 16px;

@@ -10,7 +10,7 @@ import SubModal from '../Modal/SubModal';
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
 import ImageFile from './Image2';
 import toast from 'react-hot-toast';
-import Button from '../share/Button';
+import Button from '../button/Button';
 
 interface Props {
   closeMainModal: (
@@ -48,7 +48,7 @@ const PostModal: React.FC<Props> = ({
     google.maps.places.PlaceResult[] | null
   >(null);
 
-  const { postContentMutate } = usePostContentMutate();
+  const { postContentMutate, isPostContentLoading } = usePostContentMutate();
 
   const clearPostHandler = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
@@ -121,6 +121,17 @@ const PostModal: React.FC<Props> = ({
     postContentMutate(newContent);
     closeMainModal(e);
   };
+
+  useEffect(() => {
+    isPostContentLoading
+      ? toast.loading('게시물을 업로드 중입니다...', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+          id: '1',
+        })
+      : toast.remove('1');
+  }, [isPostContentLoading]);
 
   return (
     <Base>

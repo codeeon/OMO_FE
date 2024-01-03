@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import KakaoLogin from '../components/auth/KakaoLogin';
 import auth from '..//axios/auth';
-import useGetKakaoQuery from '../components/auth/signup/useGetKakaoQuery';
 
 interface LoginData {
   email: string;
@@ -17,6 +15,11 @@ const Login: React.FC = () => {
   const { register, handleSubmit } = useForm<LoginData>();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem('userId');
+    userId ? navigate('/') : null;
+  }, []);
 
   const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
@@ -34,7 +37,7 @@ const Login: React.FC = () => {
         return response.data;
       } catch (error) {
         throw new Error(
-          error.response?.data.message || '응답 없음: 로그인에 실패했습니다.',
+          // error.response?.data.message || '응답 없음: 로그인에 실패했습니다.',
           alert('아이디와 비밀번호를 확인해주세요!'),
         );
       }
@@ -53,10 +56,6 @@ const Login: React.FC = () => {
   const onSubmit = (data: LoginData) => {
     mutation.mutate(data);
   };
-
-  // const onClickKakao = () => {
-
-  // }
 
   return (
     <Base>
@@ -80,8 +79,7 @@ const Login: React.FC = () => {
             <Text $color="btn">로그인</Text>
           </LargeBtn>
         </form>
-        {/* <KakaoLogin /> */}
-        {/* <LargeBtn type="button" onClick={() => useGetKakaoQuery()}></LargeBtn> */}
+        <KakaoLogin />
         <OrLine>
           <div>{line}</div>
           <div>
@@ -173,6 +171,7 @@ const LargeBtn = styled.button`
   cursor: pointer;
 `;
 
+// 스타일드 컴포넌트 프롭스 타입에 옵셔널 붙여야겠지...? ㅠㅠ
 const Text = styled.div<{ $color?: string }>`
   display: inline-flex;
   align-items: center;

@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BiSolidMap } from 'react-icons/bi';
 import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa';
+import LocationIcon from '../../assets/icons/LocationIcon';
+
 interface Props {
   placeName: string;
   locationName: string;
@@ -20,7 +21,7 @@ const ModalBody: React.FC<Props> = ({
     <Base>
       <Title>{placeName}</Title>
       <PlaceInfo>
-        <BiSolidMap />
+        <LocationIcon />
         <span>{locationName}</span>
       </PlaceInfo>
       <StarContainer>

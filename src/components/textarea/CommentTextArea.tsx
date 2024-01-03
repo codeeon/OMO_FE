@@ -52,9 +52,7 @@ const Textarea = styled.textarea<{ $isTextareaFocus: boolean }>`
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
-    font-family: 'Wanted Sans';
   }
-  font-family: 'Wanted Sans';
   outline: none;
   transition: border 200ms ease;
 `;

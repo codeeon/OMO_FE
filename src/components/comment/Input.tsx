@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import Button from '../share/Button';
-import { getToday } from '../../function/getToday';
+import Button from '../button/Button';
+import { getToday } from '../../utils/getToday';
 import usePostCommentMutation from '../../hooks/reactQuery/comment/usePostCommentMutation';
 import CommentTextArea from '../textarea/CommentTextArea';
 import useInput from '../../hooks/useInput';
@@ -13,12 +13,12 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   const { value: text, changeValueHandler, clearValueHandler } = useInput();
   const [isTextareaFocus, setIsTextareaFoucs] = useState<boolean>(false);
 
-  const onTextAreaFocus = () => {
+  const onTextAreaFocus = useCallback(() => {
     setIsTextareaFoucs(true);
-  };
-  const offTextAreaFocus = () => {
+  }, []);
+  const offTextAreaFocus = useCallback(() => {
     setIsTextareaFoucs(false);
-  };
+  }, []);
 
   const { postMutate, isPostLoading } = usePostCommentMutation({
     contentId,

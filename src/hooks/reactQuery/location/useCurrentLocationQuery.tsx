@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { coord2Address, getCurrentCoords } from '../../../function/kakao';
+import { coord2Address, getCurrentCoords } from '../../../utils/kakao';
 import toast from 'react-hot-toast';
 
 export const getCurrentAddr = async () => {

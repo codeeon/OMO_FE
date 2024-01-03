@@ -4,10 +4,10 @@ interface ModalControl {
   isModalOpen: boolean;
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleModalOpen: (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLLIElement>,
   ) => void;
   handleModalClose: (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLLIElement>,
   ) => void;
 }
 
@@ -15,7 +15,7 @@ const useModalCtr = (): ModalControl => {
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
   const handleModalOpen = (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLLIElement>,
   ) => {
     e.stopPropagation();
     if (!isModalOpen) {
@@ -25,7 +25,7 @@ const useModalCtr = (): ModalControl => {
   };
 
   const handleModalClose = (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLLIElement>,
   ) => {
     e.stopPropagation();
     if (isModalOpen) {

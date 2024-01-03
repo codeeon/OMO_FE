@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import api from '../../../axios/api';
+import apis from '../../../axios/apis';
 import { RepleType } from '../../../model/interface';
 
 interface getRepleProps {
@@ -11,10 +11,10 @@ const getReple = async ({
   postId,
   commentId,
 }: getRepleProps): Promise<RepleType[]> => {
-  const response = await api.get(
+  const response = await apis.get(
     `/posts/${postId}/comments/${commentId}/replies`,
   );
-  
+
   return response.data.data;
 };
 

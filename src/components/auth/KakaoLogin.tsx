@@ -1,51 +1,11 @@
 import React from 'react';
-import { useQueryClient, useQuery } from 'react-query';
-import axios from 'axios';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 
-interface KakaoTokenResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-  refresh_token: string;
-  scope: string;
-  refresh_token_expires_in: number;
-}
 
 const KakaoLogin: React.FC = () => {
   const loginWithKakao = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${
-      import.meta.env.VITE_APP_KAKAO_API_KEY
-    }&redirect_uri=${
-      import.meta.env.VITE_APP_KAKAO_REDIRECT_URI
-    }&response_type=code`;
+    window.location.href = `${import.meta.env.VITE_APP_SERVER_AUTH_URL}/kakao`;
   };
-
-  const fetchKakaoToken = async (code: string): Promise<KakaoTokenResponse> => {
-    const response = await axios.post<KakaoTokenResponse>(
-      'https://kauth.kakao.com/oauth/token',
-      `grant_type=authorization_code&client_id=${
-        import.meta.env.VITE_APP_KAKAO_API_KEY
-      }&redirect_uri=${
-        import.meta.env.VITE_APP_KAKAO_REDIRECT_URI
-      }&code=${code}`,
-    );
-    // console.log(code);
-    return response.data;
-  };
-
-  const handleKakaoLogin = async () => {
-    const code = new URLSearchParams(window.location.search).get('code');
-    if (code) {
-      const kakaoToken = await fetchKakaoToken(code);
-      // console.log('Kakao Token:', kakaoToken);
-    }
-  };
-
-  useQuery('kakaoLogin', handleKakaoLogin, {
-    enabled: true,
-  });
 
   return (
     <>
@@ -59,7 +19,7 @@ const KakaoLogin: React.FC = () => {
         }}
       >
         <div style={{ margin: '13px 0' }}>{kakao}</div>
-        <Text style={{ marginLeft: '4px', textAlign: 'center' }} color="#000">
+        <Text style={{ marginLeft: '4px', textAlign: 'center' }} $color="#000">
           카카오로 로그인
         </Text>
       </LargeBtn>
@@ -74,19 +34,18 @@ const LargeBtn = styled.button<{ $bgColor: string }>`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${(props) => props.$bgColor || '#f97393'};
+  background: ${({ $bgColor }) => $bgColor || '#f97393'};
   border: none;
   margin: 0 0 12px 0;
   cursor: pointer;
 `;
 
-const Text = styled.div`
+const Text = styled.div<{ $color: string }>`
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: ${(props) => props.color || '#fff'};
+  color: ${({ $color }) => $color || '#fff'};
   text-align: center;
-  font-family: Wanted Sans;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
