@@ -243,3 +243,35 @@ export interface SelectedPlaceType {
   latitude: number;
   longitude: number;
 }
+
+// 검색 결과 타입
+export interface UserSearchType {
+  userId: number;
+  nickname: string;
+  imgUrl: string;
+}
+
+export interface StoreSearchType {
+  Category: {
+    categoryName: string;
+  };
+  Location: {
+    address: string;
+    latitude: string;
+    longitude: string;
+    locationId: number;
+    placeInfoId: string;
+    postCount: number;
+    starAvg: number;
+    storeName: string;
+  };
+  commentCount: number;
+  content: string;
+  likeCount: number;
+  postId: number;
+  star: number;
+  User: {
+    userId: number;
+    nickname: string;
+  };
+}

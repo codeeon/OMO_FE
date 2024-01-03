@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { FaCaretDown } from 'react-icons/fa';
 import { SlLocationPin } from 'react-icons/sl';
 import { BounceLoader } from 'react-spinners';
-import useCurrentLocationQuery from '../../../hooks/reactQuery/location/useCurrentLocationQuery';
-import useDistrictStore from '../../../store/location/districtStore';
+import useCurrentLocationQuery from '../../../../hooks/reactQuery/location/useCurrentLocationQuery';
+import useDistrictStore from '../../../../store/location/districtStore';
 import toast from 'react-hot-toast';
 
-const Location = () => {
+const LocationDrodown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { district, setDistrict } = useDistrictStore();
   const { isLoading, refetch } = useCurrentLocationQuery(setDistrict);
@@ -85,7 +85,7 @@ const Location = () => {
   );
 };
 
-export default Location;
+export default LocationDrodown;
 
 const NavContainer = styled(motion.nav)`
   position: relative;

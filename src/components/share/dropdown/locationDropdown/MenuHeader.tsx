@@ -1,29 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import { motion, Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FaLocationCrosshairs } from 'react-icons/fa6';
 import {
   QueryObserverResult,
   RefetchOptions,
   RefetchQueryFilters,
 } from 'react-query';
-import { itemVariants } from '../../../styles/Motion';
 
 interface Props {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<string | undefined, unknown>>;
-  isLoading: boolean;
   toggleDropdownHandler: (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
   ) => void;
 }
 
-const MenuHeader: React.FC<Props> = ({
-  refetch,
-  isLoading,
-  toggleDropdownHandler,
-}) => {
+const MenuHeader: React.FC<Props> = ({ refetch, toggleDropdownHandler }) => {
   const onClickCurrentLocationHandler = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -67,3 +61,12 @@ const Header = styled(motion.div)`
   }
   transition: color 200ms ease-in-out;
 `;
+
+const itemVariants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 300, damping: 24 },
+  },
+  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};

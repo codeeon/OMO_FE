@@ -1,8 +1,7 @@
-import React, { ReactNode, SetStateAction } from 'react';
-import { motion, Variants } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import { itemVariants } from '../../../styles/Motion';
-import useDistrictStore from '../../../store/location/districtStore';
+import useDistrictStore from '../../../../store/location/districtStore';
 
 interface Props {
   dist: string;
@@ -38,3 +37,12 @@ const Item = styled(motion.li)`
     background: #fcf0f3;
   }
 `;
+
+const itemVariants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 300, damping: 24 },
+  },
+  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};

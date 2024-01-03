@@ -23,7 +23,7 @@ const StarCount: React.FC<Props> = ({ margin, count }) => {
 
 export default StarCount;
 
-const RatingContainer = styled.div<{ $margin: string }>`
+const RatingContainer = styled.div<{ $margin?: string }>`
   margin: ${({ $margin }) => ($margin ? $margin : 0)};
   width: 100%;
   display: flex;

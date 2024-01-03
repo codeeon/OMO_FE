@@ -6,28 +6,15 @@ import DetailContentsModal from '../detailModal/ContentsModal';
 import Modal from '../Modal/Modal';
 import { RecentPostsType } from '../../model/interface';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import useModalCtr from '../../hooks/useModalCtr';
 
 const RecentPostCard: React.FC<{ post: RecentPostsType }> = ({ post }) => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
 
   const { User, createdAt, content, likeCount, commentCount, imgUrl } = post;
 
-  const openModalHandler = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    e.stopPropagation();
-    setIsModalOpen(true);
-  };
-
-  const closeModalHandler = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    e.stopPropagation();
-    setIsModalOpen(false);
-  };
-
   return (
-    <Base onClick={(e) => openModalHandler(e)}>
+    <Base onClick={(e) => handleModalOpen(e)}>
       <ImgContainer src={imgUrl[0]} />
       <HeaderContainer>
         <Title>{User.nickname}</Title>
@@ -45,10 +32,10 @@ const RecentPostCard: React.FC<{ post: RecentPostsType }> = ({ post }) => {
           <span>{commentCount}</span>
         </FooterItem>
       </Footer>
-      <Modal isOpen={isModalOpen} onClose={closeModalHandler}>
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
         <DetailContentsModal
           postId={post.postId}
-          closeModalHandler={closeModalHandler}
+          closeModalHandler={handleModalClose}
         />
       </Modal>
     </Base>

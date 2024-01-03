@@ -1,3 +1,4 @@
+
 import { useQuery } from 'react-query';
 // import { HotPostsType } from '../../../model/interface';
 import authApi from '../../../axios/authApi';

@@ -6,6 +6,7 @@ import DetailModalFooter from './ModalFooter';
 import Comment from '../comment';
 import useGetContentDetailQuery from '../../hooks/reactQuery/post/useGetContentDetailQuery';
 import Image from './Image';
+import SEO from '../share/SEO';
 
 const DetailContentsModal: React.FC<{
   postId: number;
@@ -31,6 +32,7 @@ const DetailContentsModal: React.FC<{
 
   return (
     <Base>
+      <SEO title={Location.storeName} description={content} image={imgUrl[0]} />
       <DetailModalHeader
         userProfile={User.imgUrl}
         userName={User.nickname}

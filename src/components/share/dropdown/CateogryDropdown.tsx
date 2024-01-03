@@ -1,9 +1,9 @@
-import React, { SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { itemVariants } from '../../styles/Motion';
 import styled from 'styled-components';
 import { FaCaretDown } from 'react-icons/fa';
-import useCategoryStore from '../../store/category/categoryStore';
+import useCategoryStore from '../../../store/category/categoryStore';
+import { itemVariants, listVariants } from '../../../styles/Motion';
 
 const CategoryDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,26 +56,7 @@ const CategoryDropdown = () => {
         </motion.div>
       </DropdownBtn>
       <DropdownList
-        variants={{
-          open: {
-            clipPath: 'inset(0% 0% 0% 0% round 10px)',
-            transition: {
-              type: 'spring',
-              bounce: 0,
-              duration: 0.7,
-              delayChildren: 0.3,
-              staggerChildren: 0.05,
-            },
-          },
-          closed: {
-            clipPath: 'inset(10% 70% 90% 30% round 10px)',
-            transition: {
-              type: 'spring',
-              bounce: 0,
-              duration: 0.3,
-            },
-          },
-        }}
+        variants={listVariants}
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
         <DropdownItem

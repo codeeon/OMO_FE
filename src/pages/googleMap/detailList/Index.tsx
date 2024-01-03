@@ -11,6 +11,7 @@ import ClockIcon from '../../../assets/icons/ClockIcon';
 import DividingPointIcon from '../../../assets/icons/DividingPointIcon';
 import DownArrow from '../../../assets/icons/DownArrow';
 import PhoneIcon from '../../../assets/icons/PhoneIcon';
+import { MoonLoader } from 'react-spinners';
 
 interface Props {
   selectedPlace: SelectedPlaceType | null;
@@ -22,6 +23,7 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   const [googleSearchResult, setGoogleSearchResult] =
     useState<google.maps.places.PlaceResult | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const detailToggleHandler = () => {
     setIsOpen(!isOpen);
@@ -38,6 +40,7 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   }, [selectedPlace, refetch, locationId]);
 
   useEffect(() => {
+    setIsLoading(true);
     if (!posts) return;
     if (posts.location.placeInfoId === 'null')
       return setGoogleSearchResult(null);
@@ -57,8 +60,10 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
     ) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         setGoogleSearchResult(place);
+        setIsLoading(false);
       } else {
         setGoogleSearchResult(null);
+        setIsLoading(false);
       }
     }
   }, [posts]);
@@ -66,13 +71,20 @@ const DetailList: React.FC<Props> = ({ selectedPlace }) => {
   return (
     <Base>
       <BodyContainer>
-        <ImageHeader
-          $imageURL={
-            googleSearchResult?.photos?.[0]?.getUrl()
-              ? googleSearchResult?.photos?.[0]?.getUrl()
-              : posts?.location.Posts[0].imgUrl
-          }
-        />
+        {isLoading ? (
+          <LoadingContainer>
+            <MoonLoader color="#F97393" size={30} />
+          </LoadingContainer>
+        ) : (
+          <ImageHeader
+            $imageURL={
+              googleSearchResult?.photos?.[0]?.getUrl()
+                ? googleSearchResult?.photos?.[0]?.getUrl()
+                : posts?.location.Posts[0].imgUrl
+            }
+          />
+        )}
+
         <PlaceName>{posts?.location.storeName}</PlaceName>
         <Address>
           <HiLocationMarker />
@@ -155,12 +167,21 @@ const Base = styled.div`
 const ImageHeader = styled.div<{ $imageURL: string | undefined }>`
   width: 100%;
   height: 186px;
-  background: gray;
+
   background-image: ${({ $imageURL }) => `url(${$imageURL})`};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 `;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 186px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const BodyContainer = styled.div`
   box-sizing: border-box;
   width: 100%;

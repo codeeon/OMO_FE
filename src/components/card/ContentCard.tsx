@@ -12,7 +12,7 @@ interface Props {
   contentData: PostType;
 }
 
-const Card: React.FC<Props> = ({ contentData }) => {
+const ContentCard: React.FC<Props> = ({ contentData }) => {
   const { isModalOpen, handleModalOpen, handleModalClose } = useModalCtr();
 
   const {
@@ -63,7 +63,7 @@ const Card: React.FC<Props> = ({ contentData }) => {
   );
 };
 
-export default Card;
+export default ContentCard;
 
 const ImgContainer = styled.div<{ $imageURL: string[] }>`
   width: 285px;

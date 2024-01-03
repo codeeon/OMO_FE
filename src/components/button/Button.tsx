@@ -62,6 +62,7 @@ const Base = styled.button<BtnProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 4px;
 
   font-size: ${({ $fontSize }) => $fontSize};
   font-weight: ${({ $fontWeight }) => $fontWeight};
