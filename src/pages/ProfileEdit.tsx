@@ -220,7 +220,7 @@ const ProfileEdit = () => {
                 <Input
                   $check={nicknameCheck}
                   $width="284px"
-                  placeholder={myData?.data.nickname}
+                  placeholder={`${myData?.data.nickname}  (2~15자)`}
                   type="text"
                   value={nickname}
                   onChange={onChangeNickname}
@@ -252,7 +252,7 @@ const ProfileEdit = () => {
                 <Text style={{ marginBottom: '6px' }}>비밀번호</Text>
                 <Input
                   $check={passwordCheck}
-                  placeholder="비밀번호를 입력해 주세요."
+                  placeholder="비밀번호를 입력해 주세요.  (6자 이상, 영문, 숫자 필수)"
                   type="password"
                   {...register('password')}
                 />
@@ -262,7 +262,7 @@ const ProfileEdit = () => {
                 <Text style={{ marginBottom: '6px' }}>비밀번호 확인</Text>
                 <Input
                   $check={confirmedPasswordCheck}
-                  placeholder="비밀번호를 다시 입력해 주세요."
+                  placeholder="비밀번호를 한 번 더 입력해 주세요."
                   type="password"
                   {...register('confirmedPassword')}
                 />

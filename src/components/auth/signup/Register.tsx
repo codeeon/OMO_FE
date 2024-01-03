@@ -137,7 +137,7 @@ const Register: React.FC = (props: string) => {
             <Input
               check={nicknameCheck}
               width="284px"
-              placeholder="닉네임을 입력해 주세요."
+              placeholder="닉네임을 입력해 주세요.  (2~15자)"
               type="text"
               value={nickname}
               onChange={onChangeNickname}
@@ -156,7 +156,7 @@ const Register: React.FC = (props: string) => {
             <div>
               <Input
                 check={passwordCheck}
-                placeholder="비밀번호를 입력해 주세요."
+                placeholder="비밀번호를 입력해 주세요.  (6자 이상, 영문, 숫자 필수)"
                 type="password"
                 {...register('password')}
               />
@@ -167,7 +167,7 @@ const Register: React.FC = (props: string) => {
             <div>
               <Input
                 check={confirmedPasswordCheck}
-                placeholder="비밀번호를 다시 입력해 주세요."
+                placeholder="비밀번호를 한 번 더 입력해 주세요."
                 type="password"
                 {...register('confirmedPassword')}
               />
