@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../components/skeleton/RecentPostCardSkeleton';
 import ContentCard from '../components/card/ContentCard';
 import useGetUserDataQuery from '../hooks/reactQuery/userPage/useGetUserDataQuery';
@@ -12,8 +12,11 @@ const UserPage: React.FC = () => {
 
   const [isSelect, setIsSelect] = useState('Contents');
 
-  const { data: userData, refetch: refetchUserData } =
-    useGetUserDataQuery(username);
+  const {
+    data: userData,
+    refetch: refetchUserData,
+    isError: userDataError,
+  } = useGetUserDataQuery(username);
 
   const {
     data: userPosts,
@@ -29,9 +32,18 @@ const UserPage: React.FC = () => {
     fetchNextUserPosts,
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     // 모달에서 벗어나 이 페이지로 진입 시, 스크롤 락 걸리는 현상을 해결
     document.body.style.overflow = 'auto';
+
+    // 로그인 중이 아닐 때,
+    const userId = sessionStorage.getItem('userId');
+    (userDataError || !userId) &&
+      (alert('로그인 후 이용해 주세요.'),
+      navigate(-1),
+      sessionStorage.removeItem('userId'));
   }, []);
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import DetailModalDropdown from '../../components/detailModal/ModalDropdown';
 import { PostDetailType } from '../../model/interface';
+import toast from 'react-hot-toast';
 
 const DetailModalHeader: React.FC<{
   userName: string;
@@ -25,7 +26,14 @@ const DetailModalHeader: React.FC<{
   const navigate = useNavigate();
 
   const onClickMoveUserPage = () => {
-    navigate(`/userpage/${userName}`);
+    const checkUserId = sessionStorage.getItem('userId');
+    !checkUserId
+      ? toast.error('로그인 후 이용해주세요.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        })
+      : navigate(`/userpage/${userName}`);
   };
 
   return (

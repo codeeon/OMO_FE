@@ -18,7 +18,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     const userId = sessionStorage.getItem('userId');
-    userId ? navigate('/') : null;
+    userId && navigate('/');
   }, []);
 
   const mutation = useMutation<LoginData, Error, LoginData>(

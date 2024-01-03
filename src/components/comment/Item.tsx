@@ -5,6 +5,7 @@ import Dropdown from './Dropdown';
 import RepleItem from './RepleItem';
 import RepleInput from './RepleInput';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 //TODO 유저 데이터
 const CommentItem: React.FC<{
@@ -35,7 +36,14 @@ const CommentItem: React.FC<{
   };
 
   const onClickMoveUserPage = () => {
-    navigate(`/userpage/${User.nickname}`);
+    const checkUserId = sessionStorage.getItem('userId');
+    !checkUserId
+      ? toast.error('로그인 후 이용해주세요.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        })
+      : navigate(`/userpage/${User.nickname}`);
   };
 
   return (
