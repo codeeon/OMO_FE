@@ -2,25 +2,25 @@
   font-family: 'WantedSans';
   font-display: swap;
   font-weight: 500;
-  src: url('public/assets/fonts/WantedSans-Regular.ttf') format('truetype'),
-    url('public/assets/fonts/WantedSans-Regular.woff') format('font-woff'),
-    url('public/assets/fonts/WantedSans-Regular.woff2') format('font-woff2');
+  src: url('/assets/fonts/WantedSans-Regular.ttf') format('truetype'),
+    url('/assets/fonts/WantedSans-Regular.woff') format('font-woff'),
+    url('/assets/fonts/WantedSans-Regular.woff2') format('font-woff2');
 }
 @font-face {
   font-family: 'WantedSans';
   font-display: swap;
   font-weight: 700;
-  src: url('public/assets/fonts/WantedSans-SemiBold.ttf') format('truetype'),
-    url('public/assets/fonts/WantedSans-SemiBold.woff') format('font-woff'),
-    url('public/assets/fonts/WantedSans-SemiBold.woff2') format('font-woff2');
+  src: url('/assets/fonts/WantedSans-SemiBold.ttf') format('truetype'),
+    url('/assets/fonts/WantedSans-SemiBold.woff') format('font-woff'),
+    url('/assets/fonts/WantedSans-SemiBold.woff2') format('font-woff2');
 }
 @font-face {
   font-family: 'WantedSans';
   font-display: swap;
   font-weight: 900;
-  src: url('public/assets/fonts/WantedSans-Bold.ttf') format('truetype'),
-    url('public/assets/fonts/WantedSans-Bold.woff') format('font-woff'),
-    url('public/assets/fonts/WantedSans-Bold.woff2') format('font-woff2');
+  src: url('/assets/fonts/WantedSans-Bold.ttf') format('truetype'),
+    url('/assets/fonts/WantedSans-Bold.woff') format('font-woff'),
+    url('/assets/fonts/WantedSans-Bold.woff2') format('font-woff2');
 }
 
 #root {
