@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { RepleType } from '../../model/interface';
 import Dropdown from './Dropdown';
+import { useNavigate } from 'react-router-dom';
 
 //TODO 유저 데이터
 const RepleItem: React.FC<{
@@ -10,14 +11,19 @@ const RepleItem: React.FC<{
   commentId: number;
 }> = ({ reple, contentId, commentId }) => {
   const { replyId, content, createdAt, User } = reple;
+  const navigate = useNavigate();
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
+
+  const onClickMoveUserPage = () => {
+    navigate(`/userpage/${User.nickname}`);
+  };
 
   return (
     <Base>
-      <UserProfile $imgUrl={User.imgUrl} />
+      <UserProfile $imgUrl={User.imgUrl} onClick={onClickMoveUserPage} />
       <BodyContainer>
         <UserInfoContainer>
-          <UserName>{User.nickname}</UserName>
+          <UserName onClick={onClickMoveUserPage}>{User.nickname}</UserName>
           <CreateAt>{createdAt.split('T')[0]}</CreateAt>
           {User.userId === currentUserId && (
             <Dropdown
@@ -55,6 +61,7 @@ const UserProfile = styled.div<{ $imgUrl: string }>`
   height: 50px;
   border: 2px solid ${({ theme }) => theme.color.border};
   border-radius: 100%;
+  cursor: pointer;
 `;
 
 const BodyContainer = styled.div`
@@ -78,6 +85,7 @@ const UserName = styled.div`
   color: ${({ theme }) => theme.color.text};
   font-size: 16px;
   font-weight: 700;
+  cursor: pointer;
 `;
 
 const CreateAt = styled.div`

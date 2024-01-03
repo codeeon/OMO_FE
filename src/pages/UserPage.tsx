@@ -30,6 +30,11 @@ const UserPage: React.FC = () => {
   });
 
   useEffect(() => {
+    // 모달에서 벗어나 이 페이지로 진입 시, 스크롤 락 걸리는 현상을 해결
+    document.body.style.overflow = 'auto';
+  }, []);
+
+  useEffect(() => {
     refetchUserPosts();
   }, [isSelect]);
 
