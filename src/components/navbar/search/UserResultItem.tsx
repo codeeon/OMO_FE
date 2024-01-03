@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { UserSearchType } from '../../../model/interface';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 interface Props {
   searchResult: UserSearchType;
@@ -20,14 +21,21 @@ const UserResultItem: React.FC<Props> = ({
     setIsSearching(false);
   };
 
-
   const navigate = useNavigate();
 
+  const onClickMoveUserPage = () => {
+    const checkUserId = sessionStorage.getItem('userId');
+    !checkUserId
+      ? toast.error('로그인 후 이용해주세요.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        })
+      : navigate(`/userpage/${nickname}`);
+  };
+
   return (
-    <Base
-      onClick={() => navigate(`/userpage/${nickname}`)}
-      $isSearching={isSearching}
-    >
+    <Base onClick={onClickMoveUserPage} $isSearching={isSearching}>
       <UserProfile src={imgUrl} />
       <UserName>{nickname}</UserName>
     </Base>

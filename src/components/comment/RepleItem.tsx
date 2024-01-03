@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { RepleType } from '../../model/interface';
 import Dropdown from './Dropdown';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 //TODO 유저 데이터
 const RepleItem: React.FC<{
@@ -14,8 +15,16 @@ const RepleItem: React.FC<{
   const navigate = useNavigate();
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
 
+  // 이거 총 4개의 컴포넌트에서 쓰이기 때문에, hook으로 만들어서 사용 가능할 듯
   const onClickMoveUserPage = () => {
-    navigate(`/userpage/${User.nickname}`);
+    const checkUserId = sessionStorage.getItem('userId');
+    !checkUserId
+      ? toast.error('로그인 후 이용해주세요.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        })
+      : navigate(`/userpage/${User.nickname}`);
   };
 
   return (
