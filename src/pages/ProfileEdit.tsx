@@ -75,16 +75,16 @@ const ProfileEdit = () => {
       ? '비밀번호가 일치합니다.'
       : '';
 
-  // 마이페이지와 겹침 - 훅으로 만들기
+  // 마이페이지와 겹침 - 훅으로 만들기?
   // 의존성 배열에 뭘 넣어야, 리프레쉬 토큰 만료가 됐을 때 해결할 수 있을까?
   useEffect(() => {
-    userError
-      ? (alert('다시 로그인 후 이용해주세요.'),
-        sessionStorage.removeItem('userId'),
-        sessionStorage.removeItem('accessToken'),
-        sessionStorage.removeItem('refreshToken'),
-        navigate('/login'))
-      : null;
+    const userId = sessionStorage.getItem('userId');
+    (userError || !userId) &&
+      (alert('다시 로그인 후 이용해주세요.'),
+      navigate('/login'),
+      sessionStorage.removeItem('userId'),
+      sessionStorage.removeItem('accessToken'),
+      sessionStorage.removeItem('refreshToken'));
   }, []);
 
   const onValid = async ({ password, confirmedPassword }: SignUpData) => {
