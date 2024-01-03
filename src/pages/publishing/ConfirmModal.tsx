@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../button/Button';
+import Button from '../../components/button/Button';
 
 interface Props {
   closeModalHandler: (

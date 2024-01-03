@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Modal from '../../../components/Modal/Modal';
-import PostModal from '../../../components/postModal';
+import PostModal from '../../publishing/PublicModal';
 import useModalCtr from '../../../hooks/useModalCtr';
 import useGetAllContentsQuery from '../../../hooks/reactQuery/post/useGetAllContentsQuery';
 import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';

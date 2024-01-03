@@ -5,8 +5,8 @@ import { FaQuoteLeft } from 'react-icons/fa';
 import { CommentPostsType } from '../../model/interface';
 import useModalCtr from '../../hooks/useModalCtr';
 import Modal from '../Modal/Modal';
-import DetailContentsModal from '../detailModal/ContentsModal';
 import { motion } from 'framer-motion';
+import PostDetailModal from '../../pages/postDetail/PostDetailModal';
 
 const CommentCard: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
   const { PostId, content, Post } = comment;
@@ -22,10 +22,7 @@ const CommentCard: React.FC<{ comment: CommentPostsType }> = ({ comment }) => {
         <span>{Post.Location.address}</span>
       </PlaceName>
       <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-        <DetailContentsModal
-          postId={PostId}
-          closeModalHandler={handleModalClose}
-        />
+        <PostDetailModal postId={PostId} closeModalHandler={handleModalClose} />
       </Modal>
     </Base>
   );

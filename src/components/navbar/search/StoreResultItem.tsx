@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import StarCount from '../../share/StarCount';
 import useModalCtr from '../../../hooks/useModalCtr';
 import Modal from '../../Modal/Modal';
-import DetailContentsModal from '../../detailModal/ContentsModal';
+import PostDetailModal from '../../../pages/postDetail/PostDetailModal';
 
 interface Props {
   searchResult: StoreSearchType;
@@ -20,12 +20,9 @@ const StoreResultItem: React.FC<Props> = ({ searchResult, isSearching }) => {
         <StoreName>{Location.storeName}</StoreName>
         <StarCount count={star} />
       </HeaderContainer>
-      <Content>{content}</Content>
+      <Content dangerouslySetInnerHTML={{ __html: content }} />
       <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-        <DetailContentsModal
-          postId={postId}
-          closeModalHandler={handleModalClose}
-        />
+        <PostDetailModal postId={postId} closeModalHandler={handleModalClose} />
       </Modal>
     </Base>
   );

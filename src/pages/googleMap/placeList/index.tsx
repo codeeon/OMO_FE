@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import Search from './Search';
 import Header from './Header';
 import { LocationType } from '../../../model/interface';
-import Card from './Card';
 import { Virtuoso } from 'react-virtuoso';
+import MapLocationCard from './MapLocationCard';
 const categories = ['전체', '음식점', '카페', '기타'];
 
 interface Props {
@@ -41,7 +41,7 @@ const PlaceList: React.FC<Props> = ({
           style={{ width: '100%', height: '100%' }}
           increaseViewportBy={0}
           itemContent={(index, placeDb) => {
-            return <Card key={index} placeDb={placeDb} />;
+            return <MapLocationCard key={index} placeDb={placeDb} />;
           }}
           data={placeDatas}
         />

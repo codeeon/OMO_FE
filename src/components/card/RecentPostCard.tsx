@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { TbMessage2 } from 'react-icons/tb';
-import DetailContentsModal from '../detailModal/ContentsModal';
 import Modal from '../Modal/Modal';
 import { RecentPostsType } from '../../model/interface';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useModalCtr from '../../hooks/useModalCtr';
+import PostDetailModal from '../../pages/postDetail/PostDetailModal';
 
 const RecentPostCard: React.FC<{ post: RecentPostsType }> = ({ post }) => {
   const { isModalOpen, handleModalClose, handleModalOpen } = useModalCtr();
@@ -33,7 +33,7 @@ const RecentPostCard: React.FC<{ post: RecentPostsType }> = ({ post }) => {
         </FooterItem>
       </Footer>
       <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-        <DetailContentsModal
+        <PostDetailModal
           postId={post.postId}
           closeModalHandler={handleModalClose}
         />

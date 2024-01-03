@@ -8,7 +8,7 @@ interface Props {
   setStarNum: React.Dispatch<SetStateAction<number>>;
 }
 
-const Stars: React.FC<Props> = ({ starNum, setStarNum }) => {
+const StarButton: React.FC<Props> = ({ starNum, setStarNum }) => {
   const [hover, setHover] = useState(0);
   const starArr = [1, 2, 3, 4, 5];
 
@@ -29,7 +29,7 @@ const Stars: React.FC<Props> = ({ starNum, setStarNum }) => {
   );
 };
 
-export default Stars;
+export default StarButton;
 
 const Base = styled.div`
   margin-top: 8px;

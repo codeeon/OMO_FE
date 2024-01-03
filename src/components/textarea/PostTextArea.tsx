@@ -1,7 +1,7 @@
 import React, { SetStateAction } from 'react';
 import styled from 'styled-components';
 
-const Text: React.FC<{
+const PostTextArea: React.FC<{
   text: string;
   setText: React.Dispatch<SetStateAction<string>>;
 }> = ({ text, setText }) => {
@@ -28,7 +28,7 @@ const Text: React.FC<{
   );
 };
 
-export default Text;
+export default PostTextArea;
 
 const Base = styled.div`
   margin-top: 40px;
