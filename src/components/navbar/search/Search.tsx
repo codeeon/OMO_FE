@@ -97,6 +97,7 @@ const Search = () => {
         storeSearchResults={storeSearchResults}
         userSearchError={userSearchError}
         storeSearchError={storeSearchError}
+        setIsSearching={setIsSearching}
       />
     </Base>
   );
