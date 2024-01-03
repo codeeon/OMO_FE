@@ -4,6 +4,7 @@ import { CommentType } from '../../model/interface';
 import Dropdown from './Dropdown';
 import RepleItem from './RepleItem';
 import RepleInput from './RepleInput';
+import { useNavigate } from 'react-router-dom';
 
 //TODO 유저 데이터
 const CommentItem: React.FC<{
@@ -11,6 +12,9 @@ const CommentItem: React.FC<{
   contentId: number;
 }> = ({ comment, contentId }) => {
   const { Replies, commentId, content, createdAt, User } = comment;
+
+  const navigate = useNavigate();
+
   const [isShowReple, setIsShowReple] = useState(false);
   const [isShowRepleInput, setIsShowRepleInput] = useState(false);
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
@@ -30,12 +34,16 @@ const CommentItem: React.FC<{
     toggleRepleHandler();
   };
 
+  const onClickMoveUserPage = () => {
+    navigate(`/userpage/${User.nickname}`);
+  };
+
   return (
     <Base>
-      <UserProfile $profileImg={User.imgUrl} />
+      <UserProfile $profileImg={User.imgUrl} onClick={onClickMoveUserPage} />
       <BodyContainer>
         <UserInfoContainer>
-          <UserName>{User.nickname}</UserName>
+          <UserName onClick={onClickMoveUserPage}>{User.nickname}</UserName>
           <CreateAt>{createdAt.split('T')[0]}</CreateAt>
           {currentUserId === User.userId && (
             <Dropdown commentId={commentId} contentId={contentId} />
@@ -116,6 +124,7 @@ const UserProfile = styled.div<{ $profileImg: string }>`
   height: 50px;
   border: 2px solid ${({ theme }) => theme.color.border};
   border-radius: 100%;
+  cursor: pointer;
 `;
 
 const BodyContainer = styled.div`
@@ -139,6 +148,7 @@ const UserName = styled.div`
   color: ${({ theme }) => theme.color.text};
   font-size: 16px;
   font-weight: 700;
+  cursor: pointer;
 `;
 
 const CreateAt = styled.div`

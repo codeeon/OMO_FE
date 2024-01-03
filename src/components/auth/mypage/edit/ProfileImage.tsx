@@ -76,6 +76,14 @@ const ProfileImage: React.FC<Props> = ({
           imageURL={imageURL[imageURL.length - 1]}
         />
       )}
+      <Text
+        onClick={uploadImage}
+        style={{ marginTop: '24px' }}
+        $fontSize="14px"
+        $color="#44A5FF"
+      >
+        프로필 사진
+      </Text>
     </>
   );
 };
@@ -94,4 +102,14 @@ const MyImageBox = styled.div<{ imageURL: string[] }>`
   border-radius: 100%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+`;
+
+const Text = styled.div<{ $color: string; $fontSize: string }>`
+  color: ${({ $color, theme }) => $color || theme.color.text};
+  font-size: ${({ $fontSize }) => $fontSize || '16px'};
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+  text-align: center;
+  cursor: pointer;
 `;

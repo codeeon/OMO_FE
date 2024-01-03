@@ -174,24 +174,6 @@ const ProfileEdit = () => {
     },
   );
 
-  const deleteUserMutation = useMutation<void, Error>(
-    async (): Promise<void> => {
-      const response = await authAuth.delete(`/withdraw`);
-    },
-    {
-      onSuccess: () => {
-        alert('회원 탈퇴를 완료하였습니다.');
-        sessionStorage.removeItem('userId');
-        sessionStorage.removeItem('accessToken');
-        sessionStorage.removeItem('refreshToken');
-        navigate('/');
-      },
-      onError: (error) => {
-        alert('회원 탈퇴에 실패하였습니다.');
-      },
-    },
-  );
-
   // 프로필 사진 수정한 것도 넣어야 함!!!
   // nickname이 비어 있으면 myData?.data.nickname, confirmedNickname과 현재 nickname이 같으면 POST, 다르면 alert('닉네임 중복 확인 버튼을 눌러 주세요')
   const onClickSubmit = async (data: SignUpData): void => {
@@ -217,10 +199,6 @@ const ProfileEdit = () => {
     }
   };
 
-  const onClickWithdraw = () => {
-    deleteUserMutation.mutate();
-  };
-
   return (
     <Base>
       <Title>내 정보 수정</Title>
@@ -233,14 +211,7 @@ const ProfileEdit = () => {
               setImageUrl={setImageUrl}
               setFiles={setFiles}
               files={files}
-            />
-            <Text
-              style={{ marginTop: '24px' }}
-              $fontSize="14px"
-              $color="#44A5FF"
-            >
-              프로필 사진
-            </Text>
+            ></ProfileImage>
           </ImgContatiner>
           <InputContainer>
             <InputWrapper>
@@ -249,7 +220,7 @@ const ProfileEdit = () => {
                 <Input
                   $check={nicknameCheck}
                   $width="284px"
-                  placeholder={myData?.data.nickname}
+                  placeholder={`${myData?.data.nickname}  (2~15자)`}
                   type="text"
                   value={nickname}
                   onChange={onChangeNickname}
@@ -268,8 +239,8 @@ const ProfileEdit = () => {
               <Check verifyCheck={nicknameCheck}>{checkingNickname}</Check>
             </InputWrapper>
             <InputWrapper style={{ marginTop: '30px' }}>
-              <Text style={{ marginBottom: '6px' }}>이메일</Text>
-              <Input placeholder={myData?.data.email} value="" />
+              <Text style={{ marginBottom: '16px' }}>이메일</Text>
+              <Text $fontSize="20px">{myData?.data.email}</Text>
             </InputWrapper>
           </InputContainer>
           <Text style={{ margin: '60px 0 20px 0' }} $fontSize="24px">
@@ -281,7 +252,7 @@ const ProfileEdit = () => {
                 <Text style={{ marginBottom: '6px' }}>비밀번호</Text>
                 <Input
                   $check={passwordCheck}
-                  placeholder="비밀번호를 입력해 주세요."
+                  placeholder="비밀번호를 입력해 주세요.  (6자 이상, 영문, 숫자 필수)"
                   type="password"
                   {...register('password')}
                 />
@@ -291,7 +262,7 @@ const ProfileEdit = () => {
                 <Text style={{ marginBottom: '6px' }}>비밀번호 확인</Text>
                 <Input
                   $check={confirmedPasswordCheck}
-                  placeholder="비밀번호를 다시 입력해 주세요."
+                  placeholder="비밀번호를 한 번 더 입력해 주세요."
                   type="password"
                   {...register('confirmedPassword')}
                 />
@@ -317,25 +288,6 @@ const ProfileEdit = () => {
       </ProfileBox>
       <Withdraw onClick={() => setIsModalOpen(true)}>
         <Text $color="#808080">회원탈퇴를 원하시나요?</Text>
-        {/* {isModalOpen && (
-          <SelectQuestion>
-            <Text $color="tomato" $fontSize="24px">
-              정말로 탈퇴하시겠습니까?
-            </Text>
-            <Selection>
-              <Btn onClick={() => setIsModalOpen(!isModalOpen)}>
-                <Text $color="#FFF" $fontSize="14px">
-                  취소
-                </Text>
-              </Btn>
-              <Btn onClick={onClickWithdraw} $color="tomato">
-                <Text $color="#FFF" $fontSize="14px">
-                  탈퇴하기
-                </Text>
-              </Btn>
-            </Selection>
-          </SelectQuestion>
-        )} */}
       </Withdraw>
       <SubModal
         onClose={() => setIsModalOpen(false)}

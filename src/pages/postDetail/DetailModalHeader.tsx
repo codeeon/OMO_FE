@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { useNavigate } from 'react-router-dom';
 import DetailModalDropdown from '../../components/detailModal/ModalDropdown';
 import { PostDetailType } from '../../model/interface';
 
@@ -22,12 +22,17 @@ const DetailModalHeader: React.FC<{
   userId,
 }) => {
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
+  const navigate = useNavigate();
+
+  const onClickMoveUserPage = () => {
+    navigate(`/userpage/${userName}`);
+  };
 
   return (
     <Base>
-      <UserProfile $userProfile={userProfile} />
+      <UserProfile $userProfile={userProfile} onClick={onClickMoveUserPage} />
       <UserInfoContainer>
-        <UserName>{userName}</UserName>
+        <UserName onClick={onClickMoveUserPage}>{userName}</UserName>
         <CreationDate>{createdAt.split('T')[0]}</CreationDate>
       </UserInfoContainer>
       {userId === currentUserId && (
@@ -60,6 +65,7 @@ const UserProfile = styled.div<{ $userProfile: string }>`
   height: 50px;
   border: 2px solid ${({ theme }) => theme.color.border};
   border-radius: 100%;
+  cursor: pointer;
 `;
 
 const UserInfoContainer = styled.div`
@@ -75,6 +81,7 @@ const UserName = styled.div`
   font-weight: bold;
   letter-spacing: -0.16px;
   color: ${({ theme }) => theme.color.text};
+  cursor: pointer;
 `;
 
 const CreationDate = styled.div`
