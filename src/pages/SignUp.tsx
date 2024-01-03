@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import auth from '../axios/auth';
 import useInput from '../hooks/useInput';
 import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
+import Done from '../components/auth/signup/Done';
 
 const SignUp: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  // const { themeMode } = useTheme();
+  // const { value: email, changeValueHandler: onChangeEmail } = useInput();
+  const [email, setEmail] = useState<string>();
 
-  const { value: email, changeValueHandler: onChangeEmail } = useInput();
   const { value: code, changeValueHandler: onChangeCode } = useInput();
 
   const [emailCheck, setEmailCheck] = useState<string>('');
@@ -19,14 +22,17 @@ const SignUp: React.FC = () => {
 
   const [confirmedEmail, setConfirmedEmail] = useState<string>('');
   const [isValidated, setIsValidated] = useState<boolean>(false);
-  const [registerPage, setRegisterPage] = useState<boolean>(false);
+  const [registerPage, setRegisterPage] = useState<number>(1);
 
-  const title = registerPage ? '회원가입' : '이메일 인증';
+  const title =
+    registerPage === 2 ? '회원가입' : registerPage === 1 ? '이메일 인증' : null;
   const checkingEmail =
     emailCheck === 'rejected'
       ? '올바른 이메일이 아니거나, 이미 가입한 이메일입니다.'
       : emailCheck === 'confirmed'
       ? '전송된 메일의 인증번호를 입력해주세요.'
+      : emailCheck === 'retry'
+      ? '이메일 인증을 다시 진행해주세요.'
       : '';
   const checkingCode =
     codeCheck === 'rejected'
@@ -35,6 +41,21 @@ const SignUp: React.FC = () => {
       ? '전송된 메일의 인증번호를 입력해주세요.'
       : '';
 
+  // emailCheck === 'confirmed'에서, email이 수정되었을 때(email !== confirmedEmail),
+  // codeCheck === 'confirmed'에서, email이 수정되었을 때(email !== confirmedEmail)
+  const onValid = () => {
+    emailCheck === 'confirmed' || codeCheck === 'confirmed'
+      ? email !== confirmedEmail
+        ? setEmailCheck('retry')
+        : null
+      : null;
+  };
+
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
+    onValid();
+  };
+
   const checkEmailMutation = useMutation(
     async (email: string): Promise<void> => {
       // console.log(email);
@@ -42,8 +63,15 @@ const SignUp: React.FC = () => {
       // console.log('이메일 체크 응답 -> ', checkEmailResponse);
     },
     {
+      onMutate: () => {
+        if (email.includes('@') && email.split('@')[1].includes('.')) {
+          setEmailCheck('confirmed');
+        } else {
+          setEmailCheck('rejected');
+        }
+      },
       onSuccess: () => {
-        setEmailCheck('confirmed');
+        emailCheck !== 'retry' && setEmailCheck('confirmed');
       },
       onError: () => {
         setEmailCheck('rejected');
@@ -62,8 +90,8 @@ const SignUp: React.FC = () => {
     },
     {
       onSuccess: () => {
-        setCodeCheck('confirmed');
         setConfirmedEmail(email);
+        setCodeCheck('confirmed');
         setIsValidated(true);
       },
       onError: () => {
@@ -74,7 +102,7 @@ const SignUp: React.FC = () => {
 
   const onClickNextStep = () => {
     isValidated
-      ? setRegisterPage(true)
+      ? setRegisterPage(2)
       : emailCheck === 'confirmed'
       ? setCodeCheck('rejected')
       : setEmailCheck('rejected');
@@ -83,84 +111,100 @@ const SignUp: React.FC = () => {
   return (
     <Base>
       <RegisterBox>
-        <Title>{title}</Title>
-        <Step>
-          <Number $validation={true}>1</Number>
-          <Bar $validation={isValidated} />
-          <Number $validation={registerPage}>2</Number>
-        </Step>
-        {registerPage ? (
-          <Register confirmedEmail={confirmedEmail} />
+        {registerPage === 3 ? (
+          <Done setRegisterPage={setRegisterPage} />
         ) : (
-          <>
-            <EmailBox>
-              <InputBox>
-                <div>
-                  <div>
-                    <Input
-                      $check={emailCheck}
-                      placeholder="이메일을 입력해 주세요"
-                      value={email}
-                      onChange={onChangeEmail}
-                      type="text"
-                    />
-                    <SmallBtn onClick={() => checkEmailMutation.mutate(email)}>
-                      인증메일 전송
-                    </SmallBtn>
-                  </div>
-                  <Check verifyCheck={emailCheck}>{checkingEmail}</Check>
-                </div>
-                <div>
-                  <div>
-                    <Input
-                      $check={codeCheck}
-                      placeholder="인증번호를 입력해 주세요"
-                      value={code}
-                      onChange={onChangeCode}
-                      type="text"
-                    />
-                    <SmallBtn onClick={() => checkCodeMutation.mutate(code)}>
-                      인증번호 확인
-                    </SmallBtn>
-                  </div>
-                  <Check verifyCheck={codeCheck}>{checkingCode}</Check>
-                </div>
-              </InputBox>
-              <Retry>
-                <Text $fontSize="14px">이메일이 오지 않았나요?</Text>
-                <Link
-                  style={{ textDecoration: 'none' }}
-                  onClick={() => checkEmailMutation.mutate(email)}
-                >
-                  <Text $fontSize="14px" color="#44A5FF">
-                    인증메일 재전송
-                  </Text>
-                </Link>
-              </Retry>
-            </EmailBox>
-            <div style={{ height: '214px' }}>
+          <div>
+            <Title>{title}</Title>
+            <Step>
+              <Number $validation={true}>1</Number>
+              <Bar $validation={isValidated} />
+              <Number $validation={registerPage === 2}>2</Number>
+            </Step>
+            {registerPage === 2 ? (
+              <Register
+                confirmedEmail={confirmedEmail}
+                setRegisterPage={setRegisterPage}
+              />
+            ) : (
               <div>
-                <LargeBtn onClick={onClickNextStep} $validation={isValidated}>
-                  다음
-                </LargeBtn>
+                <EmailBox>
+                  <InputBox>
+                    <div>
+                      <div>
+                        <Input
+                          $check={emailCheck}
+                          placeholder="이메일을 입력해 주세요"
+                          value={email}
+                          onChange={onChangeEmail}
+                          type="text"
+                        />
+                        <SmallBtn
+                          onClick={() => checkEmailMutation.mutate(email)}
+                        >
+                          인증메일 전송
+                        </SmallBtn>
+                      </div>
+                      <Check verifyCheck={emailCheck}>{checkingEmail}</Check>
+                    </div>
+                    <div>
+                      <div>
+                        <Input
+                          $check={codeCheck}
+                          placeholder="인증번호를 입력해 주세요"
+                          value={code}
+                          onChange={onChangeCode}
+                          type="text"
+                        />
+                        <SmallBtn
+                          onClick={() => checkCodeMutation.mutate(code)}
+                        >
+                          인증번호 확인
+                        </SmallBtn>
+                      </div>
+                      <Check verifyCheck={codeCheck}>{checkingCode}</Check>
+                    </div>
+                  </InputBox>
+                  <Retry>
+                    <Text $fontSize="14px">이메일이 오지 않았나요?</Text>
+                    <Link
+                      style={{ textDecoration: 'none' }}
+                      onClick={() => checkEmailMutation.mutate(email)}
+                    >
+                      <Text $fontSize="14px" color="#44A5FF">
+                        인증메일 재전송
+                      </Text>
+                    </Link>
+                  </Retry>
+                </EmailBox>
+                <div style={{ height: '214px' }}>
+                  <div>
+                    <LargeBtn
+                      onClick={onClickNextStep}
+                      $validation={isValidated}
+                    >
+                      다음
+                    </LargeBtn>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text>기존 회원이신가요?</Text>
+                    <Link
+                      style={{ textDecoration: 'none', marginLeft: '10px' }}
+                      to="/login"
+                    >
+                      <Text color="#44a5ff">로그인</Text>
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Text>기존 회원이신가요?</Text>
-                <Link
-                  style={{ textDecoration: 'none', marginLeft: '10px' }}
-                  to="/login"
-                >
-                  <Text color="#44a5ff">로그인</Text>
-                </Link>
-              </div>
-            </div>
-          </>
+            )}
+          </div>
         )}
       </RegisterBox>
     </Base>
@@ -267,7 +311,7 @@ const Input = styled.input<{ $check: string }>`
     font-size: 14px;
     font-weight: 700;
   }
-  color: ${({ theme }) => theme.color.text};
+  color: ${({ theme, $check }) => theme.color.text};
 `;
 
 const SmallBtn = styled.button`
@@ -276,7 +320,7 @@ const SmallBtn = styled.button`
   height: 50px;
   flex-shrink: 0;
   border-radius: 4px;
-  background: ${({ theme }) => theme.color.cardBg};
+  background-color: ${({ theme }) => theme.color.locBg};
   border: 1px solid #f97393;
   margin-left: 10px;
   color: #f97393;

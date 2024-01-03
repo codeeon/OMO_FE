@@ -2,21 +2,22 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import ContentCardSkeleton from '../components/skeleton/RecentPostCardSkeleton';
-import ContentCard from '../components/card/ContentCard';
-import PlaceCardSkeleton from '../components/auth/mypage/PlaceCardSkeleton';
+
+import ContentCard from '../components/share/ContentCard';
+import PlaceCardSkeleton from '../components/skeleton/PlaceCardSkeleton';
 import PlaceCard from '../components/auth/mypage/PlaceCard';
-import useGetUserDataQuery from '../hooks/reactQuery/mypage/useGetUserDataQuery';
+import useGetMyDataQuery from '../hooks/reactQuery/mypage/useGetMyDataQuery';
 import useGetMyPostsQuery from '../hooks/reactQuery/mypage/useGetMyPostsQuery';
 import useGetMyBookmarkQuery from '../hooks/reactQuery/mypage/useGetMyBookmarkQuery';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 const Mypage: React.FC = () => {
-  // 무한 스크롤 추가하기, 데이터 잘 처리하기
   const navigate = useNavigate();
 
   const [isSelect, setIsSelect] = useState('Bookmark');
 
-  const { data: userData, isError: userError } = useGetUserDataQuery();
+  const { data: myData, isError: userError } = useGetMyDataQuery();
+
   const {
     data: myBookmark,
     fetchNextPage: fetchNextBookmark,
@@ -72,9 +73,9 @@ const Mypage: React.FC = () => {
     <Base>
       <Header>
         <Profile>
-          <MyImg src={userData?.data.imgUrl} alt=""></MyImg>
+          <MyImg src={myData?.data.imgUrl} alt=""></MyImg>
           <Nickname style={{ marginLeft: '22px' }}>
-            {userData?.data.nickname}
+            {myData?.data.nickname}
           </Nickname>
         </Profile>
         <Btn onClick={() => navigate('/mypage/edit')}>내 정보 수정</Btn>
@@ -96,30 +97,39 @@ const Mypage: React.FC = () => {
       </Select>
       <Contents>
         {/* pages가 정해져 있기 때문에, 수정을 해야 할 듯. 다음 페이지가 있다면 그 숫자의 페이지도 나오게끔 */}
-        {isSelect === 'Bookmark'
-          ? (isFetchingBookmark && !isFetchingNextBookmark) ||
-            (!isFetchingBookmark && isFetchingNextBookmark)
-            ? Array.from({ length: 12 }).map((_, idx) => (
-                <PlaceCardSkeleton key={idx} />
-              ))
-            : myBookmark?.pages.map((page) =>
-                page.data.map((placeData) => (
-                  <PlaceCard key={placeData.locationId} placeData={placeData} />
-                )),
-              )
-          : (isFetchingMyPosts && !isFetchingNextMyPosts) ||
-            (!isFetchingMyPosts && isFetchingNextMyPosts)
-          ? Array.from({ length: 12 }).map((_, idx) => (
-              <ContentCardSkeleton key={idx} />
+        {isSelect === 'Bookmark' ? (
+          (isFetchingBookmark && !isFetchingNextBookmark) ||
+          (!isFetchingBookmark && isFetchingNextBookmark) ? (
+            Array.from({ length: 12 }).map((_, idx) => (
+              <PlaceCardSkeleton key={idx} />
             ))
-          : myPosts?.pages.map((page) =>
-              page.data.map((contentData) => (
-                <ContentCard
-                  key={contentData.postId}
-                  contentData={contentData}
-                />
+          ) : myBookmark?.pages[0].data.length === 0 ? (
+            <Text $color="sub" style={{ marginTop: '50px' }}>
+              북마크에 저장한 장소가 없습니다.
+            </Text>
+          ) : (
+            myBookmark?.pages.map((page) =>
+              page.data.map((placeData) => (
+                <PlaceCard key={placeData.locationId} placeData={placeData} />
               )),
-            )}
+            )
+          )
+        ) : (isFetchingMyPosts && !isFetchingNextMyPosts) ||
+          (!isFetchingMyPosts && isFetchingNextMyPosts) ? (
+          Array.from({ length: 12 }).map((_, idx) => (
+            <ContentCardSkeleton key={idx} />
+          ))
+        ) : myPosts?.pages[0].data.length === 0 ? (
+          <Text $color="sub" style={{ marginTop: '50px' }}>
+            아직 작성한 게시글이 없습니다.
+          </Text>
+        ) : (
+          myPosts?.pages.map((page) =>
+            page.data.map((contentData) => (
+              <ContentCard key={contentData.postId} contentData={contentData} />
+            )),
+          )
+        )}
         {isSelect === 'Bookmark' ? (
           <ObserverContainer ref={setTargetBookmark}></ObserverContainer>
         ) : (
@@ -162,6 +172,10 @@ const MyImg = styled.img`
   flex-shrink: 0;
   border-radius: 100%;
   border: none;
+  /* background-color: ${({ theme }) => theme.color.border}; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const Nickname = styled.div`
@@ -200,6 +214,26 @@ const Item = styled.div<{ selected: boolean }>`
   border-width: 0 0 3px 0;
   margin-bottom: 16px;
   cursor: pointer;
+`;
+
+const Text = styled.div<{ $color?: string }>`
+  /* display: inline-flex;
+  justify-content: flex-end; */
+  gap: 4px;
+  color: ${({ $color, theme }) =>
+    $color === 'sub2'
+      ? theme.color.sub2
+      : $color === 'sub'
+      ? theme.color.sub
+      : $color === 'text'
+      ? theme.color.text
+      : $color === 'btn'
+      ? '#fff'
+      : theme.color.link};
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  height: 25px;
 `;
 
 const Contents = styled.div`
