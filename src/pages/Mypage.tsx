@@ -9,9 +9,11 @@ import useGetMyDataQuery from '../hooks/reactQuery/mypage/useGetMyDataQuery';
 import useGetMyPostsQuery from '../hooks/reactQuery/mypage/useGetMyPostsQuery';
 import useGetMyBookmarkQuery from '../hooks/reactQuery/mypage/useGetMyBookmarkQuery';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import useLogoutMutation from '../hooks/reactQuery/auth/useLogoutMutation';
 
 const Mypage: React.FC = () => {
   const navigate = useNavigate();
+  const { logoutMutate } = useLogoutMutation();
 
   const [isSelect, setIsSelect] = useState('Bookmark');
 
@@ -20,11 +22,7 @@ const Mypage: React.FC = () => {
   useEffect(() => {
     const userId = sessionStorage.getItem('userId');
     (!userId || userError) &&
-      (alert('로그인 후 이용해주세요.'),
-      navigate('/login'),
-      sessionStorage.removeItem('userId'),
-      sessionStorage.removeItem('accessToken'),
-      sessionStorage.removeItem('refreshToken'));
+      (alert('로그인 후 이용해주세요.'), navigate('/login'));
   }, []);
 
   const {

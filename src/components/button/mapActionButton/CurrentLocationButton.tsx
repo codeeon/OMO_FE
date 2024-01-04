@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { MdMyLocation } from 'react-icons/md';
 import styled from 'styled-components';
 import { getCurrentCoords } from '../../../utils/kakao';

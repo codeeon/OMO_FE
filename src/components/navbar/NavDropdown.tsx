@@ -7,12 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import useThemeStore from '../../store/theme/themeStore';
 import toast from 'react-hot-toast';
 import { itemVariants } from '../../styles/Motion';
+import useLogoutMutation from '../../hooks/reactQuery/auth/useLogoutMutation';
 
 const NavDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [errorType, setErrorType] = useState<string | null>(null);
   const { themeMode, toggleTheme } = useThemeStore();
+  const { logoutMutate } = useLogoutMutation();
+
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {
       if (
@@ -44,18 +47,14 @@ const NavDropdown = () => {
   const userId = sessionStorage.getItem('userId');
 
   const handleLogout = () => {
-    // 여기에 auth.POST /logout req 넣을 예정
-    setErrorType('logout');
+    logoutMutate();
     toast.success('로그아웃이 완료되었습니다.', {
       position: 'top-right',
       duration: 4000,
       style: { fontSize: '14px' },
-    });
-    setIsOpen(false);
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('refreshToken');
-    sessionStorage.removeItem('userId');
-    navigate('/');
+    }),
+      setIsOpen(false),
+      navigate('/');
   };
 
   const onClickMyPageBtn = () => {

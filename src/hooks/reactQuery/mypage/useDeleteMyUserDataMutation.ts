@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import authAuth from '../../../axios/authAuth';
+import useLogoutMutation from '../auth/useLogoutMutation';
 
 const deleteMyData = async () => {
   const response = await authAuth.delete(`/withdraw`);
@@ -8,12 +9,12 @@ const deleteMyData = async () => {
 
 const useDeleteMyDataMutation = () => {
   const navigate = useNavigate();
+  const { logoutMutate } = useLogoutMutation();
+
   const mutation = useMutation(deleteMyData, {
     onSuccess: () => {
+      logoutMutate();
       alert('회원 탈퇴를 완료하였습니다.');
-      sessionStorage.removeItem('userId');
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('refreshToken');
       navigate('/');
     },
   });
