@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { RepleType } from '../../model/interface';
+import { RepleTypeNew } from '../../model/interface';
 import Dropdown from './Dropdown';
 import { useNavigate } from 'react-router-dom';
 
 //TODO 유저 데이터
 const RepleItem: React.FC<{
-  reple: RepleType;
-  contentId: number;
+  reple: RepleTypeNew;
+  postId: number;
   commentId: number;
-}> = ({ reple, contentId, commentId }) => {
-  const { replyId, content, createdAt, User } = reple;
+}> = ({ reple, postId, commentId }) => {
+  const { Comment, User, content, createdAt, replyId } = reple;
   const navigate = useNavigate();
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
 
@@ -29,7 +29,7 @@ const RepleItem: React.FC<{
             <Dropdown
               commentId={commentId}
               replyId={replyId}
-              contentId={contentId}
+              contentId={postId}
             />
           )}
         </UserInfoContainer>
