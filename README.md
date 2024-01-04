@@ -11,8 +11,9 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%233178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2361DAFB?style=for-the-badge&logo=react&logoColor=black)<br />
-![React Router Dom](https://img.shields.io/badge/react%20router%20dom-%23CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 ![Styled Components](https://img.shields.io/badge/styled%20components-%23DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/framer%20motion-%23E13197?style=for-the-badge&logo=framer&logoColor=white)
+![React Router Dom](https://img.shields.io/badge/react%20router%20dom-%23CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 ![Axios](https://img.shields.io/badge/axios-%235A29E4?style=for-the-badge&logo=axios&logoColor=white)
 ![TanStack Query](https://img.shields.io/badge/tanstack%20query-%23FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![Zustand](https://img.shields.io/badge/zustand-%234F1E31?style=for-the-badge)
