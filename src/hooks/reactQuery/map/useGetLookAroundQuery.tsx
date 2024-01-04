@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { instance } from '../../../apis/apis';
+import api from '../../../axios/api';
 import { LocationType } from '../../../model/interface';
 
 export const getLocations = async (
@@ -10,7 +10,7 @@ export const getLocations = async (
   qa: number | null,
 ): Promise<LocationType[]> => {
   const params = { categoryName, qa, pa, ha, oa };
-  const response = await instance.get(`/locations`, { params });
+  const response = await api.get(`/api/locations`, { params });
 
   return response.data.location || response.data;
 };

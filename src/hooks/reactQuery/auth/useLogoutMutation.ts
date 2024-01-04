@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query';
-import authAuth from '../../../axios/authAuth';
+import authApi from '../../../axios/authApi';
 
 interface LoginData {
   email: string;
@@ -7,7 +7,7 @@ interface LoginData {
 }
 
 const postLogin = async () => {
-  const response = await authAuth.post('/logout');
+  const response = await authApi.post('/auth/logout');
 };
 
 const useLogoutMutation = () => {

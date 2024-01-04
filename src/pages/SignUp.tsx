@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import auth from '../axios/auth';
+import api from '../axios/api';
 import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
 import Done from '../components/auth/signup/Done';
@@ -56,7 +56,9 @@ const SignUp: React.FC = () => {
 
   const checkEmailMutation = useMutation(
     async (email: string): Promise<void> => {
-      const checkEmailResponse = await auth.post('/verify-email', { email });
+      const checkEmailResponse = await api.post('/auth/verify-email', {
+        email,
+      });
     },
     {
       onMutate: () => {
@@ -77,10 +79,13 @@ const SignUp: React.FC = () => {
 
   const checkCodeMutation = useMutation(
     async (code: string): Promise<void> => {
-      const checkCodeResponse = await auth.post('/verify-authentication-code', {
-        authenticationCode: code,
-        email,
-      });
+      const checkCodeResponse = await api.post(
+        '/auth/verify-authentication-code',
+        {
+          authenticationCode: code,
+          email,
+        },
+      );
     },
     {
       onSuccess: () => {

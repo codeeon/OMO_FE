@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { LocationType } from '../model/interface';
 import { useMutation, useQueryClient } from 'react-query';
-import { instance } from '../apis/apis';
+import api from '../axios/api';
 
 const postLocation = async (newLocation: LocationType) => {
-  const response = await instance.post('/locations', newLocation);
+  const response = await api.post('/api/locations', newLocation);
   return response.data;
 };
 

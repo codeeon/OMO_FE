@@ -6,7 +6,7 @@ const deleteLike: MutationFunction<
   void,
   { postId: number | undefined }
 > = async ({ postId }) => {
-  const response = await authApi.delete(`/posts/${postId}/like`);
+  const response = await authApi.delete(`/api/posts/${postId}/like`);
   return response.data;
 };
 

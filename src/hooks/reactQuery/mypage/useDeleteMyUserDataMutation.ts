@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import authAuth from '../../../axios/authAuth';
+import authApi from '../../../axios/authApi';
 import useLogoutMutation from '../auth/useLogoutMutation';
 
 const deleteMyData = async () => {
-  const response = await authAuth.delete(`/withdraw`);
+  const response = await authApi.delete(`/auth/withdraw`);
 };
 
 const useDeleteMyDataMutation = () => {

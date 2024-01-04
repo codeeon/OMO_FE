@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import Check from '../components/auth/signup/Check';
-import auth from '../axios/auth';
+import api from '../axios/api';
 import useGetMyDataQuery from '../hooks/reactQuery/mypage/useGetMyDataQuery';
 import authApi from '../axios/authApi';
 import ProfileImage from '../components/auth/mypage/edit/ProfileImage';
@@ -145,7 +145,7 @@ const ProfileEdit = () => {
   // 회원가입 페이지와 동일, hook으로 만들기
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      const checkNicknameResponse = await auth.post('/check-nickname', {
+      const checkNicknameResponse = await api.post('/auth/check-nickname', {
         nickname,
       });
     },
@@ -162,7 +162,10 @@ const ProfileEdit = () => {
 
   const updateProfileMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      const response = await authApi.patch(`/users/self/profile/edit`, data);
+      const response = await authApi.patch(
+        `/api/users/self/profile/edit`,
+        data,
+      );
     },
     {
       onSuccess: () => {
@@ -438,20 +441,4 @@ const Btn = styled.button<{ $check: string; color: string }>`
 const Withdraw = styled.div`
   margin: 50px 0 100px 0;
   cursor: pointer;
-`;
-
-const SelectQuestion = styled.div`
-  margin: 30px 0 40px 0;
-  padding: 20px 30px;
-  border: 2px solid tomato;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.cardBg};
-`;
-
-const Selection = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin: 15px 0 0 0;
 `;

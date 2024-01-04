@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from 'react-query';
-import authUsers from '../../../axios/authUsers';
+import authApi from '../../../axios/authApi';
 
 const getUserPosts = async (
   nickname: string,
@@ -12,7 +12,7 @@ const getUserPosts = async (
     pageSize,
   };
 
-  const response = await authUsers.get(`/api/users/profile/${nickname}/posts`, {
+  const response = await authApi.get(`/api/users/profile/${nickname}/posts`, {
     params,
   });
 

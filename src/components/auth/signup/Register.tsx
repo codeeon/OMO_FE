@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
-import auth from '../../../axios/auth';
+import api from '../../../axios/api';
 import useInput from '../../../hooks/useInput';
 import Check from './Check';
 
@@ -98,7 +98,7 @@ const Register: React.FC = (props: string) => {
 
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      const checkNicknameResponse = await auth.post('/check-nickname', {
+      const checkNicknameResponse = await api.post('/auth/check-nickname', {
         nickname,
       });
     },
@@ -115,7 +115,7 @@ const Register: React.FC = (props: string) => {
 
   const signupMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      const response = await auth.post(`/register`, data);
+      const response = await api.post(`/auth/register`, data);
     },
     {
       onSuccess: () => {

@@ -1,12 +1,12 @@
 import { QueryClient, useQuery } from 'react-query';
-import { instance } from '../../../apis/apis';
+import api from '../../../axios/api';
 import { StoreSearchType } from '../../../model/interface';
 
 const queryClient = new QueryClient();
 
 const serachStore = async (searchValue: string): Promise<StoreSearchType[]> => {
   const params = { storeName: searchValue };
-  const response = await instance.get(`/posts/main/searching`, { params });
+  const response = await api.get(`/api/posts/main/searching`, { params });
   return response.data;
 };
 
