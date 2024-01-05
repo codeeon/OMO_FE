@@ -12,7 +12,6 @@ import ProfileImage from '../components/auth/mypage/edit/ProfileImage';
 import useUpdateMyImageMutation from '../hooks/reactQuery/mypage/useUpdateMyImageMutation';
 import WithdrawModal from '../components/auth/mypage/edit/WithdrawModal';
 import SubModal from '../components/Modal/SubModal';
-import useLogoutMutation from '../hooks/reactQuery/auth/useLogoutMutation';
 
 interface UserEmail {
   email: string;
@@ -32,7 +31,6 @@ const ProfileEdit = () => {
   });
 
   const { myImageMutate } = useUpdateMyImageMutation();
-  const { logoutMutate } = useLogoutMutation();
 
   const navigate = useNavigate();
 

@@ -9,11 +9,9 @@ import useGetMyDataQuery from '../hooks/reactQuery/mypage/useGetMyDataQuery';
 import useGetMyPostsQuery from '../hooks/reactQuery/mypage/useGetMyPostsQuery';
 import useGetMyBookmarkQuery from '../hooks/reactQuery/mypage/useGetMyBookmarkQuery';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import useLogoutMutation from '../hooks/reactQuery/auth/useLogoutMutation';
 
 const Mypage: React.FC = () => {
   const navigate = useNavigate();
-  const { logoutMutate } = useLogoutMutation();
 
   const [isSelect, setIsSelect] = useState('Bookmark');
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import KakaoLogin from '../components/auth/KakaoLogin';
 import api from '..//axios/api';

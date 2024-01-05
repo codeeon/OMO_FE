@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import api from './api';
 
-// 타입 추가
 interface RefreshResponseData {
   userId: string;
 }

@@ -24,7 +24,7 @@ const SignUp: React.FC = () => {
 
   const [confirmedEmail, setConfirmedEmail] = useState<string>('');
   const [isValidated, setIsValidated] = useState<boolean>(false);
-  const [registerPage, setRegisterPage] = useState<number>(2);
+  const [registerPage, setRegisterPage] = useState<number>(1);
 
   const title =
     registerPage === 2 ? '회원가입' : registerPage === 1 ? '이메일 인증' : null;

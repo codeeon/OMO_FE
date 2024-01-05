@@ -8,16 +8,30 @@ interface LoginData {
 
 const postLogin = async () => {
   const response = await authApi.post('/auth/logout');
+  console.log(response);
 };
 
 const useLogoutMutation = () => {
   const mutation = useMutation<void, unknown, { userData: LoginData }>(
     postLogin,
     {
+      // onMutate: () => {
+      //   // onSuccess는 - 혹시나 서버에 이미 토큰이 지워졌다면? 여기 토큰은 안 지워짐,
+      //   // 차라리 서버에 있는 토큰 데이터가 안 지워지는 게 나아서, onMutate로 optimistic update를 쓰고 에러 핸들링을 조정?
+      //   sessionStorage.removeItem('accessToken');
+      //   sessionStorage.removeItem('refreshToken');
+      //   sessionStorage.removeItem('userId');
+      //
+      //   // 이렇게 하면 토큰이 먼저 삭제되기에, 에러가 발생.
+      // },
       onSuccess: () => {
+        console.log('로그아웃 성공');
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('refreshToken');
         sessionStorage.removeItem('userId');
+      },
+      onError: (error) => {
+        console.error;
       },
     },
   );

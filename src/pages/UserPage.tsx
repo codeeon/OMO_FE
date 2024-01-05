@@ -6,11 +6,9 @@ import ContentCard from '../components/card/ContentCard';
 import useGetUserDataQuery from '../hooks/reactQuery/userPage/useGetUserDataQuery';
 import useGetUserPostsQuery from '../hooks/reactQuery/userPage/useGetUserContentsQuery';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import useLogoutMutation from '../hooks/reactQuery/auth/useLogoutMutation';
 
 const UserPage: React.FC = () => {
   const { nickname: username } = useParams();
-  const { logoutMutate } = useLogoutMutation();
 
   const [isSelect, setIsSelect] = useState('Contents');
 
