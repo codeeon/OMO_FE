@@ -165,7 +165,7 @@ const Button = styled(motion.div)<{ $isBookMarking: boolean }>`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  width: 70px;
+  width: 80px;
   border-radius: 41px;
   border: ${({ $isBookMarking, theme }) =>
     $isBookMarking

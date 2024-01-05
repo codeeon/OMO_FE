@@ -16,7 +16,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
   const onTextAreaFocus = useCallback(() => {
     setIsTextareaFoucs(true);
   }, []);
-  
+
   const offTextAreaFocus = useCallback(() => {
     setIsTextareaFoucs(false);
   }, []);
@@ -66,7 +66,7 @@ const CommentInput: React.FC<{ contentId: number | undefined }> = ({
       <Button
         theme="gray"
         padding="9px 14px"
-        width="50px"
+        width="60px"
         height="15px"
         fontSize="14px"
         onClick={postCommentHandler}

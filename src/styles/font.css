@@ -3,7 +3,7 @@
   font-display: swap;
   font-weight: 500;
   src: url('/assets/fonts/WantedSans-Regular.ttf') format('truetype'),
-    url('/assets/fonts/WantedSans-Regular.woff') format('woff'),
+    url('/assets/fonts/WantedSans-Regular.woff') format('font-woff'),
     url('/assets/fonts/WantedSans-Regular.woff2') format('font-woff2');
 }
 @font-face {
@@ -11,7 +11,7 @@
   font-display: swap;
   font-weight: 700;
   src: url('/assets/fonts/WantedSans-SemiBold.ttf') format('truetype'),
-    url('/assets/fonts/WantedSans-SemiBold.woff') format('woff'),
+    url('/assets/fonts/WantedSans-SemiBold.woff') format('font-woff'),
     url('/assets/fonts/WantedSans-SemiBold.woff2') format('font-woff2');
 }
 @font-face {
@@ -19,25 +19,35 @@
   font-display: swap;
   font-weight: 900;
   src: url('/assets/fonts/WantedSans-Bold.ttf') format('truetype'),
-    url('/assets/fonts/WantedSans-Bold.woff') format('woff'),
+    url('/assets/fonts/WantedSans-Bold.woff') format('font-woff'),
     url('/assets/fonts/WantedSans-Bold.woff2') format('font-woff2');
 }
 
 #root {
   font-family: 'WantedSans';
+  font-weight: 500;
 }
 #modal-root {
   font-family: 'WantedSans';
+  font-weight: 500;
 }
 textarea {
   font-family: 'WantedSans';
+  font-weight: 500;
 }
 textarea::placeholder {
   font-family: 'WantedSans';
+  font-weight: 500;
 }
 input {
   font-family: 'WantedSans';
+  font-weight: 500;
 }
 input::placeholder {
   font-family: 'WantedSans';
+  font-weight: 500;
+}
+button {
+  font-family: 'WantedSans';
+  font-weight: 500;
 }

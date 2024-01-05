@@ -15,6 +15,7 @@ const postReple: MutationFunction<
     `/api/posts/${postId}/comments/${commentId}/replies`,
     newComment,
   );
+  console.log(response);
   return response.data;
 };
 
