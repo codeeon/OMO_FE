@@ -1,5 +1,5 @@
 import { QueryClient, useQuery } from 'react-query';
-import { instance } from '../../../apis/apis';
+import api from '../../../axios/api';
 import { CommentPostsType } from '../../../model/interface';
 
 const queryClient = new QueryClient();
@@ -12,7 +12,7 @@ const getCommentPost = async (
       ? { limit: 9, districtName: '' }
       : { districtName, limit: 9 };
 
-  const response = await instance.get(`/main/comments`, { params });
+  const response = await api.get(`/api/main/comments`, { params });
   return response.data;
 };
 

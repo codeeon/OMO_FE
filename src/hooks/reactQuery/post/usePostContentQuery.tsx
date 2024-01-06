@@ -18,7 +18,7 @@ const postContent = async (newContent: PostContentType) => {
     formData.append('imgUrl', file);
   });
 
-  const response = await authApi.post('/posts', formData);
+  const response = await authApi.post('/api/posts', formData);
   return response.data;
 };
 

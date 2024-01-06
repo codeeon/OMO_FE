@@ -8,7 +8,7 @@ const postComment: MutationFunction<
   { contentId: number | undefined; newComment: PostCommentType }
 > = async ({ contentId, newComment }) => {
   const response = await authApi.post(
-    `/posts/${contentId}/comments`,
+    `/api/posts/${contentId}/comments`,
     newComment,
   );
   console.log(response.data);

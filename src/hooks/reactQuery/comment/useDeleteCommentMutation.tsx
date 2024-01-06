@@ -1,5 +1,4 @@
 import { MutationFunction, useMutation, useQueryClient } from 'react-query';
-import { instance } from '../../../apis/apis';
 import authApi from '../../../axios/authApi';
 import toast from 'react-hot-toast';
 
@@ -11,7 +10,7 @@ const deleteComment: MutationFunction<
   }
 > = async ({ contentId, commentId }) => {
   const response = await authApi.delete(
-    `/posts/${contentId}/comments/${commentId}`,
+    `/api/posts/${contentId}/comments/${commentId}`,
   );
   return response.data;
 };

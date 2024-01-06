@@ -1,5 +1,5 @@
 import { QueryClient, useQuery } from 'react-query';
-import { instance } from '../../../apis/apis';
+import api from '../../../axios/api';
 import { HotPostsType } from '../../../model/interface';
 
 const queryClient = new QueryClient();
@@ -12,7 +12,7 @@ const getHotPosts = async (
       ? { districtName, limit: 9 }
       : { districtName: '', limit: 9 };
 
-  const response = await instance.get(`/main/popular`, { params });
+  const response = await api.get(`/api/main/popular`, { params });
   return response.data;
 };
 

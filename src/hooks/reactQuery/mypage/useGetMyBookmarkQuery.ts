@@ -1,22 +1,8 @@
-// import { useQuery } from 'react-query';
-// // import { HotPostsType } from '../../../model/interface';
-// import authApi from '..//..//..//axios/authApi';
-
-// const getMyBookmark = async () => {
-//   const response = await authApi.get(`/users/self/profile/bookmark`);
-//   return response.data;
-// };
-
-// const useGetMyBookmarkQuery = () =>
-//   useQuery('myBookmark', () => getMyBookmark());
-
-// export default useGetMyBookmarkQuery;
-
 import { useInfiniteQuery } from 'react-query';
 import authApi from '../../../axios/authApi';
 
 const getMyBookmark = async (
-  lastBookmarkId: number | undefined, // 마지막 게시글 id
+  lastBookmarkId: number | undefined,
   pageSize: number | undefined, // 불러올 게시글 숫자
 ) => {
   const params = {
@@ -24,17 +10,15 @@ const getMyBookmark = async (
     pageSize,
   };
 
-  const response = await authApi.get('/users/self/profile/bookmark', {
+  const response = await authApi.get('/api/users/self/profile/bookmark', {
     params,
   });
-
-  // console.log(response.data.data);
 
   return response.data;
 };
 
 const useGetMyBookmarkQuery = (
-  lastBookmarkId: number | undefined, // 마지막 게시글 id
+  lastBookmarkId: number | undefined,
   pageSize: number | undefined, // 불러올 게시글 숫자
 ) =>
   useInfiniteQuery(

@@ -4,7 +4,7 @@ import { PostDetailType } from '../../../model/interface';
 import toast from 'react-hot-toast';
 
 const deleteBookmark = async (locationId: number | undefined) => {
-  const response = await authApi.delete(`/posts/${locationId}/bookmark`);
+  const response = await authApi.delete(`/api/posts/${locationId}/bookmark`);
   return response.data;
 };
 

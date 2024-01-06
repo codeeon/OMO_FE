@@ -4,7 +4,7 @@ import { PostDetailType } from '../../../model/interface';
 import toast from 'react-hot-toast';
 
 const postBookmark = async (locationId: number | undefined) => {
-  const response = await authApi.post(`/posts/${locationId}/bookmark`);
+  const response = await authApi.post(`/api/posts/${locationId}/bookmark`);
   return response.data;
 };
 

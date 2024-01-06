@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import authApi from '../../../axios/authApi';
 
 const getBookmark = async () => {
-  const response = await authApi.get(`/posts/user/bookmark`);
+  const response = await authApi.get(`/api/posts/user/bookmark`);
   return response.data.userBookmark;
 };
 

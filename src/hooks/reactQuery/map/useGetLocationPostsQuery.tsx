@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { instance } from '../../../apis/apis';
+import api from '../../../axios/api';
 import { LocationPostsType } from '../../../model/interface';
 
 export const getLocations = async (
@@ -8,7 +8,7 @@ export const getLocations = async (
   longitude: number | undefined,
 ): Promise<LocationPostsType> => {
   const params = { latitude, longitude };
-  const response = await instance.get(`/locations/${locationId}`, { params });
+  const response = await api.get(`/api/locations/${locationId}`, { params });
   return response.data;
 };
 

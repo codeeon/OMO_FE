@@ -12,7 +12,7 @@ const postReple: MutationFunction<
   }
 > = async ({ postId, commentId, newComment }) => {
   const response = await authApi.post(
-    `/posts/${postId}/comments/${commentId}/replies`,
+    `/api/posts/${postId}/comments/${commentId}/replies`,
     newComment,
   );
   return response.data;

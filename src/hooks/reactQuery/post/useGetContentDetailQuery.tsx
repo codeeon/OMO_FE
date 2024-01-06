@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
+import api from '../../../axios/api';
 import { PostDetailType } from '../../../model/interface';
-import { instance } from '../../../apis/apis';
 
 const getDetailContent = async (postId: number): Promise<PostDetailType> => {
-  const response = await instance.get(`/posts/${postId}`);
+  const response = await api.get(`/api/posts/${postId}`);
   return response.data;
 };
 

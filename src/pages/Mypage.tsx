@@ -17,6 +17,12 @@ const Mypage: React.FC = () => {
 
   const { data: myData, isError: userError } = useGetMyDataQuery();
 
+  useEffect(() => {
+    const userId = sessionStorage.getItem('userId');
+    (!userId || userError) &&
+      (alert('로그인 후 이용해주세요.'), navigate('/login'));
+  }, []);
+
   const {
     data: myBookmark,
     fetchNextPage: fetchNextBookmark,
@@ -47,17 +53,6 @@ const Mypage: React.FC = () => {
   useEffect(() => {
     isSelect === 'Bookmark' ? refetchBookmark() : refetchMyPosts();
   }, [isSelect]);
-
-  useEffect(() => {
-    userError
-      ? (alert('다시 로그인 후 이용해주세요.'),
-        sessionStorage.removeItem('userId'),
-        sessionStorage.removeItem('accessToken'),
-        sessionStorage.removeItem('refreshToken'),
-        navigate('/login'))
-      : null;
-    // : console.log(sessionStorage.getItem('userId'));
-  }, []);
 
   const onClickSelectBookmark = () => {
     setIsSelect('Bookmark');

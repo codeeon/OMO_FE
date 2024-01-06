@@ -6,7 +6,7 @@ const postLike: MutationFunction<
   void,
   { postId: number | undefined }
 > = async ({ postId }) => {
-  const response = await authApi.post(`/posts/${postId}/like`);
+  const response = await authApi.post(`/api/posts/${postId}/like`);
   return response.data;
 };
 

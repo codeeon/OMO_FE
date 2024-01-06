@@ -1,5 +1,5 @@
 import { MutationFunction, UseMutationResult, useMutation } from 'react-query';
-import auth from '../../../axios/auth';
+import api from '../../../axios/api';
 
 interface LoginData {
   email: string;
@@ -9,7 +9,7 @@ interface LoginData {
 const postLogin: MutationFunction<void, { userData: LoginData }> = async (
   userData: LoginData,
 ) => {
-  const response = await auth.post('/login', userData);
+  const response = await api.post('/auth/login', userData);
   return response.data;
 };
 
