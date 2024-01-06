@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../button/Button';
 import { getToday } from '../../utils/getToday';
@@ -26,7 +26,7 @@ const CommentInput: React.FC<Props> = ({ contentId, scrollToTop }) => {
     setIsTextareaFoucs(false);
   }, []);
 
-  const { postMutate, isPostLoading } = usePostCommentMutation({
+  const { postMutate, isPostLoading, isPostSuccess } = usePostCommentMutation({
     contentId,
   });
 
@@ -40,8 +40,11 @@ const CommentInput: React.FC<Props> = ({ contentId, scrollToTop }) => {
     };
     postMutate({ contentId, newComment });
     clearValueHandler();
-    scrollToTop();
   };
+
+  useEffect(() => {
+    isPostSuccess && scrollToTop();
+  }, [isPostSuccess]);
 
   return (
     <Base>

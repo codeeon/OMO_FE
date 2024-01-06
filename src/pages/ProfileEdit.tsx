@@ -307,7 +307,8 @@ const Base = styled.div`
   box-sizing: border-box;
   width: 100%;
   background-color: ${({ theme }) => theme.color.bg};
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;

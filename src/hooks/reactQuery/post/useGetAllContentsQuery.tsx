@@ -48,7 +48,7 @@ const useGetAllContentsQuery = (
 ) =>
   useInfiniteQuery(
     'posts',
-    ({ pageParam }) => getContents(districtName, categoryName, pageParam, 20),
+    ({ pageParam }) => getContents(districtName, categoryName, pageParam, 16),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length > 0

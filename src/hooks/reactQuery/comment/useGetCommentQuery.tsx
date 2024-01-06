@@ -10,7 +10,7 @@ const getComments = async (
 ): Promise<CommentTypeNew[]> => {
   const params = {
     lastSeenId: lastSeenId,
-    page: page,
+    // page: page,
   };
 
   const response = await authApi.get(`/posts/${postId}/comments`, { params });

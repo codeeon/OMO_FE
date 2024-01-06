@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Modal from '../../../components/Modal/Modal';
 import PostModal from '../../publishing/PublicModal';
 import useModalCtr from '../../../hooks/useModalCtr';
 import useGetAllContentsQuery from '../../../hooks/reactQuery/post/useGetAllContentsQuery';
-import { useIntersectionObserver } from '../../../hooks/useIntersectionObserver';
 import useDistrictStore from '../../../store/location/districtStore';
 import useCategoryStore from '../../../store/category/categoryStore';
 import toast from 'react-hot-toast';
@@ -14,6 +13,7 @@ import RecentPostCardSkeleton from '../../../components/skeleton/RecentPostCardS
 import LocationDrodown from '../../../components/share/dropdown/locationDropdown/LocationDrodown';
 import CategoryDropdown from '../../../components/share/dropdown/CateogryDropdown';
 import ContentCard from '../../../components/card/ContentCard';
+import useObserver from '../../../hooks/useObserver';
 
 const List = () => {
   const { district } = useDistrictStore();
@@ -38,10 +38,9 @@ const List = () => {
     refetch,
   } = useGetAllContentsQuery(district, category);
 
-  const { setTarget } = useIntersectionObserver({
-    hasNextPage,
-    fetchNextPage,
-  });
+  const listRef = useRef<HTMLDivElement>(null);
+  const pageRef = useObserver(listRef, {});
+  const isPageEnd = !!pageRef?.isIntersecting;
 
   useEffect(() => {
     refetch();
@@ -61,15 +60,32 @@ const List = () => {
     openMainModal(e);
   };
 
+  const fetchNext = useCallback(async () => {
+    const res = await fetchNextPage();
+    if (res.isError) {
+      console.log(res.error);
+    }
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | undefined;
+    if (isPageEnd && hasNextPage) {
+      timerId = setTimeout(() => {
+        fetchNext();
+      }, 500);
+    }
+    return () => clearTimeout(timerId);
+  }, [fetchNext, fetchNextPage, isPageEnd, hasNextPage]);
+
   const renderSkeletons = (count: number) =>
     Array.from({ length: count }).map((_, idx) => (
       <RecentPostCardSkeleton key={idx} />
     ));
 
   const renderContentCards = () =>
-    contents?.pages.map((group, pageIndex) => (
+    contents?.pages.map((page, pageIndex) => (
       <React.Fragment key={pageIndex}>
-        {group.map((contentData) => (
+        {page.map((contentData) => (
           <ContentCard key={contentData.postId} contentData={contentData} />
         ))}
       </React.Fragment>
@@ -90,10 +106,8 @@ const List = () => {
               ? renderSkeletons(20)
               : renderContentCards()}
             {isFetchingNextPage && hasNextPage && renderSkeletons(4)}
-            {hasNextPage && (
-              <ObserverContainer ref={setTarget}></ObserverContainer>
-            )}
           </RecentCardGrid>
+          <ObserverContainer ref={listRef}></ObserverContainer>
         </Body>
       </Wrapper>
       <Modal isOpen={isMainModalOpen} onClose={openSubModal}>
@@ -159,5 +173,8 @@ const FilterContainer = styled.div`
 `;
 
 const ObserverContainer = styled.div`
-  height: 200px;
+  width: 100%;
+  height: 10px;
+  touch-action: none;
+  margin-bottom: 10px;
 `;

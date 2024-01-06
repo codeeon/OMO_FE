@@ -95,7 +95,6 @@ const Base = styled.div`
   &::-webkit-scrollbar-track {
     background-color: transparent;
   }
-  scroll-behavior: smooth;
 `;
 
 const Wrapper = styled.div`

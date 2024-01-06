@@ -7,6 +7,7 @@ import { readdirSync } from 'fs';
 import { resolve } from 'path';
 
 const fontsDirectory = resolve(__dirname, 'public/assets/fonts');
+
 const fontFiles = readdirSync(fontsDirectory).filter((file) =>
   file.endsWith('.woff2'),
 );
