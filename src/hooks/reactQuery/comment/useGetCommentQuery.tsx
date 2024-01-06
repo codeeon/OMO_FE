@@ -10,10 +10,12 @@ const getComments = async (
 ): Promise<CommentTypeNew[]> => {
   const params = {
     lastSeenId: lastSeenId,
-    // page: page,
+    page: page,
   };
 
-  const response = await authApi.get(`/posts/${postId}/comments`, { params });
+  const response = await authApi.get(`/api/posts/${postId}/comments`, {
+    params,
+  });
   console.log(response);
   return response.data;
 };
@@ -21,7 +23,7 @@ const getComments = async (
 const useGetCommentQuery = (postId: number) =>
   useInfiniteQuery(
     ['comments', postId],
-    ({ pageParam }) => getComments(postId, pageParam, 5),
+    ({ pageParam }) => getComments(postId, pageParam, 10),
     {
       getNextPageParam: (lastPage) => {
         if (lastPage.data.length > 0) {
