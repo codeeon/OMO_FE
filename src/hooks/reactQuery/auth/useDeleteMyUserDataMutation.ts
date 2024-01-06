@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import authApi from '../../../axios/authApi';
 import useLogoutMutation from './useLogoutMutation';
-import toast from 'react-toast';
+import toast from 'react-hot-toast';
 
 const deleteMyData = async () => {
   const response = await authApi.delete(`/auth/withdraw`);

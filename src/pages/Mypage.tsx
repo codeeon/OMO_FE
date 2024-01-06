@@ -181,7 +181,7 @@ const Nickname = styled.div`
 
 const Btn = styled.button`
   display: inline-flex;
-  padding: 10px 13px 8px 14px;
+  padding: 9px 13px 9px 14px;
   border-radius: 8px;
   background: #44a5ff;
   color: #fff;
