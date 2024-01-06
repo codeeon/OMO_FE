@@ -14,13 +14,15 @@ const useDeleteMyDataMutation = () => {
 
   const mutation = useMutation(deleteMyData, {
     onSuccess: () => {
-      logoutMutate();
       toast.success('회원 탈퇴를 완료하였습니다.', {
         position: 'top-right',
         duration: 4000,
         style: { fontSize: '14px' },
       });
       navigate('/');
+    },
+    onMutate: () => {
+      logoutMutate();
     },
   });
   return {
