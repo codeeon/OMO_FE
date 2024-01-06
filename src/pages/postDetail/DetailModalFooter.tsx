@@ -7,15 +7,17 @@ interface Props {
   likeCount: number;
   postId: number | undefined;
   commentLength: number;
+  footerRef: React.RefObject<HTMLDivElement>;
 }
 
 const DetailModalFooter: React.FC<Props> = ({
   likeCount,
   postId,
   commentLength,
+  footerRef,
 }) => {
   return (
-    <Footer>
+    <Footer ref={footerRef}>
       <FooterItem $color="red">
         <LikeBtn postId={postId} />
         <span>{likeCount}</span>

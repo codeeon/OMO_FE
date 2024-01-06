@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+
 import api from '../../../axios/api';
 import { RepleType } from '../../../model/interface';
 
@@ -25,7 +26,7 @@ const useGetRepleQuery = (
   useQuery(
     ['posts', postId, commentId],
     () => getReple({ postId, commentId }),
-    { enabled: false },
+    // { enabled: false },
   );
 
 export default useGetRepleQuery;

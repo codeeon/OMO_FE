@@ -67,17 +67,7 @@ export interface PostDetailType {
     imgUrl: string;
     userId: number;
   };
-  Location: {
-    Category: {
-      categoryId: number;
-      categoryName: string;
-    };
-    storeName: string;
-    address: string;
-    latitude: string;
-    longitude: string;
-    placeInfoId: string;
-  };
+  Location: LocationType;
   Comments: CommentType[];
 }
 
@@ -274,4 +264,22 @@ export interface StoreSearchType {
     userId: number;
     nickname: string;
   };
+}
+
+//신규 댓글 타입
+export interface CommentTypeNew {
+  Post: { postId: number };
+  User: { imgUrl: string; nickname: string; userId: number };
+  commentId: number;
+  content: string;
+  createdAt: string;
+  replyCount: number;
+}
+
+export interface RepleTypeNew {
+  Comment: { commentId: number; replyCount: number };
+  User: { nickname: string; imgUrl: string; userId: number };
+  content: string;
+  createdAt: string;
+  replyId: number;
 }

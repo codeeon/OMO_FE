@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MapGoogle from './map/MapGoogle';
 import ListBtn from './placeList/ListBtn';
-import PlaceList from './placeList';
+import PlaceList from './placeList/PlaceList';
 import DetailList from './detailList/Index';
 import useLocationQuery from '../../hooks/reactQuery/map/useGetAroundLocation';
 import usePlaceStore from '../../store/location/placeStore';

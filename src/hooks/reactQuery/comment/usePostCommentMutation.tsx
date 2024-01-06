@@ -27,7 +27,7 @@ const usePostCommentQuery = ({
     { contentId: number | undefined; newComment: PostCommentType }
   >(postComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts', contentId]);
+      queryClient.invalidateQueries(['comments', contentId]);
       toast.success('댓글이 성공적으로 등록되었습니다.', {
         position: 'top-right',
         duration: 4000,

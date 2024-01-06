@@ -1,27 +1,28 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { CommentType } from '../../model/interface';
+import { CommentTypeNew } from '../../model/interface';
 import Dropdown from './Dropdown';
 import RepleItem from './RepleItem';
 import RepleInput from './RepleInput';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import useGetRepleQuery from '../../hooks/reactQuery/replies/useGetRepleQuery';
+import { motion } from 'framer-motion';
 
 //TODO 유저 데이터
 const CommentItem: React.FC<{
-  comment: CommentType;
-  contentId: number;
-}> = ({ comment, contentId }) => {
-  const { Replies, commentId, content, createdAt, User } = comment;
+  comment: CommentTypeNew;
+  postId: number;
+  delay: number;
+}> = ({ comment, postId, delay }) => {
+  const { commentId, content, createdAt, User } = comment;
+  const { data: repliesData } = useGetRepleQuery(postId, commentId);
 
   const navigate = useNavigate();
 
   const [isShowReple, setIsShowReple] = useState(false);
   const [isShowRepleInput, setIsShowRepleInput] = useState(false);
-  const currentUserId = Number(window.sessionStorage.getItem('userId'));
-  console.log(comment);
 
-  const repleLength = comment.Replies.length;
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
 
   const toggleRepleHandler = useCallback(() => {
     setIsShowReple(!isShowReple);
@@ -36,29 +37,26 @@ const CommentItem: React.FC<{
   };
 
   const onClickMoveUserPage = () => {
-    const checkUserId = sessionStorage.getItem('userId');
-    !checkUserId
-      ? toast.error('로그인 후 이용해주세요.', {
-          position: 'top-right',
-          duration: 4000,
-          style: { fontSize: '14px' },
-        })
-      : navigate(`/userpage/${User.nickname}`);
+    navigate(`/userpage/${User.nickname}`);
   };
 
   return (
-    <Base>
+    <Base
+      initial={{ scale: 1, opacity: 0, y: 100 }}
+      animate={{ scale: 1, opacity: 1, y: 0 }}
+      transition={{ delay: delay, duration: 0.2 }}
+    >
       <UserProfile $profileImg={User.imgUrl} onClick={onClickMoveUserPage} />
       <BodyContainer>
         <UserInfoContainer>
           <UserName onClick={onClickMoveUserPage}>{User.nickname}</UserName>
           <CreateAt>{createdAt.split('T')[0]}</CreateAt>
           {currentUserId === User.userId && (
-            <Dropdown commentId={commentId} contentId={contentId} />
+            <Dropdown commentId={commentId} contentId={postId} />
           )}
         </UserInfoContainer>
         <CommentText>{content}</CommentText>
-        {repleLength !== 0 ? (
+        {repliesData?.length !== 0 ? (
           <>
             {isShowReple ? (
               !isShowRepleInput && (
@@ -66,17 +64,17 @@ const CommentItem: React.FC<{
               )
             ) : (
               <RepleBtn onClick={getRepleHandler}>
-                <span>{repleLength}개의 답글 보기</span>
+                <span>{repliesData?.length}개의 답글 보기</span>
               </RepleBtn>
             )}
 
             {isShowReple && (
               <>
-                {Replies?.map((reple) => (
+                {repliesData?.map((reple) => (
                   <RepleItem
                     key={reple.replyId}
                     reple={reple}
-                    contentId={contentId}
+                    postId={postId}
                     commentId={commentId}
                   />
                 ))}
@@ -85,7 +83,7 @@ const CommentItem: React.FC<{
                 </RepleBtn>
                 {isShowRepleInput && (
                   <RepleInput
-                    postId={contentId}
+                    postId={postId}
                     commentId={commentId}
                     toggleRepleInputHandler={toggleRepleInputHandler}
                   />
@@ -97,7 +95,7 @@ const CommentItem: React.FC<{
           <>
             {isShowRepleInput ? (
               <RepleInput
-                postId={contentId}
+                postId={postId}
                 commentId={commentId}
                 toggleRepleInputHandler={toggleRepleInputHandler}
               />
@@ -113,7 +111,7 @@ const CommentItem: React.FC<{
 
 export default CommentItem;
 
-const Base = styled.div`
+const Base = styled(motion.li)<{ $delay: string }>`
   display: flex;
   justify-content: start;
   align-items: start;
