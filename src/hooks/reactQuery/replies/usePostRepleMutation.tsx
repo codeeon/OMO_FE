@@ -44,6 +44,13 @@ const usePostRepleMutation = ({
         style: { fontSize: '14px' },
       });
     },
+    onError: () => {
+      toast.error('로그인 후 사용해주세요.', {
+        position: 'top-right',
+        duration: 4000,
+        style: { fontSize: '14px' },
+      });
+    },
   });
   return {
     postMutate: mutation.mutate,

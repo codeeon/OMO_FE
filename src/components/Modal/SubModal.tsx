@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import Portal from '../../Portal';
@@ -55,7 +55,7 @@ const Dim = styled.div`
   backdrop-filter: blur(5px);
 `;
 
-const Container = styled.div<{ $width: number; $height: number }>`
+const Container = styled.div<{ $width?: number; $height?: number }>`
   width: ${({ $width }) => $width || '700px'};
   height: ${({ $height }) => $height || '800px'};
 

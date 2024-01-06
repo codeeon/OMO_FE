@@ -39,6 +39,7 @@
     "react-spring": "^9.7.3",
     "react-transition-group": "^4.4.5",
     "react-virtuoso": "^4.6.2",
+    "seamless-scroll-polyfill": "^2.3.4",
     "styled-components": "^6.1.1",
     "styled-reset": "^4.5.1",
     "uuid": "^9.0.1",

@@ -23,7 +23,7 @@ const useDeleteCommentMutation = ({ contentId }: { contentId: number }) => {
     { contentId: number | undefined; commentId: number | undefined }
   >(deleteComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts', contentId]);
+      queryClient.invalidateQueries(['comments', contentId]);
       toast.success('댓글이 성공적으로 삭제되었어요.', {
         position: 'top-right',
         duration: 4000,

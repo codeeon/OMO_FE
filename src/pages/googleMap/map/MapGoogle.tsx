@@ -10,7 +10,6 @@ import { LocationType } from '../../../model/interface';
 import { darkMapTheme, lightMapTheme } from './maptheme';
 import CurrentLocationMarker from '../../../components/marker/CurrentLocationMarker';
 import LocationMarker from '../../../components/marker/LocationMarker';
-import ReSearchButton from '../../../components/button/mapActionButton/ReSearchButton';
 import CurrentLocationButton from '../../../components/button/mapActionButton/CurrentLocationButton';
 import LevelButton from '../../../components/button/mapActionButton/LevelButton';
 import useMapStore from '../../../store/location/googleMapStore';
@@ -131,12 +130,6 @@ const MapGoogle: React.FC<Props> = ({
           setIsListOpen={setIsListOpen}
         />
       ))}
-      {/* {isShowReasarchBtn && (
-        <ReSearchButton
-          lookAroundRefetch={lookAroundRefetch}
-          setIsShowReasearchBtn={setIsShowReasearchBtn}
-        />
-      )} */}
 
       <CurrentLocationButton />
       <LevelButton
