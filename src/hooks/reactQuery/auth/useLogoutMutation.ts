@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 import authApi from '../../../axios/authApi';
-
+import toast from 'react-hot-toast';
 interface LoginData {
   email: string;
   password: string;
@@ -8,7 +8,7 @@ interface LoginData {
 
 const postLogin = async () => {
   const response = await authApi.post('/auth/logout');
-  console.log(response);
+  // console.log(response);
 };
 
 const useLogoutMutation = () => {
@@ -25,13 +25,18 @@ const useLogoutMutation = () => {
       //   // 이렇게 하면 토큰이 먼저 삭제되기에, 에러가 발생.
       // },
       onSuccess: () => {
-        console.log('로그아웃 성공');
+        // console.log('로그아웃 성공');
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('refreshToken');
         sessionStorage.removeItem('userId');
+        toast.success('로그아웃이 완료되었습니다.', {
+          position: 'top-right',
+          duration: 4000,
+          style: { fontSize: '14px' },
+        });
       },
       onError: (error) => {
-        console.error;
+        console.error(error);
       },
     },
   );
