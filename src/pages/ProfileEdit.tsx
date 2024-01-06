@@ -5,14 +5,11 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import Check from '../components/auth/signup/Check';
-import auth from '../axios/auth';
-import useInput from '../hooks/useInput';
+import api from '../axios/api';
 import useGetMyDataQuery from '../hooks/reactQuery/mypage/useGetMyDataQuery';
 import authApi from '../axios/authApi';
-import authAuth from '../axios/authAuth';
 import ProfileImage from '../components/auth/mypage/edit/ProfileImage';
 import useUpdateMyImageMutation from '../hooks/reactQuery/mypage/useUpdateMyImageMutation';
-import Modal from '../components/Modal/Modal';
 import WithdrawModal from '../components/auth/mypage/edit/WithdrawModal';
 import SubModal from '../components/Modal/SubModal';
 
@@ -42,9 +39,8 @@ const ProfileEdit = () => {
   const [imageURL, setImageUrl] = useState([myData?.data.imgUrl]);
   const [files, setFiles] = useState<File[]>([]);
 
-  const { value: nickname, changeValueHandler: onChangeNickname } = useInput(
-    myData?.data.nickname,
-  );
+  const [nickname, setNickname] = useState(myData?.data.nickname);
+
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
 
@@ -60,8 +56,9 @@ const ProfileEdit = () => {
       ? '이미 사용 중이거나 사용할 수 없는 닉네임입니다.'
       : nicknameCheck === 'confirmed'
       ? '사용할 수 있는 닉네임입니다.'
+      : nicknameCheck === 'retry'
+      ? '닉네임 중복체크를 다시 진행해주세요.'
       : '';
-
   const checkingPassword =
     passwordCheck === 'rejected'
       ? '반드시 영문과 숫자를 포함해 6자 이상 입력해야 합니다.'
@@ -80,11 +77,7 @@ const ProfileEdit = () => {
   useEffect(() => {
     const userId = sessionStorage.getItem('userId');
     (userError || !userId) &&
-      (alert('다시 로그인 후 이용해주세요.'),
-      navigate('/login'),
-      sessionStorage.removeItem('userId'),
-      sessionStorage.removeItem('accessToken'),
-      sessionStorage.removeItem('refreshToken'));
+      (alert('로그인 후 이용해주세요.'), navigate('/login'));
   }, []);
 
   const onValid = async ({ password, confirmedPassword }: SignUpData) => {
@@ -121,6 +114,17 @@ const ProfileEdit = () => {
     await trigger(['password', 'confirmedPassword']);
   };
 
+  // 이것도 분리 가능할 듯 - Register도 마찬가지
+  const onValidNickname = (e) => {
+    setNickname(e.target.value);
+    nicknameCheck === 'confirmed' && setNicknameCheck('retry');
+  };
+
+  // 닉네임이 비었을 경우 - 좀 쓸 데 없이 렌더링 되려나 - 최적화 찾아보기
+  useEffect(() => {
+    nickname === '' && setNicknameCheck('');
+  }, [nickname]);
+
   // rejected일 때, 모두가 변하지 않았을 때, 회색인 게 나은 듯 -> 수정 예정
   const allValidated =
     (nicknameCheck === 'confirmed' &&
@@ -139,11 +143,9 @@ const ProfileEdit = () => {
   // 회원가입 페이지와 동일, hook으로 만들기
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      // console.log(nickname);
-      const checkNicknameResponse = await auth.post('/check-nickname', {
+      const checkNicknameResponse = await api.post('/auth/check-nickname', {
         nickname,
       });
-      // console.log('닉네임 체크 응답 -> ', checkNicknameResponse);
     },
     {
       onSuccess: () => {
@@ -158,18 +160,14 @@ const ProfileEdit = () => {
 
   const updateProfileMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      // console.log(data);
-      const response = await authApi.patch(`/users/self/profile/edit`, data);
-      // console.log(response);
+      const response = await authApi.patch(
+        `/api/users/self/profile/edit`,
+        data,
+      );
     },
     {
       onSuccess: () => {
-        // alert('프로필을 변경하였습니다.');
         navigate('/mypage');
-      },
-      onError: (error) => {
-        // console.log(error);
-        // alert('프로필 변경에 실패하였습니다.');
       },
     },
   );
@@ -223,7 +221,7 @@ const ProfileEdit = () => {
                   placeholder={`${myData?.data.nickname}  (2~15자)`}
                   type="text"
                   value={nickname}
-                  onChange={onChangeNickname}
+                  onChange={onValidNickname}
                 />
                 <SmallBtn
                   onClick={() =>
@@ -307,7 +305,8 @@ const Base = styled.div`
   box-sizing: border-box;
   width: 100%;
   background-color: ${({ theme }) => theme.color.bg};
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -441,20 +440,4 @@ const Btn = styled.button<{ $check: string; color: string }>`
 const Withdraw = styled.div`
   margin: 50px 0 100px 0;
   cursor: pointer;
-`;
-
-const SelectQuestion = styled.div`
-  margin: 30px 0 40px 0;
-  padding: 20px 30px;
-  border: 2px solid tomato;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.cardBg};
-`;
-
-const Selection = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin: 15px 0 0 0;
 `;

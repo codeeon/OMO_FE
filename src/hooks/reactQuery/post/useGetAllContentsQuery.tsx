@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from 'react-query';
+import api from '../../../axios/api';
 import { PostType } from '../../../model/interface';
-import { instance } from '../../../apis/apis';
 
 const getContents = async (
   districtName: string | undefined,
@@ -37,7 +37,7 @@ const getContents = async (
           page: page,
         };
 
-  const response = await instance.get('/posts', { params });
+  const response = await api.get('/api/posts', { params });
 
   return response.data;
 };
@@ -48,7 +48,7 @@ const useGetAllContentsQuery = (
 ) =>
   useInfiniteQuery(
     'posts',
-    ({ pageParam }) => getContents(districtName, categoryName, pageParam, 20),
+    ({ pageParam }) => getContents(districtName, categoryName, pageParam, 16),
     {
       getNextPageParam: (lastPage) => {
         return lastPage.length > 0

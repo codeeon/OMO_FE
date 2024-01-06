@@ -11,7 +11,7 @@ const deleteReple: MutationFunction<
   }
 > = async ({ contentId, commentId, replyId }) => {
   const response = await authApi.delete(
-    `/posts/${contentId}/comments/${commentId}/replies/${replyId}`,
+    `/api/posts/${contentId}/comments/${commentId}/replies/${replyId}`,
   );
   return response.data;
 };

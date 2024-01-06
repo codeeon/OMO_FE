@@ -5,7 +5,7 @@ import { getToday } from '../../utils/getToday';
 import usePostRepleMutation from '../../hooks/reactQuery/replies/usePostRepleMutation';
 import CommentTextArea from '../textarea/CommentTextArea';
 import useInput from '../../hooks/useInput';
-import toast from 'react-hot-toast';
+import { validateComments } from '../../utils/validationComments';
 
 interface Props {
   postId: number | undefined;
@@ -33,24 +33,7 @@ const RepleInput: React.FC<Props> = ({
   });
 
   const postCommentHandler = () => {
-    const trimmedText = text.trim();
-    if (!trimmedText) {
-      return toast.error('대댓글 내용을 입력해주세요!', {
-        position: 'top-right',
-        duration: 4000,
-        style: { fontSize: '14px' },
-      });
-    }
-    if (trimmedText.length < 2 || trimmedText.length > 2000) {
-      return toast.error(
-        '대댓글은 2글자 이상 2000글자 미만으로 작성해주세요.',
-        {
-          position: 'top-right',
-          duration: 4000,
-          style: { fontSize: '14px' },
-        },
-      );
-    }
+    if (!validateComments(text)) return;
     const newComment = {
       PostId: postId,
       UserId: 3, // TODO 유저와 연결

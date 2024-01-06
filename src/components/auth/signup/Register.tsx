@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { useNavigate, Link } from 'react-router-dom';
-import auth from '../../../axios/auth';
+import { Link } from 'react-router-dom';
+import api from '../../../axios/api';
 import useInput from '../../../hooks/useInput';
 import Check from './Check';
 
@@ -25,9 +25,8 @@ const Register: React.FC = (props: string) => {
   const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
     mode: 'onChange',
   });
-  const navigate = useNavigate();
 
-  const { value: nickname, changeValueHandler: onChangeNickname } = useInput();
+  const [nickname, setNickname] = useState();
 
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
@@ -46,6 +45,8 @@ const Register: React.FC = (props: string) => {
       ? '이미 사용 중이거나 사용할 수 없는 닉네임입니다.'
       : nicknameCheck === 'confirmed'
       ? '사용할 수 있는 닉네임입니다.'
+      : nicknameCheck === 'retry'
+      ? '닉네임 중복체크를 다시 진행해주세요.'
       : '';
   const checkingPassword =
     passwordCheck === 'rejected'
@@ -60,7 +61,12 @@ const Register: React.FC = (props: string) => {
       ? '비밀번호가 일치합니다.'
       : '';
 
-  const onValid = async (data: SignUpData) => {
+  const onValidNickname = (e) => {
+    setNickname(e.target.value);
+    nicknameCheck === 'confirmed' && setNicknameCheck('retry');
+  };
+
+  const onValidPw = async (data: SignUpData) => {
     if (
       data.password.length > 5 &&
       /[a-zA-Z]/.test(data.password) &&
@@ -92,14 +98,14 @@ const Register: React.FC = (props: string) => {
 
   const checkNicknameMutation = useMutation(
     async (nickname: string): Promise<void> => {
-      const checkNicknameResponse = await auth.post('/check-nickname', {
+      const checkNicknameResponse = await api.post('/auth/check-nickname', {
         nickname,
       });
     },
     {
       onSuccess: () => {
-        setNicknameCheck('confirmed');
         setConfirmedNickname(nickname);
+        setNicknameCheck('confirmed');
       },
       onError: () => {
         setNicknameCheck('rejected');
@@ -109,7 +115,7 @@ const Register: React.FC = (props: string) => {
 
   const signupMutation = useMutation<void, Error, UserData>(
     async (data: UserData): Promise<void> => {
-      const response = await auth.post(`/register`, data);
+      const response = await api.post(`/auth/register`, data);
     },
     {
       onSuccess: () => {
@@ -122,7 +128,7 @@ const Register: React.FC = (props: string) => {
     data.email = confirmedEmail;
     data.nickname = confirmedNickname;
 
-    await onValid(data);
+    await onValidPw(data);
 
     if (allValidated) {
       signupMutation.mutate(data);
@@ -140,7 +146,7 @@ const Register: React.FC = (props: string) => {
               placeholder="닉네임을 입력해 주세요.  (2~15자)"
               type="text"
               value={nickname}
-              onChange={onChangeNickname}
+              onChange={onValidNickname}
             />
             <SmallBtn
               onClick={() => checkNicknameMutation.mutate(nickname)}
@@ -151,7 +157,7 @@ const Register: React.FC = (props: string) => {
           </div>
           <Check verifyCheck={nicknameCheck}>{checkingNickname}</Check>
         </div>
-        <Form onChange={handleSubmit(onValid)}>
+        <Form onChange={handleSubmit(onValidPw)}>
           <div>
             <div>
               <Input

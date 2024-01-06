@@ -3,7 +3,7 @@ import authApi from '../../../axios/authApi';
 import toast from 'react-hot-toast';
 
 const deleteContent = async (contentId: number | undefined) => {
-  return await authApi.delete(`posts/${contentId}`);
+  return await authApi.delete(`/api/posts/${contentId}`);
 };
 
 const useDeleteContentMutation = () => {

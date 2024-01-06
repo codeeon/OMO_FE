@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import auth from '../axios/auth';
-import useInput from '../hooks/useInput';
+import api from '../axios/api';
 import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
 import Done from '../components/auth/signup/Done';
@@ -18,8 +17,7 @@ const SignUp: React.FC = () => {
   }, []);
 
   const [email, setEmail] = useState<string>();
-
-  const { value: code, changeValueHandler: onChangeCode } = useInput();
+  const [code, setCode] = useState<string>();
 
   const [emailCheck, setEmailCheck] = useState<string>('');
   const [codeCheck, setCodeCheck] = useState<string>('');
@@ -45,26 +43,22 @@ const SignUp: React.FC = () => {
       ? '전송된 메일의 인증번호를 입력해주세요.'
       : '';
 
-  // emailCheck === 'confirmed'에서, email이 수정되었을 때(email !== confirmedEmail),
-  // codeCheck === 'confirmed'에서, email이 수정되었을 때(email !== confirmedEmail)
-  const onValid = () => {
-    emailCheck === 'confirmed' || codeCheck === 'confirmed'
-      ? email !== confirmedEmail
-        ? setEmailCheck('retry')
-        : null
-      : null;
-  };
-
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
-    onValid();
+    (emailCheck === 'confirmed' || codeCheck === 'confirmed') &&
+      (setEmailCheck('retry'), setCodeCheck(''), setIsValidated(false));
+  };
+  const onChangeCode = (e) => {
+    setCode(e.target.value);
+    codeCheck === 'confirmed' &&
+      (setEmailCheck('retry'), setCodeCheck(''), setIsValidated(false));
   };
 
   const checkEmailMutation = useMutation(
     async (email: string): Promise<void> => {
-      // console.log(email);
-      const checkEmailResponse = await auth.post('/verify-email', { email });
-      // console.log('이메일 체크 응답 -> ', checkEmailResponse);
+      const checkEmailResponse = await api.post('/auth/verify-email', {
+        email,
+      });
     },
     {
       onMutate: () => {
@@ -75,7 +69,7 @@ const SignUp: React.FC = () => {
         }
       },
       onSuccess: () => {
-        emailCheck !== 'retry' && setEmailCheck('confirmed');
+        emailCheck === 'confirmed' ? setEmailCheck('confirmed') : null;
       },
       onError: () => {
         setEmailCheck('rejected');
@@ -85,12 +79,13 @@ const SignUp: React.FC = () => {
 
   const checkCodeMutation = useMutation(
     async (code: string): Promise<void> => {
-      // console.log(code);
-      const checkCodeResponse = await auth.post('/verify-authentication-code', {
-        authenticationCode: code,
-        email,
-      });
-      // console.log('코드 체크 응답 -> ', checkCodeResponse);
+      const checkCodeResponse = await api.post(
+        '/auth/verify-authentication-code',
+        {
+          authenticationCode: code,
+          email,
+        },
+      );
     },
     {
       onSuccess: () => {
@@ -105,7 +100,7 @@ const SignUp: React.FC = () => {
   );
 
   const onClickNextStep = () => {
-    isValidated
+    isValidated && emailCheck === 'confirmed' && codeCheck === 'confirmed'
       ? setRegisterPage(2)
       : emailCheck === 'confirmed'
       ? setCodeCheck('rejected')

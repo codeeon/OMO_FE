@@ -6,7 +6,7 @@ const patchContent: MutationFunction<
   void,
   { postId: number | undefined; newPost: PostPatchType }
 > = async ({ postId, newPost }) => {
-  const response = await authApi.patch(`/posts/${postId}`, newPost);
+  const response = await authApi.patch(`/api/posts/${postId}`, newPost);
   return response.data;
 };
 

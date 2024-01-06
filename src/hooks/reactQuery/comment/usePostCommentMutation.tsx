@@ -8,7 +8,7 @@ const postComment: MutationFunction<
   { contentId: number | undefined; newComment: PostCommentType }
 > = async ({ contentId, newComment }) => {
   const response = await authApi.post(
-    `/posts/${contentId}/comments`,
+    `/api/posts/${contentId}/comments`,
     newComment,
   );
   console.log(response.data);
@@ -27,7 +27,7 @@ const usePostCommentQuery = ({
     { contentId: number | undefined; newComment: PostCommentType }
   >(postComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts', contentId]);
+      queryClient.invalidateQueries(['comments', contentId]);
       toast.success('댓글이 성공적으로 등록되었습니다.', {
         position: 'top-right',
         duration: 4000,

@@ -13,7 +13,7 @@ const myImage = async (profileImg: PostContentType) => {
   });
 
   const response = await authApi.patch(
-    `/users/self/profile/edit`,
+    `/api/users/self/profile/edit`,
     myImageFormData,
   );
   // console.log('PATCH 프로필 폼 데이터 2 -> ', myImageFormData);

@@ -1,7 +1,6 @@
 import { QueryClient, useQuery } from 'react-query';
-import { instance } from '../../../apis/apis';
 import { RecentPostsType } from '../../../model/interface';
-import axios from 'axios';
+import api from '../../../axios/api';
 
 const queryClient = new QueryClient();
 
@@ -14,7 +13,7 @@ export const getRecentPosts = async (
     categoryName: categoryName !== '전체' ? categoryName : '',
     limit: 16,
   };
-  const response = await instance.get(`/main/recent`, { params });
+  const response = await api.get(`/api/main/recent`, { params });
   return response.data;
 };
 

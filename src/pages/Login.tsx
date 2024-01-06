@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import KakaoLogin from '../components/auth/KakaoLogin';
-import auth from '..//axios/auth';
+import api from '..//axios/api';
 
 interface LoginData {
   email: string;
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
   const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
       try {
-        const response = await auth.post(`/login`, formData);
+        const response = await api.post(`/auth/login`, formData);
 
         const accessToken = response.headers.authorization;
         const refreshToken = response.headers.refreshtoken;

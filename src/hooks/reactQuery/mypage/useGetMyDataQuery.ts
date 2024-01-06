@@ -1,11 +1,9 @@
-
 import { useQuery } from 'react-query';
-// import { HotPostsType } from '../../../model/interface';
 import authApi from '../../../axios/authApi';
 
 const getMyData = async () => {
-  const response = await authApi.get(`/users/self/profile`);
-  // console.log(response.data);
+  const response = await authApi.get(`/api/users/self/profile`);
+
   return response.data;
 };
 

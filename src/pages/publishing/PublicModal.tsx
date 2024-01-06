@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import ConfirmModal from './ConfirmModal';
 import { SelectedInfoType } from '../../model/interface';
-import Stars from '../../components/button/StarButton';
 import SubModal from '../../components/Modal/SubModal';
 import usePostContentMutate from '../../hooks/reactQuery/post/usePostContentQuery';
 import toast from 'react-hot-toast';
@@ -100,43 +99,45 @@ const PublicModal: React.FC<Props> = ({
 
   return (
     <Base>
-      <Header>
-        <BackBtn onClick={openSubModal}>
-          <IoIosArrowRoundBack />
-        </BackBtn>
-        <Title>새 게시글</Title>
-        <Button
-          theme="gray"
-          padding="9px 14px"
-          width="49px"
-          height="14px"
-          onClick={(e) => savePostHandler(e)}
-        >
-          작성완료
-        </Button>
-      </Header>
-      <ImageUpload
-        imageURL={imageURL}
-        setImageUrl={setImageUrl}
-        files={files}
-        setFiles={setFiles}
-      />
-      <SearchPlace
-        selectedInfo={selectedInfo}
-        setSelectedInfo={setSelectedInfo}
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-        googleSearchResult={googleSearchResult}
-        setGoogleSearchResult={setGoogleSearchResult}
-      />
-      <StarButton starNum={starNum} setStarNum={setStarNum} />
-      <PostTextArea text={text} setText={setText} />
-      <SubModal isOpen={isSubModalOpen}>
-        <ConfirmModal
-          clearPostHandler={clearPostHandler}
-          closeModalHandler={closeSubModal}
+      <Wrapper>
+        <Header>
+          <BackBtn onClick={openSubModal}>
+            <IoIosArrowRoundBack />
+          </BackBtn>
+          <Title>새 게시글</Title>
+          <Button
+            theme="gray"
+            padding="9px 14px"
+            width="49px"
+            height="14px"
+            onClick={(e) => savePostHandler(e)}
+          >
+            작성완료
+          </Button>
+        </Header>
+        <ImageUpload
+          imageURL={imageURL}
+          setImageUrl={setImageUrl}
+          files={files}
+          setFiles={setFiles}
         />
-      </SubModal>
+        <SearchPlace
+          selectedInfo={selectedInfo}
+          setSelectedInfo={setSelectedInfo}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          googleSearchResult={googleSearchResult}
+          setGoogleSearchResult={setGoogleSearchResult}
+        />
+        <StarButton starNum={starNum} setStarNum={setStarNum} />
+        <PostTextArea text={text} setText={setText} />
+        <SubModal isOpen={isSubModalOpen}>
+          <ConfirmModal
+            clearPostHandler={clearPostHandler}
+            closeModalHandler={closeSubModal}
+          />
+        </SubModal>
+      </Wrapper>
     </Base>
   );
 };
@@ -144,6 +145,39 @@ const PublicModal: React.FC<Props> = ({
 export default PublicModal;
 
 const Base = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: ${({ theme }) => theme.color.bg};
+
+  display: flex;
+  justify-content: center;
+  align-items: start;
+
+  width: 725px;
+  min-height: 800px;
+  max-height: 1000px;
+  height: 80%;
+
+  border-radius: 16px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.border};
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+`;
+
+const Wrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

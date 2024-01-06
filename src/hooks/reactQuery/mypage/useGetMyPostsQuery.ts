@@ -1,72 +1,8 @@
-// import { useQuery } from 'react-query';
-// import authApi from '../../../axios/authApi';
-
-// const getMyPosts = async () => {
-//   const response = await authApi.get(`/users/self/profile/posts`);
-//   return response.data;
-// };
-
-// const useGetMyPostsQuery = () => useQuery('myPosts', () => getMyPosts());
-
-// export default useGetMyPostsQuery;
-
-// import { useQuery } from 'react-query';
-// // import { HotPostsType } from '../../../model/interface';
-// import authApi from '../../../axios/authApi';
-
-// const getMyPosts = async () => {
-//   const response = await authApi.get(`/users/self/profile/posts`);
-//   return response.data;
-// };
-
-// const useGetMyPostsQuery = () => useQuery('myPosts', () => getMyPosts());
-
-// export default useGetMyPostsQuery;
-
-// import { useQuery } from 'react-query';
-// // import { HotPostsType } from '../../../model/interface';
-// import authApi from '../../../axios/authApi';
-
-// const getMyPosts = async () => {
-//   const response = await authApi.get(`/users/self/profile/posts`);
-//   return response.data;
-// };
-
-// const useGetMyPostsQuery = () => useQuery('myPosts', () => getMyPosts());
-
-// export default useGetMyPostsQuery;
-
-// import { useQuery } from 'react-query';
-// // import { HotPostsType } from '../../../model/interface';
-// import authApi from '../../../axios/authApi';
-
-// const getMyPosts = async () => {
-//   const response = await authApi.get(`/users/self/profile/posts`);
-//   return response.data;
-// };
-
-// const useGetMyPostsQuery = () => useQuery('myPosts', () => getMyPosts());
-
-// export default useGetMyPostsQuery;
-
-// import { useQuery } from 'react-query';
-// // import { HotPostsType } from '../../../model/interface';
-// import authApi from '../../../axios/authApi';
-
-// const getMyPosts = async () => {
-//   const response = await authApi.get(`/users/self/profile/posts`);
-//   return response.data;
-// };
-
-// const useGetMyPostsQuery = () => useQuery('myPosts', () => getMyPosts());
-
-// export default useGetMyPostsQuery;
-
 import { useInfiniteQuery } from 'react-query';
 import authApi from '../../../axios/authApi';
 
 const getMyPosts = async (
-  lastPostId: number | undefined, // 마지막 게시글 id
+  lastPostId: number | undefined,
   pageSize: number | undefined, // 불러올 게시글 숫자
 ) => {
   const params = {
@@ -74,15 +10,15 @@ const getMyPosts = async (
     pageSize,
   };
 
-  const response = await authApi.get('/users/self/profile/posts', { params });
-
-  // console.log('내 게시글 조회 -> ', response);
+  const response = await authApi.get('/api/users/self/profile/posts', {
+    params,
+  });
 
   return response.data;
 };
 
 const useGetMyPostsQuery = (
-  lastPostId: number | undefined, // 마지막 게시글 id
+  lastPostId: number | undefined,
   pageSize: number | undefined, // 불러올 게시글 숫자
 ) =>
   useInfiniteQuery(

@@ -1,6 +1,5 @@
-import { instance } from '../../../apis/apis';
-
 import { useQuery } from 'react-query';
+import api from '../../../axios/api';
 
 const fetchLocations = async (
   categoryName: string,
@@ -9,8 +8,8 @@ const fetchLocations = async (
   ha: string,
   oa: string,
 ) => {
-  const response = await instance.get(
-    `/locations?categoryName=${categoryName}&qa=${qa}&pa=${pa}&ha=${ha}&oa=${oa}`,
+  const response = await api.get(
+    `/api/locations?categoryName=${categoryName}&qa=${qa}&pa=${pa}&ha=${ha}&oa=${oa}`,
   );
   return response.data;
 };
