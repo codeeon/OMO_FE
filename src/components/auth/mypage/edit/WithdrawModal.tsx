@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import useDeleteMyDataMutation from '../../../../hooks/reactQuery/mypage/useDeleteMyUserDataMutation';
+import useDeleteMyDataMutation from '../../../../hooks/reactQuery/auth/useDeleteMyUserDataMutation';
 
 const WithdrawModal = (props) => {
   const { setIsModalOpen } = props;

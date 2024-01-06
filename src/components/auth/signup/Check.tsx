@@ -33,6 +33,7 @@ const Icon = styled.div`
   flex-shrink: 0;
   margin-right: 2px;
 `;
+
 const reject = (
   <svg
     xmlns="http://www.w3.org/2000/svg"

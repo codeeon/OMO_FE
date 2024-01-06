@@ -11,7 +11,7 @@ const postComment: MutationFunction<
     `/api/posts/${contentId}/comments`,
     newComment,
   );
-  console.log(response.data);
+  // console.log(response.data);
   return response.data;
 };
 

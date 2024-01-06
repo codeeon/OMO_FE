@@ -12,6 +12,7 @@ import ProfileImage from '../components/auth/mypage/edit/ProfileImage';
 import useUpdateMyImageMutation from '../hooks/reactQuery/mypage/useUpdateMyImageMutation';
 import WithdrawModal from '../components/auth/mypage/edit/WithdrawModal';
 import SubModal from '../components/Modal/SubModal';
+import toast from 'react-hot-toast';
 
 interface UserEmail {
   email: string;
@@ -19,7 +20,7 @@ interface UserEmail {
 
 interface SignUpData {
   nickname?: string;
-  password: string;
+  newPassword: string;
   confirmedPassword: string;
 }
 
@@ -39,7 +40,7 @@ const ProfileEdit = () => {
   const [imageURL, setImageUrl] = useState([myData?.data.imgUrl]);
   const [files, setFiles] = useState<File[]>([]);
 
-  const [nickname, setNickname] = useState(myData?.data.nickname);
+  const [nickname, setNickname] = useState('');
 
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
@@ -80,26 +81,26 @@ const ProfileEdit = () => {
       (alert('로그인 후 이용해주세요.'), navigate('/login'));
   }, []);
 
-  const onValid = async ({ password, confirmedPassword }: SignUpData) => {
+  const onValid = async ({ newPassword, confirmedPassword }: SignUpData) => {
     if (
-      password.length > 5 &&
-      /[a-zA-Z]/.test(password) &&
-      /\d/.test(password)
+      newPassword.length > 5 &&
+      /[a-zA-Z]/.test(newPassword) &&
+      /\d/.test(newPassword)
     ) {
       setPasswordCheck('confirmed');
     } else {
       setPasswordCheck('rejected');
-      setError('password');
+      setError('newPassword');
     }
 
-    if (password.length > 0 && password === confirmedPassword) {
+    if (newPassword.length > 0 && newPassword === confirmedPassword) {
       setConfirmedPasswordCheck('confirmed');
     } else {
       setConfirmedPasswordCheck('rejected');
       setError('confirmedPassword');
     }
 
-    if (!password.length) {
+    if (!newPassword.length) {
       setPasswordCheck('');
     }
 
@@ -111,7 +112,7 @@ const ProfileEdit = () => {
       setNicknameCheck('');
     }
 
-    await trigger(['password', 'confirmedPassword']);
+    await trigger(['newPassword', 'confirmedPassword']);
   };
 
   // 이것도 분리 가능할 듯 - Register도 마찬가지
@@ -159,7 +160,7 @@ const ProfileEdit = () => {
   );
 
   const updateProfileMutation = useMutation<void, Error, UserData>(
-    async (data: UserData): Promise<void> => {
+    async (data) => {
       const response = await authApi.patch(
         `/api/users/self/profile/edit`,
         data,
@@ -168,6 +169,16 @@ const ProfileEdit = () => {
     {
       onSuccess: () => {
         navigate('/mypage');
+      },
+      onError: (error) => {
+        error.response.status === 500 &&
+          toast.error('동일한 비밀번호입니다.', {
+            position: 'top-right',
+            duration: 4000,
+            style: { fontSize: '14px' },
+          }),
+          setPasswordCheck(''),
+          setConfirmedPasswordCheck('');
       },
     },
   );
@@ -182,7 +193,7 @@ const ProfileEdit = () => {
         updateProfileMutation.mutate(data);
       } else if (confirmedNickname !== nickname) {
         files.length === 0 && alert('닉네임 중복 체크를 다시 확인해주세요.');
-      } else if (data.password === '') {
+      } else if (data.newPassword === '') {
         updateProfileMutation.mutate({ nickname: confirmedNickname });
       } else {
         data.nickname = confirmedNickname;
@@ -252,7 +263,7 @@ const ProfileEdit = () => {
                   $check={passwordCheck}
                   placeholder="비밀번호를 입력해 주세요.  (6자 이상, 영문, 숫자 필수)"
                   type="password"
-                  {...register('password')}
+                  {...register('newPassword')}
                 />
                 <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
               </InputWrapper>

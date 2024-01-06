@@ -48,13 +48,7 @@ const NavDropdown = () => {
 
   const handleLogout = () => {
     logoutMutate();
-    toast.success('로그아웃이 완료되었습니다.', {
-      position: 'top-right',
-      duration: 4000,
-      style: { fontSize: '14px' },
-    }),
-      setIsOpen(false),
-      navigate('/');
+    setIsOpen(false), navigate('/');
   };
 
   const onClickMyPageBtn = () => {
