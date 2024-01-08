@@ -44,7 +44,7 @@ const DetailModalBody: React.FC<Props> = ({
       <Title>{placeName}</Title>
       <PlaceInfo onClick={moveMapHandler}>
         <LocationIcon />
-        <span>{Location.storeName}</span>
+        <span>{Location.address}</span>
       </PlaceInfo>
       <StarContainer>
         {Array.from({ length: 5 }, (_, idx) => (

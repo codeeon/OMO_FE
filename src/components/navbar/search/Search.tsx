@@ -9,6 +9,7 @@ import useUserSearchQuery from '../../../hooks/reactQuery/search/useUserSearchQu
 import _ from 'lodash';
 import useStoreSearchQuery from '../../../hooks/reactQuery/search/useStoreSearchQuery';
 import useDebounce from '../../../hooks/useDebounce';
+import { FaCaretDown } from 'react-icons/fa6';
 const Search = () => {
   const [isSearching, setIsSearching] = useState(false);
   const { value, changeValueHandler, clearValueHandler } = useInput();
@@ -72,6 +73,9 @@ const Search = () => {
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
         setIsSearching={setIsSearching}
+        buttonIcon={
+          <FaCaretDown style={{ color: '#f97393', margin: '5px 0 0 3px' }} />
+        }
       >
         <DropdownItem width="50%" onClick={() => setSearchHander('닉네임')}>
           닉네임

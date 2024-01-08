@@ -4,6 +4,7 @@ import { PostDetailType } from '../../../model/interface';
 
 const getDetailContent = async (postId: number): Promise<PostDetailType> => {
   const response = await api.get(`/api/posts/${postId}`);
+  console.log(response.data);
   return response.data;
 };
 

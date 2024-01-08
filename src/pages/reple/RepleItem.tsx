@@ -1,17 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { RepleTypeNew } from '../../model/interface';
-import Dropdown from './Dropdown';
+import { RepleType } from '../../model/interface';
+import Dropdown from '../comment/Dropdown';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 //TODO 유저 데이터
 const RepleItem: React.FC<{
-  reple: RepleTypeNew;
+  reple: RepleType;
   postId: number;
   commentId: number;
 }> = ({ reple, postId, commentId }) => {
-  const { Comment, User, content, createdAt, replyId } = reple;
+  const { User, createdAt, content, replyId } = reple;
   const navigate = useNavigate();
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
 

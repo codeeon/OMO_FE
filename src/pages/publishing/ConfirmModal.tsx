@@ -18,40 +18,42 @@ const ConfirmModal: React.FC<Props> = ({
   const onClickYesBtn = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
-    clearPostHandler(e);
+    closeModalHandler(e);
   };
 
   const onClickNoBtn = (
     e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
   ) => {
+    clearPostHandler(e);
     closeModalHandler(e);
   };
 
   return (
     <Base>
-      <Title>게시글을 삭제하시겠습니까?</Title>
+      <Title>😥정말 나가시겠어요?</Title>
+      <SubText>저장하지 않은 내용을 잃어버릴 수 있어요.</SubText>
       <BtnWrapper>
         <Button
-          outlineColor="red"
-          padding="10px 20px"
-          width="40px"
+          outlineColor="blue"
+          padding="10px 5px"
+          width="100px"
           height="15px"
           fontSize="14px"
           fontWeight="700"
           onClick={(e) => onClickYesBtn(e)}
         >
-          예
+          계속 작성하기
         </Button>
         <Button
-          outlineColor="blue"
-          padding="10px 20px"
-          width="40px"
+          outlineColor="red"
+          padding="10px 5px"
+          width="45px"
           height="15px"
           fontSize="14px"
           fontWeight="700"
           onClick={(e) => onClickNoBtn(e)}
         >
-          아니오
+          나가기
         </Button>
       </BtnWrapper>
     </Base>
@@ -82,10 +84,20 @@ const Title = styled.div`
   letter-spacing: -0.2px;
 `;
 
+const SubText = styled.div`
+  color: ${({ theme }) => theme.color.sub};
+
+  margin-top: 15px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+`;
+
 const BtnWrapper = styled.div`
   margin-top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
 `;

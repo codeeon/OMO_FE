@@ -151,12 +151,13 @@ const Base = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   &::-webkit-scrollbar {
-    width: 5px;
+    width: 15px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.color.border};
+    background-color: ${({ theme }) => theme.color.border2};
     border-radius: 20px;
+    border: 5px solid ${({ theme }) => theme.color.cardBg};
   }
 
   &::-webkit-scrollbar-track {

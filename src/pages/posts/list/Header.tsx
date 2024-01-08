@@ -14,7 +14,8 @@ const Header: React.FC<Props> = ({ openPostModalHandler }) => {
     <Base onClick={openPostModalHandler}>
       <Title>게시글</Title>
       <Button theme="blue" width="91px" height="32px" padding="none">
-        <PencilIcon />새 게시글
+        <PencilIcon />
+        <span>새 게시글</span>
       </Button>
     </Base>
   );
