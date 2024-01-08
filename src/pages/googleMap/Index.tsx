@@ -7,12 +7,14 @@ import DetailList from './detailList/Index';
 import useLocationQuery from '../../hooks/reactQuery/map/useGetAroundLocation';
 import usePlaceStore from '../../store/location/placeStore';
 import useMapStore from '../../store/location/googleMapStore';
-
+import useGetBookmarkQuery from '../../hooks/reactQuery/bookmark/useGetBookmarkQuery';
 const Map = () => {
   const { place, setPlace } = usePlaceStore();
   const [selectedCategory, setSelectedCategory] = useState<string>('전체');
   const [isListOpen, setIsListOpen] = useState<boolean>(true);
   const { currentLocation, mapBounds } = useMapStore();
+
+  const currentUser = sessionStorage.getItem('userId');
 
   const { data: placeDatas, refetch: lookAroundRefetch } = useLocationQuery(
     selectedCategory,
@@ -21,6 +23,7 @@ const Map = () => {
     String(mapBounds?.southWest.lng),
     String(mapBounds?.northEast.lng),
   );
+  const { data: bookmarkPlaces } = useGetBookmarkQuery(currentUser);
 
   useEffect(() => {
     if (mapBounds?.northEast.lat === undefined) return;
@@ -60,6 +63,7 @@ const Map = () => {
         placeDatas={placeDatas}
         isListOpen={isListOpen}
         setIsListOpen={setIsListOpen}
+        bookmarkPlaces={bookmarkPlaces}
       />
     </Base>
   );

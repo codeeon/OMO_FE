@@ -21,17 +21,15 @@ const usePatchPostMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries('posts');
       toast.success('게시물 수정 성공!', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
       toast.remove('10');
     },
     onMutate: () => {
       toast.loading('게시물 업로드 중입니다...', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
         id: '10',
       });
     },

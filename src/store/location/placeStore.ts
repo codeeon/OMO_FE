@@ -1,6 +1,6 @@
 // themeStore.js
 import { create } from 'zustand';
-import { LocationType, SelectedPlaceType } from '../../model/interface';
+import { SelectedPlaceType } from '../../model/interface';
 
 interface PlaceStoreState {
   place: SelectedPlaceType | null;

@@ -26,7 +26,6 @@ const PostDetailModal: React.FC<{
     Location,
     Comments,
   } = post;
-  console.log(post);
 
   return (
     <Base>

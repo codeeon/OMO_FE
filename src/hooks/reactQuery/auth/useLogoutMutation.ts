@@ -30,9 +30,8 @@ const useLogoutMutation = () => {
         sessionStorage.removeItem('refreshToken');
         sessionStorage.removeItem('userId');
         toast.success('로그아웃이 완료되었습니다.', {
-          position: 'top-right',
+          position: 'bottom-right',
           duration: 4000,
-          style: { fontSize: '14px' },
         });
       },
       onError: (error) => {

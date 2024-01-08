@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { SelectedPlaceType } from '../../../model/interface';
+import {
+  BookmarkLocationType,
+  SelectedPlaceType,
+} from '../../../model/interface';
 import { HiLocationMarker } from 'react-icons/hi';
 import ContentsSection from './ContentsSection';
 import useGetLocationPostsQuery from '../../../hooks/reactQuery/map/useGetLocationPostsQuery';
