@@ -27,18 +27,16 @@ const usePostCommentQuery = ({
     { contentId: number | undefined; newComment: PostCommentType }
   >(postComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries(['comments', contentId]);
+      queryClient.invalidateQueries(['posts', contentId]);
       toast.success('댓글이 성공적으로 등록되었습니다.', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
     },
     onError: () => {
       toast.error('로그인 후 이용해주세요.', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
     },
   });

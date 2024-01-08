@@ -1,9 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import DetailModalDropdown from '../../components/detailModal/ModalDropdown';
 import { PostDetailType } from '../../model/interface';
 import toast from 'react-hot-toast';
+import Dropdown from '../../components/share/dropdown/Dropdown';
+import useDropdown from '../../hooks/useDropdown';
+import DropdownItem from '../../components/share/dropdown/DropdownItem';
+import useDeleteContentMutation from '../../hooks/reactQuery/post/useDeletePostsMutation';
+import Modal from '../../components/Modal/Modal';
+import PatchModal from '../patch/PatchModal';
+import useModalCtr from '../../hooks/useModalCtr';
+import { MeatballIcon } from '../../assets/icons/MeatballIcon';
 
 const DetailModalHeader: React.FC<{
   userName: string;
@@ -23,34 +30,75 @@ const DetailModalHeader: React.FC<{
   userId,
 }) => {
   const currentUserId = Number(window.sessionStorage.getItem('userId'));
+  const { isDropdownOpen, setIsDropdownOpen } = useDropdown();
+  const {
+    isModalOpen: isPatchModalOpen,
+    handleModalClose: handlePatchModalClose,
+    handleModalOpen: handlePatchModalOpen,
+  } = useModalCtr();
+  const {
+    isModalOpen: isConfirmModalOpen,
+    handleModalClose: handleConfirmModalClose,
+    handleModalOpen: handleConfirmModalOpen,
+  } = useModalCtr();
   const navigate = useNavigate();
 
   const onClickMoveUserPage = () => {
     const checkUserId = sessionStorage.getItem('userId');
     !checkUserId
       ? toast.error('로그인 후 이용해주세요.', {
-          position: 'top-right',
+          position: 'bottom-right',
           duration: 4000,
-          style: { fontSize: '14px' },
         })
       : navigate(`/userpage/${userName}`);
   };
+  const { deleteMutate } = useDeleteContentMutation();
+
+  const onClickDelete = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    deleteMutate(contentId);
+    closeModalHandler(e);
+  };
 
   return (
-    <Base>
-      <UserProfile $userProfile={userProfile} onClick={onClickMoveUserPage} />
-      <UserInfoContainer>
-        <UserName onClick={onClickMoveUserPage}>{userName}</UserName>
-        <CreationDate>{createdAt.split('T')[0]}</CreationDate>
-      </UserInfoContainer>
-      {userId === currentUserId && (
-        <DetailModalDropdown
-          contentId={contentId}
-          closeModalHandler={closeModalHandler}
+    <>
+      <Base>
+        <UserProfile $userProfile={userProfile} onClick={onClickMoveUserPage} />
+        <UserInfoContainer>
+          <UserName onClick={onClickMoveUserPage}>{userName}</UserName>
+          <CreationDate>{createdAt.split('T')[0]}</CreationDate>
+        </UserInfoContainer>
+        {userId === currentUserId && (
+          <Dropdown
+            isDropdownOpen={isDropdownOpen}
+            setIsDropdownOpen={setIsDropdownOpen}
+            margin="0 0 0 auto"
+            borderRadius="50%"
+            padding="0px"
+            titleWidth="35px"
+            titleHeight="35px"
+            width="80px"
+            height="90px"
+            buttonIcon={<MeatballIcon />}
+          >
+            <DropdownItem onClick={(e) => handlePatchModalOpen(e)}>
+              수정
+            </DropdownItem>
+            <DropdownItem onClick={(e) => onClickDelete(e)} textColor="red">
+              삭제
+            </DropdownItem>
+          </Dropdown>
+        )}
+      </Base>
+      <Modal isOpen={isPatchModalOpen} onClose={handleConfirmModalOpen}>
+        <PatchModal
+          handlePatchModalClose={handlePatchModalClose}
+          isConfirmModalOpen={isConfirmModalOpen}
+          handleConfirmModalOpen={handleConfirmModalOpen}
+          handleConfirmModalClose={handleConfirmModalClose}
           post={post}
         />
-      )}
-    </Base>
+      </Modal>
+    </>
   );
 };
 

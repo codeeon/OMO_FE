@@ -1,18 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Button from '../button/Button';
+import Button from '../../components/button/Button';
 import { getToday } from '../../utils/getToday';
 import usePostCommentMutation from '../../hooks/reactQuery/comment/usePostCommentMutation';
-import CommentTextArea from '../textarea/CommentTextArea';
+import CommentTextArea from '../../components/textarea/CommentTextArea';
 import useInput from '../../hooks/useInput';
 import { validateComments } from '../../utils/validationComments';
 
 interface Props {
   contentId: number | undefined;
-  scrollToTop: () => void;
 }
 
-const CommentInput: React.FC<Props> = ({ contentId, scrollToTop }) => {
+const CommentInput: React.FC<Props> = ({ contentId }) => {
   const { value: text, changeValueHandler, clearValueHandler } = useInput();
   const [isTextareaFocus, setIsTextareaFoucs] = useState<boolean>(false);
 
@@ -26,7 +25,7 @@ const CommentInput: React.FC<Props> = ({ contentId, scrollToTop }) => {
     setIsTextareaFoucs(false);
   }, []);
 
-  const { postMutate, isPostLoading, isPostSuccess } = usePostCommentMutation({
+  const { postMutate, isPostLoading } = usePostCommentMutation({
     contentId,
   });
 
@@ -41,10 +40,6 @@ const CommentInput: React.FC<Props> = ({ contentId, scrollToTop }) => {
     postMutate({ contentId, newComment });
     clearValueHandler();
   };
-
-  useEffect(() => {
-    isPostSuccess && scrollToTop();
-  }, [isPostSuccess]);
 
   return (
     <Base>

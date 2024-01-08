@@ -9,7 +9,11 @@ import useCurrentLocationQuery from '../../../../hooks/reactQuery/location/useCu
 import useDistrictStore from '../../../../store/location/districtStore';
 import toast from 'react-hot-toast';
 
-const LocationDrodown = () => {
+interface Props {
+  position?: string;
+}
+
+const LocationDrodown: React.FC<Props> = ({ position }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { district, setDistrict } = useDistrictStore();
   const { isLoading, refetch } = useCurrentLocationQuery(setDistrict);
@@ -42,11 +46,10 @@ const LocationDrodown = () => {
   useEffect(() => {
     isLoading &&
       toast.loading('현재 위치를 업데이트 중입니다...', {
-        position: 'top-right',
-        style: { fontSize: '14px' },
-        id: '1',
+        position: 'bottom-right',
+        id: '11',
       });
-    !isLoading && toast.remove('1');
+    !isLoading && toast.remove('11');
   }, [isLoading]);
 
   return (
@@ -80,6 +83,7 @@ const LocationDrodown = () => {
         isOpen={isOpen}
         isLoading={isLoading}
         toggleDropdownHandler={toggleDropdownHandler}
+        position={position}
       />
     </NavContainer>
   );

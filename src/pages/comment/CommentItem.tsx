@@ -1,21 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { CommentTypeNew } from '../../model/interface';
+import { CommentType } from '../../model/interface';
 import Dropdown from './Dropdown';
-import RepleItem from './RepleItem';
-import RepleInput from './RepleInput';
+import RepleItem from '../reple/RepleItem';
+import RepleInput from '../reple/RepleInput';
 import { useNavigate } from 'react-router-dom';
-import useGetRepleQuery from '../../hooks/reactQuery/replies/useGetRepleQuery';
-import { motion } from 'framer-motion';
+import { Virtuoso } from 'react-virtuoso';
 
 //TODO 유저 데이터
 const CommentItem: React.FC<{
-  comment: CommentTypeNew;
+  comment: CommentType;
   postId: number;
-  delay: number;
-}> = ({ comment, postId, delay }) => {
-  const { commentId, content, createdAt, User } = comment;
-  const { data: repliesData } = useGetRepleQuery(postId, commentId);
+}> = ({ comment, postId }) => {
+  const { Replies, commentId, content, createdAt, User } = comment;
 
   const navigate = useNavigate();
 
@@ -41,11 +38,7 @@ const CommentItem: React.FC<{
   };
 
   return (
-    <Base
-      initial={{ scale: 1, opacity: 0, y: 100 }}
-      animate={{ scale: 1, opacity: 1, y: 0 }}
-      transition={{ delay: delay, duration: 0.2 }}
-    >
+    <Base>
       <UserProfile $profileImg={User.imgUrl} onClick={onClickMoveUserPage} />
       <BodyContainer>
         <UserInfoContainer>
@@ -56,7 +49,7 @@ const CommentItem: React.FC<{
           )}
         </UserInfoContainer>
         <CommentText>{content}</CommentText>
-        {repliesData?.length !== 0 ? (
+        {Replies?.length !== 0 ? (
           <>
             {isShowReple ? (
               !isShowRepleInput && (
@@ -64,13 +57,13 @@ const CommentItem: React.FC<{
               )
             ) : (
               <RepleBtn onClick={getRepleHandler}>
-                <span>{repliesData?.length}개의 답글 보기</span>
+                <span>{Replies?.length}개의 답글 보기</span>
               </RepleBtn>
             )}
 
             {isShowReple && (
               <>
-                {repliesData?.map((reple) => (
+                {Replies?.map((reple) => (
                   <RepleItem
                     key={reple.replyId}
                     reple={reple}
@@ -111,7 +104,7 @@ const CommentItem: React.FC<{
 
 export default CommentItem;
 
-const Base = styled(motion.li)<{ $delay: string }>`
+const Base = styled.div`
   display: flex;
   justify-content: start;
   align-items: start;

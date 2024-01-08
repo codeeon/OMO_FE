@@ -6,7 +6,8 @@ import DetailModalHeader from './DetailModalHeader';
 import DetailModalBody from './DetailModalBody';
 import DetailImage from './DetailImage';
 import DetailModalFooter from './DetailModalFooter';
-import Comment from './Comment';
+import Comment from '../comment/Comment';
+
 const PostDetailModal: React.FC<{
   postId: number;
   closeModalHandler: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -56,7 +57,7 @@ const PostDetailModal: React.FC<{
           postId={postId}
           commentLength={Comments.length}
         />
-        <Comment postId={postId} footerRef={footerRef} />
+        <Comment postId={postId} footerRef={footerRef} comments={Comments} />
       </Wrapper>
     </Base>
   );
@@ -84,15 +85,22 @@ const Base = styled.div`
   border-radius: 16px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
-    width: 5px;
+    width: 15px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.color.border};
+    background-color: ${({ theme }) => theme.color.border2};
     border-radius: 20px;
+    border: 5px solid ${({ theme }) => theme.color.bg};
   }
 
   &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-button:start:decrement,
+  &::-webkit-scrollbar-button:end:increment {
+    display: block;
+    height: 8px;
     background-color: transparent;
   }
 `;

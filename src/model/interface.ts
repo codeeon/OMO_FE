@@ -138,6 +138,7 @@ export interface LocationType {
   starAvg: number;
   postCount: number;
   storeName: string;
+  placeInfoId: string;
 }
 
 export interface PostContentType {
@@ -157,7 +158,7 @@ export interface PostPatchType {
   content: string;
   star: number;
   storeName: string;
-  placeInfoId: string;
+  placeInfoId: string | undefined | null;
 }
 
 export interface PostCommentType {

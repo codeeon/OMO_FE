@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import { FaCaretDown } from 'react-icons/fa6';
 
 interface Props {
   children: React.ReactNode;
@@ -14,6 +13,10 @@ interface Props {
   setIsDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSearching?: React.Dispatch<React.SetStateAction<boolean>>;
   top?: string;
+  margin?: string;
+  borderRadius?: string;
+  padding?: string;
+  buttonIcon?: React.ReactNode;
 }
 
 const Dropdown: React.FC<Props> = ({
@@ -27,6 +30,10 @@ const Dropdown: React.FC<Props> = ({
   setIsDropdownOpen,
   setIsSearching,
   top,
+  margin,
+  borderRadius,
+  padding,
+  buttonIcon,
 }) => {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -52,30 +59,33 @@ const Dropdown: React.FC<Props> = ({
     return () => {
       document.removeEventListener('mousedown', onClickOutside);
     };
-  }, [isDropdownOpen]);
+  }, [isDropdownOpen, setIsDropdownOpen]);
 
   return (
     <NavContainer
       initial={false}
       animate={isDropdownOpen ? 'open' : 'closed'}
       ref={dropdownRef}
+      $margin={margin}
     >
       <DropdownBtn
         whileTap={{ scale: 0.97 }}
         onClick={toggleDropdownHandler}
         $titleWidth={titleWidth}
         $titleHeight={titleHeight}
+        $borderRadius={borderRadius}
+        $padding={padding}
       >
-        <TitleWrapper>{title}</TitleWrapper>
+        {title && <TitleWrapper>{title}</TitleWrapper>}
         <BtnWrapper
           variants={{
             open: { rotate: 180 },
             closed: { rotate: 0 },
           }}
           transition={{ duration: 0.1 }}
-          style={{ originX: 0.55 }}
+          style={{ originX: 0.5, originY: 0.5 }}
         >
-          <FaCaretDown style={{ color: '#f97393', margin: '5px 0 0 3px' }} />
+          {buttonIcon}
         </BtnWrapper>
       </DropdownBtn>
       <DropdownList
@@ -93,17 +103,20 @@ const Dropdown: React.FC<Props> = ({
 
 export default Dropdown;
 
-const NavContainer = styled(motion.nav)`
+const NavContainer = styled(motion.nav)<{ $margin?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 30px;
   position: relative;
+  margin: ${({ $margin }) => ($margin ? $margin : null)};
 `;
 
 const DropdownBtn = styled(motion.button)<{
   $titleWidth?: string;
   $titleHeight?: string;
+  $borderRadius?: string;
+  $padding?: string;
 }>`
   display: flex;
   justify-content: center;
@@ -112,12 +125,13 @@ const DropdownBtn = styled(motion.button)<{
   width: ${({ $titleWidth }) => ($titleWidth ? $titleWidth : '30px')};
   height: ${({ $titleHeight }) => ($titleHeight ? $titleHeight : '30px')};
 
-  padding: 5px 0px 5px 10px;
+  padding: ${({ $padding }) => ($padding ? $padding : '5px 0px 5px 10px')};
   border: none;
 
   background: ${({ theme }) => theme.color.cardBg};
   color: ${({ theme }) => theme.color.text};
-  border-radius: 30px 0 0 30px;
+  border-radius: ${({ $borderRadius }) =>
+    $borderRadius ? $borderRadius : '30px 0 0 30px'};
 
   cursor: pointer;
   &:hover {

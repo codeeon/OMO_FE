@@ -36,9 +36,8 @@ const LikeBtn: React.FC<Props> = ({ postId }) => {
 
       if (!userId)
         return toast.error('로그인 후 이용해주세요.', {
-          position: 'top-right',
+          position: 'bottom-right',
           duration: 4000,
-          style: { fontSize: '14px' },
         });
 
       if (isLiked) {

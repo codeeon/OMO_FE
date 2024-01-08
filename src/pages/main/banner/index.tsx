@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Location from './location';
+import LocationDrodown from '../../../components/share/dropdown/locationDropdown/LocationDrodown';
 
 const webPImgUrl =
   'https://firebasestorage.googleapis.com/v0/b/photo-zone-b66e9.appspot.com/o/Banner.webp?alt=media&token=b4eaf3e2-da7d-4758-ad21-152d6d770446';
@@ -37,7 +38,7 @@ const Banner = () => {
               오늘은 <span>요기서!</span>
             </h2>
           </BannerTitle>
-          <Location />
+          <LocationDrodown position="center" />
         </TitleContainer>
       </Wrapper>
     </Base>

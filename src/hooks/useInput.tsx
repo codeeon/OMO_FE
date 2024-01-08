@@ -1,9 +1,5 @@
 import { useState, ChangeEvent, SetStateAction } from 'react';
 
-interface UseInputProps {
-  initialState?: string;
-}
-
 interface UseInputReturn {
   value: string;
   setValue: React.Dispatch<SetStateAction<string>>;
@@ -13,10 +9,8 @@ interface UseInputReturn {
   clearValueHandler: () => void;
 }
 
-const useInput = ({
-  initialState = '',
-}: UseInputProps = {}): UseInputReturn => {
-  const [value, setValue] = useState<string>(initialState);
+const useInput = (initialState?: string): UseInputReturn => {
+  const [value, setValue] = useState<string>(initialState ? initialState : '');
 
   const changeValueHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
