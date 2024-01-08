@@ -6,7 +6,7 @@ import {
 } from '@react-google-maps/api';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { LocationType } from '../../../model/interface';
+import { BookmarkLocationType, LocationType } from '../../../model/interface';
 import { darkMapTheme, lightMapTheme } from './maptheme';
 import CurrentLocationMarker from '../../../components/marker/CurrentLocationMarker';
 import LocationMarker from '../../../components/marker/LocationMarker';
@@ -15,22 +15,29 @@ import LevelButton from '../../../components/button/mapActionButton/LevelButton'
 import useMapStore from '../../../store/location/googleMapStore';
 import useThemeStore from '../../../store/theme/themeStore';
 import usePlaceStore from '../../../store/location/placeStore';
+import BookMarkLocationButton from '../../../components/button/mapActionButton/BookMarkLocationButton';
+import BookmarkLocationMarker from '../../../components/marker/BookmarkLocationMarker';
+import useBookMarkPlaceStore from '../../../store/location/bookMarkPlaceStore';
 
 interface Props {
   placeDatas: LocationType[] | undefined;
   isListOpen: boolean;
   setIsListOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  bookmarkPlaces: BookmarkLocationType[] | undefined;
 }
 
 const MapGoogle: React.FC<Props> = ({
   placeDatas,
   isListOpen,
   setIsListOpen,
+  bookmarkPlaces,
 }) => {
   const [mapLevel, setMapLevel] = useState(17);
   const { place } = usePlaceStore();
   const { map, setMap, currentLocation, setMapBounds } = useMapStore();
   const { themeMode } = useThemeStore();
+
+  const { isShowBookMarkPlace } = useBookMarkPlaceStore();
 
   const containerStyle = {
     width:
@@ -106,7 +113,7 @@ const MapGoogle: React.FC<Props> = ({
         maxZoom: 18,
         clickableIcons: false,
         styles: themeMode === 'LightMode' ? lightMapTheme : darkMapTheme,
-        backgroundColor: 'none'
+        backgroundColor: 'none',
       }}
     >
       <OverlayViewF
@@ -126,7 +133,12 @@ const MapGoogle: React.FC<Props> = ({
         />
       ))}
 
+      {isShowBookMarkPlace &&
+        bookmarkPlaces?.map((db) => (
+          <BookmarkLocationMarker key={db.Location.locationId} placeDb={db} />
+        ))}
       <CurrentLocationButton />
+      <BookMarkLocationButton />
       <LevelButton
         downMapLevelHandler={downMapLevelHandler}
         upMapLevelHandler={upMapLevelHandler}

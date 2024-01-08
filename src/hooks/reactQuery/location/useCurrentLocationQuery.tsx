@@ -17,16 +17,15 @@ const useCurrentLocationQuery = (setState: (dist: string) => void) =>
         setState(result);
       }
       toast.success('현재 위치 업데이트를 완료했습니다.', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
+      toast.remove('11');
     },
     onError: () => {
       toast.success('위치 정보를 불러오지 못했습니다.', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
     },
   });

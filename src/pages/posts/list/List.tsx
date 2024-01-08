@@ -53,9 +53,8 @@ const List = () => {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
       return toast.error('로그인 후 작성 가능합니다.', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
     }
     openMainModal(e);
@@ -64,7 +63,10 @@ const List = () => {
   const fetchNext = useCallback(async () => {
     const res = await fetchNextPage();
     if (res.isError) {
-      console.log(res.error);
+      toast.error('게시글을 불러오는데 실패했습니다.', {
+        position: 'bottom-right',
+        duration: 4000,
+      });
     }
   }, [fetchNextPage]);
 

@@ -93,10 +93,6 @@ const PublicModal: React.FC<Props> = ({
     closeMainModal(e);
   };
 
-  useEffect(() => {
-    isPostContentLoading ? postLoading() : toast.remove('10');
-  }, [isPostContentLoading]);
-
   return (
     <Base>
       <Wrapper>

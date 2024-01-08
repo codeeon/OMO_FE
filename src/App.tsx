@@ -52,7 +52,30 @@ const App = () => {
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <Routers />
-            <Toaster />
+            <Toaster
+              toastOptions={{
+                success: {
+                  style: {
+                    background: '#C6F6D5',
+                    fontSize: '16px',
+                    borderRadius: '5px',
+                  },
+                },
+                loading: {
+                  style: {
+                    fontSize: '16px',
+                    borderRadius: '5px',
+                  },
+                },
+                error: {
+                  style: {
+                    background: '#FED7D7',
+                    fontSize: '16px',
+                    borderRadius: '5px',
+                  },
+                },
+              }}
+            />
           </BrowserRouter>
         </QueryClientProvider>
       </ThemeProvider>

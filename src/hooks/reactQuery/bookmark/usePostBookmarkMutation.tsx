@@ -1,6 +1,5 @@
-import { MutationFunction, useMutation, useQueryClient } from 'react-query';
+import { QueryClient, useMutation, useQueryClient } from 'react-query';
 import authApi from '../../../axios/authApi';
-import { PostDetailType } from '../../../model/interface';
 import toast from 'react-hot-toast';
 
 const postBookmark = async (locationId: number | undefined) => {
@@ -25,18 +24,17 @@ const usePostBookmarkMutation = (locationId: number | undefined) => {
       return { previousLocationData };
     },
     onSuccess: () => {
+      queryClient.invalidateQueries('bookmarkPlaces');
       toast.success('북마크에 저장되었습니다.', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
     },
-    onError: (err, brandId, context) => {
+    onError: (context) => {
       queryClient.setQueryData('bookmarkPlaces', context?.previousLocationData);
       toast.error('북마크 삭제에 실패했습니다.', {
-        position: 'top-right',
+        position: 'bottom-right',
         duration: 4000,
-        style: { fontSize: '14px' },
       });
     },
 

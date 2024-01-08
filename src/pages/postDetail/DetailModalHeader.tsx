@@ -47,9 +47,8 @@ const DetailModalHeader: React.FC<{
     const checkUserId = sessionStorage.getItem('userId');
     !checkUserId
       ? toast.error('로그인 후 이용해주세요.', {
-          position: 'top-right',
+          position: 'bottom-right',
           duration: 4000,
-          style: { fontSize: '14px' },
         })
       : navigate(`/userpage/${userName}`);
   };
