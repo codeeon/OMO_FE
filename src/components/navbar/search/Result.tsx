@@ -81,7 +81,7 @@ const Base = styled.div<{ $isSearching: boolean }>`
   align-items: start;
   gap: 3px;
 
-  width: ${({ $isSearching: $isFocused }) => ($isFocused ? '650px' : '320px')};
+  width: ${({ $isSearching }) => ($isSearching ? '650px' : '320px')};
   min-height: 63px;
   height: auto;
 
@@ -90,7 +90,8 @@ const Base = styled.div<{ $isSearching: boolean }>`
   background-color: ${({ theme }) => theme.color.searchBg};
   backdrop-filter: blur(20px);
 
-  opacity: ${({ $isSearching: $isFocused }) => ($isFocused ? '1' : '0')};
+  opacity: ${({ $isSearching }) => ($isSearching ? 'flex' : 'none')};
+  display: ${({ $isSearching }) => ($isSearching ? 'flex' : 'none')};
 
   transition: all 300ms ease;
 

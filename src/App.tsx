@@ -2,12 +2,13 @@ import React, { useEffect } from 'react';
 import Routers from './shared/Routers';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { LightTheme, DarkTheme } from './styles/theme.js';
+import { LightTheme, DarkTheme } from './styles/theme.ts';
 import useThemeStore from './store/theme/themeStore.js';
 import useApiError from './hooks/reactQuery/useApiError.js';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
 import { HelmetProvider } from 'react-helmet-async';
+
 const App = () => {
   const { themeMode, toggleTheme } = useThemeStore();
 

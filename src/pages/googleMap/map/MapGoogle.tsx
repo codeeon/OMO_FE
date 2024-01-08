@@ -24,15 +24,12 @@ interface Props {
 
 const MapGoogle: React.FC<Props> = ({
   placeDatas,
-
   isListOpen,
   setIsListOpen,
 }) => {
-  const [isShowReasarchBtn, setIsShowReasearchBtn] = useState(false);
   const [mapLevel, setMapLevel] = useState(17);
   const { place } = usePlaceStore();
-  const { map, setMap, currentLocation, mapBounds, setMapBounds } =
-    useMapStore();
+  const { map, setMap, currentLocation, setMapBounds } = useMapStore();
   const { themeMode } = useThemeStore();
 
   const containerStyle = {
@@ -101,7 +98,6 @@ const MapGoogle: React.FC<Props> = ({
       onLoad={onLoad}
       onTilesLoaded={onTileLoaded}
       onUnmount={onUnmount}
-      onDragEnd={() => setIsShowReasearchBtn(true)}
       options={{
         gestureHandling: 'greedy',
         disableDefaultUI: true,
@@ -110,8 +106,7 @@ const MapGoogle: React.FC<Props> = ({
         maxZoom: 18,
         clickableIcons: false,
         styles: themeMode === 'LightMode' ? lightMapTheme : darkMapTheme,
-
-        backgroundColor: 'transparent',
+        backgroundColor: 'none'
       }}
     >
       <OverlayViewF

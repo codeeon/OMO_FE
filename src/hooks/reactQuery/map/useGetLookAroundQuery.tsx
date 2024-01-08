@@ -11,7 +11,6 @@ export const getLocations = async (
 ): Promise<LocationType[]> => {
   const params = { categoryName, qa, pa, ha, oa };
   const response = await api.get(`/api/locations`, { params });
-
   return response.data.location || response.data;
 };
 

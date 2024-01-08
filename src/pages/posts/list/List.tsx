@@ -14,6 +14,7 @@ import LocationDrodown from '../../../components/share/dropdown/locationDropdown
 import CategoryDropdown from '../../../components/share/dropdown/CateogryDropdown';
 import ContentCard from '../../../components/card/ContentCard';
 import useObserver from '../../../hooks/useObserver';
+import { SyncLoader } from 'react-spinners';
 
 const List = () => {
   const { district } = useDistrictStore();
@@ -105,8 +106,12 @@ const List = () => {
             {isFetching && !isFetchingNextPage
               ? renderSkeletons(20)
               : renderContentCards()}
-            {isFetchingNextPage && hasNextPage && renderSkeletons(4)}
           </RecentCardGrid>
+          {isPageEnd && hasNextPage && (
+            <LoadingContainer>
+              <SyncLoader color="gray" />
+            </LoadingContainer>
+          )}
           <ObserverContainer ref={listRef}></ObserverContainer>
         </Body>
       </Wrapper>
@@ -174,7 +179,15 @@ const FilterContainer = styled.div`
 
 const ObserverContainer = styled.div`
   width: 100%;
-  height: 10px;
+  height: 150px;
   touch-action: none;
   margin-bottom: 10px;
+`;
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

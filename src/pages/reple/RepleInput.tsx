@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Button from '../button/Button';
+import Button from '../../components/button/Button';
 import { getToday } from '../../utils/getToday';
 import usePostRepleMutation from '../../hooks/reactQuery/replies/usePostRepleMutation';
-import CommentTextArea from '../textarea/CommentTextArea';
+import CommentTextArea from '../../components/textarea/CommentTextArea';
 import useInput from '../../hooks/useInput';
 import { validateComments } from '../../utils/validationComments';
 
@@ -21,6 +21,8 @@ const RepleInput: React.FC<Props> = ({
   const { value: text, changeValueHandler, clearValueHandler } = useInput();
   const [isTextareaFocus, setIsTextareaFoucs] = useState<boolean>(false);
 
+  const currentUserId = Number(window.sessionStorage.getItem('userId'));
+
   const onTextAreaFocus = () => {
     setIsTextareaFoucs(true);
   };
@@ -36,7 +38,7 @@ const RepleInput: React.FC<Props> = ({
     if (!validateComments(text)) return;
     const newComment = {
       PostId: postId,
-      UserId: 3, // TODO 유저와 연결
+      UserId: currentUserId,
       content: text,
       createdAt: getToday(),
     };

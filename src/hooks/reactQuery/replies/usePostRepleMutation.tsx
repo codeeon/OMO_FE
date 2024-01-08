@@ -20,7 +20,6 @@ const postReple: MutationFunction<
 
 const usePostRepleMutation = ({
   postId,
-  commentId,
 }: {
   postId: number | undefined;
   commentId: number | undefined;

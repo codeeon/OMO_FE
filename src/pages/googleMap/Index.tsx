@@ -16,10 +16,10 @@ const Map = () => {
 
   const { data: placeDatas, refetch: lookAroundRefetch } = useLocationQuery(
     selectedCategory,
-    mapBounds?.southWest.lat,
-    mapBounds?.northEast.lat,
-    mapBounds?.southWest.lng,
-    mapBounds?.northEast.lng,
+    String(mapBounds?.southWest.lat),
+    String(mapBounds?.northEast.lat),
+    String(mapBounds?.southWest.lng),
+    String(mapBounds?.northEast.lng),
   );
 
   useEffect(() => {
