@@ -109,7 +109,7 @@ const List = () => {
               ? renderSkeletons(20)
               : renderContentCards()}
           </RecentCardGrid>
-          {isPageEnd && hasNextPage && (
+          {hasNextPage && (
             <LoadingContainer>
               <SyncLoader color="gray" />
             </LoadingContainer>
@@ -181,14 +181,14 @@ const FilterContainer = styled.div`
 
 const ObserverContainer = styled.div`
   width: 100%;
-  height: 150px;
+  height: 100px;
   touch-action: none;
   margin-bottom: 10px;
 `;
 
 const LoadingContainer = styled.div`
   width: 100%;
-  height: 150px;
+  height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -37,6 +37,11 @@ export default defineConfig({
       },
     }),
   ],
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    include: ['src/components/**/*.test.ts', 'src/components/**/*.test.tsx'],
+  },
   define: {
     'process.env': {},
   },

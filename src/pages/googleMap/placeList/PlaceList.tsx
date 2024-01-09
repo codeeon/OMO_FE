@@ -61,8 +61,13 @@ const Base = styled.div`
 
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Virtuosos = styled(Virtuoso)`

@@ -9,8 +9,6 @@ import SearchPlace from '../publishing/SearchPlace';
 import StarButton from '../../components/button/StarButton';
 import PostTextArea from '../../components/textarea/PostTextArea';
 import ConfirmModal from '../publishing/ConfirmModal';
-import { postLoading } from '../../components/alert/postAlert';
-import toast from 'react-hot-toast';
 
 interface Props {
   post: PostDetailType;
