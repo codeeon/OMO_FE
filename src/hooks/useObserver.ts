@@ -19,7 +19,7 @@ const useObserver = (
     if (!node || !hasIOSupport) return;
 
     const observerParams = { threshold, root, rootMargin };
-    
+
     // observer 생성
     const observer = new IntersectionObserver(updateEntry, observerParams);
 
@@ -28,7 +28,7 @@ const useObserver = (
 
     // 클린업
     return () => observer.disconnect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elementRef?.current, root, rootMargin, JSON.stringify(threshold)]);
 
   return entry;

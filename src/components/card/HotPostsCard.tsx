@@ -30,7 +30,7 @@ const HotPostsCard: React.FC<Props> = ({ post }) => {
         </BodyConatiner>
       </Wrapper>
       <LocationModal isOpen={isModalOpen} onClose={handleModalClose}>
-        <PlaceInfoModal handleModalClose={handleModalClose} post={post} />
+        <PlaceInfoModal post={post} />
       </LocationModal>
     </Base>
   );

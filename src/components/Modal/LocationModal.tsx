@@ -76,15 +76,22 @@ const Container = styled.div`
   border-radius: 16px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
-    width: 5px;
+    width: 15px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.color.border};
+    background-color: ${({ theme }) => theme.color.border2};
     border-radius: 20px;
+    border: 5px solid ${({ theme }) => theme.color.cardBg};
   }
 
   &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-button:start:decrement,
+  &::-webkit-scrollbar-button:end:increment {
+    display: block;
+    height: 8px;
     background-color: transparent;
   }
 `;
