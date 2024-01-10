@@ -128,6 +128,6 @@ const Base = styled.button<BtnProps>`
       : null};
 
   span {
-    color: ${({ theme }) => theme.color.text};
+    color: #fff;
   }
 `;

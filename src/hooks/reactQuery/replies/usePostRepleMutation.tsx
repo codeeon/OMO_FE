@@ -15,13 +15,11 @@ const postReple: MutationFunction<
     `/api/posts/${postId}/comments/${commentId}/replies`,
     newComment,
   );
-  // console.log(response);
   return response.data;
 };
 
 const usePostRepleMutation = ({
   postId,
-  commentId,
 }: {
   postId: number | undefined;
   commentId: number | undefined;
@@ -39,16 +37,14 @@ const usePostRepleMutation = ({
     onSuccess: () => {
       queryClient.invalidateQueries(['posts', postId]);
       toast.success('댓글이 성공적으로 등록되었습니다.', {
-        position: 'top-right',
-        duration: 3000,
-        style: { fontSize: '14px' },
+        position: 'bottom-right',
+        duration: 4000,
       });
     },
     onError: () => {
       toast.error('로그인 후 사용해주세요.', {
-        position: 'top-right',
-        duration: 3000,
-        style: { fontSize: '14px' },
+        position: 'bottom-right',
+        duration: 4000,
       });
     },
   });

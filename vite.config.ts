@@ -6,7 +6,7 @@ import { createHtmlPlugin } from 'vite-plugin-html';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
 // import ViteFavicon from 'vite-plugin-favicon';
-import { ViteFaviconsPlugin } from 'vite-plugin-favicon';
+// import { ViteFaviconsPlugin } from 'vite-plugin-favicon';
 
 const fontsDirectory = resolve(__dirname, 'public/assets/fonts');
 
@@ -29,9 +29,9 @@ export default defineConfig({
   plugins: [
     react(),
     // ViteFavicon(),
-    ViteFaviconsPlugin({
-      logo: 'public/assets/logo.png',
-    }),
+    // ViteFaviconsPlugin({
+    //   logo: 'public/assets/logo.png',
+    // }),
     mkcert(),
     VitePluginHtmlEnv(),
     VitePluginHtmlEnv({
@@ -43,6 +43,11 @@ export default defineConfig({
       },
     }),
   ],
+  // test: {
+  //   globals: true,
+  //   environment: 'happy-dom',
+  //   include: ['src/components/**/*.test.ts', 'src/components/**/*.test.tsx'],
+  // },
   define: {
     'process.env': {},
   },

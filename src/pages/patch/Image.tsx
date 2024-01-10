@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { AnimatePresence, wrap, motion } from 'framer-motion';
-import LeftArrow from '../../../assets/icons/LeftArrow';
-import { RightArrow } from '../../../assets/icons/RightArrow';
+import LeftArrow from '../../assets/icons/LeftArrow';
+import { RightArrow } from '../../assets/icons/RightArrow';
 
 const variants = {
   enter: (direction: number) => {

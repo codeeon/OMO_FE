@@ -27,9 +27,8 @@ const UserResultItem: React.FC<Props> = ({
     const checkUserId = sessionStorage.getItem('userId');
     !checkUserId
       ? toast.error('로그인 후 이용해주세요.', {
-          position: 'top-right',
-          duration: 3000,
-          style: { fontSize: '14px' },
+          position: 'bottom-right',
+          duration: 4000,
         })
       : navigate(`/userpage/${nickname}`);
   };

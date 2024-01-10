@@ -37,10 +37,10 @@ const PlaceList: React.FC<Props> = ({
         ))}
       </PlaceCategoryContainer>
       <ContentsContainer>
-        <Virtuoso
+        <Virtuosos
           style={{ width: '100%', height: '100%' }}
           increaseViewportBy={0}
-          itemContent={(index, placeDb) => {
+          itemContent={(index, placeDb: LocationType) => {
             return <MapLocationCard key={index} placeDb={placeDb} />;
           }}
           data={placeDatas}
@@ -61,21 +61,37 @@ const Base = styled.div`
 
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
   &::-webkit-scrollbar {
-    width: 5px;
+    display: none;
+  }
+`;
+
+const Virtuosos = styled(Virtuoso)`
+  &::-webkit-scrollbar {
+    width: 15px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.color.border};
+    background-color: ${({ theme }) => theme.color.border2};
     border-radius: 20px;
+    border: 5px solid ${({ theme }) => theme.color.cardBg};
   }
 
   &::-webkit-scrollbar-track {
     background-color: transparent;
   }
+  &::-webkit-scrollbar-button:start:decrement,
+  &::-webkit-scrollbar-button:end:increment {
+    display: block;
+    height: 8px;
+    background-color: transparent;
+  }
 `;
+
 const PlaceCategoryContainer = styled.div`
   box-sizing: border-box;
   margin: 17px 20px;

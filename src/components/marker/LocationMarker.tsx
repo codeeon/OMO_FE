@@ -38,10 +38,12 @@ const LocationMarker: React.FC<Props> = ({
     [],
   );
 
-  const clikcMarkerHandler = useCallback(() => {
-    !isListOpen && setIsListOpen(true);
+  const clikcMarkerHandler = () => {
+    if (!isListOpen) {
+      setIsListOpen(true);
+    }
     selectPlaceHandler();
-  }, []);
+  };
 
   return (
     <OverlayViewF

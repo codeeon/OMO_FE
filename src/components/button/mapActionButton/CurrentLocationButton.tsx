@@ -6,14 +6,12 @@ import useMapStore from '../../../store/location/googleMapStore';
 import toast from 'react-hot-toast';
 
 const CurrentLocationButton = () => {
-  const [isLoading, setIsLoading] = React.useState(false);
   const { setCurrentLocation } = useMapStore();
 
   const moveMyLocation = async () => {
     try {
       toast.loading('현재 위치를 업데이트 중입니다...', {
-        position: 'top-right',
-        style: { marginTop: '50px', fontSize: '14px' },
+        position: 'bottom-right',
         id: '1',
       });
       const { latitude, longitude } = await getCurrentCoords();
@@ -21,11 +19,8 @@ const CurrentLocationButton = () => {
     } finally {
       toast.remove('1');
       toast.success('현재 위치를 업데이트하였습니다.', {
-        position: 'top-right',
-        style: { marginTop: '50px', fontSize: '14px' },
+        position: 'bottom-right',
       });
-
-      setIsLoading(false);
     }
   };
 
@@ -42,7 +37,7 @@ const BtnWrapper = styled.div`
   z-index: 3;
   position: absolute;
   right: 45px;
-  bottom: 140px;
+  top: 90px;
 
   display: flex;
   justify-content: center;
@@ -51,15 +46,14 @@ const BtnWrapper = styled.div`
   color: ${({ theme }) => theme.color.sub};
   font-size: 26px;
   background: ${({ theme }) => theme.color.bg};
-  border: 2px solid ${({ theme }) => theme.color.sub};
-  border-radius: 8px;
+  border: 1px solid ${({ theme }) => theme.color.sub};
+  border-radius: 15px;
 
   width: 40px;
   height: 40px;
 
   &:hover {
-    font-size: 28px;
-    background: #d9d9d9;
+    background: ${({ theme }) => theme.color.hover};
   }
 
   cursor: pointer;

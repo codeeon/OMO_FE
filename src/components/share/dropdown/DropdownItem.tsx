@@ -5,12 +5,23 @@ import styled from 'styled-components';
 interface Props {
   children: React.ReactNode;
   width?: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  textColor?: string;
 }
 
-const DropdownItem: React.FC<Props> = ({ children, width, onClick }) => {
+const DropdownItem: React.FC<Props> = ({
+  children,
+  width,
+  onClick,
+  textColor,
+}) => {
   return (
-    <Item variants={itemVariants} $width={width} onClick={onClick}>
+    <Item
+      variants={itemVariants}
+      $width={width}
+      onClick={onClick}
+      $textColor={textColor}
+    >
       {children}
     </Item>
   );
@@ -18,12 +29,13 @@ const DropdownItem: React.FC<Props> = ({ children, width, onClick }) => {
 
 export default DropdownItem;
 
-const Item = styled(motion.div)<{ $width?: string }>`
+const Item = styled(motion.div)<{ $width?: string; $textColor?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 15px 20px;
-  color: ${({ theme }) => theme.color.text};
+  color: ${({ theme, $textColor }) =>
+    $textColor ? $textColor : theme.color.text};
   font-size: 14px;
   font-weight: 700;
   width: ${({ $width }) => ($width ? $width : '50%')};
@@ -45,7 +57,7 @@ const itemVariants = {
   open: {
     opacity: 1,
     y: 0,
-    transition: { type: 'spring', stiffness: 300, damping: 24 },
+    transition: { type: 'spring', stiffness: 100, damping: 12 },
   },
-  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+  closed: { opacity: 0, y: 0, transition: { duration: 0.1 } },
 };

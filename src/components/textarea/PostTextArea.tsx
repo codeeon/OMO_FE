@@ -18,7 +18,7 @@ const PostTextArea: React.FC<{
     <Base>
       <TextArea
         placeholder="글을 입력하세요"
-        value={text}
+        value={text.replace(/<br\/>/g, '\r\n')}
         onChange={handleChange}
       />
       <CharacterCount>

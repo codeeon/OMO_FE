@@ -18,17 +18,20 @@ interface MenuProps {
   toggleDropdownHandler: (
     e: React.MouseEvent<HTMLButtonElement | HTMLDivElement>,
   ) => void;
+  position?: string;
 }
 
 const Menu: React.FC<MenuProps> = ({
   isOpen,
   refetch,
   toggleDropdownHandler,
+  position,
 }) => {
   return (
     <Base
-      variants={motionVariants}
+      variants={position === 'center' ? centerVariants : motionVariants}
       style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+      $position={position}
     >
       <MenuHeader
         refetch={refetch}
@@ -48,7 +51,7 @@ const Menu: React.FC<MenuProps> = ({
 
 export default Menu;
 
-const Base = styled(motion.div)`
+const Base = styled(motion.div)<{ $position?: string }>`
   display: flex;
   flex-direction: column;
   border-radius: 16px;
@@ -58,7 +61,7 @@ const Base = styled(motion.div)`
   height: 200px;
   position: absolute;
   top: 50px;
-  left: 0px;
+  left: ${({ $position }) => ($position === 'center' ? '-170px' : '0px')};
   z-index: 99;
 `;
 
@@ -67,6 +70,25 @@ const BodyContainer = styled(motion.div)`
   justify-content: start;
   align-items: start;
   overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 15px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.border2};
+    border-radius: 20px;
+    border: 5px solid ${({ theme }) => theme.color.cardBg};
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-button:start:decrement,
+  &::-webkit-scrollbar-button:end:increment {
+    display: block;
+    height: 8px;
+    background-color: transparent;
+  }
 `;
 
 const CityDivider = styled(motion.div)`
@@ -103,6 +125,27 @@ const motionVariants = {
   },
   closed: {
     clipPath: 'inset(0% 100% 100% 0% round 10px)',
+    transition: {
+      type: 'spring',
+      bounce: 0,
+      duration: 0.3,
+    },
+  },
+};
+
+const centerVariants = {
+  open: {
+    clipPath: 'inset(0% 0% 0% 0% round 10px)',
+    transition: {
+      type: 'spring',
+      bounce: 0,
+      duration: 0.7,
+      delayChildren: 0.3,
+      staggerChildren: 0.05,
+    },
+  },
+  closed: {
+    clipPath: 'inset(10% 50% 90% 50% round 10px)',
     transition: {
       type: 'spring',
       bounce: 0,

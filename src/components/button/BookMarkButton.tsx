@@ -8,6 +8,7 @@ import { BookmarkLocationType } from '../../model/interface';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
 import BookMarkIcon from '../../assets/icons/BookMarkIcon';
+
 const randomNumberBetween = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
@@ -30,7 +31,9 @@ const BookMarkButton: React.FC<Props> = ({
   right,
 }) => {
   const [scope, animate] = useAnimate();
-  const [isBookMarking, setIsBookMarking] = useState(false);
+  const [isBookMarking, setIsBookMarking] = useState<boolean | undefined>(
+    false,
+  );
   const userId = sessionStorage.getItem('userId');
 
   const { data, refetch, isLoading, isFetching } = useGetBookmarkQuery();
@@ -88,9 +91,8 @@ const BookMarkButton: React.FC<Props> = ({
     ]);
     if (!userId)
       return toast.error('로그인 후 이용해주세요.', {
-        position: 'top-right',
-        duration: 3000,
-        style: { fontSize: '14px' },
+        position: 'bottom-right',
+        duration: 4000,
       });
     if (!isBookMarking) {
       animate([
@@ -158,7 +160,7 @@ const Container = styled.div<{
   left: ${({ $left }) => ($left ? $left : null)};
 `;
 
-const Button = styled(motion.div)<{ $isBookMarking: boolean }>`
+const Button = styled(motion.div)<{ $isBookMarking?: boolean }>`
   position: relative;
   display: inline-flex;
   padding: 10px 16px;

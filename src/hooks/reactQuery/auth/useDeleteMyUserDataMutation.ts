@@ -15,9 +15,8 @@ const useDeleteMyDataMutation = () => {
   const mutation = useMutation(deleteMyData, {
     onSuccess: () => {
       toast.success('회원 탈퇴를 완료하였습니다.', {
-        position: 'top-right',
-        duration: 3000,
-        style: { fontSize: '14px' },
+        position: 'bottom-right',
+        duration: 4000,
       });
       navigate('/');
     },

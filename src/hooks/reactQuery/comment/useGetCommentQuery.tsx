@@ -16,7 +16,6 @@ const getComments = async (
   const response = await authApi.get(`/api/posts/${postId}/comments`, {
     params,
   });
-  console.log(response);
   return response.data;
 };
 

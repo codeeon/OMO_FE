@@ -2,7 +2,6 @@ import React from 'react';
 import { LuPlus } from 'react-icons/lu';
 import { LuMinus } from 'react-icons/lu';
 import styled from 'styled-components';
-import { handleLevel } from '../../../utils/kakao.ts';
 
 interface Props {
   downMapLevelHandler: () => void;
@@ -35,7 +34,7 @@ const Base = styled.div`
 
   position: absolute;
   right: 45px;
-  bottom: 45px;
+  top: 140px;
   z-index: 2;
 `;
 
@@ -48,16 +47,15 @@ const BtnWrapper = styled.div`
   height: 40px;
   background: ${({ theme }) => theme.color.bg};
   font-size: 26px;
-  border: 2px solid ${({ theme }) => theme.color.sub};
+  border: 1px solid ${({ theme }) => theme.color.sub};
   &:hover {
-    font-size: 28px;
-    background: #d9d9d9;
+    background: ${({ theme }) => theme.color.hover};
   }
   cursor: pointer;
   &:first-child {
-    border-radius: 8px 8px 0 0;
+    border-radius: 15px 15px 0 0;
   }
   &:last-child {
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 15px 15px;
   }
 `;

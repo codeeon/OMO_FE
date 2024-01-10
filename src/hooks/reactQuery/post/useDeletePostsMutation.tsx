@@ -13,8 +13,7 @@ const useDeleteContentMutation = () => {
       queryClient.invalidateQueries('posts');
       toast.success('게시물이 성공적으로 삭제되었어요.', {
         position: 'bottom-right',
-        duration: 3000,
-        style: { fontSize: '14px' },
+        duration: 4000,
       });
     },
   });
