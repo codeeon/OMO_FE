@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../axios/api';
 import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
 import Done from '../components/auth/signup/Done';
+
+import Input1 from '../components/input/authInput/Input1';
+import LargeButton from '../components/button/authButton/LargeButton';
+
+// 이 타입은 중복 사용이 되니까, 분리해서 재사용하면 좋을 듯
+type Checking = 'rejected' | 'confirmed' | 'retry' | '';
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -16,19 +21,25 @@ const SignUp: React.FC = () => {
     userId && (alert('회원가입은 로그아웃 후 이용해 주세요.'), navigate('/'));
   }, []);
 
-  const [email, setEmail] = useState<string>();
-  const [code, setCode] = useState<string>();
+  const [email, setEmail] = useState<string>('');
+  const [code, setCode] = useState<string>('');
 
   // union type
-  const [emailCheck, setEmailCheck] = useState<string>('');
-  const [codeCheck, setCodeCheck] = useState<string>('');
+  const [emailCheck, setEmailCheck] = useState<Checking>('');
+  const [codeCheck, setCodeCheck] = useState<Checking>('');
 
   const [confirmedEmail, setConfirmedEmail] = useState<string>('');
   const [isValidated, setIsValidated] = useState<boolean>(false);
-  const [registerPage, setRegisterPage] = useState<number>(1); // enum
+  const [registerPage, setRegisterPage] = useState<
+    '이메일 인증' | '회원가입' | '가입완료'
+  >('이메일 인증'); // enum
 
   const title =
-    registerPage === 2 ? '회원가입' : registerPage === 1 ? '이메일 인증' : null;
+    registerPage === '이메일 인증'
+      ? '이메일 인증'
+      : registerPage === '회원가입'
+      ? '회원가입'
+      : null;
   const checkingEmail =
     emailCheck === 'rejected'
       ? '올바른 이메일이 아니거나, 이미 가입한 이메일입니다.'
@@ -44,12 +55,12 @@ const SignUp: React.FC = () => {
       ? '전송된 메일의 인증번호를 입력해주세요.'
       : '';
 
-  const onChangeEmail = (e) => {
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     (emailCheck === 'confirmed' || codeCheck === 'confirmed') &&
       (setEmailCheck('retry'), setCodeCheck(''), setIsValidated(false));
   };
-  const onChangeCode = (e) => {
+  const onChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCode(e.target.value);
     codeCheck === 'confirmed' &&
       (setEmailCheck('retry'), setCodeCheck(''), setIsValidated(false));
@@ -102,7 +113,7 @@ const SignUp: React.FC = () => {
 
   const onClickNextStep = () => {
     isValidated && emailCheck === 'confirmed' && codeCheck === 'confirmed'
-      ? setRegisterPage(2)
+      ? setRegisterPage('회원가입')
       : emailCheck === 'confirmed'
       ? setCodeCheck('rejected')
       : setEmailCheck('rejected');
@@ -111,17 +122,17 @@ const SignUp: React.FC = () => {
   return (
     <Base>
       <RegisterBox>
-        {registerPage === 3 ? (
-          <Done setRegisterPage={setRegisterPage} />
+        {registerPage === '가입완료' ? (
+          <Done />
         ) : (
           <div>
             <Title>{title}</Title>
             <Step>
               <Number $validation={true}>1</Number>
               <Bar $validation={isValidated} />
-              <Number $validation={registerPage === 2}>2</Number>
+              <Number $validation={registerPage === '회원가입'}>2</Number>
             </Step>
-            {registerPage === 2 ? (
+            {registerPage === '회원가입' ? (
               <Register
                 confirmedEmail={confirmedEmail}
                 setRegisterPage={setRegisterPage}
@@ -132,8 +143,9 @@ const SignUp: React.FC = () => {
                   <InputBox>
                     <div>
                       <div>
-                        <Input
+                        <Input1
                           $check={emailCheck}
+                          $width="284px"
                           placeholder="이메일을 입력해 주세요"
                           value={email}
                           onChange={onChangeEmail}
@@ -149,8 +161,9 @@ const SignUp: React.FC = () => {
                     </div>
                     <div>
                       <div>
-                        <Input
+                        <Input1
                           $check={codeCheck}
+                          $width="284px"
                           placeholder="인증번호를 입력해 주세요"
                           value={code}
                           onChange={onChangeCode}
@@ -167,24 +180,24 @@ const SignUp: React.FC = () => {
                   </InputBox>
                   <Retry>
                     <Text $fontSize="14px">이메일이 오지 않았나요?</Text>
-                    <Link
-                      style={{ textDecoration: 'none' }}
+                    <Text
+                      $fontSize="14px"
+                      color="#44A5FF"
                       onClick={() => checkEmailMutation.mutate(email)}
+                      style={{ cursor: 'pointer' }}
                     >
-                      <Text $fontSize="14px" color="#44A5FF">
-                        인증메일 재전송
-                      </Text>
-                    </Link>
+                      인증메일 재전송
+                    </Text>
                   </Retry>
                 </EmailBox>
                 <div style={{ height: '214px' }}>
                   <div>
-                    <LargeBtn
+                    <LargeButton
                       onClick={onClickNextStep}
                       $validation={isValidated}
                     >
                       다음
-                    </LargeBtn>
+                    </LargeButton>
                   </div>
                   <div
                     style={{
@@ -291,29 +304,6 @@ const InputBox = styled.div`
   box-sizing: border-box;
 `;
 
-const Input = styled.input<{ $check: string }>`
-  box-sizing: border-box;
-  width: 284px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  border-color: ${({ $check }) =>
-    $check === 'rejected'
-      ? '#FF3263'
-      : $check === 'confirmed'
-      ? '#0BD961'
-      : '#D9D9D9'};
-  background: none;
-  padding: 0 15px;
-  &::placeholder {
-    color: ${({ theme }) => theme.color.sub2};
-    font-size: 14px;
-    font-weight: 700;
-  }
-  color: ${({ theme, $check }) => theme.color.text};
-`;
-
 const SmallBtn = styled.button`
   box-sizing: border-box;
   width: 106px;
@@ -331,20 +321,6 @@ const SmallBtn = styled.button`
   box-sizing: border-box;
 `;
 
-const Text = styled.div<{
-  $color?: string;
-  $fontSize?: string;
-  $fontWeight?: string;
-}>`
-  color: ${({ color }) => color || '#666'};
-  text-align: center;
-  font-size: ${({ $fontSize }) => $fontSize || '16px'};
-  font-style: normal;
-  font-weight: ${({ $fontWeight }) => $fontWeight || '700'};
-  line-height: 100%;
-  box-sizing: border-box;
-`;
-
 const Retry = styled.div`
   display: flex;
   align-items: center;
@@ -354,21 +330,14 @@ const Retry = styled.div`
   box-sizing: border-box;
 `;
 
-const LargeBtn = styled.button<{ $validation: boolean }>`
-  width: 400px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  background: ${({ $validation, theme }) =>
-    $validation ? '#f97393' : theme.color.btnBg};
-  border: none;
-  margin: 0 0 61px 0;
-  color: #fff;
+const Text = styled.div<{
+  $color?: string;
+  $fontSize?: string;
+  $fontWeight?: string;
+}>`
+  color: ${({ $color }) => $color || '#666'};
   text-align: center;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
-  cursor: pointer;
+  font-size: ${({ $fontSize }) => $fontSize || '16px'};
+  font-weight: ${({ $fontWeight }) => $fontWeight || '700'};
   box-sizing: border-box;
 `;

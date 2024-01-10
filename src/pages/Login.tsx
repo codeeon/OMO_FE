@@ -6,6 +6,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import KakaoLogin from '../components/auth/KakaoLogin';
 import api from '..//axios/api';
 
+import Input1 from '../components/input/authInput/Input1';
+
 interface LoginData {
   email: string;
   password: string;
@@ -57,6 +59,10 @@ const Login: React.FC = () => {
     mutation.mutate(data);
   };
 
+  const Input = styled(Input1)`
+    margin-top: 20px;
+  `;
+
   return (
     <Base>
       <LoginBox>
@@ -67,12 +73,12 @@ const Login: React.FC = () => {
               placeholder="이메일을 입력해주세요."
               type="email"
               autoComplete="none"
-              {...register('email')}
+              register={register('email')}
             />
             <Input
               placeholder="비밀번호를 입력해주세요."
               type="password"
-              {...register('password')}
+              register={register('password')}
             />
           </InputBox>
           <LargeBtn>
@@ -141,24 +147,26 @@ const InputBox = styled.div`
   flex-direction: column;
   justify-content: center;
   margin-bottom: 50px;
+  gap: 20px;
+  padding-top: 20px;
 `;
 
-const Input = styled.input`
-  width: 370px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  background: ${({ theme }) => theme.color.cardBg};
-  margin-top: 20px;
-  padding: 0 15px;
-  &::placeholder {
-    color: ${({ theme }) => theme.color.sub};
-    font-size: 14px;
-    font-weight: 700;
-  }
-  color: ${({ theme }) => theme.color.text};
-`;
+// const Input1 = styled.input`
+//   width: 370px;
+//   height: 50px;
+//   flex-shrink: 0;
+//   border-radius: 4px;
+//   border: 1px solid ${({ theme }) => theme.color.border};
+//   background: ${({ theme }) => theme.color.cardBg};
+//   margin-top: 20px;
+//   padding: 0 15px;
+//   &::placeholder {
+//     color: ${({ theme }) => theme.color.sub};
+//     font-size: 14px;
+//     font-weight: 700;
+//   }
+//   color: ${({ theme }) => theme.color.text};
+// `;
 
 const LargeBtn = styled.button`
   width: 400px;

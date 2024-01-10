@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,7 +69,7 @@ const Text = styled.div`
   margin-top: 23px;
 `;
 
-const LargeBtn = styled.button<{ $validation: boolean }>`
+const LargeBtn = styled.button`
   width: 400px;
   height: 50px;
   flex-shrink: 0;

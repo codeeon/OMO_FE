@@ -16,7 +16,7 @@ const useDeleteMyDataMutation = () => {
     onSuccess: () => {
       toast.success('회원 탈퇴를 완료하였습니다.', {
         position: 'top-right',
-        duration: 4000,
+        duration: 3000,
         style: { fontSize: '14px' },
       });
       navigate('/');

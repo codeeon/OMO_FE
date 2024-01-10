@@ -29,7 +29,7 @@ const usePostContentMutate = () => {
       queryClient.invalidateQueries('posts');
       toast.success('게시물 업로드 성공!', {
         position: 'top-right',
-        duration: 4000,
+        duration: 3000,
         style: { fontSize: '14px' },
       });
     },

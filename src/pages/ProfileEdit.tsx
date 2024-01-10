@@ -174,7 +174,7 @@ const ProfileEdit = () => {
         error.response.status === 500 &&
           toast.error('동일한 비밀번호입니다.', {
             position: 'top-right',
-            duration: 4000,
+            duration: 3000,
             style: { fontSize: '14px' },
           }),
           setPasswordCheck(''),

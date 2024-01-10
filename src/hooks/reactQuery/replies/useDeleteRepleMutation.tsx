@@ -31,7 +31,7 @@ const useDeleteRepleMutation = ({ contentId }: { contentId: number }) => {
       queryClient.invalidateQueries(['posts', contentId]);
       toast.success('대댓글이 성공적으로 삭제되었어요.', {
         position: 'top-right',
-        duration: 4000,
+        duration: 3000,
         style: { fontSize: '14px' },
       });
     },

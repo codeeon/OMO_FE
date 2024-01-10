@@ -27,7 +27,7 @@ const useDeleteBookmarkMutation = (locationId: number | undefined) => {
     onSuccess: () => {
       toast.success('북마크가 삭제되었습니다.', {
         position: 'top-right',
-        duration: 4000,
+        duration: 3000,
         style: { fontSize: '14px' },
       });
     },
@@ -35,7 +35,7 @@ const useDeleteBookmarkMutation = (locationId: number | undefined) => {
       queryClient.setQueryData('bookmarkPlaces', context?.previousLocationData);
       toast.error('북마크 저장에 실패했습니다.', {
         position: 'top-right',
-        duration: 4000,
+        duration: 3000,
         style: { fontSize: '14px' },
       });
     },

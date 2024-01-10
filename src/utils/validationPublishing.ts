@@ -9,7 +9,7 @@ export const validatePublishing = (
   if (fileLength === 0) {
     toast.error('이미지를 추가해주세요.', {
       position: 'top-right',
-      duration: 4000,
+      duration: 3000,
       style: { fontSize: '14px' },
     });
     return false;
@@ -17,7 +17,7 @@ export const validatePublishing = (
   if (!PlaceName) {
     toast.error('장소에 대한 위치를 지정해주세요.', {
       position: 'top-right',
-      duration: 4000,
+      duration: 3000,
       style: { fontSize: '14px' },
     });
     return false;
@@ -25,7 +25,7 @@ export const validatePublishing = (
   if (starNum < 1) {
     toast.error('별점을 지정해주세요.', {
       position: 'top-right',
-      duration: 4000,
+      duration: 3000,
       style: { fontSize: '14px' },
     });
     return false;
@@ -33,7 +33,7 @@ export const validatePublishing = (
   if (!text) {
     toast.error('장소에 대한 내용을 적어주세요.', {
       position: 'top-right',
-      duration: 4000,
+      duration: 3000,
       style: { fontSize: '14px' },
     });
     return false;
@@ -41,7 +41,7 @@ export const validatePublishing = (
   if (text.length <= 10) {
     toast.error('장소에 대한 내용은 10자 이상 적어주세요.', {
       position: 'top-right',
-      duration: 4000,
+      duration: 3000,
       style: { fontSize: '14px' },
     });
     return false;

@@ -59,7 +59,7 @@ const NavDropdown = () => {
       setErrorType('required');
       toast.error('로그인 후 이용해주세요.', {
         position: 'top-right',
-        duration: 4000,
+        duration: 3000,
         style: { fontSize: '14px' },
       });
       setIsOpen(false);

@@ -53,7 +53,7 @@ const List = () => {
     if (!userId) {
       return toast.error('로그인 후 작성 가능합니다.', {
         position: 'top-right',
-        duration: 4000,
+        duration: 3000,
         style: { fontSize: '14px' },
       });
     }

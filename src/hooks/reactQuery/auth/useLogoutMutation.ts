@@ -31,7 +31,7 @@ const useLogoutMutation = () => {
         sessionStorage.removeItem('userId');
         toast.success('로그아웃이 완료되었습니다.', {
           position: 'top-right',
-          duration: 4000,
+          duration: 3000,
           style: { fontSize: '14px' },
         });
       },
