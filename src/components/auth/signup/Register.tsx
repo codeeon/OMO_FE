@@ -8,6 +8,8 @@ import Check from './Check';
 
 import Input1 from '../../input/authInput/Input1';
 import LargeButton from '../../button/authButton/LargeButton';
+import SmallButton from '../../button/authButton/SmallButton';
+import Text1 from '../../text/Text1';
 
 interface RegisterProps {
   confirmedEmail: string;
@@ -155,12 +157,12 @@ const Register: React.FC = (props: RegisterProps) => {
               value={nickname}
               onChange={onValidNickname}
             />
-            <SmallBtn
+            <SmallButton
               onClick={() => checkNicknameMutation.mutate(nickname)}
               type="button"
             >
               중복체크
-            </SmallBtn>
+            </SmallButton>
           </div>
           <Check verifyCheck={nicknameCheck}>{checkingNickname}</Check>
         </div>
@@ -208,12 +210,12 @@ const Register: React.FC = (props: RegisterProps) => {
             alignItems: 'center',
           }}
         >
-          <Text>기존 회원이신가요?</Text>
+          <Text1 $color="sub">기존 회원이신가요?</Text1>
           <Link
             style={{ textDecoration: 'none', marginLeft: '10px' }}
             to="/login"
           >
-            <Text color="#44a5ff">로그인</Text>
+            <Text1 $color="link">로그인</Text1>
           </Link>
         </div>
       </div>
@@ -238,28 +240,4 @@ const Form = styled.form`
   box-sizing: border-box;
   height: 380px;
   gap: 30px;
-`;
-
-const SmallBtn = styled.button`
-  width: 106px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid #f97393;
-  margin-left: 10px;
-  color: #f97393;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  box-sizing: border-box;
-  background-color: ${({ theme }) => theme.color.locBg};
-`;
-
-const Text = styled.span`
-  color: ${(props) => props.color || '#666'};
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-  box-sizing: border-box;
 `;

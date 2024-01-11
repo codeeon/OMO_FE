@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Input1 = styled.input<{ $width: string; $check: string }>`
+const Input1 = styled.input<{ $width?: string; $check?: string }>`
   width: ${({ $width }) => $width || '400px'};
   color: ${({ theme }) => theme.color.text};
   height: 50px;

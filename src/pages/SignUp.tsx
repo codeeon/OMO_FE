@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { ThemeConsumer } from 'styled-components';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../axios/api';
 import Check from '../components/auth/signup/Check';
 import Register from '../components/auth/signup/Register';
 import Done from '../components/auth/signup/Done';
+import toast from 'react-hot-toast';
 
 import Input1 from '../components/input/authInput/Input1';
 import LargeButton from '../components/button/authButton/LargeButton';
+import SmallButton from '../components/button/authButton/SmallButton';
+import Text1 from '../components/text/Text1';
+import Title1 from '../components/text/Title1';
 
 // 이 타입은 중복 사용이 되니까, 분리해서 재사용하면 좋을 듯
 type Checking = 'rejected' | 'confirmed' | 'retry' | '';
@@ -18,7 +22,7 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     const userId = sessionStorage.getItem('userId');
-    userId && (alert('회원가입은 로그아웃 후 이용해 주세요.'), navigate('/'));
+    userId && (alert('로그아웃 후 이용해 주세요.'), navigate('/'));
   }, []);
 
   const [email, setEmail] = useState<string>('');
@@ -79,12 +83,24 @@ const SignUp: React.FC = () => {
         } else {
           setEmailCheck('rejected');
         }
+        toast.loading('메일을 확인 중입니다.', {
+          position: 'bottom-right',
+          duration: 4000,
+        });
       },
       onSuccess: () => {
         emailCheck === 'confirmed' ? setEmailCheck('confirmed') : null;
+        toast.success('인증메일이 전송되었습니다.', {
+          position: 'bottom-right',
+          duration: 4000,
+        });
       },
       onError: () => {
         setEmailCheck('rejected');
+        toast.error('인증메일 전송에 실패하였습니다.', {
+          position: 'bottom-right',
+          duration: 4000,
+        });
       },
     },
   );
@@ -128,9 +144,20 @@ const SignUp: React.FC = () => {
           <div>
             <Title>{title}</Title>
             <Step>
-              <Number $validation={true}>1</Number>
+              <Number
+                onClick={() => setRegisterPage('이메일 인증')}
+                $validation={true}
+                style={{ cursor: 'pointer' }}
+              >
+                1
+              </Number>
               <Bar $validation={isValidated} />
-              <Number $validation={registerPage === '회원가입'}>2</Number>
+              <Number
+                onClick={onClickNextStep}
+                $validation={registerPage === '회원가입'}
+              >
+                2
+              </Number>
             </Step>
             {registerPage === '회원가입' ? (
               <Register
@@ -151,11 +178,11 @@ const SignUp: React.FC = () => {
                           onChange={onChangeEmail}
                           type="text"
                         />
-                        <SmallBtn
+                        <SmallButton
                           onClick={() => checkEmailMutation.mutate(email)}
                         >
                           인증메일 전송
-                        </SmallBtn>
+                        </SmallButton>
                       </div>
                       <Check verifyCheck={emailCheck}>{checkingEmail}</Check>
                     </div>
@@ -169,25 +196,27 @@ const SignUp: React.FC = () => {
                           onChange={onChangeCode}
                           type="text"
                         />
-                        <SmallBtn
+                        <SmallButton
                           onClick={() => checkCodeMutation.mutate(code)}
                         >
                           인증번호 확인
-                        </SmallBtn>
+                        </SmallButton>
                       </div>
                       <Check verifyCheck={codeCheck}>{checkingCode}</Check>
                     </div>
                   </InputBox>
                   <Retry>
-                    <Text $fontSize="14px">이메일이 오지 않았나요?</Text>
-                    <Text
+                    <Text1 $color="sub" $fontSize="14px">
+                      이메일이 오지 않았나요?
+                    </Text1>
+                    <Text1
                       $fontSize="14px"
-                      color="#44A5FF"
+                      $color="link"
                       onClick={() => checkEmailMutation.mutate(email)}
                       style={{ cursor: 'pointer' }}
                     >
                       인증메일 재전송
-                    </Text>
+                    </Text1>
                   </Retry>
                 </EmailBox>
                 <div style={{ height: '214px' }}>
@@ -206,12 +235,12 @@ const SignUp: React.FC = () => {
                       alignItems: 'center',
                     }}
                   >
-                    <Text>기존 회원이신가요?</Text>
+                    <Text1 $color="sub">기존 회원이신가요?</Text1>
                     <Link
                       style={{ textDecoration: 'none', marginLeft: '10px' }}
                       to="/login"
                     >
-                      <Text color="#44a5ff">로그인</Text>
+                      <Text1 $color="link">로그인</Text1>
                     </Link>
                   </div>
                 </div>
@@ -249,11 +278,7 @@ const RegisterBox = styled.div`
   background: ${({ theme }) => theme.color.cardBg};
 `;
 
-const Title = styled.div`
-  color: ${({ theme }) => theme.color.text};
-  text-align: center;
-  font-size: 32px;
-  font-weight: 700;
+const Title = styled(Title1)`
   margin: 83px 0 25px 0;
 `;
 
@@ -268,12 +293,9 @@ const Number = styled.div<{ $validation: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: 20px;
   height: 20px;
-
   border-radius: 100%;
-
   background-color: ${({ $validation, theme }) =>
     $validation ? theme.color.primary : theme.color.border};
   color: ${({ $validation, theme }) =>
@@ -281,6 +303,7 @@ const Number = styled.div<{ $validation: boolean }>`
   font-size: 14px;
   font-weight: 700;
   line-height: 100%;
+  cursor: pointer;
 `;
 
 const Bar = styled.div<{ $validation: boolean }>`
@@ -304,23 +327,6 @@ const InputBox = styled.div`
   box-sizing: border-box;
 `;
 
-const SmallBtn = styled.button`
-  box-sizing: border-box;
-  width: 106px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  background-color: ${({ theme }) => theme.color.locBg};
-  border: 1px solid #f97393;
-  margin-left: 10px;
-  color: #f97393;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  box-sizing: border-box;
-`;
-
 const Retry = styled.div`
   display: flex;
   align-items: center;
@@ -330,14 +336,14 @@ const Retry = styled.div`
   box-sizing: border-box;
 `;
 
-const Text = styled.div<{
-  $color?: string;
-  $fontSize?: string;
-  $fontWeight?: string;
-}>`
-  color: ${({ $color }) => $color || '#666'};
-  text-align: center;
-  font-size: ${({ $fontSize }) => $fontSize || '16px'};
-  font-weight: ${({ $fontWeight }) => $fontWeight || '700'};
-  box-sizing: border-box;
-`;
+// const Text = styled.div<{
+//   $color?: string;
+//   $fontSize?: string;
+//   $fontWeight?: string;
+// }>`
+//   color: ${({ $color }) => $color || '#666'};
+//   text-align: center;
+//   font-size: ${({ $fontSize }) => $fontSize || '16px'};
+//   font-weight: ${({ $fontWeight }) => $fontWeight || '700'};
+//   box-sizing: border-box;
+// `;

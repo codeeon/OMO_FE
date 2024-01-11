@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const LargeButton = styled.button<{ $validation: boolean }>`
+const LargeButton = styled.button<{ $validation?: boolean }>`
   width: 400px;
   height: 50px;
   flex-shrink: 0;
