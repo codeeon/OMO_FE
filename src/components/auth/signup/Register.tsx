@@ -4,8 +4,17 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
 import api from '../../../axios/api';
-import useInput from '../../../hooks/useInput';
 import Check from './Check';
+
+import Input1 from '../../input/authInput/Input1';
+import LargeButton from '../../button/authButton/LargeButton';
+import SmallButton from '../../button/authButton/SmallButton';
+import Text1 from '../../text/Text1';
+
+interface RegisterProps {
+  confirmedEmail: string;
+  setRegisterPage: React.Dispatch<React.SetStateAction<number>>;
+}
 
 interface UserEmail {
   email: string;
@@ -19,14 +28,14 @@ interface SignUpData {
 
 interface UserData extends UserEmail, SignUpData {}
 
-const Register: React.FC = (props: string) => {
+const Register: React.FC = (props: RegisterProps) => {
   const { confirmedEmail, setRegisterPage } = props;
 
   const { register, handleSubmit, setError, trigger } = useForm<SignUpData>({
     mode: 'onChange',
   });
 
-  const [nickname, setNickname] = useState();
+  const [nickname, setNickname] = useState<string>('');
 
   const [nicknameCheck, setNicknameCheck] = useState<string>('');
   const [confirmedNickname, setConfirmedNickname] = useState<string>('');
@@ -61,7 +70,7 @@ const Register: React.FC = (props: string) => {
       ? '비밀번호가 일치합니다.'
       : '';
 
-  const onValidNickname = (e) => {
+  const onValidNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
     nicknameCheck === 'confirmed' && setNicknameCheck('retry');
   };
@@ -119,12 +128,12 @@ const Register: React.FC = (props: string) => {
     },
     {
       onSuccess: () => {
-        setRegisterPage(3);
+        setRegisterPage('가입완료');
       },
     },
   );
 
-  const onClickSubmit = async (data: SignUpData): void => {
+  const onClickSubmit = async (data: UserData): Promise<void> => {
     data.email = confirmedEmail;
     data.nickname = confirmedNickname;
 
@@ -140,28 +149,28 @@ const Register: React.FC = (props: string) => {
       <InputBox>
         <div>
           <div>
-            <Input
-              check={nicknameCheck}
-              width="284px"
+            <Input1
+              $check={nicknameCheck}
+              $width="284px"
               placeholder="닉네임을 입력해 주세요.  (2~15자)"
               type="text"
               value={nickname}
               onChange={onValidNickname}
             />
-            <SmallBtn
+            <SmallButton
               onClick={() => checkNicknameMutation.mutate(nickname)}
               type="button"
             >
               중복체크
-            </SmallBtn>
+            </SmallButton>
           </div>
           <Check verifyCheck={nicknameCheck}>{checkingNickname}</Check>
         </div>
         <Form onChange={handleSubmit(onValidPw)}>
           <div>
             <div>
-              <Input
-                check={passwordCheck}
+              <Input1
+                $check={passwordCheck}
                 placeholder="비밀번호를 입력해 주세요.  (6자 이상, 영문, 숫자 필수)"
                 type="password"
                 {...register('password')}
@@ -171,8 +180,8 @@ const Register: React.FC = (props: string) => {
           </div>
           <div>
             <div>
-              <Input
-                check={confirmedPasswordCheck}
+              <Input1
+                $check={confirmedPasswordCheck}
                 placeholder="비밀번호를 한 번 더 입력해 주세요."
                 type="password"
                 {...register('confirmedPassword')}
@@ -186,13 +195,13 @@ const Register: React.FC = (props: string) => {
       </InputBox>
       <div style={{ height: '214px' }}>
         <div>
-          <LargeBtn
+          <LargeButton
             type="button"
             onClick={handleSubmit(onClickSubmit)}
-            validation={allValidated}
+            $validation={allValidated}
           >
             회원가입 완료
-          </LargeBtn>
+          </LargeButton>
         </div>
         <div
           style={{
@@ -201,12 +210,12 @@ const Register: React.FC = (props: string) => {
             alignItems: 'center',
           }}
         >
-          <Text>기존 회원이신가요?</Text>
+          <Text1 $color="sub">기존 회원이신가요?</Text1>
           <Link
             style={{ textDecoration: 'none', marginLeft: '10px' }}
             to="/login"
           >
-            <Text color="#44a5ff">로그인</Text>
+            <Text1 $color="link">로그인</Text1>
           </Link>
         </div>
       </div>
@@ -231,76 +240,4 @@ const Form = styled.form`
   box-sizing: border-box;
   height: 380px;
   gap: 30px;
-`;
-
-const SmallBtn = styled.button`
-  width: 106px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid #f97393;
-  margin-left: 10px;
-  color: #f97393;
-  text-align: center;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
-  cursor: pointer;
-  box-sizing: border-box;
-  background-color: ${({ theme }) => theme.color.locBg};
-`;
-
-const Input = styled.input`
-  width: ${({ width }) => width || '400px'};
-  color: ${({ theme }) => theme.color.text};
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  border-color: ${({ check }) =>
-    check === 'rejected'
-      ? 'var(--error_accent, #FF3263)'
-      : check === 'confirmed'
-      ? '#0BD961'
-      : '#D9D9D9'};
-  background: none;
-  padding: 0 15px;
-  &::placeholder {
-    color: #a5a5a5;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 100%;
-  }
-  box-sizing: border-box;
-`;
-
-const LargeBtn = styled.button`
-  width: 400px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  background: ${({ validation }) =>
-    validation ? 'var(--primary, #f97393)' : 'var(--light-5_btn_bg, #B1B1B1)'};
-  border: none;
-  margin: 0 0 61px 0;
-  color: #fff;
-  text-align: center;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
-  cursor: pointer;
-  box-sizing: border-box;
-`;
-
-const Text = styled.span`
-  color: ${(props) => props.color || '#666'};
-  text-align: center;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
-  box-sizing: border-box;
 `;

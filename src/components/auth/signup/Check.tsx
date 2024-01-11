@@ -3,15 +3,17 @@ import styled from 'styled-components';
 
 const Check = (props) => {
   const { verifyCheck, children } = props;
+
+  const icon =
+    verifyCheck === 'rejected'
+      ? reject
+      : verifyCheck === 'confirmed'
+      ? confirm
+      : '';
+
   return (
     <Base check={verifyCheck}>
-      <Icon>
-        {verifyCheck === 'rejected'
-          ? reject
-          : verifyCheck === 'confirmed'
-          ? confirm
-          : ''}
-      </Icon>
+      <Icon>{icon}</Icon>
       <Text check={verifyCheck}>{children}</Text>
     </Base>
   );

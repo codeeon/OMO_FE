@@ -1,6 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+
+import LargeButton from '../../button/authButton/LargeButton';
+import Text1 from '../../text/Text1';
+import Title1 from '../../text/Title1';
 
 const Done = () => {
   const navigate = useNavigate();
@@ -9,8 +13,11 @@ const Done = () => {
     <>
       <Badge>{badge}</Badge>
       <Title>회원가입 완료</Title>
-      <Text>오늘 모하지 회원가입이 완료되었습니다</Text>
-      <Text>이제 서비스를 즐기러 가볼까요?</Text>
+      <Text $color="sub">
+        오늘 모하지 회원가입이 완료되었습니다
+        <br />
+        이제 서비스를 즐기러 가볼까요?
+      </Text>
       <LargeBtn onClick={() => navigate('/login')}>로그인 하러가기</LargeBtn>
     </>
   );
@@ -52,37 +59,16 @@ const Badge = styled.div`
   margin-top: 202px;
 `;
 
-const Title = styled.div`
-  color: ${({ theme }) => theme.color.text};
-  text-align: center;
-  font-size: 32px;
-  font-weight: 700;
+const Title = styled(Title1)`
   margin-top: 37px;
 `;
 
-const Text = styled.div`
-  color: ${({ theme }) => theme.color.sub};
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 140%;
-  margin-top: 23px;
+const LargeBtn = styled(LargeButton)`
+  background: #f97393;
+  margin-top: 95px;
 `;
 
-const LargeBtn = styled.button<{ $validation: boolean }>`
-  width: 400px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  background: #f97393;
-  border: none;
-  color: #fff;
-  text-align: center;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
-  cursor: pointer;
-  box-sizing: border-box;
-  margin-top: 95px;
+const Text = styled(Text1)`
+  margin-top: 23px;
+  line-height: 140%;
 `;

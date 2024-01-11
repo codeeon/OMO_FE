@@ -14,6 +14,10 @@ import WithdrawModal from '../components/auth/mypage/edit/WithdrawModal';
 import SubModal from '../components/Modal/SubModal';
 import toast from 'react-hot-toast';
 
+import Input1 from '../components/input/authInput/Input1';
+import SmallButton from '../components/button/authButton/SmallButton';
+import Text1 from '../components/text/Text1';
+
 interface UserEmail {
   email: string;
 }
@@ -212,7 +216,7 @@ const ProfileEdit = () => {
       <Title>내 정보 수정</Title>
       <ProfileBox>
         <Profile>
-          <Text $fontSize="24px">프로필 수정</Text>
+          <Text1 $fontSize="24px">프로필 수정</Text1>
           <ImgContatiner>
             <ProfileImage
               imageURL={imageURL}
@@ -223,9 +227,9 @@ const ProfileEdit = () => {
           </ImgContatiner>
           <InputContainer>
             <InputWrapper>
-              <Text style={{ marginBottom: '6px' }}>닉네임</Text>
+              <Text1 style={{ marginBottom: '6px' }}>닉네임</Text1>
               <div>
-                <Input
+                <Input1
                   $check={nicknameCheck}
                   $width="284px"
                   placeholder={`${myData?.data.nickname}  (2~15자)`}
@@ -233,7 +237,7 @@ const ProfileEdit = () => {
                   value={nickname}
                   onChange={onValidNickname}
                 />
-                <SmallBtn
+                <SmallButton
                   onClick={() =>
                     nickname === ''
                       ? setNicknameCheck('')
@@ -242,23 +246,23 @@ const ProfileEdit = () => {
                   type="button"
                 >
                   중복체크
-                </SmallBtn>
+                </SmallButton>
               </div>
               <Check verifyCheck={nicknameCheck}>{checkingNickname}</Check>
             </InputWrapper>
             <InputWrapper style={{ marginTop: '30px' }}>
-              <Text style={{ marginBottom: '16px' }}>이메일</Text>
-              <Text $fontSize="20px">{myData?.data.email}</Text>
+              <Text1 style={{ marginBottom: '16px' }}>이메일</Text1>
+              <Text1 $fontSize="20px">{myData?.data.email}</Text1>
             </InputWrapper>
           </InputContainer>
-          <Text style={{ margin: '60px 0 20px 0' }} $fontSize="24px">
+          <Text1 style={{ margin: '60px 0 20px 0' }} $fontSize="24px">
             비밀번호 재설정
-          </Text>
+          </Text1>
           <form onChange={handleSubmit(onValid)}>
             <InputContainer>
               <InputWrapper>
-                <Text style={{ marginBottom: '6px' }}>비밀번호</Text>
-                <Input
+                <Text1 style={{ marginBottom: '6px' }}>비밀번호</Text1>
+                <Input1
                   $check={passwordCheck}
                   placeholder="비밀번호를 입력해 주세요.  (6자 이상, 영문, 숫자 필수)"
                   type="password"
@@ -267,8 +271,8 @@ const ProfileEdit = () => {
                 <Check verifyCheck={passwordCheck}>{checkingPassword}</Check>
               </InputWrapper>
               <InputWrapper style={{ marginTop: '30px' }}>
-                <Text style={{ marginBottom: '6px' }}>비밀번호 확인</Text>
-                <Input
+                <Text1 style={{ marginBottom: '6px' }}>비밀번호 확인</Text1>
+                <Input1
                   $check={confirmedPasswordCheck}
                   placeholder="비밀번호를 한 번 더 입력해 주세요."
                   type="password"
@@ -282,20 +286,20 @@ const ProfileEdit = () => {
           </form>
           <Submit>
             <Btn onClick={() => navigate('/mypage')}>
-              <Text $color="#FFF" $fontSize="14px">
+              <Text1 $color="btn" $fontSize="14px">
                 취소
-              </Text>
+              </Text1>
             </Btn>
             <Btn $check={allValidated} onClick={handleSubmit(onClickSubmit)}>
-              <Text $color="#FFF" $fontSize="14px">
+              <Text1 $color="btn" $fontSize="14px">
                 수정하기
-              </Text>
+              </Text1>
             </Btn>
           </Submit>
         </Profile>
       </ProfileBox>
       <Withdraw onClick={() => setIsModalOpen(true)}>
-        <Text $color="#808080">회원탈퇴를 원하시나요?</Text>
+        <Text1 $color="sub2">회원탈퇴를 원하시나요?</Text1>
       </Withdraw>
       <SubModal
         onClose={() => setIsModalOpen(false)}
@@ -356,15 +360,6 @@ const Profile = styled.div`
   height: 762px;
 `;
 
-const Text = styled.div<{ $color: string; $fontSize: string }>`
-  color: ${({ $color, theme }) => $color || theme.color.text};
-  font-size: ${({ $fontSize }) => $fontSize || '16px'};
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
-  text-align: center;
-`;
-
 const ImgContatiner = styled.div`
   margin: 20px 0;
   gap: 24px;
@@ -380,51 +375,6 @@ const InputWrapper = styled.div`
   align-items: flex-start;
 `;
 
-const Input = styled.input<{ $width: string; check: string }>`
-  width: ${({ $width }) => $width || '400px'};
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid #d9d9d9;
-  border-color: ${({ $check }) =>
-    $check === 'rejected'
-      ? 'var(--error_accent, #FF3263)'
-      : $check === 'confirmed'
-      ? '#0BD961'
-      : '#D9D9D9'};
-  background: none;
-  padding: 0 15px;
-  color: ${({ theme }) => theme.color.text};
-  font-weight: 700;
-  &::placeholder {
-    color: #a5a5a5;
-
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 100%;
-  }
-  box-sizing: border-box;
-`;
-
-const SmallBtn = styled.button`
-  width: 106px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid #f97393;
-  margin-left: 10px;
-  color: #f97393;
-  text-align: center;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 100%;
-  cursor: pointer;
-  box-sizing: border-box;
-  background-color: ${({ theme }) => theme.color.locBg};
-`;
-
 const Submit = styled.div`
   width: 100%;
   margin-top: 28px;
@@ -433,7 +383,7 @@ const Submit = styled.div`
   justify-content: flex-end;
 `;
 
-const Btn = styled.button<{ $check: string; color: string }>`
+const Btn = styled.button<{ $check?: string; color?: string }>`
   width: 77px;
   height: 32px;
   display: flex;

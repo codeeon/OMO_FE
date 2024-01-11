@@ -2,9 +2,15 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import KakaoLogin from '../components/auth/KakaoLogin';
 import api from '..//axios/api';
+import toast from 'react-hot-toast';
+
+import Input1 from '../components/input/authInput/Input1';
+import Text1 from '../components/text/Text1';
+import LargeButton from '../components/button/authButton/LargeButton';
+import Title1 from '../components/text/Title1';
 
 interface LoginData {
   email: string;
@@ -23,32 +29,27 @@ const Login: React.FC = () => {
 
   const mutation = useMutation<LoginData, Error, LoginData>(
     async (formData: LoginData) => {
-      try {
-        const response = await api.post(`/auth/login`, formData);
+      const response = await api.post(`/auth/login`, formData);
 
-        const accessToken = response.headers.authorization;
-        const refreshToken = response.headers.refreshtoken;
-        const userId = response.data.userId;
+      const accessToken = response.headers.authorization;
+      const refreshToken = response.headers.refreshtoken;
+      const userId = response.data.userId;
 
-        sessionStorage.setItem('accessToken', accessToken);
-        sessionStorage.setItem('refreshToken', refreshToken);
-        sessionStorage.setItem('userId', userId);
+      sessionStorage.setItem('accessToken', accessToken);
+      sessionStorage.setItem('refreshToken', refreshToken);
+      sessionStorage.setItem('userId', userId);
 
-        return response.data;
-      } catch (error) {
-        throw new Error(
-          // error.response?.data.message || '응답 없음: 로그인에 실패했습니다.',
-          alert('아이디와 비밀번호를 확인해주세요!'),
-        );
-      }
+      return response.data;
     },
     {
       onSuccess: () => {
         navigate(`/`);
       },
       onError: (error: Error) => {
-        // console.error('로그인 실패 -> ', error.message);
-        // alert('onError: 아이디와 비밀번호를 확인해주세요!');
+        toast.error('아이디와 비밀번호를 확인해주세요!', {
+          position: 'bottom-right',
+          duration: 4000,
+        });
       },
     },
   );
@@ -76,24 +77,26 @@ const Login: React.FC = () => {
             />
           </InputBox>
           <LargeBtn>
-            <Text $color="btn">로그인</Text>
+            <Text1 $color="btn">로그인</Text1>
           </LargeBtn>
         </form>
         <KakaoLogin />
         <OrLine>
           <div>{line}</div>
           <div>
-            <Text $color="sub2">or</Text>
+            <Text1 $color="sub2">or</Text1>
           </div>
           <div>{line}</div>
         </OrLine>
-        <div>
-          <Text $color="sub">아직 회원이 아니신가요?</Text>
-          <Link to="/signup">
-            <Text style={{ marginLeft: '11px' }} color="link">
-              회원가입
-            </Text>
-          </Link>
+        <div style={{ display: 'flex' }}>
+          <Text1 $color="sub2">아직 회원이 아니신가요?</Text1>
+          <Text1
+            onClick={() => navigate('/signup')}
+            style={{ marginLeft: '11px', cursor: 'pointer' }}
+            $color="link"
+          >
+            회원가입
+          </Text1>
         </div>
       </LoginBox>
     </Base>
@@ -128,11 +131,7 @@ const LoginBox = styled.div`
   background: ${({ theme }) => theme.color.cardBg};
 `;
 
-const Title = styled.div`
-  color: ${({ theme }) => theme.color.text};
-  text-align: center;
-  font-size: 32px;
-  font-weight: 700;
+const Title = styled(Title1)`
   margin: 83px 0 26px 0;
 `;
 
@@ -141,55 +140,16 @@ const InputBox = styled.div`
   flex-direction: column;
   justify-content: center;
   margin-bottom: 50px;
+  padding-top: 20px;
 `;
 
-const Input = styled.input`
-  width: 370px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.color.border};
-  background: ${({ theme }) => theme.color.cardBg};
+const Input = styled(Input1)`
   margin-top: 20px;
-  padding: 0 15px;
-  &::placeholder {
-    color: ${({ theme }) => theme.color.sub};
-    font-size: 14px;
-    font-weight: 700;
-  }
-  color: ${({ theme }) => theme.color.text};
 `;
 
-const LargeBtn = styled.button`
-  width: 400px;
-  height: 50px;
-  flex-shrink: 0;
-  border-radius: 4px;
+const LargeBtn = styled(LargeButton)`
   background: #f97393;
-  border: none;
   margin: 0 0 12px 0;
-  cursor: pointer;
-`;
-
-// 스타일드 컴포넌트 프롭스 타입에 옵셔널 붙여야겠지...? ㅠㅠ
-const Text = styled.div<{ $color?: string }>`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: ${({ $color, theme }) =>
-    $color === 'sub2'
-      ? theme.color.sub2
-      : $color === 'sub'
-      ? theme.color.sub
-      : $color === 'text'
-      ? theme.color.text
-      : $color === 'btn'
-      ? '#fff'
-      : theme.color.link};
-  text-align: center;
-  font-size: 16px;
-  font-weight: 700;
-  height: 25px;
 `;
 
 const OrLine = styled.div`
